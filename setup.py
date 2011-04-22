@@ -2,10 +2,10 @@ from setuptools import setup as _setup
 from setuptools import find_packages
 
 SETUP_INFO = dict(
-    name = 'hello',
+    name = 'python_dist',
     version = '0.1',
     author = 'Infinidat',
-    description = 'hello world',
+    description = 'builds python',
     long_description = (),
     classifiers = [],
     install_requires = [],
@@ -14,14 +14,12 @@ SETUP_INFO = dict(
     test_suite = '',
     tests_require = {},
 
-    namespace_packages = ['hello', ],
-    packages = find_packages('src'),
-    package_dir = {'': 'src'},
+    packages = [],
+    package_dir = {},
     include_package_data = True,
 
     entry_points = dict(
-        console_scripts = [
-            'script = hello:script.main'],
+        console_scripts = [],
         gui_scripts = [])
 
     )
