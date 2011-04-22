@@ -1,0 +1,19 @@
+
+# generic
+*.swp
+*.pyc
+*.egg-info/
+
+# eclipse
+.project
+.pydevproject
+
+# buildout
+.*installed.cfg
+.cache/
+bin/
+eggs/
+develop-eggs/
+parts/
+build/
+dist/
