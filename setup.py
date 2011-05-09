@@ -20,6 +20,7 @@ SETUP_INFO = dict(
         console_scripts = [
 			'build = scripts:build',
 			'pack = scripts:pack',
+            'clean = scripts:clean',
         ],
         gui_scripts = [])
 
