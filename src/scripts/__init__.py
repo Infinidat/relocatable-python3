@@ -20,7 +20,7 @@ def pack(argv = argv):
 
 def clean(argv = argv):
     from os.path import abspath, curdir, sep, pardir
-    from os import mkdir
+    from os import mkdir, remove
     from glob import glob
     from shutil import rmtree, move
 
@@ -29,6 +29,10 @@ def clean(argv = argv):
     parts = sep.join([base, 'parts'])
 
     print "base = %s" % repr(base)
+
+    for tar_gz in glob(sep.join([base, '*tar.gz'])):
+        print "rm %s" % tar_gz
+        remove(tar_gz)
 
     print "rm -rf %s" % repr(dist)
     _catch_and_print(rmtree, *[dist])
