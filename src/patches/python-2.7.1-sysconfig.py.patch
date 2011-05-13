@@ -1,0 +1,17 @@
+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
+index 33b2791..23a4ef5 100644
+--- a/Lib/sysconfig.py
++++ b/Lib/sysconfig.py
+@@ -264,7 +264,11 @@ def _parse_makefile(filename, vars=None):
+             done[k] = v.strip()
+ 
+     # save the results in the global dictionary
+-    vars.update(done)
++    # do not override keys in the global dictionary (e.g. 'prefix')
++    for key,value in done.iteritems():
++        if key not in vars:
++            vars[key] = done[key]
++        
+     return vars
+ 
+ 
