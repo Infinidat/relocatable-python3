@@ -1,17 +1,23 @@
 diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
-index ba48173..50adc3d 100644
+index ba48173..64c2d5e 100644
 --- a/Lib/distutils/sysconfig.py
 +++ b/Lib/distutils/sysconfig.py
-@@ -324,7 +324,11 @@ def parse_makefile(fn, g=None):
-             done[k] = v.strip()
+@@ -432,7 +432,17 @@ def _init_posix():
  
-     # save the results in the global dictionary
--    g.update(done)
-+    # do not override keys in the global dictionary (e.g. 'prefix')
-+    for key,value in done.iteritems():
-+        if key not in g:
-+            g[key] = done[key]
-+        
-     return g
+     global _config_vars
+     _config_vars = g
+-
++    _fix_prefix(_config_vars)
++
++def _fix_prefix(config_vars):
++    import sys
++    makefile_prefix = config_vars.get('prefix', None)
++    if not makefile_prefix:
++        return
++    for key, value in config_vars.items():
++        if not isinstance(value, str):
++            continue
++        config_vars[key] = value.replace(makefile_prefix, sys.prefix)
  
- 
+ def _init_nt():
+     """Initialize the module as appropriate for NT"""
