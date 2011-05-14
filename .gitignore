@@ -9,7 +9,7 @@
 .pydevproject
 
 # buildout
-.*installed.cfg
+.*installed*.cfg
 .cache/
 bin/
 eggs/
