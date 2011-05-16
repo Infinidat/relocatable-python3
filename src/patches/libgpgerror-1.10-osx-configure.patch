@@ -1,0 +1,43 @@
+diff --git a/configure b/configure
+index b7a43f2..9c3f5b5 100755
+--- a/configure
++++ b/configure
+@@ -8629,7 +8629,7 @@ _LT_EOF
+     interix[3-9]*)
+       hardcode_direct=no
+       hardcode_shlibpath_var=no
+-      hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
++      hardcode_libdir_flag_spec=''
+       export_dynamic_flag_spec='${wl}-E'
+       # Hack: On Interix 3.x, we cannot compile PIC because of a broken gcc.
+       # Instead, shared libraries are loaded at an image base (0x10000000 by
+@@ -8696,7 +8696,7 @@ _LT_EOF
+ 	  # IBM XL Fortran 10.1 on PPC cannot create shared libs itself
+ 	  whole_archive_flag_spec='--whole-archive$convenience --no-whole-archive'
+ 	  hardcode_libdir_flag_spec=
+-	  hardcode_libdir_flag_spec_ld='-rpath $libdir'
++	  hardcode_libdir_flag_spec_ld=''
+ 	  archive_cmds='$LD -shared $libobjs $deplibs $compiler_flags -soname $soname -o $lib'
+ 	  if test "x$supports_anon_versioning" = xyes; then
+ 	    archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
+@@ -8763,7 +8763,7 @@ _LT_EOF
+ 	  # DT_RUNPATH tag from executables and libraries.  But doing so
+ 	  # requires that you compile everything twice, which is a pain.
+ 	  if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
+-	    hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
++	    hardcode_libdir_flag_spec=''
+ 	    archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags ${wl}-soname $wl$soname -o $lib'
+ 	    archive_expsym_cmds='$CC -shared $libobjs $deplibs $compiler_flags ${wl}-soname $wl$soname ${wl}-retain-symbols-file $wl$export_symbols -o $lib'
+ 	  else
+@@ -9052,9 +9052,9 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+   esac
+   if test "$_lt_dar_can_shared" = "yes"; then
+     output_verbose_link_cmd=echo
+-    archive_cmds="\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name \$rpath/\$soname \$verstring $_lt_dar_single_mod${_lt_dsymutil}"
++    archive_cmds="\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name @rpath/\$soname \$verstring $_lt_dar_single_mod${_lt_dsymutil}"
+     module_cmds="\$CC \$allow_undefined_flag -o \$lib -bundle \$libobjs \$deplibs \$compiler_flags${_lt_dsymutil}"
+-    archive_expsym_cmds="sed 's,^,_,' < \$export_symbols > \$output_objdir/\${libname}-symbols.expsym~\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name \$rpath/\$soname \$verstring ${_lt_dar_single_mod}${_lt_dar_export_syms}${_lt_dsymutil}"
++    archive_expsym_cmds="sed 's,^,_,' < \$export_symbols > \$output_objdir/\${libname}-symbols.expsym~\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name @rpath/\$soname \$verstring ${_lt_dar_single_mod}${_lt_dar_export_syms}${_lt_dsymutil}"
+     module_expsym_cmds="sed -e 's,^,_,' < \$export_symbols > \$output_objdir/\${libname}-symbols.expsym~\$CC \$allow_undefined_flag -o \$lib -bundle \$libobjs \$deplibs \$compiler_flags${_lt_dar_export_syms}${_lt_dsymutil}"
+ 
+   else

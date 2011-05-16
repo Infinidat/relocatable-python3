@@ -1,0 +1,234 @@
+diff --git a/configure b/configure
+index bf5d640..17d4bde 100755
+--- a/configure
++++ b/configure
+@@ -8579,7 +8579,7 @@ $echo "local: *; };" >> $output_objdir/$libname.ver~
+ 
+     if test "$ld_shlibs" = yes; then
+       runpath_var=LD_RUN_PATH
+-      hardcode_libdir_flag_spec='${wl}--rpath ${wl}$libdir'
++      hardcode_libdir_flag_spec=''
+       export_dynamic_flag_spec='${wl}--export-dynamic'
+       # ancient GNU ld didn't support --whole-archive et. al.
+       if $LD --help 2>&1 | grep 'no-whole-archive' > /dev/null; then
+@@ -8826,16 +8826,16 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+     	  lt_int_apple_cc_single_mod=yes
+     	fi
+     	if test "X$lt_int_apple_cc_single_mod" = Xyes ; then
+-    	  archive_cmds='$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name $rpath/$soname $verstring'
++    	  archive_cmds='$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name @rpath/$soname $verstring'
+     	else
+-        archive_cmds='$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name $rpath/$soname $verstring'
++        archive_cmds='$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name @rpath/$soname $verstring'
+       fi
+       module_cmds='$CC ${wl}-bind_at_load $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
+       # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+         if test "X$lt_int_apple_cc_single_mod" = Xyes ; then
+-          archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
++          archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name @rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+         else
+-          archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
++          archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name @rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+         fi
+           module_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC $allow_undefined_flag  -o $lib -bundle $libobjs $deplibs$compiler_flags~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+       hardcode_direct=no
+@@ -8958,9 +8958,9 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags ${wl}-soname ${wl}$soname `test -n "$verstring" && echo ${wl}-set_version ${wl}$verstring` ${wl}-update_registry ${wl}${output_objdir}/so_locations -o $lib'
+       else
+ 	archive_cmds='$LD -shared $libobjs $deplibs $linker_flags -soname $soname `test -n "$verstring" && echo -set_version $verstring` -update_registry ${output_objdir}/so_locations -o $lib'
+-	hardcode_libdir_flag_spec_ld='-rpath $libdir'
++	hardcode_libdir_flag_spec_ld=''
+       fi
+-      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
++      hardcode_libdir_flag_spec=''
+       hardcode_libdir_separator=:
+       link_all_deplibs=yes
+       ;;
+@@ -8979,7 +8979,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+     newsos6)
+       archive_cmds='$LD -G -h $soname -o $lib $libobjs $deplibs $linker_flags'
+       hardcode_direct=yes
+-      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
++      hardcode_libdir_flag_spec=''
+       hardcode_libdir_separator=:
+       hardcode_shlibpath_var=no
+       ;;
+@@ -8989,7 +8989,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+       hardcode_shlibpath_var=no
+       if test -z "`echo __ELF__ | $CC -E - | grep __ELF__`" || test "$host_os-$host_cpu" = "openbsd2.8-powerpc"; then
+ 	archive_cmds='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+-	hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
++	hardcode_libdir_flag_spec=''
+ 	export_dynamic_flag_spec='${wl}-E'
+       else
+        case $host_os in
+@@ -8999,7 +8999,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	   ;;
+ 	 *)
+ 	   archive_cmds='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+-	   hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
++	   hardcode_libdir_flag_spec=''
+ 	   ;;
+        esac
+       fi
+@@ -9021,7 +9021,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	allow_undefined_flag=' -expect_unresolved \*'
+ 	archive_cmds='$LD -shared${allow_undefined_flag} $libobjs $deplibs $linker_flags -soname $soname `test -n "$verstring" && echo -set_version $verstring` -update_registry ${output_objdir}/so_locations -o $lib'
+       fi
+-      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
++      hardcode_libdir_flag_spec=''
+       hardcode_libdir_separator=:
+       ;;
+ 
+@@ -9029,7 +9029,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+       if test "$GCC" = yes; then
+ 	allow_undefined_flag=' ${wl}-expect_unresolved ${wl}\*'
+ 	archive_cmds='$CC -shared${allow_undefined_flag} $libobjs $deplibs $compiler_flags ${wl}-msym ${wl}-soname ${wl}$soname `test -n "$verstring" && echo ${wl}-set_version ${wl}$verstring` ${wl}-update_registry ${wl}${output_objdir}/so_locations -o $lib'
+-	hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
++	hardcode_libdir_flag_spec=''
+       else
+ 	allow_undefined_flag=' -expect_unresolved \*'
+ 	archive_cmds='$LD -shared${allow_undefined_flag} $libobjs $deplibs $linker_flags -msym -soname $soname `test -n "$verstring" && echo -set_version $verstring` -update_registry ${output_objdir}/so_locations -o $lib'
+@@ -9037,7 +9037,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	$LD -shared${allow_undefined_flag} -input $lib.exp $linker_flags $libobjs $deplibs -soname $soname `test -n "$verstring" && echo -set_version $verstring` -update_registry ${objdir}/so_locations -o $lib~$rm $lib.exp'
+ 
+ 	# Both c and cxx compiler support -rpath directly
+-	hardcode_libdir_flag_spec='-rpath $libdir'
++	hardcode_libdir_flag_spec=''
+       fi
+       hardcode_libdir_separator=:
+       ;;
+@@ -10386,10 +10386,10 @@ aix4* | aix5*)
+       ;;
+     esac
+     output_verbose_link_cmd='echo'
+-    archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring'
++    archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags -install_name @rpath/$soname $verstring'
+     module_cmds='$CC $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
+     # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+-    archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
++    archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name @rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+     module_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC $allow_undefined_flag  -o $lib -bundle $libobjs $deplibs$compiler_flags~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+     hardcode_direct=no
+     hardcode_automatic=yes
+@@ -11144,7 +11144,7 @@ with_gnu_ld=$lt_cv_prog_gnu_ld
+     archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname -o $lib'
+     archive_expsym_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname ${wl}-retain-symbols-file $wl$export_symbols -o $lib'
+ 
+-    hardcode_libdir_flag_spec_CXX='${wl}--rpath ${wl}$libdir'
++    hardcode_libdir_flag_spec_CXX=''
+     export_dynamic_flag_spec_CXX='${wl}--export-dynamic'
+ 
+     # If archive_cmds runs LD, not CC, wlarc should be empty
+@@ -11407,17 +11407,17 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+       lt_int_apple_cc_single_mod=yes
+     fi
+     if test "X$lt_int_apple_cc_single_mod" = Xyes ; then
+-      archive_cmds_CXX='$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name $rpath/$soname $verstring'
++      archive_cmds_CXX='$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name @rpath/$soname $verstring'
+     else
+-      archive_cmds_CXX='$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name $rpath/$soname $verstring'
++      archive_cmds_CXX='$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name @rpath/$soname $verstring'
+     fi
+     module_cmds_CXX='$CC ${wl}-bind_at_load $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
+ 
+     # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+     if test "X$lt_int_apple_cc_single_mod" = Xyes ; then
+-      archive_expsym_cmds_CXX='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
++      archive_expsym_cmds_CXX='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib -single_module $allow_undefined_flag -o $lib $libobjs $deplibs $compiler_flags -install_name @rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+     else
+-      archive_expsym_cmds_CXX='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
++      archive_expsym_cmds_CXX='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -r ${wl}-bind_at_load -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs~$CC -dynamiclib $allow_undefined_flag -o $lib ${lib}-master.o $deplibs $compiler_flags -install_name @rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+     fi
+     module_expsym_cmds_CXX='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC $allow_undefined_flag  -o $lib -bundle $libobjs $deplibs$compiler_flags~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+     hardcode_direct_CXX=no
+@@ -11601,7 +11601,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	link_all_deplibs_CXX=yes
+ 	;;
+     esac
+-    hardcode_libdir_flag_spec_CXX='${wl}-rpath ${wl}$libdir'
++    hardcode_libdir_flag_spec_CXX=''
+     hardcode_libdir_separator_CXX=:
+     ;;
+   linux*)
+@@ -11624,7 +11624,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	# dependencies.
+ 	output_verbose_link_cmd='templist=`$CC $CFLAGS -v conftest.$objext -o libconftest$shared_ext 2>&1 | grep "ld"`; rm -f libconftest$shared_ext; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 
+-	hardcode_libdir_flag_spec_CXX='${wl}--rpath,$libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	export_dynamic_flag_spec_CXX='${wl}--export-dynamic'
+ 
+ 	# Archives containing C++ object files must be created using
+@@ -11637,7 +11637,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	archive_cmds_need_lc_CXX=no
+ 	archive_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname -o $lib'
+ 	archive_expsym_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname ${wl}-retain-symbols-file $wl$export_symbols -o $lib'
+-	hardcode_libdir_flag_spec_CXX='${wl}-rpath,$libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	export_dynamic_flag_spec_CXX='${wl}--export-dynamic'
+ 	whole_archive_flag_spec_CXX='${wl}--whole-archive$convenience ${wl}--no-whole-archive'
+ 	;;
+@@ -11647,7 +11647,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	archive_expsym_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname  -o $lib ${wl}-retain-symbols-file $wl$export_symbols'
+ 
+ 	runpath_var=LD_RUN_PATH
+-	hardcode_libdir_flag_spec_CXX='-rpath $libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	hardcode_libdir_separator_CXX=:
+ 
+ 	# Commands to make compiler produce verbose output that lists
+@@ -11703,7 +11703,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	# to its proper name (with version) after linking.
+ 	archive_cmds_CXX='tempext=`echo $shared_ext | $SED -e '\''s/\([^()0-9A-Za-z{}]\)/\\\\\1/g'\''`; templib=`echo $lib | $SED -e "s/\${tempext}\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib; mv \$templib $lib'
+ 
+-	hardcode_libdir_flag_spec_CXX='${wl}-rpath,$libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	hardcode_libdir_separator_CXX=:
+ 
+ 	# Archives containing C++ object files must be created using
+@@ -11720,7 +11720,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	allow_undefined_flag_CXX=' ${wl}-expect_unresolved ${wl}\*'
+ 	archive_cmds_CXX='$CC -shared${allow_undefined_flag} $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $soname `test -n "$verstring" && echo ${wl}-set_version $verstring` -update_registry ${objdir}/so_locations -o $lib'
+ 
+-	hardcode_libdir_flag_spec_CXX='${wl}-rpath ${wl}$libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	hardcode_libdir_separator_CXX=:
+ 
+ 	# Commands to make compiler produce verbose output that lists
+@@ -11738,7 +11738,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	  allow_undefined_flag_CXX=' ${wl}-expect_unresolved ${wl}\*'
+ 	  archive_cmds_CXX='$CC -shared -nostdlib ${allow_undefined_flag} $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname ${wl}$soname `test -n "$verstring" && echo ${wl}-set_version ${wl}$verstring` ${wl}-update_registry ${wl}${objdir}/so_locations -o $lib'
+ 
+-	  hardcode_libdir_flag_spec_CXX='${wl}-rpath ${wl}$libdir'
++	  hardcode_libdir_flag_spec_CXX=''
+ 	  hardcode_libdir_separator_CXX=:
+ 
+ 	  # Commands to make compiler produce verbose output that lists
+@@ -11763,7 +11763,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	# to its proper name (with version) after linking.
+ 	archive_cmds_CXX='tempext=`echo $shared_ext | $SED -e '\''s/\([^()0-9A-Za-z{}]\)/\\\\\1/g'\''`; templib=`echo $lib | $SED -e "s/\${tempext}\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib; mv \$templib $lib'
+ 
+-	hardcode_libdir_flag_spec_CXX='${wl}-rpath,$libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	hardcode_libdir_separator_CXX=:
+ 
+ 	# Archives containing C++ object files must be created using
+@@ -11783,7 +11783,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	  $CC -shared$allow_undefined_flag $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -msym -soname $soname -Wl,-input -Wl,$lib.exp  `test -n "$verstring" && echo -set_version	$verstring` -update_registry $objdir/so_locations -o $lib~
+ 	  $rm $lib.exp'
+ 
+-	hardcode_libdir_flag_spec_CXX='-rpath $libdir'
++	hardcode_libdir_flag_spec_CXX=''
+ 	hardcode_libdir_separator_CXX=:
+ 
+ 	# Commands to make compiler produce verbose output that lists
+@@ -11801,7 +11801,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
+ 	  allow_undefined_flag_CXX=' ${wl}-expect_unresolved ${wl}\*'
+ 	 archive_cmds_CXX='$CC -shared -nostdlib ${allow_undefined_flag} $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-msym ${wl}-soname ${wl}$soname `test -n "$verstring" && echo ${wl}-set_version ${wl}$verstring` ${wl}-update_registry ${wl}${objdir}/so_locations -o $lib'
+ 
+-	  hardcode_libdir_flag_spec_CXX='${wl}-rpath ${wl}$libdir'
++	  hardcode_libdir_flag_spec_CXX=''
+ 	  hardcode_libdir_separator_CXX=:
+ 
+ 	  # Commands to make compiler produce verbose output that lists
