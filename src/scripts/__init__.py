@@ -4,21 +4,23 @@ from sys import argv
 from subprocess import Popen
 from platform import system
 
-def build(argv = argv):
+def build(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Darwin':
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
+    print 'executing "%s"' % command
     process = Popen(command.split())
     stdout, stderr = process.communicate()
     exit(process.returncode)
 
-def pack(argv = argv):
+def pack(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-pack.cfg %s' % argv
+    print 'executing "%s"' % command
     process = Popen(command.split())
     stdout, stderr = process.communicate()
     exit(process.returncode)
 
-def clean(argv = argv):
+def clean(argv = ' '.join(argv[1:])):
     from os.path import abspath, curdir, sep, pardir
     from os import mkdir, remove
     from glob import glob
