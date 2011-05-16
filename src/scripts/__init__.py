@@ -5,7 +5,7 @@ from subprocess import Popen
 from platform import system
 
 def build(argv = argv):
-    command = './bin/buildout -c buildout-build.cfg %s' argv
+    command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Darwin':
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     process = Popen(command.split())
