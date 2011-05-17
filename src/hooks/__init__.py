@@ -79,6 +79,7 @@ def patch_openssl(options, buildout, version):
         content = content.replace('-Wl,-rpath,$(LIBRPATH)', '')
         content = content.replace('-Wl,-rpath,$(LIBPATH)', '')
         content = content.replace('-rpath $(LIBRPATH)', '')
+        content = content.replace("-install_name $(INSTALLTOP)/$(LIBDIR)", "-install_name @rpath")
         open(filepath, 'w').write(content)
 
 def patch_pdb(options, buildout, version):
