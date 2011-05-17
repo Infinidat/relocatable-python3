@@ -1,0 +1,34 @@
+diff --git a/configure b/configure
+index 639b790..3f27c4d 100755
+--- a/configure
++++ b/configure
+@@ -493,29 +493,6 @@ if test -n "$ac_prev"; then
+    { (exit 1); exit 1; }; }
+ fi
+ 
+-# Be sure to have absolute paths.
+-for ac_var in exec_prefix prefix
+-do
+-  eval ac_val=$`echo $ac_var`
+-  case $ac_val in
+-    [\\/$]* | ?:[\\/]* | NONE | '' ) ;;
+-    *)  { echo "$as_me: error: expected an absolute path for --$ac_var: $ac_val" >&2
+-   { (exit 1); exit 1; }; };;
+-  esac
+-done
+-
+-# Be sure to have absolute paths.
+-for ac_var in bindir sbindir libexecdir datadir sysconfdir sharedstatedir \
+-              localstatedir libdir includedir oldincludedir infodir mandir
+-do
+-  eval ac_val=$`echo $ac_var`
+-  case $ac_val in
+-    [\\/$]* | ?:[\\/]* ) ;;
+-    *)  { echo "$as_me: error: expected an absolute path for --$ac_var: $ac_val" >&2
+-   { (exit 1); exit 1; }; };;
+-  esac
+-done
+-
+ # There might be people who depend on the old broken behavior: `$host'
+ # used to hold the argument of --host etc.
+ build=$build_alias
