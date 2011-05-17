@@ -24,19 +24,41 @@ def change_install_name_in_file(filepath):
     print "pre-configure-hook: changing install_name in %s" % filepath
     content = open(filepath).read()
     pattern = r'-install_name .*/(.*) '
-    repl = r'-install_name @rpath/\1'
+    repl = r'-install_name @rpath/\1 '
     open(filepath, 'w').write(sub(pattern, repl, content))
+
+def remove_rpath_in_file(filepath):
+    from re import sub
+    print "pre-configure-hook: changing install_name in %s" % filepath
+    content = open(filepath).read()
+    content = content.replace(r'$rpath/$soname', r'@rpath/$soname')
+    content = content.replace(r'\$rpath/\$soname', r'@rpath/\$soname')
+    content = content.replace(r'\$rpath/\$soname', r'@rpath/\$soname')
+    content = content.replace(r'${wl}-rpath ${wl}$libdir}', '')
+    content = content.replace(r'${wl}-rpath,$libdir}', '')
+    content = content.replace(r'-rpath $libdir}', '')
+    open(filepath, 'w').write(content)
 
 def change_install_name(options, buildout, version):
     from os import curdir
     from os.path import exists, sep, abspath
-    for item in find_files(abspath(curdir), 'config*'):
+    for item in find_files(abspath(curdir), 'configure'):
         change_install_name_in_file(item)
-    for item in find_files(abspath(curdir), 'Makefile*'):
+        remove_rpath_in_file(item)
+    for item in find_files(abspath(curdir), 'Makefile'):
         change_install_name_in_file(item)
+        remove_rpath_in_file(item)
+    for item in find_files(abspath(curdir), 'configure.in'):
+        change_install_name_in_file(item)
+        remove_rpath_in_file(item)
+    for item in find_files(abspath(curdir), 'Makefile.in'):
+        change_install_name_in_file(item)
+        remove_rpath_in_file(item)
+    for item in find_files(abspath(curdir), 'libtool'):
+        change_install_name_in_file(item)
+        remove_rpath_in_file(item)
 
 def patch_ncurses(options, buildout, version):
-    change_install_name(options, buildout, version)
     from os import curdir
     from os.path import exists, sep, abspath
     for item in find_files(abspath(curdir), 'Makefile'):
@@ -48,7 +70,6 @@ def patch_ncurses(options, buildout, version):
         open(filepath, 'w').write(content.replace(src,dst).replace('-o$@', '-o $@'))
 
 def patch_openssl(options, buildout, version):
-    change_install_name(options, buildout, version)
     from os import curdir
     from os.path import exists, sep, abspath
     for item in find_files(abspath(curdir), 'Makefile*'):
@@ -63,4 +84,20 @@ def patch_openssl(options, buildout, version):
 def patch_pdb(options, buildout, version):
     import pdb
     pdb.set_trace()
+
+def patch_cyrus_sasl(options, buildout, version):
+    change_install_name(options, buildout, version)
+    from os import curdir
+    from os.path import exists, sep, abspath
+    for item in find_files(abspath(curdir), 'ltconfig'):
+        change_install_name_in_file(item)
+        remove_rpath_in_file(item)
+
+def patch_python(options, buildout, version):
+    change_install_name(options, buildout, version)
+    for file in ['Makefile.pre.in', 'configure', 'configure.in']:
+        content = open(file).read()
+        content = content.replace(r'-install_name,$(prefix)/lib', '-install_name,@rpath')
+        content = content.replace(r'-install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
+        open(file, 'w').write(content)
 
