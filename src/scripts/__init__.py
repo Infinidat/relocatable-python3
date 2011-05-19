@@ -8,6 +8,8 @@ def build(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Darwin':
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
+    if system() == 'Windows':
+        command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
     print 'executing "%s"' % command
     process = Popen(command.split())
     stdout, stderr = process.communicate()
