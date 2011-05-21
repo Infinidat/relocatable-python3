@@ -1,0 +1,16 @@
+diff --git a/win32/Makefile.msc b/win32/Makefile.msc
+index a731c0c..7346eca 100644
+--- a/win32/Makefile.msc
++++ b/win32/Makefile.msc
+@@ -137,3 +137,11 @@ clean:
+ 	-del *.pdb
+ 	-del *.manifest
+ 	-del foo.gz
++
++install:
++    -cp zlib.h $(PREFIX)\include
++    -cp zlibdefs.h $(PREFIX)\include
++    -cp zconf.h $(PREFIX)\include
++    -cp *.lib $(PREFIX)\lib
++    -cp *.dll $(PREFIX)\lib
++
