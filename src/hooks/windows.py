@@ -10,5 +10,5 @@ def openssl_pre_make(options, buildout, environ):
     _execute(r'ms\do_ms.bat', environ)
 
 def openssl_pre_make64(options, buildout, environ):
-    _execute(r'ms\do_win64a', environ)
+    _execute(r'ms\do_win64a.bat', environ)
 
