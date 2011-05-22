@@ -1,0 +1,25 @@
+diff --git a/gettext-runtime/intl/localename.c b/gettext-runtime/intl/localename.c
+index 1b8b99a..59045de 100644
+--- a/gettext-runtime/intl/localename.c
++++ b/gettext-runtime/intl/localename.c
+@@ -590,16 +590,16 @@
+ # define SUBLANG_NEPALI_INDIA 0x02
+ # endif
+ # ifndef SUBLANG_PUNJABI_INDIA
+-# define SUBLANG_PUNJABI_INDIA 0x00
++# define SUBLANG_PUNJABI_INDIA 0x01
+ # endif
+ # ifndef SUBLANG_PUNJABI_PAKISTAN
+-# define SUBLANG_PUNJABI_PAKISTAN 0x01
++# define SUBLANG_PUNJABI_PAKISTAN 0x00
+ # endif
+ # ifndef SUBLANG_ROMANIAN_ROMANIA
+-# define SUBLANG_ROMANIAN_ROMANIA 0x00
++# define SUBLANG_ROMANIAN_ROMANIA 0x01
+ # endif
+ # ifndef SUBLANG_ROMANIAN_MOLDOVA
+-# define SUBLANG_ROMANIAN_MOLDOVA 0x01
++# define SUBLANG_ROMANIAN_MOLDOVA 0x00
+ # endif
+ # ifndef SUBLANG_SERBIAN_LATIN
+ # define SUBLANG_SERBIAN_LATIN 0x02
