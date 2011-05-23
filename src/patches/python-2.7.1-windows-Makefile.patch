@@ -1,8 +1,8 @@
 diff --git a/PCbuild/_bsddb.vcproj b/PCbuild/_bsddb.vcproj
-index a323171..98c05ad 100644
+index a323171..9729c13 100644
 --- a/PCbuild/_bsddb.vcproj
 +++ b/PCbuild/_bsddb.vcproj
-@@ -1,1463 +1,1451 @@
+@@ -1,1463 +1,1450 @@
 -<?xml version="1.0" encoding="Windows-1252"?>
 -<VisualStudioProject
 -	ProjectType="Visual C++"
@@ -1524,7 +1524,7 @@ index a323171..98c05ad 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="$(bsddbDepLibs)"
++				AdditionalDependencies="$(bsddbDepLibs) $(prefix)\lib"
 +				BaseAddress="0x1e180000"
 +			/>
 +			<Tool
@@ -1588,7 +1588,7 @@ index a323171..98c05ad 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="$(bsddbDepLibs)"
++				AdditionalDependencies="$(bsddbDepLibs) $(prefix)\lib"
 +				BaseAddress="0x1e180000"
 +			/>
 +			<Tool
@@ -1971,7 +1971,6 @@ index a323171..98c05ad 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				BaseAddress="0x1e180000"
 +				TargetMachine="17"
 +			/>
