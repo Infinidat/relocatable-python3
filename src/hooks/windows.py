@@ -51,28 +51,28 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.pyd')):
-            shtil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_exe(self):
         import glob
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.exe')):
-            shtil.copy(pyd_file, path.join(self.prefix, 'bin'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'bin'))
 
     def make_dll(self):
         import glob
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.dll')):
-            shtil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_lib(self):
         import glob
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.lib')):
-            shtil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_ico(self):
         import glob
@@ -80,7 +80,7 @@ class PythonPostMake(object):
         from os import path
         for pyd_file in glob.glob(path.join(self.python_source_path,
                                             'PC', '*.ico')):
-            shtil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_includes(self):
         import shutil
