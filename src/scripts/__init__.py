@@ -26,11 +26,13 @@ def pack(argv = ' '.join(argv[1:])):
     exit(process.returncode)
 
 def clean(argv = ' '.join(argv[1:])):
-    from os.path import abspath, curdir, sep, pardir
-    from os import mkdir, remove
+    from os.path import abspath, curdir, pardir
+    from os import mkdir, remove, path
     from glob import glob
     from shutil import rmtree, move
 
+    sep = '/'
+    __file__ = __file__.replace(path,sep, '/')
     base = abspath(sep.join([__file__, pardir, pardir, pardir]))
     dist = sep.join([base, 'dist'])
     parts = sep.join([base, 'parts'])
