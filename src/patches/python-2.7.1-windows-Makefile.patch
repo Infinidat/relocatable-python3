@@ -7507,7 +7507,7 @@ index afda578..4a56e49 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/pcbuild.sln b/PCbuild/pcbuild.sln
-index 725c6ea..f28cbfc 100644
+index 725c6ea..bef8259 100644
 --- a/PCbuild/pcbuild.sln
 +++ b/PCbuild/pcbuild.sln
 @@ -269,9 +269,7 @@ Global
@@ -7520,6 +7520,16 @@ index 725c6ea..f28cbfc 100644
  		{0E9791DB-593A-465F-98BC-681011311618}.Debug|Win32.ActiveCfg = Debug|Win32
  		{0E9791DB-593A-465F-98BC-681011311618}.Debug|Win32.Build.0 = Debug|Win32
  		{0E9791DB-593A-465F-98BC-681011311618}.Debug|x64.ActiveCfg = Debug|x64
+@@ -413,9 +411,7 @@ Global
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGUpdate|x64.Build.0 = PGUpdate|x64
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|Win32.ActiveCfg = Release|Win32
+-		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|Win32.Build.0 = Release|Win32
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|x64.ActiveCfg = Release|x64
+-		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|x64.Build.0 = Release|x64
+ 		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|Win32.Build.0 = Debug|Win32
+ 		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|x64.ActiveCfg = Debug|x64
 diff --git a/PCbuild/pyproject.vsprops b/PCbuild/pyproject.vsprops
 index 33c3576..7f35609 100644
 --- a/PCbuild/pyproject.vsprops
