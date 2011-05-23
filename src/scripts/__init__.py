@@ -32,8 +32,8 @@ def clean(argv = ' '.join(argv[1:])):
     from shutil import rmtree, move
 
     sep = '/'
-    __file__ = __file__.replace(path,sep, '/')
-    base = abspath(sep.join([__file__, pardir, pardir, pardir]))
+    filepath = __file__.replace(path,sep, '/')
+    base = abspath(sep.join([filepath, pardir, pardir, pardir]))
     dist = sep.join([base, 'dist'])
     parts = sep.join([base, 'parts'])
     installed_file = sep.join([base, '.installed-build.cfg'])
