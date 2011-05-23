@@ -7519,6 +7519,53 @@ index afda578..4a56e49 100644
 +	<Globals>
 +	</Globals>
 +</VisualStudioProject>
+diff --git a/PCbuild/pyproject.vsprops b/PCbuild/pyproject.vsprops
+index 33c3576..4c30bd9 100644
+--- a/PCbuild/pyproject.vsprops
++++ b/PCbuild/pyproject.vsprops
+@@ -45,12 +45,20 @@
+ 		Value="$(SolutionDir)\python.exe"
+ 	/>
+ 	<UserMacro
+-		Name="externalsDir"
+-		Value="..\.."
++		Name="buildoutDir"
++		Value="..\..\..\..\"
++	/>
++	<UserMacro
++		Name="prefixDir"
++		Value="..\..\..\..\dist\"
++	/>
++	<UserMacro
++		Name="partsDir"
++		Value="..\..\..\"
+ 	/>
+ 	<UserMacro
+ 		Name="bsddb47Dir"
+-		Value="$(externalsDir)\db-4.7.25.0\build_windows"
++		Value="$(partsDir)\db__compile__\db-5.1.25\build_windows"
+ 	/>
+ 	<UserMacro
+ 		Name="bsddb47DepLibs"
+@@ -74,15 +82,15 @@
+ 	/>
+ 	<UserMacro
+ 		Name="sqlite3Dir"
+-		Value="$(externalsDir)\sqlite-3.6.21"
++        Value="$(partsDir)\sqlite3__compile__\sqlite-autoconf-3070602"
+ 	/>
+ 	<UserMacro
+ 		Name="bz2Dir"
+-		Value="$(externalsDir)\bzip2-1.0.5"
++		Value="$(partsDir)\bzip__compile__\bzip2-1.0.6"
+ 	/>
+ 	<UserMacro
+ 		Name="opensslDir"
+-		Value="$(externalsDir)\openssl-0.9.8l"
++		Value="$(parts)\openssl__compile__\openssl--1.0.0d"
+ 	/>
+ 	<UserMacro
+ 		Name="tcltkDir"
 diff --git a/PCbuild/sqlite3.vcproj b/PCbuild/sqlite3.vcproj
 index 70badf5..ef8c328 100644
 --- a/PCbuild/sqlite3.vcproj
