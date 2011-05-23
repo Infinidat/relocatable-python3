@@ -7531,7 +7531,7 @@ index 725c6ea..bef8259 100644
  		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|Win32.Build.0 = Debug|Win32
  		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|x64.ActiveCfg = Debug|x64
 diff --git a/PCbuild/pyproject.vsprops b/PCbuild/pyproject.vsprops
-index 33c3576..7f35609 100644
+index 33c3576..e9fdc40 100644
 --- a/PCbuild/pyproject.vsprops
 +++ b/PCbuild/pyproject.vsprops
 @@ -45,12 +45,20 @@
@@ -7568,7 +7568,7 @@ index 33c3576..7f35609 100644
  	<UserMacro
  		Name="bz2Dir"
 -		Value="$(externalsDir)\bzip2-1.0.5"
-+		Value="$(partsDir)\bzip__compile__\bzip2-1.0.6"
++		Value="$(partsDir)\bzip2__compile__\bzip2-1.0.6"
  	/>
  	<UserMacro
  		Name="opensslDir"
