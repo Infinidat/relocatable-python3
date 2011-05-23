@@ -26,7 +26,7 @@ def pack(argv = ' '.join(argv[1:])):
     exit(process.returncode)
 
 def clean(argv = ' '.join(argv[1:])):
-    from os.path import abspath, curdir, pardir
+    from os.path import abspath, curdir, pardir, exists
     from os import mkdir, remove, path
     from glob import glob
     from shutil import rmtree, move
@@ -53,7 +53,8 @@ def clean(argv = ' '.join(argv[1:])):
     _catch_and_print(move, *[src, dst])
 
     print "rm %s" % repr(installed_file)
-    remove(installed_file)
+    if exists(installed_file):
+        remove(installed_file)
 
     print "rm -rf %s" % repr(parts)
     _catch_and_print(rmtree, *[parts])
