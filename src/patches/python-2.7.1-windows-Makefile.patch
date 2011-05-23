@@ -1,9 +1,9 @@
 diff --git a/Modules/_bsddb.c b/Modules/_bsddb.c
 new file mode 100644
-index 0000000..5079ca4
+index 0000000..6ce86b0
 --- /dev/null
 +++ b/Modules/_bsddb.c
-@@ -0,0 +1,10025 @@
+@@ -0,0 +1,10026 @@
 +/*----------------------------------------------------------------------
 +  Copyright (c) 1999-2001, Digital Creations, Fredericksburg, VA, USA
 +  and Andrew Kuchling. All rights reserved.
@@ -9772,6 +9772,7 @@ index 0000000..5079ca4
 +    ADD_INT(d, DB_REP_PERMANENT);
 +
 +#if (DBVER >= 44)
++    ADD_INT(d, DB_REP_CONF_NOAUTOINIT);
 +    ADD_INT(d, DB_REP_CONF_DELAYCLIENT);
 +    ADD_INT(d, DB_REP_CONF_BULK);
 +    ADD_INT(d, DB_REP_CONF_NOWAIT);
