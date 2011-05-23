@@ -1,5 +1,5 @@
 diff --git a/PCbuild/_bsddb.vcproj b/PCbuild/_bsddb.vcproj
-index a323171..1915209 100644
+index a323171..0174c97 100644
 --- a/PCbuild/_bsddb.vcproj
 +++ b/PCbuild/_bsddb.vcproj
 @@ -1,1463 +1,1450 @@
@@ -1651,7 +1651,7 @@ index a323171..1915209 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="libdb51.lib"
++                AdditionalDependencies="$(prefixDir)\lib\libdb51.lib"
 +				BaseAddress="0x1e180000"
 +			/>
 +			<Tool
