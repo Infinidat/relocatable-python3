@@ -26,3 +26,6 @@ def db_post_make64(options, buildout, environ):
     prefix = environ['PREFIX'].replace(os.path.sep, '/')
     _db_post_make('x64', prefix)
 
+def python_post_make(options, buildout, environ):
+    import os
+
