@@ -7531,18 +7531,9 @@ index 725c6ea..bef8259 100644
  		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|Win32.Build.0 = Debug|Win32
  		{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}.Debug|x64.ActiveCfg = Debug|x64
 diff --git a/PCbuild/pyproject.vsprops b/PCbuild/pyproject.vsprops
-index 33c3576..7f93fbf 100644
+index 33c3576..e9fdc40 100644
 --- a/PCbuild/pyproject.vsprops
 +++ b/PCbuild/pyproject.vsprops
-@@ -3,7 +3,7 @@
- 	ProjectType="Visual C++"
- 	Version="8.00"
- 	Name="pyproject"
--	OutputDirectory="$(SolutionDir)"
-+	OutputDirectory="$(SolutionDir)\Release"
- 	IntermediateDirectory="$(SolutionDir)$(PlatformName)-temp-$(ConfigurationName)\$(ProjectName)\"
- 	>
- 	<Tool
 @@ -45,12 +45,20 @@
  		Value="$(SolutionDir)\python.exe"
  	/>
@@ -8665,11 +8656,8 @@ index 70badf5..ef8c328 100644
 +	<Globals>
 +	</Globals>
 +</VisualStudioProject>
-diff --git a/PCbuild/w9xpopen.exe b/PCbuild/w9xpopen.exe
-index 5c95db3..c6440ff 100644
-Binary files a/PCbuild/w9xpopen.exe and b/PCbuild/w9xpopen.exe differ
 diff --git a/PCbuild/x64.vsprops b/PCbuild/x64.vsprops
-index 0720084..5f01c99 100644
+index 0720084..8f9a053 100644
 --- a/PCbuild/x64.vsprops
 +++ b/PCbuild/x64.vsprops
 @@ -3,7 +3,7 @@
@@ -8677,7 +8665,7 @@ index 0720084..5f01c99 100644
  	Version="8.00"
  	Name="amd64"
 -	OutputDirectory="$(SolutionDir)\amd64\"
-+	OutputDirectory="$(SolutionDir)\Release"
++	OutputDirectory="$(SolutionDir)"
  	IntermediateDirectory="$(SolutionDir)$(PlatformName)-temp-$(ConfigurationName)\$(ProjectName)\"
  	>
  	<Tool
