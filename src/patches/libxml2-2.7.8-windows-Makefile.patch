@@ -1,0 +1,17 @@
+diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
+index bd0eb9d..ff4c960 100644
+--- a/win32/Makefile.msvc
++++ b/win32/Makefile.msvc
+@@ -71,9 +71,9 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
+ !if "$(WITH_ICONV)" == "1"
+ LIBS = $(LIBS) iconv.lib
+ !endif 
+-+!if "$(WITH_ICU)" == "1"
+-+LIBS = $(LIBS) icu.lib
+-+!endif
++!if "$(WITH_ICU)" == "1"
++LIBS = $(LIBS) icu.lib
++!endif
+ !if "$(WITH_ZLIB)" == "1"
+ LIBS = $(LIBS) zdll.lib
+ !endif
