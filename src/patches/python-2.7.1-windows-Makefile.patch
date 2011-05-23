@@ -1,5 +1,5 @@
 diff --git a/PCbuild/_bsddb.vcproj b/PCbuild/_bsddb.vcproj
-index a323171..969a172 100644
+index a323171..79809d7 100644
 --- a/PCbuild/_bsddb.vcproj
 +++ b/PCbuild/_bsddb.vcproj
 @@ -1,1463 +1,1463 @@
@@ -1510,7 +1510,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1573,7 +1573,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1637,7 +1637,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1701,7 +1701,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1765,7 +1765,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1829,7 +1829,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1893,7 +1893,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1957,7 +1957,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\.."
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 +			/>
 +			<Tool
@@ -1971,7 +1971,7 @@ index a323171..969a172 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="$(bsddbDepLibs)"
++				AdditionalIncludeDirectories="$(bsddbDir),$(bsddbDir)\..,$(prefix)\include"
 +				BaseAddress="0x1e180000"
 +				TargetMachine="17"
 +			/>
