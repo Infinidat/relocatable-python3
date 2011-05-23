@@ -32,7 +32,7 @@ def clean(argv = ' '.join(argv[1:])):
     from shutil import rmtree, move
 
     sep = '/'
-    filepath = __file__.replace(path,sep, '/')
+    filepath = __file__.replace(path.sep, '/')
     base = abspath(sep.join([filepath, pardir, pardir, pardir]))
     dist = sep.join([base, 'dist'])
     parts = sep.join([base, 'parts'])
