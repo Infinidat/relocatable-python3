@@ -1,8 +1,8 @@
 diff --git a/PCbuild/_bsddb.vcproj b/PCbuild/_bsddb.vcproj
-index a323171..79809d7 100644
+index a323171..721cd6e 100644
 --- a/PCbuild/_bsddb.vcproj
 +++ b/PCbuild/_bsddb.vcproj
-@@ -1,1463 +1,1463 @@
+@@ -1,1463 +1,1451 @@
 -<?xml version="1.0" encoding="Windows-1252"?>
 -<VisualStudioProject
 -	ProjectType="Visual C++"
@@ -2253,7 +2253,7 @@ index a323171..79809d7 100644
 +				>
 +			</File>
 +			<File
-+				RelativePath="$(bsddbDir)\..\dbm\dbm.c"
++				RelativePath="$(bsddbDir)\..\lang\dbm\dbm.c"
 +				>
 +			</File>
 +			<File
@@ -2409,7 +2409,7 @@ index a323171..79809d7 100644
 +				>
 +			</File>
 +			<File
-+				RelativePath="$(bsddbDir)\..\hsearch\hsearch.c"
++				RelativePath="$(bsddbDir)\..\lang\hsearch\hsearch.c"
 +				>
 +			</File>
 +			<File
@@ -2906,18 +2906,6 @@ index a323171..79809d7 100644
 +			</File>
 +			<File
 +				RelativePath="$(bsddbDir)\..\common\util_sig.c"
-+				>
-+			</File>
-+			<File
-+				RelativePath="$(bsddbDir)\..\xa\xa.c"
-+				>
-+			</File>
-+			<File
-+				RelativePath="$(bsddbDir)\..\xa\xa_db.c"
-+				>
-+			</File>
-+			<File
-+				RelativePath="$(bsddbDir)\..\xa\xa_map.c"
 +				>
 +			</File>
 +			<File
