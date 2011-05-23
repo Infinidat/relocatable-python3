@@ -5243,7 +5243,7 @@ index 19d5497..b31f9b6 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/_ssl.vcproj b/PCbuild/_ssl.vcproj
-index d1fe19f..defe44e 100644
+index d1fe19f..0b599b0 100644
 --- a/PCbuild/_ssl.vcproj
 +++ b/PCbuild/_ssl.vcproj
 @@ -1,545 +1,545 @@
@@ -5977,7 +5977,7 @@ index d1fe19f..defe44e 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(prefix)lib\libeay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefix)\lib\libeay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -6041,7 +6041,7 @@ index d1fe19f..defe44e 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(prefix)lib\libeay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefix)\lib\libeay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -8646,3 +8646,6 @@ index 70badf5..ef8c328 100644
 +	<Globals>
 +	</Globals>
 +</VisualStudioProject>
+diff --git a/PCbuild/w9xpopen.exe b/PCbuild/w9xpopen.exe
+index 5c95db3..c6440ff 100644
+Binary files a/PCbuild/w9xpopen.exe and b/PCbuild/w9xpopen.exe differ
