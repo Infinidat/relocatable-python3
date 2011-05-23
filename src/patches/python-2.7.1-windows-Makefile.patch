@@ -1,499 +1,3 @@
-diff --git a/PCbuild/Win32-temp-Release/kill_python/kill_python.obj b/PCbuild/Win32-temp-Release/kill_python/kill_python.obj
-deleted file mode 100644
-index 0c3b377..0000000
-Binary files a/PCbuild/Win32-temp-Release/kill_python/kill_python.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/make_buildinfo/make_buildinfo.obj b/PCbuild/Win32-temp-Release/make_buildinfo/make_buildinfo.obj
-deleted file mode 100644
-index 8c6f524..0000000
-Binary files a/PCbuild/Win32-temp-Release/make_buildinfo/make_buildinfo.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/make_versioninfo/make_versioninfo.obj b/PCbuild/Win32-temp-Release/make_versioninfo/make_versioninfo.obj
-deleted file mode 100644
-index c91d555..0000000
-Binary files a/PCbuild/Win32-temp-Release/make_versioninfo/make_versioninfo.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/Python-ast.obj b/PCbuild/Win32-temp-Release/pythoncore/Python-ast.obj
-deleted file mode 100644
-index 6e86eaa..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/Python-ast.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_codecs_cn.obj b/PCbuild/Win32-temp-Release/pythoncore/_codecs_cn.obj
-deleted file mode 100644
-index 12c6353..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_codecs_cn.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_codecs_hk.obj b/PCbuild/Win32-temp-Release/pythoncore/_codecs_hk.obj
-deleted file mode 100644
-index 6cdc46f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_codecs_hk.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_codecs_iso2022.obj b/PCbuild/Win32-temp-Release/pythoncore/_codecs_iso2022.obj
-deleted file mode 100644
-index e916585..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_codecs_iso2022.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_codecs_jp.obj b/PCbuild/Win32-temp-Release/pythoncore/_codecs_jp.obj
-deleted file mode 100644
-index 4a9cc2d..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_codecs_jp.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_codecs_kr.obj b/PCbuild/Win32-temp-Release/pythoncore/_codecs_kr.obj
-deleted file mode 100644
-index 355e61f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_codecs_kr.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_codecs_tw.obj b/PCbuild/Win32-temp-Release/pythoncore/_codecs_tw.obj
-deleted file mode 100644
-index 73faf71..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_codecs_tw.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_iomodule.obj b/PCbuild/Win32-temp-Release/pythoncore/_iomodule.obj
-deleted file mode 100644
-index 807ec45..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_iomodule.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_subprocess.obj b/PCbuild/Win32-temp-Release/pythoncore/_subprocess.obj
-deleted file mode 100644
-index 5d2735e..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_subprocess.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_warnings.obj b/PCbuild/Win32-temp-Release/pythoncore/_warnings.obj
-deleted file mode 100644
-index 74a659a..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_warnings.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/_winreg.obj b/PCbuild/Win32-temp-Release/pythoncore/_winreg.obj
-deleted file mode 100644
-index f3ce4ed..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/_winreg.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/abstract.obj b/PCbuild/Win32-temp-Release/pythoncore/abstract.obj
-deleted file mode 100644
-index e928b7e..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/abstract.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/acceler.obj b/PCbuild/Win32-temp-Release/pythoncore/acceler.obj
-deleted file mode 100644
-index 5b4e728..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/acceler.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/asdl.obj b/PCbuild/Win32-temp-Release/pythoncore/asdl.obj
-deleted file mode 100644
-index 74e454c..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/asdl.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/ast.obj b/PCbuild/Win32-temp-Release/pythoncore/ast.obj
-deleted file mode 100644
-index 470bf53..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/ast.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bitset.obj b/PCbuild/Win32-temp-Release/pythoncore/bitset.obj
-deleted file mode 100644
-index 627abba..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bitset.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bltinmodule.obj b/PCbuild/Win32-temp-Release/pythoncore/bltinmodule.obj
-deleted file mode 100644
-index d4ab89c..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bltinmodule.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/boolobject.obj b/PCbuild/Win32-temp-Release/pythoncore/boolobject.obj
-deleted file mode 100644
-index 83733ff..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/boolobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bufferedio.obj b/PCbuild/Win32-temp-Release/pythoncore/bufferedio.obj
-deleted file mode 100644
-index 01bb55a..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bufferedio.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bufferobject.obj b/PCbuild/Win32-temp-Release/pythoncore/bufferobject.obj
-deleted file mode 100644
-index 11e8d2c..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bufferobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bytearrayobject.obj b/PCbuild/Win32-temp-Release/pythoncore/bytearrayobject.obj
-deleted file mode 100644
-index 1784806..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bytearrayobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bytes_methods.obj b/PCbuild/Win32-temp-Release/pythoncore/bytes_methods.obj
-deleted file mode 100644
-index 0f0bd91..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bytes_methods.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/bytesio.obj b/PCbuild/Win32-temp-Release/pythoncore/bytesio.obj
-deleted file mode 100644
-index 760848d..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/bytesio.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/capsule.obj b/PCbuild/Win32-temp-Release/pythoncore/capsule.obj
-deleted file mode 100644
-index d38d079..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/capsule.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/cellobject.obj b/PCbuild/Win32-temp-Release/pythoncore/cellobject.obj
-deleted file mode 100644
-index f3ccc56..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/cellobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/ceval.obj b/PCbuild/Win32-temp-Release/pythoncore/ceval.obj
-deleted file mode 100644
-index 0a23c7c..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/ceval.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/classobject.obj b/PCbuild/Win32-temp-Release/pythoncore/classobject.obj
-deleted file mode 100644
-index 17a3fbd..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/classobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/cobject.obj b/PCbuild/Win32-temp-Release/pythoncore/cobject.obj
-deleted file mode 100644
-index b220671..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/cobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/codecs.obj b/PCbuild/Win32-temp-Release/pythoncore/codecs.obj
-deleted file mode 100644
-index 8b2b01e..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/codecs.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/codeobject.obj b/PCbuild/Win32-temp-Release/pythoncore/codeobject.obj
-deleted file mode 100644
-index ccf15de..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/codeobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/compile.obj b/PCbuild/Win32-temp-Release/pythoncore/compile.obj
-deleted file mode 100644
-index 94938c6..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/compile.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/complexobject.obj b/PCbuild/Win32-temp-Release/pythoncore/complexobject.obj
-deleted file mode 100644
-index 3193e9d..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/complexobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/config.obj b/PCbuild/Win32-temp-Release/pythoncore/config.obj
-deleted file mode 100644
-index 5dfdd45..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/config.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/descrobject.obj b/PCbuild/Win32-temp-Release/pythoncore/descrobject.obj
-deleted file mode 100644
-index b8fdfca..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/descrobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/dictobject.obj b/PCbuild/Win32-temp-Release/pythoncore/dictobject.obj
-deleted file mode 100644
-index 41df801..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/dictobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/dl_nt.obj b/PCbuild/Win32-temp-Release/pythoncore/dl_nt.obj
-deleted file mode 100644
-index 5c7e007..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/dl_nt.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/dtoa.obj b/PCbuild/Win32-temp-Release/pythoncore/dtoa.obj
-deleted file mode 100644
-index f8e8806..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/dtoa.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/dynload_win.obj b/PCbuild/Win32-temp-Release/pythoncore/dynload_win.obj
-deleted file mode 100644
-index 505c150..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/dynload_win.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/enumobject.obj b/PCbuild/Win32-temp-Release/pythoncore/enumobject.obj
-deleted file mode 100644
-index caffcf5..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/enumobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/errors.obj b/PCbuild/Win32-temp-Release/pythoncore/errors.obj
-deleted file mode 100644
-index d86ce0d..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/errors.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/exceptions.obj b/PCbuild/Win32-temp-Release/pythoncore/exceptions.obj
-deleted file mode 100644
-index 67344d9..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/exceptions.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/fileio.obj b/PCbuild/Win32-temp-Release/pythoncore/fileio.obj
-deleted file mode 100644
-index dde8810..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/fileio.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/fileobject.obj b/PCbuild/Win32-temp-Release/pythoncore/fileobject.obj
-deleted file mode 100644
-index 4729e52..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/fileobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/firstsets.obj b/PCbuild/Win32-temp-Release/pythoncore/firstsets.obj
-deleted file mode 100644
-index 9dbe4dd..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/firstsets.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/floatobject.obj b/PCbuild/Win32-temp-Release/pythoncore/floatobject.obj
-deleted file mode 100644
-index f5d2e26..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/floatobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/formatter_string.obj b/PCbuild/Win32-temp-Release/pythoncore/formatter_string.obj
-deleted file mode 100644
-index a16d3f0..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/formatter_string.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/formatter_unicode.obj b/PCbuild/Win32-temp-Release/pythoncore/formatter_unicode.obj
-deleted file mode 100644
-index 223a8a6..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/formatter_unicode.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/frameobject.obj b/PCbuild/Win32-temp-Release/pythoncore/frameobject.obj
-deleted file mode 100644
-index e8d5828..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/frameobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/frozen.obj b/PCbuild/Win32-temp-Release/pythoncore/frozen.obj
-deleted file mode 100644
-index 651887a..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/frozen.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/funcobject.obj b/PCbuild/Win32-temp-Release/pythoncore/funcobject.obj
-deleted file mode 100644
-index 9d3d17c..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/funcobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/future.obj b/PCbuild/Win32-temp-Release/pythoncore/future.obj
-deleted file mode 100644
-index f6fef07..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/future.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/genobject.obj b/PCbuild/Win32-temp-Release/pythoncore/genobject.obj
-deleted file mode 100644
-index 164392f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/genobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getargs.obj b/PCbuild/Win32-temp-Release/pythoncore/getargs.obj
-deleted file mode 100644
-index 98a38c8..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getargs.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getcompiler.obj b/PCbuild/Win32-temp-Release/pythoncore/getcompiler.obj
-deleted file mode 100644
-index af27743..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getcompiler.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getcopyright.obj b/PCbuild/Win32-temp-Release/pythoncore/getcopyright.obj
-deleted file mode 100644
-index d7504c4..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getcopyright.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getopt.obj b/PCbuild/Win32-temp-Release/pythoncore/getopt.obj
-deleted file mode 100644
-index 0f687e5..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getopt.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getpathp.obj b/PCbuild/Win32-temp-Release/pythoncore/getpathp.obj
-deleted file mode 100644
-index 05ae0b5..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getpathp.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getplatform.obj b/PCbuild/Win32-temp-Release/pythoncore/getplatform.obj
-deleted file mode 100644
-index 000c2d4..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getplatform.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/getversion.obj b/PCbuild/Win32-temp-Release/pythoncore/getversion.obj
-deleted file mode 100644
-index cd75912..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/getversion.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/graminit.obj b/PCbuild/Win32-temp-Release/pythoncore/graminit.obj
-deleted file mode 100644
-index fabf3cc..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/graminit.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/grammar.obj b/PCbuild/Win32-temp-Release/pythoncore/grammar.obj
-deleted file mode 100644
-index 3876d56..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/grammar.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/grammar1.obj b/PCbuild/Win32-temp-Release/pythoncore/grammar1.obj
-deleted file mode 100644
-index 3bb5992..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/grammar1.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/import.obj b/PCbuild/Win32-temp-Release/pythoncore/import.obj
-deleted file mode 100644
-index d4eee3d..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/import.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/import_nt.obj b/PCbuild/Win32-temp-Release/pythoncore/import_nt.obj
-deleted file mode 100644
-index 96e9218..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/import_nt.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/importdl.obj b/PCbuild/Win32-temp-Release/pythoncore/importdl.obj
-deleted file mode 100644
-index 43c67d8..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/importdl.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/inffast.obj b/PCbuild/Win32-temp-Release/pythoncore/inffast.obj
-deleted file mode 100644
-index 738fa00..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/inffast.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/inflate.obj b/PCbuild/Win32-temp-Release/pythoncore/inflate.obj
-deleted file mode 100644
-index f2a7e34..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/inflate.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/inftrees.obj b/PCbuild/Win32-temp-Release/pythoncore/inftrees.obj
-deleted file mode 100644
-index c20a51f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/inftrees.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/intobject.obj b/PCbuild/Win32-temp-Release/pythoncore/intobject.obj
-deleted file mode 100644
-index 2e53067..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/intobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/iobase.obj b/PCbuild/Win32-temp-Release/pythoncore/iobase.obj
-deleted file mode 100644
-index 1167914..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/iobase.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/iterobject.obj b/PCbuild/Win32-temp-Release/pythoncore/iterobject.obj
-deleted file mode 100644
-index 7e33e90..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/iterobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/listnode.obj b/PCbuild/Win32-temp-Release/pythoncore/listnode.obj
-deleted file mode 100644
-index 029fa85..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/listnode.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/listobject.obj b/PCbuild/Win32-temp-Release/pythoncore/listobject.obj
-deleted file mode 100644
-index 730f7c9..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/listobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/longobject.obj b/PCbuild/Win32-temp-Release/pythoncore/longobject.obj
-deleted file mode 100644
-index 6a7d6b6..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/longobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/marshal.obj b/PCbuild/Win32-temp-Release/pythoncore/marshal.obj
-deleted file mode 100644
-index 39a2709..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/marshal.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/memoryobject.obj b/PCbuild/Win32-temp-Release/pythoncore/memoryobject.obj
-deleted file mode 100644
-index 6b745d7..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/memoryobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/metagrammar.obj b/PCbuild/Win32-temp-Release/pythoncore/metagrammar.obj
-deleted file mode 100644
-index 1f8abb1..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/metagrammar.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/methodobject.obj b/PCbuild/Win32-temp-Release/pythoncore/methodobject.obj
-deleted file mode 100644
-index 4513ed2..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/methodobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/modsupport.obj b/PCbuild/Win32-temp-Release/pythoncore/modsupport.obj
-deleted file mode 100644
-index 0f644fc..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/modsupport.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/moduleobject.obj b/PCbuild/Win32-temp-Release/pythoncore/moduleobject.obj
-deleted file mode 100644
-index 96d85cd..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/moduleobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/msvcrtmodule.obj b/PCbuild/Win32-temp-Release/pythoncore/msvcrtmodule.obj
-deleted file mode 100644
-index bf2917f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/msvcrtmodule.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/multibytecodec.obj b/PCbuild/Win32-temp-Release/pythoncore/multibytecodec.obj
-deleted file mode 100644
-index ac0c73f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/multibytecodec.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/myreadline.obj b/PCbuild/Win32-temp-Release/pythoncore/myreadline.obj
-deleted file mode 100644
-index 9749f84..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/myreadline.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/mysnprintf.obj b/PCbuild/Win32-temp-Release/pythoncore/mysnprintf.obj
-deleted file mode 100644
-index 99a63f1..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/mysnprintf.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/mystrtoul.obj b/PCbuild/Win32-temp-Release/pythoncore/mystrtoul.obj
-deleted file mode 100644
-index 5337e7e..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/mystrtoul.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/node.obj b/PCbuild/Win32-temp-Release/pythoncore/node.obj
-deleted file mode 100644
-index dd33075..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/node.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/object.obj b/PCbuild/Win32-temp-Release/pythoncore/object.obj
-deleted file mode 100644
-index 5ed921c..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/object.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/obmalloc.obj b/PCbuild/Win32-temp-Release/pythoncore/obmalloc.obj
-deleted file mode 100644
-index cc8a8fe..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/obmalloc.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/parser.obj b/PCbuild/Win32-temp-Release/pythoncore/parser.obj
-deleted file mode 100644
-index ffa0da4..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/parser.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/parsetok.obj b/PCbuild/Win32-temp-Release/pythoncore/parsetok.obj
-deleted file mode 100644
-index 6cb990f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/parsetok.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/peephole.obj b/PCbuild/Win32-temp-Release/pythoncore/peephole.obj
-deleted file mode 100644
-index 0708aec..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/peephole.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pyarena.obj b/PCbuild/Win32-temp-Release/pythoncore/pyarena.obj
-deleted file mode 100644
-index f80a86a..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pyarena.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pyctype.obj b/PCbuild/Win32-temp-Release/pythoncore/pyctype.obj
-deleted file mode 100644
-index 7e73afe..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pyctype.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pyfpe.obj b/PCbuild/Win32-temp-Release/pythoncore/pyfpe.obj
-deleted file mode 100644
-index ffc589b..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pyfpe.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pymath.obj b/PCbuild/Win32-temp-Release/pythoncore/pymath.obj
-deleted file mode 100644
-index 0d026a0..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pymath.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pystate.obj b/PCbuild/Win32-temp-Release/pythoncore/pystate.obj
-deleted file mode 100644
-index 10a4536..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pystate.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pystrcmp.obj b/PCbuild/Win32-temp-Release/pythoncore/pystrcmp.obj
-deleted file mode 100644
-index 4bc99fa..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pystrcmp.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pystrtod.obj b/PCbuild/Win32-temp-Release/pythoncore/pystrtod.obj
-deleted file mode 100644
-index d8cb48f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pystrtod.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/pythonrun.obj b/PCbuild/Win32-temp-Release/pythoncore/pythonrun.obj
-deleted file mode 100644
-index 9887799..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/pythonrun.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/rangeobject.obj b/PCbuild/Win32-temp-Release/pythoncore/rangeobject.obj
-deleted file mode 100644
-index 333e54b..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/rangeobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/setobject.obj b/PCbuild/Win32-temp-Release/pythoncore/setobject.obj
-deleted file mode 100644
-index d2fe105..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/setobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/sliceobject.obj b/PCbuild/Win32-temp-Release/pythoncore/sliceobject.obj
-deleted file mode 100644
-index 84fc629..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/sliceobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/stringio.obj b/PCbuild/Win32-temp-Release/pythoncore/stringio.obj
-deleted file mode 100644
-index 28e9732..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/stringio.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/stringobject.obj b/PCbuild/Win32-temp-Release/pythoncore/stringobject.obj
-deleted file mode 100644
-index 904b1ce..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/stringobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/structmember.obj b/PCbuild/Win32-temp-Release/pythoncore/structmember.obj
-deleted file mode 100644
-index d1e6e5a..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/structmember.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/structseq.obj b/PCbuild/Win32-temp-Release/pythoncore/structseq.obj
-deleted file mode 100644
-index dc3ff0b..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/structseq.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/symtable.obj b/PCbuild/Win32-temp-Release/pythoncore/symtable.obj
-deleted file mode 100644
-index 8c10c7d..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/symtable.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/sysmodule.obj b/PCbuild/Win32-temp-Release/pythoncore/sysmodule.obj
-deleted file mode 100644
-index a699034..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/sysmodule.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/textio.obj b/PCbuild/Win32-temp-Release/pythoncore/textio.obj
-deleted file mode 100644
-index 4413de8..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/textio.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/thread.obj b/PCbuild/Win32-temp-Release/pythoncore/thread.obj
-deleted file mode 100644
-index a585ac9..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/thread.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/tokenizer.obj b/PCbuild/Win32-temp-Release/pythoncore/tokenizer.obj
-deleted file mode 100644
-index 3ea7024..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/tokenizer.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/traceback.obj b/PCbuild/Win32-temp-Release/pythoncore/traceback.obj
-deleted file mode 100644
-index 095db13..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/traceback.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/trees.obj b/PCbuild/Win32-temp-Release/pythoncore/trees.obj
-deleted file mode 100644
-index 3ae0910..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/trees.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/tupleobject.obj b/PCbuild/Win32-temp-Release/pythoncore/tupleobject.obj
-deleted file mode 100644
-index b0a84f5..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/tupleobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/typeobject.obj b/PCbuild/Win32-temp-Release/pythoncore/typeobject.obj
-deleted file mode 100644
-index 90d3fd1..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/typeobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/uncompr.obj b/PCbuild/Win32-temp-Release/pythoncore/uncompr.obj
-deleted file mode 100644
-index 1760879..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/uncompr.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/unicodectype.obj b/PCbuild/Win32-temp-Release/pythoncore/unicodectype.obj
-deleted file mode 100644
-index ce4766b..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/unicodectype.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/unicodeobject.obj b/PCbuild/Win32-temp-Release/pythoncore/unicodeobject.obj
-deleted file mode 100644
-index 86ef16f..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/unicodeobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/weakrefobject.obj b/PCbuild/Win32-temp-Release/pythoncore/weakrefobject.obj
-deleted file mode 100644
-index 5a3cb86..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/weakrefobject.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/pythoncore/zutil.obj b/PCbuild/Win32-temp-Release/pythoncore/zutil.obj
-deleted file mode 100644
-index 700093b..0000000
-Binary files a/PCbuild/Win32-temp-Release/pythoncore/zutil.obj and /dev/null differ
-diff --git a/PCbuild/Win32-temp-Release/w9xpopen/w9xpopen.obj b/PCbuild/Win32-temp-Release/w9xpopen/w9xpopen.obj
-deleted file mode 100644
-index c5d2ba1..0000000
-Binary files a/PCbuild/Win32-temp-Release/w9xpopen/w9xpopen.obj and /dev/null differ
 diff --git a/PCbuild/_bsddb.vcproj b/PCbuild/_bsddb.vcproj
 index a323171..0174c97 100644
 --- a/PCbuild/_bsddb.vcproj
@@ -5739,7 +5243,7 @@ index 19d5497..b31f9b6 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/_ssl.vcproj b/PCbuild/_ssl.vcproj
-index d1fe19f..2df10ec 100644
+index d1fe19f..2bc77c2 100644
 --- a/PCbuild/_ssl.vcproj
 +++ b/PCbuild/_ssl.vcproj
 @@ -1,545 +1,545 @@
@@ -6473,7 +5977,7 @@ index d1fe19f..2df10ec 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(prefix)\lib\libeay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -6537,7 +6041,7 @@ index d1fe19f..2df10ec 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(prefix)\lib\libeay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -6664,7 +6168,7 @@ index d1fe19f..2df10ec 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+                AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +				TargetMachine="17"
 +			/>
 +			<Tool
@@ -6792,7 +6296,7 @@ index d1fe19f..2df10ec 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+                AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +				TargetMachine="17"
 +			/>
 +			<Tool
@@ -6834,7 +6338,7 @@ index d1fe19f..2df10ec 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/bz2.vcproj b/PCbuild/bz2.vcproj
-index afda578..4a56e49 100644
+index afda578..596345a 100644
 --- a/PCbuild/bz2.vcproj
 +++ b/PCbuild/bz2.vcproj
 @@ -1,581 +1,583 @@
@@ -7601,7 +7105,7 @@ index afda578..4a56e49 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="$(prefix)\lib"
++				AdditionalDependencies="$(prefix)\lib\libbz2.lib"
 +				BaseAddress="0x1D170000"
 +			/>
 +			<Tool
