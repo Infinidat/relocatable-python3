@@ -34,6 +34,7 @@ def clean(argv = ' '.join(argv[1:])):
     base = abspath(sep.join([__file__, pardir, pardir, pardir]))
     dist = sep.join([base, 'dist'])
     parts = sep.join([base, 'parts'])
+    installed_file = sep.join([base, '.installed-build.cfg'])
 
     print "base = %s" % repr(base)
 
@@ -48,6 +49,9 @@ def clean(argv = ' '.join(argv[1:])):
     dst = sep.join([base ,'buildout'])
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
+
+    print "rm %s" % repr(installed_file)
+    remove(installed_file)
 
     print "rm -rf %s" % repr(parts)
     _catch_and_print(rmtree, *[parts])
