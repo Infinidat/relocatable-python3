@@ -4012,7 +4012,7 @@ index 5184e45..0df0cc8 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/_sqlite3.vcproj b/PCbuild/_sqlite3.vcproj
-index 19d5497..c96a747 100644
+index 19d5497..b31f9b6 100644
 --- a/PCbuild/_sqlite3.vcproj
 +++ b/PCbuild/_sqlite3.vcproj
 @@ -1,613 +1,613 @@
@@ -4797,7 +4797,7 @@ index 19d5497..c96a747 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(prefix)\include"
++				AdditionalIncludeDirectories="$(sqlite3Dir)"
 +				PreprocessorDefinitions="MODULE_NAME=\&quot;sqlite3\&quot;"
 +			/>
 +			<Tool
@@ -4860,7 +4860,7 @@ index 19d5497..c96a747 100644
 +			/>
 +			<Tool
 +				Name="VCCLCompilerTool"
-+				AdditionalIncludeDirectories="$(prefix)\include"
++				AdditionalIncludeDirectories="$(sqlite3Dir)"
 +				PreprocessorDefinitions="MODULE_NAME=\&quot;sqlite3\&quot;"
 +			/>
 +			<Tool
@@ -5243,7 +5243,7 @@ index 19d5497..c96a747 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/_ssl.vcproj b/PCbuild/_ssl.vcproj
-index d1fe19f..f22b4d7 100644
+index d1fe19f..faeca40 100644
 --- a/PCbuild/_ssl.vcproj
 +++ b/PCbuild/_ssl.vcproj
 @@ -1,545 +1,545 @@
@@ -5821,7 +5821,7 @@ index d1fe19f..f22b4d7 100644
 +			>
 +			<Tool
 +				Name="VCPreBuildEventTool"
-+				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;&quot;$(PythonExe)&quot; build_ssl.py Release $(PlatformName) -a&#x0D;&#x0A;"
++				CommandLine=""
 +			/>
 +			<Tool
 +				Name="VCCustomBuildTool"
