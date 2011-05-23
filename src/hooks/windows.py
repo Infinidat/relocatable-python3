@@ -12,7 +12,6 @@ def openssl_pre_make(options, buildout, environ):
 def openssl_pre_make64(options, buildout, environ):
     _execute(r'ms\do_win64a.bat', environ)
 
-
 def _db_post_make(platform_name, prefix):
     import os
     os.system('cp -fvr build_windows/*h %s/include' % prefix)
