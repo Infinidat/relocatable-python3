@@ -1,0 +1,12 @@
+diff --git a/makefile.msc b/makefile.msc
+index 799a18a..4345aac 100644
+--- a/makefile.msc
++++ b/makefile.msc
+@@ -61,3 +61,7 @@ clean:
+ .c.obj: 
+ 	$(CC) $(CFLAGS) -c $*.c -o $*.obj
+ 
++install:
++    -cp bzlib.h $(PREFIX)\include
++    -cp libbz2.lib $(PREFIX)\lib
++
