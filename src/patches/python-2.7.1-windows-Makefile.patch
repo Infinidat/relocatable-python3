@@ -5243,7 +5243,7 @@ index 19d5497..b31f9b6 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/_ssl.vcproj b/PCbuild/_ssl.vcproj
-index d1fe19f..faeca40 100644
+index d1fe19f..defe44e 100644
 --- a/PCbuild/_ssl.vcproj
 +++ b/PCbuild/_ssl.vcproj
 @@ -1,545 +1,545 @@
@@ -5947,7 +5947,7 @@ index d1fe19f..faeca40 100644
 +			>
 +			<Tool
 +				Name="VCPreBuildEventTool"
-+				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;&quot;$(PythonExe)&quot; build_ssl.py Release $(PlatformName) -a&#x0D;&#x0A;"
++				CommandLine=""
 +			/>
 +			<Tool
 +				Name="VCCustomBuildTool"
@@ -6010,7 +6010,7 @@ index d1fe19f..faeca40 100644
 +			>
 +			<Tool
 +				Name="VCPreBuildEventTool"
-+				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;&quot;$(PythonExe)&quot; build_ssl.py Release $(PlatformName) -a&#x0D;&#x0A;"
++				CommandLine=""
 +			/>
 +			<Tool
 +				Name="VCCustomBuildTool"
@@ -7506,6 +7506,20 @@ index afda578..4a56e49 100644
 +	<Globals>
 +	</Globals>
 +</VisualStudioProject>
+diff --git a/PCbuild/pcbuild.sln b/PCbuild/pcbuild.sln
+index 725c6ea..f28cbfc 100644
+--- a/PCbuild/pcbuild.sln
++++ b/PCbuild/pcbuild.sln
+@@ -269,9 +269,7 @@ Global
+ 		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
+ 		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.PGUpdate|x64.Build.0 = PGUpdate|x64
+ 		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.Release|Win32.ActiveCfg = Release|Win32
+-		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.Release|Win32.Build.0 = Release|Win32
+ 		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.Release|x64.ActiveCfg = Release|x64
+-		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.Release|x64.Build.0 = Release|x64
+ 		{0E9791DB-593A-465F-98BC-681011311618}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{0E9791DB-593A-465F-98BC-681011311618}.Debug|Win32.Build.0 = Debug|Win32
+ 		{0E9791DB-593A-465F-98BC-681011311618}.Debug|x64.ActiveCfg = Debug|x64
 diff --git a/PCbuild/pyproject.vsprops b/PCbuild/pyproject.vsprops
 index 33c3576..7f35609 100644
 --- a/PCbuild/pyproject.vsprops
