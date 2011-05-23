@@ -5243,7 +5243,7 @@ index 19d5497..b31f9b6 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/_ssl.vcproj b/PCbuild/_ssl.vcproj
-index d1fe19f..0b599b0 100644
+index d1fe19f..2df10ec 100644
 --- a/PCbuild/_ssl.vcproj
 +++ b/PCbuild/_ssl.vcproj
 @@ -1,545 +1,545 @@
@@ -5851,7 +5851,7 @@ index d1fe19f..0b599b0 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -5914,7 +5914,7 @@ index d1fe19f..0b599b0 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -6104,7 +6104,7 @@ index d1fe19f..0b599b0 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -6168,7 +6168,7 @@ index d1fe19f..0b599b0 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++                AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\
 +				TargetMachine="17"
 +			/>
 +			<Tool
@@ -6232,7 +6232,7 @@ index d1fe19f..0b599b0 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\ssleay32.lib"
 +			/>
 +			<Tool
 +				Name="VCALinkTool"
@@ -6296,7 +6296,7 @@ index d1fe19f..0b599b0 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++                AdditionalDependencies="ws2_32.lib $(prefixDir)\libeay32.lib $(prefixDir)\
 +				TargetMachine="17"
 +			/>
 +			<Tool
