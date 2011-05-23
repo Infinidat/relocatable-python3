@@ -49,6 +49,7 @@ def clean(argv = ' '.join(argv[1:])):
 
     src = sep.join([parts, 'buildout'])
     dst = sep.join([base ,'buildout'])
+
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
 
