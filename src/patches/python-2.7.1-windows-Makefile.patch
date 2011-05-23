@@ -1,5 +1,5 @@
 diff --git a/PCbuild/_bsddb.vcproj b/PCbuild/_bsddb.vcproj
-index a323171..721cd6e 100644
+index a323171..98c05ad 100644
 --- a/PCbuild/_bsddb.vcproj
 +++ b/PCbuild/_bsddb.vcproj
 @@ -1,1463 +1,1451 @@
@@ -2253,7 +2253,7 @@ index a323171..721cd6e 100644
 +				>
 +			</File>
 +			<File
-+				RelativePath="$(bsddbDir)\..\lang\dbm\dbm.c"
++				RelativePath="$(bsddbDir)\..\..\lang\dbm\dbm.c"
 +				>
 +			</File>
 +			<File
@@ -2409,7 +2409,7 @@ index a323171..721cd6e 100644
 +				>
 +			</File>
 +			<File
-+				RelativePath="$(bsddbDir)\..\lang\hsearch\hsearch.c"
++				RelativePath="$(bsddbDir)\..\..\lang\hsearch\hsearch.c"
 +				>
 +			</File>
 +			<File
