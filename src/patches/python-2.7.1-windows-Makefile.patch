@@ -7520,7 +7520,7 @@ index afda578..4a56e49 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/pyproject.vsprops b/PCbuild/pyproject.vsprops
-index 33c3576..4c30bd9 100644
+index 33c3576..7f35609 100644
 --- a/PCbuild/pyproject.vsprops
 +++ b/PCbuild/pyproject.vsprops
 @@ -45,12 +45,20 @@
@@ -7543,7 +7543,7 @@ index 33c3576..4c30bd9 100644
  	<UserMacro
  		Name="bsddb47Dir"
 -		Value="$(externalsDir)\db-4.7.25.0\build_windows"
-+		Value="$(partsDir)\db__compile__\db-5.1.25\build_windows"
++		Value="$(partsDir)\db__compile__\db-5.1.25\src\db"
  	/>
  	<UserMacro
  		Name="bsddb47DepLibs"
