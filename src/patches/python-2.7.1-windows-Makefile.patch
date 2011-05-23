@@ -7538,6 +7538,8 @@ index 33c3576..7f93fbf 100644
  	ProjectType="Visual C++"
  	Version="8.00"
  	Name="pyproject"
+-	OutputDirectory="$(SolutionDir)"
++	OutputDirectory="$(SolutionDir)\Release"
  	IntermediateDirectory="$(SolutionDir)$(PlatformName)-temp-$(ConfigurationName)\$(ProjectName)\"
  	>
  	<Tool
@@ -8674,6 +8676,8 @@ index 0720084..5f01c99 100644
  	ProjectType="Visual C++"
  	Version="8.00"
  	Name="amd64"
+-	OutputDirectory="$(SolutionDir)\amd64\"
++	OutputDirectory="$(SolutionDir)\Release"
  	IntermediateDirectory="$(SolutionDir)$(PlatformName)-temp-$(ConfigurationName)\$(ProjectName)\"
  	>
  	<Tool
