@@ -87,7 +87,7 @@ class PythonPostMake(object):
         from os import path
         shutil.copytree(path.join(self.python_source_path, 'Include'),
                         self.prefix)
-        shtutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
+        shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
 
     def make_binaries(self):
