@@ -98,6 +98,7 @@ class PythonPostMake(object):
 
     def make_libraries(self):
         import shutil
+        import glob
         from os import path
         for pyd_file in glob.glob(path.join(self.python_source_path,
                                             'lib', '*')):
