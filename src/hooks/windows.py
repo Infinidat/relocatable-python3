@@ -101,7 +101,7 @@ class PythonPostMake(object):
         import glob
         from os import path
         os.system("cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
-                                    path.join(self.prefix, 'lib'))
+                                    path.join(self.prefix, 'lib')))
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
