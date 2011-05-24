@@ -102,8 +102,11 @@ class PythonPostMake(object):
         from os import path
         for pyd_file in glob.glob(path.join(self.python_source_path,
                                             'lib', '*')):
-            shutil.copytree(path.join(self.python_source_path, 'Lib', pyd_file),
-                            path.join(self.prefix, 'lib'))
+            if path.isfile(pyd_file):
+                shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            if path.isdir(pyd_file):
+                shutil.copytree(path.join(self.python_source_path, 'Lib', pyd_file),
+                                path.join(self.prefix, 'lib'))
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
