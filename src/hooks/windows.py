@@ -45,7 +45,7 @@ class PythonPostMake(object):
         self.make_lib()
         self.make_ico()
         self.make_includes()
-        self.make_binaries()
+        self.make_libraries()
 
     def make_pyd(self):
         import glob
@@ -96,11 +96,13 @@ class PythonPostMake(object):
         shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
 
-    def make_binaries(self):
+    def make_libraries(self):
         import shutil
         from os import path
-        shutil.copytree(path.join(self.python_source_path, 'Lib'),
-                        path.join(self.prefix, 'lib'))
+        for pyd_file in glob.glob(path.join(self.python_source_path,
+                                            'lib', '*')):
+            shutil.copytree(path.join(self.python_source_path, 'Lib', pyd_file),
+                            path.join(self.prefix, 'lib'))
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
