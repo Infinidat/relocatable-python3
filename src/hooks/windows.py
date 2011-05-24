@@ -1,5 +1,7 @@
 
 import os, subprocess
+from os import path
+import glob
 
 def _execute(cmd, env):
     process = subprocess.Popen(cmd.split(), env=env)
@@ -48,45 +50,29 @@ class PythonPostMake(object):
         self.make_libraries()
 
     def make_pyd(self):
-        import glob
-        import shutil
-        from os import path
-        for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.pyd')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'DLLs'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'DLLs'))
+        dst = path.join(self.prefix, 'DLLs')
+        src = glob.glob(path.join(self.pcbuild_path, '*.pyd'))
+        _copy_files(src, dst)
 
     def make_exe(self):
-        import glob
-        import shutil
-        from os import path
-        for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.exe')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'bin'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'bin'))
+        dst = path.join(self.prefix, 'bin')
+        src = glob.glob(path.join(self.pcbuild_path, '*.exe'))
+        _copy_files(src, dst)
 
     def make_dll(self):
-        import glob
-        import shutil
-        from os import path
-        for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.dll')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'bin'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'bin'))
+        dst = path.join(self.prefix, 'bin')
+        src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
+        _copy_files(src, dst)
 
     def make_lib(self):
-        import glob
-        import shutil
-        from os import path
-        for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.lib')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'libs'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'libs'))
+        dst = path.join(self.prefix, 'libs')
+        src = glob.glob(path.join(self.pcbuild_path, '*.lib'))
+        _copy_files(src, dst)
 
     def make_ico(self):
-        import glob
-        import shutil
-        from os import path
-        for pyd_file in glob.glob(path.join(self.python_source_path,
-                                            'PC', '*.ico')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
+        dst = path.join(self.prefix, 'bin')
+        src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
+        _copy_files(src, dst)
 
     def make_includes(self):
         import shutil
@@ -99,9 +85,22 @@ class PythonPostMake(object):
 
     def make_libraries(self):
         from os import path
-        cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
-                                path.join(self.prefix))
+        dst = path.join(self.prefix, 'lib')
+        src = path.join(self.python_source_path, 'lib')
+        my_path(dst)
+        cmd = "cp -fr %s %s" % (src, dst)
         _system(cmd)
+
+def _mk_path(path):
+    if os.path.exists(path):
+        return
+    os.makedirs(path)
+
+def _copy_files(src_glob, dst):
+    _mk_path(dst)
+    for item in src_glob:
+        print 'cp %s %s' % (item, dst)
+        shutil.copy(item, dst)
 
 def _system(cmd):
     print cmd
