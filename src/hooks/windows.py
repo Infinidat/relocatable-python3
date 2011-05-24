@@ -52,6 +52,7 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.pyd')):
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
             shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_exe(self):
