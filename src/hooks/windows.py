@@ -103,3 +103,6 @@ def python_post_make64(options, buildout, environ):
     instance = PythonPostMake(environ, True)
     instance.make_install()
 
+if __name__ == '__main__':
+    environ = {'PREFIX': r'C:\Users\jenkins\workspace\python-feature-v2.7.1-windows\label\windows-x86'}
+    python_post_make(None, None, environ)
