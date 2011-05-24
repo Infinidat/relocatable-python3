@@ -1,7 +1,7 @@
 
 import os, subprocess
 from os import path
-import glob
+import glob, shutil
 
 def _execute(cmd, env):
     process = subprocess.Popen(cmd.split(), env=env)
