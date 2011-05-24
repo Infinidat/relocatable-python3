@@ -54,6 +54,7 @@ class PythonPostMake(object):
     def move_dlls(self):
         dst = path.join(self.prefix, 'DLLs')
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
+        _mk_path(dst)
         for item in src:
             if 'python27.dll' in item:
                 continue
@@ -63,6 +64,7 @@ class PythonPostMake(object):
     def move_libs(self):
         dst = path.join(self.prefix, 'libs')
         src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
+        _mk_path(dst)
         for item in src:
             if 'python27.dll' in item:
                 continue
