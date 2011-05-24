@@ -68,8 +68,8 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.dll')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'bin'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'bin'))
 
     def make_lib(self):
         import glob
