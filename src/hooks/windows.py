@@ -93,8 +93,7 @@ class PythonPostMake(object):
         from os import path
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
                                 path.join(self.prefix, 'Include'))
-        print cmd
-        os.system(cmd)
+        _system(cmd)
         shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
 
@@ -102,8 +101,11 @@ class PythonPostMake(object):
         from os import path
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
                                 path.join(self.prefix, 'lib'))
-        print cmd
-        os.system(cmd)
+        _system(cmd)
+
+def _system(cmd):
+    print cmd
+    os.sytem(cmd.replace(os.path.sep, '/')
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
