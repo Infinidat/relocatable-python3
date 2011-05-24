@@ -41,6 +41,8 @@ class PythonPostMake(object):
         print self.python_source_path, self.pcbuild_path, self.prefix
 
     def make_install(self):
+        self.move_dlls()
+        self.move_libs()
         self.make_pyd()
         self.make_exe()
         self.make_dll()
@@ -48,6 +50,24 @@ class PythonPostMake(object):
         self.make_ico()
         self.make_includes()
         self.make_libraries()
+
+    def move_dlls(self):
+        dst = path.join(self.prefix, 'DLLs')
+        src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
+        for item in src:
+            if 'python27.dll' in item:
+                continue
+            cmd = 'mv %s %s' % (item, dst)
+            _system(cmd)
+
+    def move_libs(self):
+        dst = path.join(self.prefix, 'libs')
+        src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
+        for item in src:
+            if 'python27.dll' in item:
+                continue
+            cmd = 'mv %s %s' % (item, dst)
+            _system(cmd)
 
     def make_pyd(self):
         dst = path.join(self.prefix, 'DLLs')
