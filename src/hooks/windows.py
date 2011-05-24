@@ -91,17 +91,17 @@ class PythonPostMake(object):
     def make_includes(self):
         import shutil
         from os import path
-        shutil.copytree(path.join(self.python_source_path, 'Include'),
-                        path.join(self.prefix, 'Include'))
+        cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
+                                path.join(self.prefix, 'Include'))
+        print cmd
+        os.system(cmd)
         shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
 
     def make_libraries(self):
-        import shutil
-        import glob
         from os import path
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
-                                    path.join(self.prefix, 'lib'))
+                                path.join(self.prefix, 'lib'))
         print cmd
         os.system(cmd)
 
