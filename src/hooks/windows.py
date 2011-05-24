@@ -87,7 +87,7 @@ class PythonPostMake(object):
         from os import path
         dst = path.join(self.prefix, 'lib')
         src = path.join(self.python_source_path, 'lib')
-        my_path(dst)
+        mk_path(dst)
         cmd = "cp -fr %s %s" % (src, dst)
         _system(cmd)
 
