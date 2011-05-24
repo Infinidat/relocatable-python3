@@ -85,7 +85,7 @@ class PythonPostMake(object):
 
     def make_libraries(self):
         from os import path
-        dst = path.join(self.prefix, 'lib')
+        dst = path.join(self.prefix,)
         src = path.join(self.python_source_path, 'lib')
         _mk_path(dst)
         cmd = "cp -fr %s %s" % (src, dst)
