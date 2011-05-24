@@ -20,6 +20,8 @@ def build(argv = ' '.join(argv[1:])):
 
 def pack(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-pack.cfg %s' % argv
+    if system() == 'Windows':
+        command = './bin/buildout -c buildout-pack-windows.cfg %s' % argv
     print 'executing "%s"' % command
     process = Popen(command.split())
     stdout, stderr = process.communicate()
