@@ -60,6 +60,7 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.exe')):
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'bin'))
             shutil.copy(pyd_file, path.join(self.prefix, 'bin'))
 
     def make_dll(self):
@@ -67,6 +68,7 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.dll')):
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
             shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_lib(self):
@@ -74,6 +76,7 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.lib')):
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
             shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_ico(self):
@@ -82,13 +85,14 @@ class PythonPostMake(object):
         from os import path
         for pyd_file in glob.glob(path.join(self.python_source_path,
                                             'PC', '*.ico')):
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
             shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
 
     def make_includes(self):
         import shutil
         from os import path
         shutil.copytree(path.join(self.python_source_path, 'Include'),
-                        self.prefix)
+                        path.join(self.prefix, 'Include'))
         shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
 
