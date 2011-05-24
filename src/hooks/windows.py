@@ -100,8 +100,10 @@ class PythonPostMake(object):
         import shutil
         import glob
         from os import path
-        os.system("cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
-                                    path.join(self.prefix, 'lib')))
+        cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
+                                    path.join(self.prefix, 'lib'))
+        print cmd
+        os.system(cmd)
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
