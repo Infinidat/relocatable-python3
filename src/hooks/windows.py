@@ -28,14 +28,10 @@ def db_post_make64(options, buildout, environ):
     _db_post_make('x64', prefix)
 
 class PythonPostMake(object):
-    def __init__(self, environ, x64_build=False):
+    def __init__(self, environ):
         from os import path, curdir
         self.python_source_path = path.abspath(path.join(curdir, path.pardir))
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
-        self.x64_build = x64_build
-        if self.x64_build:
-            self.pcbuild_path = path.join(self.python_source_path, 'PCbuild',
-                                         'x64')
         self.prefix = environ['PREFIX']
 
         print self.python_source_path, self.pcbuild_path, self.prefix
@@ -129,11 +125,11 @@ def _system(cmd):
     os.system(cmd.replace(os.path.sep, '/'))
 
 def python_post_make(options, buildout, environ):
-    instance = PythonPostMake(environ, False)
+    instance = PythonPostMake(environ)
     instance.make_install()
 
 def python_post_make64(options, buildout, environ):
-    instance = PythonPostMake(environ, True)
+    instance = PythonPostMake(environ)
     instance.make_install()
 
 if __name__ == '__main__':
