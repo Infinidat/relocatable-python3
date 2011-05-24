@@ -7507,9 +7507,31 @@ index afda578..596345a 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/pcbuild.sln b/PCbuild/pcbuild.sln
-index 725c6ea..bef8259 100644
+index 725c6ea..5697af3 100644
 --- a/PCbuild/pcbuild.sln
 +++ b/PCbuild/pcbuild.sln
+@@ -174,8 +174,8 @@ Global
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|x64.Build.0 = Release|Win32
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|Win32.ActiveCfg = Release|Win32
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|Win32.Build.0 = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.ActiveCfg = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.Build.0 = Release|Win32
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.ActiveCfg = Release|x64
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.Build.0 = Release|x64
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}.Debug|Win32.Build.0 = Debug|Win32
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}.Debug|x64.ActiveCfg = Debug|x64
+@@ -238,8 +238,8 @@ Global
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|x64.Build.0 = Release|Win32
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|Win32.ActiveCfg = Release|Win32
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|Win32.Build.0 = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.ActiveCfg = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.Build.0 = Release|Win32
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.ActiveCfg = Release|x64
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.Build.0 = Release|x64
+ 		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|Win32.Build.0 = Debug|Win32
+ 		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|x64.ActiveCfg = Debug|x64
 @@ -269,9 +269,7 @@ Global
  		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
  		{B4D38F3F-68FB-42EC-A45D-E00657BB3627}.PGUpdate|x64.Build.0 = PGUpdate|x64
