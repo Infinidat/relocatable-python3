@@ -105,7 +105,7 @@ class PythonPostMake(object):
 
 def _system(cmd):
     print cmd
-    os.sytem(cmd.replace(os.path.sep, '/'))
+    os.system(cmd.replace(os.path.sep, '/'))
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
