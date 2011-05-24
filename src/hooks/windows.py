@@ -52,8 +52,8 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.pyd')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'DLLs'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'DLLs'))
 
     def make_exe(self):
         import glob
@@ -76,8 +76,8 @@ class PythonPostMake(object):
         import shutil
         from os import path
         for pyd_file in glob.glob(path.join(self.pcbuild_path, '*.lib')):
-            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'lib'))
-            shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
+            print 'cp %s %s' % (pyd_file, path.join(self.prefix, 'libs'))
+            shutil.copy(pyd_file, path.join(self.prefix, 'libs'))
 
     def make_ico(self):
         import glob
@@ -100,7 +100,7 @@ class PythonPostMake(object):
         import shutil
         from os import path
         shutil.copytree(path.join(self.python_source_path, 'Lib'),
-                        path.join(self.prefix, 'lib', 'python2.7'))
+                        path.join(self.prefix, 'lib'))
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ, False)
