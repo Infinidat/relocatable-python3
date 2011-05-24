@@ -36,6 +36,8 @@ class PythonPostMake(object):
                                          'x64')
         self.prefix = environ['PREFIX']
 
+        print self.python_source_path, self.pcbuild_path, self.prefix
+
     def make_install(self):
         self.make_pyd()
         self.make_exe()
