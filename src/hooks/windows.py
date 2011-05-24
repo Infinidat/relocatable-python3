@@ -92,7 +92,7 @@ class PythonPostMake(object):
         import shutil
         from os import path
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
-                                path.join(self.prefix, 'Include'))
+                                path.join(self.prefix))
         _system(cmd)
         shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
@@ -100,7 +100,7 @@ class PythonPostMake(object):
     def make_libraries(self):
         from os import path
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'lib'),
-                                path.join(self.prefix, 'lib'))
+                                path.join(self.prefix))
         _system(cmd)
 
 def _system(cmd):
