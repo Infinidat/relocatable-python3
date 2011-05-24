@@ -6338,7 +6338,7 @@ index d1fe19f..98e0272 100644
 +	</Globals>
 +</VisualStudioProject>
 diff --git a/PCbuild/bz2.vcproj b/PCbuild/bz2.vcproj
-index afda578..596345a 100644
+index afda578..de9f82d 100644
 --- a/PCbuild/bz2.vcproj
 +++ b/PCbuild/bz2.vcproj
 @@ -1,581 +1,583 @@
@@ -7169,7 +7169,7 @@ index afda578..596345a 100644
 +			/>
 +			<Tool
 +				Name="VCLinkerTool"
-+				AdditionalDependencies="$(prefix)\lib"
++				AdditionalDependencies="$(prefix)\lib\libbz2.lib"
 +				BaseAddress="0x1D170000"
 +			/>
 +			<Tool
