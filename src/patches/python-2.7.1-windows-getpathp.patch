@@ -1,0 +1,15 @@
+diff --git a/PC/getpathp.c b/PC/getpathp.c
+index 461f9fc..b787a28 100644
+--- a/PC/getpathp.c
++++ b/PC/getpathp.c
+@@ -511,10 +511,6 @@ calculate_path(void)
+     }
+ 
+     skiphome = pythonhome==NULL ? 0 : 1;
+-#ifdef Py_ENABLE_SHARED
+-    machinepath = getpythonregpath(HKEY_LOCAL_MACHINE, skiphome);
+-    userpath = getpythonregpath(HKEY_CURRENT_USER, skiphome);
+-#endif
+     /* We only use the default relative PYTHONPATH if we havent
+        anything better to use! */
+     skipdefault = envpath!=NULL || pythonhome!=NULL || \
