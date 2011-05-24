@@ -105,6 +105,8 @@ class PythonPostMake(object):
             if path.isfile(pyd_file):
                 shutil.copy(pyd_file, path.join(self.prefix, 'lib'))
             if path.isdir(pyd_file):
+                if path.exists(path.join(self.prefix, 'lib', pyd_file)):
+                    shutil.rmtree(path.join(self.prefix, 'lib', pyd_file))
                 shutil.copytree(path.join(self.python_source_path, 'Lib', pyd_file),
                                 path.join(self.prefix, 'lib', pyd_file))
 
