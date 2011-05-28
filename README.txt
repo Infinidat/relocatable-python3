@@ -7,7 +7,7 @@ The build system itself is written in Python, based on zc.buildout and some reci
 
 The sources are downloaded from the Internet, stored locally and then built.
 
-It works on Linux and OSX for now.
+It works on Linux, OSX and Windows for now.
 
 In order to build python, execute:
 
