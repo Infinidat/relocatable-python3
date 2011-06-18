@@ -1,6 +1,6 @@
 __import__("pkg_resources").declare_namespace(__name__)
 
-from sys import argv, maxsize
+from sys import argv
 from subprocess import Popen
 from platform import system
 
@@ -9,6 +9,7 @@ def build(argv = ' '.join(argv[1:])):
     if system() == 'Darwin':
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     if system() == 'Windows':
+        from sys import maxsize
         if maxsize > 2**32:
             command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
         else:
