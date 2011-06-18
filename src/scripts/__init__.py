@@ -3,6 +3,7 @@ __import__("pkg_resources").declare_namespace(__name__)
 from sys import argv
 from subprocess import Popen
 from platform import system
+from sys import exit
 
 def build(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-build.cfg %s' % argv
