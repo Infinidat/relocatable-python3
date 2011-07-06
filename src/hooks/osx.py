@@ -95,10 +95,16 @@ def patch_cyrus_sasl(options, buildout, version):
         remove_rpath_in_file(item)
 
 def patch_python(options, buildout, version):
+    from os.path import abspath
     change_install_name(options, buildout, version)
     for file in ['Makefile.pre.in', 'configure', 'configure.in']:
         content = open(file).read()
+        print abspath('./%s' % file)
+        assert len(content)
         content = content.replace(r'-install_name,$(prefix)/lib', '-install_name,@rpath')
+        previous = content
+        content = content.replace(r'-install_name $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
         content = content.replace(r'-install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
+        assert '@rpath' in content
         open(file, 'w').write(content)
 
