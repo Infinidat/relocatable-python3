@@ -1,0 +1,27 @@
+diff --git a/gettext-tools/Makefile.in b/gettext-tools/Makefile.in
+index 48869d7..71cd355 100644
+--- a/gettext-tools/Makefile.in
++++ b/gettext-tools/Makefile.in
+@@ -1248,7 +1248,7 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = 1.5 gnu no-dependencies
+ ACLOCAL_AMFLAGS = -I m4 -I ../gettext-runtime/m4 -I ../m4 -I gnulib-m4 -I libgrep/gnulib-m4 -I libgettextpo/gnulib-m4
+-SUBDIRS = doc intl gnulib-lib libgrep src libgettextpo po projects styles misc man m4 tests gnulib-tests examples
++SUBDIRS = doc intl gnulib-lib libgrep src libgettextpo po projects styles misc man m4 tests gnulib-tests
+ 
+ # Allow users to use "gnulib-tool --update".
+ 
+diff --git a/gettext-tools/configure b/gettext-tools/configure
+index 33fae37..35c60f4 100755
+--- a/gettext-tools/configure
++++ b/gettext-tools/configure
+@@ -40606,7 +40606,9 @@ else
+ #include <stdlib.h>
+ #include <string.h> /* for strcpy */
+ /* The stpncpy prototype is missing in <string.h> on AIX 4.  */
++#ifndef stpncpy
+ extern char *stpncpy (char *dest, const char *src, size_t n);
++#endif
+ int main () {
+   const char *src = "Hello";
+   char dest[10];
