@@ -37,7 +37,6 @@ class PythonPostMake(object):
         print self.python_source_path, self.pcbuild_path, self.prefix
 
     def make_install(self):
-        self.move_dlls()
         self.move_libs()
         self.make_pyd()
         self.make_exe()
@@ -46,6 +45,7 @@ class PythonPostMake(object):
         self.make_ico()
         self.make_includes()
         self.make_libraries()
+        self.move_dlls()
 
     def move_dlls(self):
         dst = path.join(self.prefix, 'DLLs')
