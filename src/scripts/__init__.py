@@ -7,9 +7,13 @@ from sys import exit
 
 def build(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-build.cfg %s' % argv
-    if system() == 'Darwin':
+    if system() == 'Linux':
+        from platform import linux_distribution
+        if linux_distribution()[0] == 'Ubuntu':
+            command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
+    elif system() == 'Darwin':
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
-    if system() == 'Windows':
+    elif system() == 'Windows':
         from sys import maxsize
         if maxsize > 2**32:
             command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
