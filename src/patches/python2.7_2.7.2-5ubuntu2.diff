@@ -1,5 +1,5 @@
---- python2.7-2.7.1.orig/debian/mkbinfmt.py
-+++ python2.7-2.7.1/debian/mkbinfmt.py
+--- python2.7-2.7.2.orig/debian/mkbinfmt.py
++++ python2.7-2.7.2/debian/mkbinfmt.py
 @@ -0,0 +1,17 @@
 +# mkbinfmt.py
 +import imp, sys, string, os.path
@@ -18,8 +18,8 @@
 +#open(filename,'w+').write(binfmt)
 +
 +print binfmt
---- python2.7-2.7.1.orig/debian/PVER-minimal.preinst.in
-+++ python2.7-2.7.1/debian/PVER-minimal.preinst.in
+--- python2.7-2.7.2.orig/debian/PVER-minimal.preinst.in
++++ python2.7-2.7.2/debian/PVER-minimal.preinst.in
 @@ -0,0 +1,39 @@
 +#!/bin/sh
 +
@@ -60,8 +60,8 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/README.idle-PVER.in
-+++ python2.7-2.7.1/debian/README.idle-PVER.in
+--- python2.7-2.7.2.orig/debian/README.idle-PVER.in
++++ python2.7-2.7.2/debian/README.idle-PVER.in
 @@ -0,0 +1,14 @@
 +
 +  The Python IDLE package for Debian
@@ -77,8 +77,8 @@
 +
 +    06/16/1999
 +    Gregor Hoffleit <flight@debian.org>
---- python2.7-2.7.1.orig/debian/pyhtml2devhelp.py
-+++ python2.7-2.7.1/debian/pyhtml2devhelp.py
+--- python2.7-2.7.2.orig/debian/pyhtml2devhelp.py
++++ python2.7-2.7.2/debian/pyhtml2devhelp.py
 @@ -0,0 +1,222 @@
 +#! /usr/bin/python
 +
@@ -302,8 +302,8 @@
 +    print '</book>'
 +
 +main()
---- python2.7-2.7.1.orig/debian/pymindeps.py
-+++ python2.7-2.7.1/debian/pymindeps.py
+--- python2.7-2.7.2.orig/debian/pymindeps.py
++++ python2.7-2.7.2/debian/pymindeps.py
 @@ -0,0 +1,174 @@
 +#! /usr/bin/python
 +
@@ -479,8 +479,8 @@
 +    
 +if __name__=='__main__':
 +    main(sys.argv[1:])
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-tut.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-tut.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-tut.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-tut.in
 @@ -0,0 +1,13 @@
 +Document: @PVER@-tut
 +Title: Python Tutorial (v@VER@)
@@ -495,8 +495,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/tutorial/index.html
 +Files: /usr/share/doc/@PVER@/html/tutorial/*.html
---- python2.7-2.7.1.orig/debian/pydoc.1.in
-+++ python2.7-2.7.1/debian/pydoc.1.in
+--- python2.7-2.7.2.orig/debian/pydoc.1.in
++++ python2.7-2.7.2/debian/pydoc.1.in
 @@ -0,0 +1,53 @@
 +.TH PYDOC@VER@ 1
 +.SH NAME
@@ -551,8 +551,8 @@
 +it names a directory, documentation is written for all the contents.
 +.SH AUTHOR
 +Moshe Zadka, based on "pydoc --help"
---- python2.7-2.7.1.orig/debian/dh_doclink
-+++ python2.7-2.7.1/debian/dh_doclink
+--- python2.7-2.7.2.orig/debian/dh_doclink
++++ python2.7-2.7.2/debian/dh_doclink
 @@ -0,0 +1,28 @@
 +#! /bin/sh
 +
@@ -582,8 +582,8 @@
 +fi
 +EOF
 +fi
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-dist.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-dist.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-dist.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-dist.in
 @@ -0,0 +1,13 @@
 +Document: @PVER@-dist
 +Title: Distributing Python Modules (v@VER@)
@@ -598,8 +598,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/distutils/index.html
 +Files: /usr/share/doc/@PVER@/html/distutils/*.html
---- python2.7-2.7.1.orig/debian/PVER-minimal.README.Debian.in
-+++ python2.7-2.7.1/debian/PVER-minimal.README.Debian.in
+--- python2.7-2.7.2.orig/debian/PVER-minimal.README.Debian.in
++++ python2.7-2.7.2/debian/PVER-minimal.README.Debian.in
 @@ -0,0 +1,145 @@
 +Contents of the @PVER@-minimal package
 +-----------------------------------------
@@ -746,16 +746,16 @@
 +  calendar have to be added.
 +
 +- modules used very often in the testsuite: copy, cPickle, operator.
---- python2.7-2.7.1.orig/debian/idle-PVER.menu.in
-+++ python2.7-2.7.1/debian/idle-PVER.menu.in
+--- python2.7-2.7.2.orig/debian/idle-PVER.menu.in
++++ python2.7-2.7.2/debian/idle-PVER.menu.in
 @@ -0,0 +1,5 @@
 +?package(idle-@PVER@):needs="X11" section="Applications/Programming"\
 +	title="IDLE (Python v@VER@)"\
 +	icon="/usr/share/pixmaps/@PVER@.xpm"\
 +	command="/usr/bin/idle-@PVER@ -n" \
 +	hints="Environments"
---- python2.7-2.7.1.orig/debian/README.PVER.in
-+++ python2.7-2.7.1/debian/README.PVER.in
+--- python2.7-2.7.2.orig/debian/README.PVER.in
++++ python2.7-2.7.2/debian/README.PVER.in
 @@ -0,0 +1,95 @@
 +
 +  Python @VER@ for Debian
@@ -852,8 +852,8 @@
 +    Gregor Hoffleit <flight@debian.org>
 +
 +Last change: 2001-12-14
---- python2.7-2.7.1.orig/debian/PVER.desktop.in
-+++ python2.7-2.7.1/debian/PVER.desktop.in
+--- python2.7-2.7.2.orig/debian/PVER.desktop.in
++++ python2.7-2.7.2/debian/PVER.desktop.in
 @@ -0,0 +1,10 @@
 +[Desktop Entry]
 +Name=Python (v@VER@)
@@ -865,8 +865,8 @@
 +Categories=Development;
 +StartupNotify=true
 +NoDisplay=true
---- python2.7-2.7.1.orig/debian/sitecustomize.py.in
-+++ python2.7-2.7.1/debian/sitecustomize.py.in
+--- python2.7-2.7.2.orig/debian/sitecustomize.py.in
++++ python2.7-2.7.2/debian/sitecustomize.py.in
 @@ -0,0 +1,7 @@
 +# install the apport exception handler if available
 +try:
@@ -875,8 +875,8 @@
 +    pass
 +else:
 +    apport_python_hook.install()
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-lib.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-lib.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-lib.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-lib.in
 @@ -0,0 +1,15 @@
 +Document: @PVER@-lib
 +Title: Python Library Reference (v@VER@)
@@ -893,8 +893,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/library/index.html
 +Files: /usr/share/doc/@PVER@/html/library/*.html
---- python2.7-2.7.1.orig/debian/pylogo.xpm
-+++ python2.7-2.7.1/debian/pylogo.xpm
+--- python2.7-2.7.2.orig/debian/pylogo.xpm
++++ python2.7-2.7.2/debian/pylogo.xpm
 @@ -0,0 +1,351 @@
 +/* XPM */
 +static char * pylogo_xpm[] = {
@@ -1247,8 +1247,8 @@
 +"                  {@z.z+2+U.=+=+=+T+]@^@/@(@_@                  ",
 +"                    :@<@U.=+=+[@4+}@|@1@2@3@                    ",
 +"                      4@5@6@7@8@a+a+9@0@a@                      "};
---- python2.7-2.7.1.orig/debian/PVER.overrides.in
-+++ python2.7-2.7.1/debian/PVER.overrides.in
+--- python2.7-2.7.2.orig/debian/PVER.overrides.in
++++ python2.7-2.7.2/debian/PVER.overrides.in
 @@ -0,0 +1,11 @@
 +# idlelib images
 +@PVER@ binary: image-file-in-usr-lib
@@ -1261,8 +1261,8 @@
 +
 +# license file referred by the standard library
 +@PVER@ binary: extra-license-file
---- python2.7-2.7.1.orig/debian/idle-PVER.prerm.in
-+++ python2.7-2.7.1/debian/idle-PVER.prerm.in
+--- python2.7-2.7.2.orig/debian/idle-PVER.prerm.in
++++ python2.7-2.7.2/debian/idle-PVER.prerm.in
 @@ -0,0 +1,15 @@
 +#! /bin/sh -e
 +#
@@ -1279,15 +1279,15 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/PVER.menu.in
-+++ python2.7-2.7.1/debian/PVER.menu.in
+--- python2.7-2.7.2.orig/debian/PVER.menu.in
++++ python2.7-2.7.2/debian/PVER.menu.in
 @@ -0,0 +1,4 @@
 +?package(@PVER@):needs="text" section="Applications/Programming"\
 +	title="Python (v@VER@)"\
 +	icon="/usr/share/pixmaps/@PVER@.xpm"\
 +	command="/usr/bin/python@VER@"
---- python2.7-2.7.1.orig/debian/PVER-dbg.symbols.in
-+++ python2.7-2.7.1/debian/PVER-dbg.symbols.in
+--- python2.7-2.7.2.orig/debian/PVER-dbg.symbols.in
++++ python2.7-2.7.2/debian/PVER-dbg.symbols.in
 @@ -0,0 +1,32 @@
 +libpython@VER@_d.so.1.0 python@VER@-dbg #MINVER#
 + Py_InitModule4TraceRefs@Base @VER@
@@ -1321,12 +1321,12 @@
 + _Py_printtree@Base @VER@
 + _Py_showtree@Base @VER@
 + _Py_tok_dump@Base @VER@
---- python2.7-2.7.1.orig/debian/compat
-+++ python2.7-2.7.1/debian/compat
+--- python2.7-2.7.2.orig/debian/compat
++++ python2.7-2.7.2/debian/compat
 @@ -0,0 +1 @@
 +5
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-new.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-new.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-new.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-new.in
 @@ -0,0 +1,10 @@
 +Document: @PVER@-new
 +Title: What's new in Python @VER@
@@ -1338,8 +1338,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/whatsnew/@VER@.html
 +Files: /usr/share/doc/@PVER@/html/whatsnew/@VER@.html
---- python2.7-2.7.1.orig/debian/PVER-minimal.postinst.in
-+++ python2.7-2.7.1/debian/PVER-minimal.postinst.in
+--- python2.7-2.7.2.orig/debian/PVER-minimal.postinst.in
++++ python2.7-2.7.2/debian/PVER-minimal.postinst.in
 @@ -0,0 +1,76 @@
 +#! /bin/sh
 +
@@ -1417,8 +1417,8 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/README.dbm
-+++ python2.7-2.7.1/debian/README.dbm
+--- python2.7-2.7.2.orig/debian/README.dbm
++++ python2.7-2.7.2/debian/README.dbm
 @@ -0,0 +1,72 @@
 +
 + Python and dbm modules on Debian
@@ -1492,8 +1492,8 @@
 +
 +    July 16, 1999
 +    Gregor Hoffleit <flight@debian.org>
---- python2.7-2.7.1.orig/debian/README.Debian.in
-+++ python2.7-2.7.1/debian/README.Debian.in
+--- python2.7-2.7.2.orig/debian/README.Debian.in
++++ python2.7-2.7.2/debian/README.Debian.in
 @@ -0,0 +1,8 @@
 +The documentation for this package is in /usr/share/doc/@PVER@/.
 +
@@ -1503,8 +1503,8 @@
 +
 +Sometime it will be moved to /usr/share/doc/debian-policy in the
 +debian-policy package.
---- python2.7-2.7.1.orig/debian/PVER-minimal.postrm.in
-+++ python2.7-2.7.1/debian/PVER-minimal.postrm.in
+--- python2.7-2.7.2.orig/debian/PVER-minimal.postrm.in
++++ python2.7-2.7.2/debian/PVER-minimal.postrm.in
 @@ -0,0 +1,27 @@
 +#! /bin/sh -e
 +
@@ -1533,14 +1533,14 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/watch
-+++ python2.7-2.7.1/debian/watch
+--- python2.7-2.7.2.orig/debian/watch
++++ python2.7-2.7.2/debian/watch
 @@ -0,0 +1,3 @@
 +version=3
 +opts=dversionmangle=s/.*\+//,uversionmangle=s/([abcr]+[1-9])$/~$1/ \
 +  http://www.python.org/ftp/python/2\.7(\.\d)?/Python-(2\.7[.\dabcr]*)\.tgz
---- python2.7-2.7.1.orig/debian/libpython.symbols.in
-+++ python2.7-2.7.1/debian/libpython.symbols.in
+--- python2.7-2.7.2.orig/debian/libpython.symbols.in
++++ python2.7-2.7.2/debian/libpython.symbols.in
 @@ -0,0 +1,1255 @@
 + PyAST_Check@Base @VER@
 + PyAST_Compile@Base @VER@
@@ -2797,8 +2797,8 @@
 + (optional)initxxsubtype@Base @VER@
 + (optional)initzipimport@Base @VER@
 + (optional)initzlib@Base @VER@
---- python2.7-2.7.1.orig/debian/control
-+++ python2.7-2.7.1/debian/control
+--- python2.7-2.7.2.orig/debian/control
++++ python2.7-2.7.2/debian/control
 @@ -0,0 +1,114 @@
 +Source: python2.7
 +Section: python
@@ -2831,7 +2831,7 @@
 +Depends: ${shlibs:Depends}, ${misc:Depends}
 +Recommends: python2.7
 +Suggests: binfmt-support
-+Replaces: python2.7 (<< 2.7.1~rc1-2~)
++Replaces: python2.7 (<< 2.7.2~rc1-2~)
 +Conflicts: binfmt-support (<< 1.1.2)
 +XB-Python-Runtime: python2.7
 +XB-Python-Version: 2.7
@@ -2914,8 +2914,8 @@
 +Description: Debug Build of the Python Interpreter (version 2.7)
 + Python interpreter configured with --pydebug. Dynamically loaded modules are
 + searched in /usr/lib/python2.7/lib-dynload/debug first.
---- python2.7-2.7.1.orig/debian/PVER-dbg.prerm.in
-+++ python2.7-2.7.1/debian/PVER-dbg.prerm.in
+--- python2.7-2.7.2.orig/debian/PVER-dbg.prerm.in
++++ python2.7-2.7.2/debian/PVER-dbg.prerm.in
 @@ -0,0 +1,22 @@
 +#! /bin/sh
 +
@@ -2939,16 +2939,16 @@
 +esac
 +
 +#DEBHELPER#
---- python2.7-2.7.1.orig/debian/source.lintian-overrides.in
-+++ python2.7-2.7.1/debian/source.lintian-overrides.in
+--- python2.7-2.7.2.orig/debian/source.lintian-overrides.in
++++ python2.7-2.7.2/debian/source.lintian-overrides.in
 @@ -0,0 +1,5 @@
 +# this is conditional in the rules file
 +@PVER@ source: debhelper-script-needs-versioned-build-depends dh_icons (>= 5.0.51~)
 +
 +# generated during the build
 +@PVER@ source: quilt-build-dep-but-no-series-file
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-api.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-api.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-api.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-api.in
 @@ -0,0 +1,13 @@
 +Document: @PVER@-api
 +Title: Python/C API Reference Manual (v@VER@)
@@ -2963,8 +2963,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/c-api/index.html
 +Files: /usr/share/doc/@PVER@/html/c-api/*.html
---- python2.7-2.7.1.orig/debian/copyright
-+++ python2.7-2.7.1/debian/copyright
+--- python2.7-2.7.2.orig/debian/copyright
++++ python2.7-2.7.2/debian/copyright
 @@ -0,0 +1,705 @@
 +This package was put together by Klee Dienes <klee@debian.org> from 
 +sources from ftp.python.org:/pub/python, based on the Debianization by 
@@ -3671,8 +3671,8 @@
 +/* Modified by Guido van Rossum */
 +/* Beep added by Mark Hammond */
 +/* Win9X Beep and platform identification added by Uncle Timmy */
---- python2.7-2.7.1.orig/debian/README.source
-+++ python2.7-2.7.1/debian/README.source
+--- python2.7-2.7.2.orig/debian/README.source
++++ python2.7-2.7.2/debian/README.source
 @@ -0,0 +1,7 @@
 +The source tarball is lacking the files Lib/profile.py and Lib/pstats.py,
 +which Debian considers to have a license non-suitable for main (the use
@@ -3681,13 +3681,13 @@
 +The package uses quilt to apply / unapply patches.
 +See /usr/share/doc/quilt/README.source.  The series file is generated
 +during the build.
---- python2.7-2.7.1.orig/debian/PVER-dbg.overrides.in
-+++ python2.7-2.7.1/debian/PVER-dbg.overrides.in
+--- python2.7-2.7.2.orig/debian/PVER-dbg.overrides.in
++++ python2.7-2.7.2/debian/PVER-dbg.overrides.in
 @@ -0,0 +1,2 @@
 +@PVER@-dbg binary: package-name-doesnt-match-sonames
 +@PVER@-dbg binary: non-dev-pkg-with-shlib-symlink
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-inst.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-inst.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-inst.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-inst.in
 @@ -0,0 +1,12 @@
 +Document: @PVER@-inst
 +Title: Installing Python Modules (v@VER@)
@@ -3701,8 +3701,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/install/index.html
 +Files: /usr/share/doc/@PVER@/html/install/*.html
---- python2.7-2.7.1.orig/debian/idle-PVER.postrm.in
-+++ python2.7-2.7.1/debian/idle-PVER.postrm.in
+--- python2.7-2.7.2.orig/debian/idle-PVER.postrm.in
++++ python2.7-2.7.2/debian/idle-PVER.postrm.in
 @@ -0,0 +1,9 @@
 +#! /bin/sh -e
 +
@@ -3713,15 +3713,15 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/PVER.pycentral.in
-+++ python2.7-2.7.1/debian/PVER.pycentral.in
+--- python2.7-2.7.2.orig/debian/PVER.pycentral.in
++++ python2.7-2.7.2/debian/PVER.pycentral.in
 @@ -0,0 +1,4 @@
 +[@PVER@]
 +runtime: @PVER@
 +interpreter: /usr/bin/@PVER@
 +prefix: /usr/lib/@PVER@
---- python2.7-2.7.1.orig/debian/PVER.postinst.in
-+++ python2.7-2.7.1/debian/PVER.postinst.in
+--- python2.7-2.7.2.orig/debian/PVER.postinst.in
++++ python2.7-2.7.2/debian/PVER.postinst.in
 @@ -0,0 +1,37 @@
 +#! /bin/sh -e
 +
@@ -3760,8 +3760,8 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/README.python
-+++ python2.7-2.7.1/debian/README.python
+--- python2.7-2.7.2.orig/debian/README.python
++++ python2.7-2.7.2/debian/README.python
 @@ -0,0 +1,153 @@
 +
 +  Python 2.x for Debian
@@ -3916,8 +3916,8 @@
 +    Gregor Hoffleit <flight@debian.org>
 +
 +Last change: 07/16/1999
---- python2.7-2.7.1.orig/debian/pdb.1.in
-+++ python2.7-2.7.1/debian/pdb.1.in
+--- python2.7-2.7.2.orig/debian/pdb.1.in
++++ python2.7-2.7.2/debian/pdb.1.in
 @@ -0,0 +1,16 @@
 +.TH PDB@VER@ 1
 +.SH NAME
@@ -3935,8 +3935,8 @@
 +python@VER@(1). Chapter 9 of the Python Library Reference
 +(The Python Debugger). Available in the python@VER@-doc package at
 +/usr/share/doc/python@VER@/html/lib/module-pdb.html.
---- python2.7-2.7.1.orig/debian/locale-gen
-+++ python2.7-2.7.1/debian/locale-gen
+--- python2.7-2.7.2.orig/debian/locale-gen
++++ python2.7-2.7.2/debian/locale-gen
 @@ -0,0 +1,31 @@
 +#!/bin/sh
 +
@@ -3969,13 +3969,13 @@
 +EOF
 +
 +echo "Generation complete."
---- python2.7-2.7.1.orig/debian/PVER-doc.overrides.in
-+++ python2.7-2.7.1/debian/PVER-doc.overrides.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.overrides.in
++++ python2.7-2.7.2/debian/PVER-doc.overrides.in
 @@ -0,0 +1,2 @@
 +# this is referenced by the html docs
 +@PVER@-doc binary: extra-license-file
---- python2.7-2.7.1.orig/debian/README.Tk
-+++ python2.7-2.7.1/debian/README.Tk
+--- python2.7-2.7.2.orig/debian/README.Tk
++++ python2.7-2.7.2/debian/README.Tk
 @@ -0,0 +1,8 @@
 +Tkinter documentation can be found at
 +
@@ -3985,8 +3985,8 @@
 +
 +    http://www.pythonware.com/library/tkinter/introduction/index.htm
 +    http://www.pythonware.com/library/tkinter/an-introduction-to-tkinter.pdf
---- python2.7-2.7.1.orig/debian/mincheck.py
-+++ python2.7-2.7.1/debian/mincheck.py
+--- python2.7-2.7.2.orig/debian/mincheck.py
++++ python2.7-2.7.2/debian/mincheck.py
 @@ -0,0 +1,41 @@
 +
 +import sys
@@ -4029,8 +4029,8 @@
 +
 +main()
 +
---- python2.7-2.7.1.orig/debian/idle-PVER.1.in
-+++ python2.7-2.7.1/debian/idle-PVER.1.in
+--- python2.7-2.7.2.orig/debian/idle-PVER.1.in
++++ python2.7-2.7.2/debian/idle-PVER.1.in
 @@ -0,0 +1,104 @@
 +.TH IDLE 1 "21 September 2004"
 +.SH NAME
@@ -4136,8 +4136,8 @@
 +python(1).
 +.SH AUTHORS
 +Various.
---- python2.7-2.7.1.orig/debian/PVER-minimal.prerm.in
-+++ python2.7-2.7.1/debian/PVER-minimal.prerm.in
+--- python2.7-2.7.2.orig/debian/PVER-minimal.prerm.in
++++ python2.7-2.7.2/debian/PVER-minimal.prerm.in
 @@ -0,0 +1,44 @@
 +#! /bin/sh -e
 +
@@ -4183,8 +4183,8 @@
 +esac
 +
 +#DEBHELPER#
---- python2.7-2.7.1.orig/debian/idle.desktop.in
-+++ python2.7-2.7.1/debian/idle.desktop.in
+--- python2.7-2.7.2.orig/debian/idle.desktop.in
++++ python2.7-2.7.2/debian/idle.desktop.in
 @@ -0,0 +1,9 @@
 +[Desktop Entry]
 +Name=IDLE (using Python-@VER@)
@@ -4195,14 +4195,14 @@
 +Type=Application
 +Categories=Application;Development;
 +StartupNotify=true
---- python2.7-2.7.1.orig/debian/idle-PVER.overrides.in
-+++ python2.7-2.7.1/debian/idle-PVER.overrides.in
+--- python2.7-2.7.2.orig/debian/idle-PVER.overrides.in
++++ python2.7-2.7.2/debian/idle-PVER.overrides.in
 @@ -0,0 +1,3 @@
 +# icon in dependent package
 +idle-@PVER@ binary: menu-icon-missing
 +idle-@PVER@ binary: image-file-in-usr-lib
---- python2.7-2.7.1.orig/debian/PVER-dbg.README.Debian.in
-+++ python2.7-2.7.1/debian/PVER-dbg.README.Debian.in
+--- python2.7-2.7.2.orig/debian/PVER-dbg.README.Debian.in
++++ python2.7-2.7.2/debian/PVER-dbg.README.Debian.in
 @@ -0,0 +1,51 @@
 +Contents of the @PVER@-dbg package
 +-------------------------------------
@@ -4255,12 +4255,12 @@
 +   In addition, C assert()s are enabled (via the C way: by not defining
 +   NDEBUG), and some routines do additional sanity checks inside
 +   "#ifdef Py_DEBUG" blocks.
---- python2.7-2.7.1.orig/debian/libPVER.overrides.in
-+++ python2.7-2.7.1/debian/libPVER.overrides.in
+--- python2.7-2.7.2.orig/debian/libPVER.overrides.in
++++ python2.7-2.7.2/debian/libPVER.overrides.in
 @@ -0,0 +1 @@
 +lib@PVER@ binary: package-name-doesnt-match-sonames
---- python2.7-2.7.1.orig/debian/FAQ.html
-+++ python2.7-2.7.1/debian/FAQ.html
+--- python2.7-2.7.2.orig/debian/FAQ.html
++++ python2.7-2.7.2/debian/FAQ.html
 @@ -0,0 +1,8997 @@
 +<HTML>
 +<HEAD>
@@ -13259,14 +13259,14 @@
 +ALIGN=top WIDTH=110 HEIGHT=44 ALT="Python Powered" BORDER=0></A><BR>
 +</BODY>
 +</HTML>
---- python2.7-2.7.1.orig/debian/libPVER.symbols.in
-+++ python2.7-2.7.1/debian/libPVER.symbols.in
+--- python2.7-2.7.2.orig/debian/libPVER.symbols.in
++++ python2.7-2.7.2/debian/libPVER.symbols.in
 @@ -0,0 +1,3 @@
 +libpython@VER@.so.1.0 libpython@VER@ #MINVER#
 + Py_InitModule4@Base @VER@
 +#include "libpython.symbols"
---- python2.7-2.7.1.orig/debian/rules
-+++ python2.7-2.7.1/debian/rules
+--- python2.7-2.7.2.orig/debian/rules
++++ python2.7-2.7.2/debian/rules
 @@ -0,0 +1,1043 @@
 +#!/usr/bin/make -f
 +# Sample debian/rules that uses debhelper. GNU copyright 1997 by Joey Hess.
@@ -14311,8 +14311,8 @@
 +# Local Variables:
 +# mode: makefile
 +# end:
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-doc.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-doc.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-doc.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-doc.in
 @@ -0,0 +1,19 @@
 +Document: @PVER@-doc
 +Title: Documenting Python (v@VER@)
@@ -14333,22 +14333,22 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/documenting/index.html
 +Files: /usr/share/doc/@PVER@/html/documenting/*.html
---- python2.7-2.7.1.orig/debian/changelog.shared
-+++ python2.7-2.7.1/debian/changelog.shared
+--- python2.7-2.7.2.orig/debian/changelog.shared
++++ python2.7-2.7.2/debian/changelog.shared
 @@ -0,0 +1,3 @@
 +  * Link the interpreter against the shared runtime library. With
 +    gcc-4.1 the difference in the pystones benchmark dropped from about
 +    12% to about 5%.
---- python2.7-2.7.1.orig/debian/source.lintian-overrides
-+++ python2.7-2.7.1/debian/source.lintian-overrides
+--- python2.7-2.7.2.orig/debian/source.lintian-overrides
++++ python2.7-2.7.2/debian/source.lintian-overrides
 @@ -0,0 +1,5 @@
 +# this is conditional in the rules file
 +python2.7 source: debhelper-script-needs-versioned-build-depends dh_icons (>= 5.0.51~)
 +
 +# generated during the build
 +python2.7 source: quilt-build-dep-but-no-series-file
---- python2.7-2.7.1.orig/debian/PVER.prerm.in
-+++ python2.7-2.7.1/debian/PVER.prerm.in
+--- python2.7-2.7.2.orig/debian/PVER.prerm.in
++++ python2.7-2.7.2/debian/PVER.prerm.in
 @@ -0,0 +1,27 @@
 +#! /bin/sh -e
 +#
@@ -14377,8 +14377,8 @@
 +        true
 +
 +#DEBHELPER#
---- python2.7-2.7.1.orig/debian/control.in
-+++ python2.7-2.7.1/debian/control.in
+--- python2.7-2.7.2.orig/debian/control.in
++++ python2.7-2.7.2/debian/control.in
 @@ -0,0 +1,113 @@
 +Source: @PVER@
 +Section: python
@@ -14410,7 +14410,7 @@
 +Depends: ${shlibs:Depends}, ${misc:Depends}
 +Recommends: @PVER@
 +Suggests: binfmt-support
-+Replaces: @PVER@ (<< 2.7.1~rc1-2~)
++Replaces: @PVER@ (<< 2.7.2~rc1-2~)
 +Conflicts: binfmt-support (<< 1.1.2)
 +XB-Python-Runtime: @PVER@
 +XB-Python-Version: @VER@
@@ -14493,13 +14493,13 @@
 +Description: Debug Build of the Python Interpreter (version @VER@)
 + Python interpreter configured with --pydebug. Dynamically loaded modules are
 + searched in /usr/lib/@PVER@/lib-dynload/debug first.
---- python2.7-2.7.1.orig/debian/PVER-examples.overrides.in
-+++ python2.7-2.7.1/debian/PVER-examples.overrides.in
+--- python2.7-2.7.2.orig/debian/PVER-examples.overrides.in
++++ python2.7-2.7.2/debian/PVER-examples.overrides.in
 @@ -0,0 +1,2 @@
 +# don't care about permissions of the example files
 +@PVER@-examples binary: executable-not-elf-or-script
---- python2.7-2.7.1.orig/debian/idle-PVER.postinst.in
-+++ python2.7-2.7.1/debian/idle-PVER.postinst.in
+--- python2.7-2.7.2.orig/debian/idle-PVER.postinst.in
++++ python2.7-2.7.2/debian/idle-PVER.postinst.in
 @@ -0,0 +1,30 @@
 +#! /bin/sh -e
 +#
@@ -14531,8 +14531,8 @@
 +#DEBHELPER#
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/README.maintainers.in
-+++ python2.7-2.7.1/debian/README.maintainers.in
+--- python2.7-2.7.2.orig/debian/README.maintainers.in
++++ python2.7-2.7.2/debian/README.maintainers.in
 @@ -0,0 +1,88 @@
 +
 +Hints for maintainers of Debian packages of Python extensions
@@ -14622,8 +14622,8 @@
 +
 +
 +Last modified: 2007-10-14
---- python2.7-2.7.1.orig/debian/dh_rmemptydirs
-+++ python2.7-2.7.1/debian/dh_rmemptydirs
+--- python2.7-2.7.2.orig/debian/dh_rmemptydirs
++++ python2.7-2.7.2/debian/dh_rmemptydirs
 @@ -0,0 +1,10 @@
 +#! /bin/sh -e
 +
@@ -14635,8 +14635,8 @@
 +done
 +
 +exit 0
---- python2.7-2.7.1.orig/debian/control.stdlib
-+++ python2.7-2.7.1/debian/control.stdlib
+--- python2.7-2.7.2.orig/debian/control.stdlib
++++ python2.7-2.7.2/debian/control.stdlib
 @@ -0,0 +1,16 @@
 +Package: @PVER@-tk
 +Architecture: any
@@ -14654,8 +14654,8 @@
 + GNU dbm database module for Python. Install this if you want to
 + create or read GNU dbm database files with Python.
 +
---- python2.7-2.7.1.orig/debian/depgraph.py
-+++ python2.7-2.7.1/debian/depgraph.py
+--- python2.7-2.7.2.orig/debian/depgraph.py
++++ python2.7-2.7.2/debian/depgraph.py
 @@ -0,0 +1,199 @@
 +#! /usr/bin/python
 +
@@ -14856,8 +14856,8 @@
 +
 +
 +
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-ref.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-ref.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-ref.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-ref.in
 @@ -0,0 +1,18 @@
 +Document: @PVER@-ref
 +Title: Python Reference Manual (v@VER@)
@@ -14877,8 +14877,8 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/reference/index.html
 +Files: /usr/share/doc/@PVER@/html/reference/*.html
---- python2.7-2.7.1.orig/debian/PVER-doc.doc-base.PVER-ext.in
-+++ python2.7-2.7.1/debian/PVER-doc.doc-base.PVER-ext.in
+--- python2.7-2.7.2.orig/debian/PVER-doc.doc-base.PVER-ext.in
++++ python2.7-2.7.2/debian/PVER-doc.doc-base.PVER-ext.in
 @@ -0,0 +1,16 @@
 +Document: @PVER@-ext
 +Title: Extending and Embedding the Python Interpreter (v@VER@)
@@ -14896,16 +14896,16 @@
 +Format: HTML
 +Index: /usr/share/doc/@PVER@/html/extending/index.html
 +Files: /usr/share/doc/@PVER@/html/extending/*.html
---- python2.7-2.7.1.orig/debian/changelog
-+++ python2.7-2.7.1/debian/changelog
+--- python2.7-2.7.2.orig/debian/changelog
++++ python2.7-2.7.2/debian/changelog
 @@ -0,0 +1,2414 @@
-+python2.7 (2.7.1-5ubuntu2) natty; urgency=low
++python2.7 (2.7.2-5ubuntu2) natty; urgency=low
 +
 +  * Force linking the curses module against libncursesw.
 +
 + -- Matthias Klose <doko@ubuntu.com>  Mon, 11 Apr 2011 11:54:52 +0200
 +
-+python2.7 (2.7.1-5ubuntu1) natty; urgency=low
++python2.7 (2.7.2-5ubuntu1) natty; urgency=low
 +
 +  * debian/patches/deb-setup.diff: DEB_GNU_TYPE was never being set, so
 +    the expected multiarch path support wasn't working.  Consolidate to
@@ -14914,7 +14914,7 @@
 +
 + -- Steve Langasek <steve.langasek@ubuntu.com>  Wed, 23 Mar 2011 15:02:47 -0700
 +
-+python2.7 (2.7.1-5) experimental; urgency=low
++python2.7 (2.7.2-5) experimental; urgency=low
 +
 +  * Update to 20110224, taken from the 2.7 branch.
 +  * Update patches.
@@ -14922,20 +14922,20 @@
 +
 + -- Matthias Klose <doko@debian.org>  Thu, 24 Feb 2011 06:01:42 +0100
 +
-+python2.7 (2.7.1-4) experimental; urgency=low
++python2.7 (2.7.2-4) experimental; urgency=low
 +
 +  * Update to 20110119, taken from the 2.7 branch.
 +
 + -- Matthias Klose <doko@debian.org>  Wed, 19 Jan 2011 04:21:14 +0100
 +
-+python2.7 (2.7.1-3) experimental; urgency=low
++python2.7 (2.7.2-3) experimental; urgency=low
 +
 +  * Do not run test_multiprocessing when running the testsuite.
 +    Fails on armel and powerpc on some buildds.
 +
 + -- Matthias Klose <doko@debian.org>  Fri, 24 Dec 2010 01:46:55 +0100
 +
-+python2.7 (2.7.1-2) experimental; urgency=low
++python2.7 (2.7.2-2) experimental; urgency=low
 +
 +  * Update to 20101222, taken from the 2.7 branch.
 +  * Re-enable the distutils-sysconfig.diff patch, apparently
@@ -14944,22 +14944,22 @@
 +
 + -- Matthias Klose <doko@debian.org>  Wed, 22 Dec 2010 15:39:48 +0100
 +
-+python2.7 (2.7.1-1) experimental; urgency=low
++python2.7 (2.7.2-1) experimental; urgency=low
 +
-+  * Python 2.7.1 release.
++  * Python 2.7.2 release.
 +
 + -- Matthias Klose <doko@debian.org>  Sun, 28 Nov 2010 12:05:23 +0100
 +
-+python2.7 (2.7.1~rc1-2) experimental; urgency=low
++python2.7 (2.7.2~rc1-2) experimental; urgency=low
 +
 +  * Move the pyconfig.h file into the -min package, required by sysconfig.
 +    Closes: #603237.
 +
 + -- Matthias Klose <doko@debian.org>  Sun, 14 Nov 2010 09:40:09 +0100
 +
-+python2.7 (2.7.1~rc1-1) experimental; urgency=low
++python2.7 (2.7.2~rc1-1) experimental; urgency=low
 +
-+  * Python 2.7.1 release candidate 1.
++  * Python 2.7.2 release candidate 1.
 +  * Move the Makefile into the -min package, required by sysconfig.
 +    Closes: #603237.
 +
@@ -15031,7 +15031,7 @@
 +
 + -- Matthias Klose <doko@debian.org>  Tue, 06 Jul 2010 21:07:48 +0200
 +
-+python2.7 (2.7-1) experimental; urgency=low
++python2.7 (2.7.2) experimental; urgency=low
 +
 +  * Python 2.7 release.
 +  * Update to 20100706, taken from the trunk.
@@ -16565,7 +16565,7 @@
 +  * locale.getdefaultlocale: don't fail with empty environment variables.
 +    Closes: #249816.
 +  * Include distutils/command/wininst.exe in -dev package (closes: #249006).
-+  * Disable cthreads on the Hurd (Michael Banck). Closes: #247211.
++  * Disable cthreads on the Hurd (Michael Banck). Closes: #2.7.21.
 +  * Add a note to pygettext(1), that this program is deprecated in favour
 +    of xgettext, which now includes support for Python as well.
 +    Closes: #246332.
@@ -16668,14 +16668,14 @@
 +
 +  * Put the conflict in the correct direction. python2.3 (2.3.2-6) doesn't
 +    conflict with python (<= 2.3.2-5) but python (2.3.2-6) conflicts with
-+    python2.3 (<= 2.3.2-5) (thanks to Brian May). Really closes #221791.
++    python2.3 (<= 2.3.2-5) (thanks to Brian May). Really closes #22.7.2.
 +
 + -- Matthias Klose <doko@debian.org>  Fri, 21 Nov 2003 00:20:02 +0100
 +
 +python2.3 (2.3.2-6) unstable; urgency=low
 +
 +  * Add conflicts with older python{,2.3} packages to fix overwrite
-+    errors (closes: #221791).
++    errors (closes: #22.7.2).
 +
 + -- Matthias Klose <doko@debian.org>  Thu, 20 Nov 2003 07:24:36 +0100
 +
@@ -17313,8 +17313,8 @@
 +  * New upstream version. Initial release for python2.
 +
 + -- Gregor Hoffleit <flight@debian.org>  Mon, 11 Dec 2000 22:39:46 +0100
---- python2.7-2.7.1.orig/debian/pygettext.1
-+++ python2.7-2.7.1/debian/pygettext.1
+--- python2.7-2.7.2.orig/debian/pygettext.1
++++ python2.7-2.7.2/debian/pygettext.1
 @@ -0,0 +1,108 @@
 +.TH PYGETTEXT 1 "" "pygettext 1.4"
 +.SH NAME
@@ -17424,8 +17424,8 @@
 +.PP
 +Joonas Paalasmaa <joonas.paalasmaa@iki.fi> put this manual page together
 +based on "pygettext --help".
---- python2.7-2.7.1.orig/debian/patches/disable-utimes.diff
-+++ python2.7-2.7.1/debian/patches/disable-utimes.diff
+--- python2.7-2.7.2.orig/debian/patches/disable-utimes.diff
++++ python2.7-2.7.2/debian/patches/disable-utimes.diff
 @@ -0,0 +1,13 @@
 +# DP: disable check for utimes function, which is broken in glibc-2.3.2
 +
@@ -17440,8 +17440,8 @@
 + 
 + # For some functions, having a definition is not sufficient, since
 + # we want to take their address.
---- python2.7-2.7.1.orig/debian/patches/link-system-expat.diff
-+++ python2.7-2.7.1/debian/patches/link-system-expat.diff
+--- python2.7-2.7.2.orig/debian/patches/link-system-expat.diff
++++ python2.7-2.7.2/debian/patches/link-system-expat.diff
 @@ -0,0 +1,22 @@
 +# DP: Link with the system expat
 +
@@ -17465,8 +17465,8 @@
 + 
 + 
 + # Hye-Shik Chang's CJKCodecs
---- python2.7-2.7.1.orig/debian/patches/site-locations.diff
-+++ python2.7-2.7.1/debian/patches/site-locations.diff
+--- python2.7-2.7.2.orig/debian/patches/site-locations.diff
++++ python2.7-2.7.2/debian/patches/site-locations.diff
 @@ -0,0 +1,32 @@
 +# DP: Set site-packages/dist-packages
 +
@@ -17500,8 +17500,8 @@
 +         else:
 +             sitepackages.append(prefix)
 +             sitepackages.append(os.path.join(prefix, "lib", "site-packages"))
---- python2.7-2.7.1.orig/debian/patches/statvfs-f_flag-constants.diff
-+++ python2.7-2.7.1/debian/patches/statvfs-f_flag-constants.diff
+--- python2.7-2.7.2.orig/debian/patches/statvfs-f_flag-constants.diff
++++ python2.7-2.7.2/debian/patches/statvfs-f_flag-constants.diff
 @@ -0,0 +1,57 @@
 +From 21fda4c78000d78cb1824fdf0373031d07f5325a Mon Sep 17 00:00:00 2001
 +From: Peter Jones <pjones@redhat.com>
@@ -17560,8 +17560,8 @@
 + #ifdef HAVE_SPAWNV
 + #if defined(PYOS_OS2) && defined(PYCC_GCC)
 +     if (ins(d, "P_WAIT", (long)P_WAIT)) return -1;
---- python2.7-2.7.1.orig/debian/patches/deb-locations.diff
-+++ python2.7-2.7.1/debian/patches/deb-locations.diff
+--- python2.7-2.7.2.orig/debian/patches/deb-locations.diff
++++ python2.7-2.7.2/debian/patches/deb-locations.diff
 @@ -0,0 +1,63 @@
 +# DP: adjust locations of directories to debian policy
 +
@@ -17626,8 +17626,8 @@
 + the NCSA HTTP daemon and probably others).
 + 
 + Report printed:
---- python2.7-2.7.1.orig/debian/patches/plat-linux2_sparc.diff
-+++ python2.7-2.7.1/debian/patches/plat-linux2_sparc.diff
+--- python2.7-2.7.2.orig/debian/patches/plat-linux2_sparc.diff
++++ python2.7-2.7.2/debian/patches/plat-linux2_sparc.diff
 @@ -0,0 +1,72 @@
 +Index: Lib/plat-linux2/IN.py
 +===================================================================
@@ -17701,8 +17701,8 @@
 + SOCK_STREAM = 1
 + SOCK_DGRAM = 2
 + SOCK_RAW = 3
---- python2.7-2.7.1.orig/debian/patches/bdist-wininst-notfound.diff
-+++ python2.7-2.7.1/debian/patches/bdist-wininst-notfound.diff
+--- python2.7-2.7.2.orig/debian/patches/bdist-wininst-notfound.diff
++++ python2.7-2.7.2/debian/patches/bdist-wininst-notfound.diff
 @@ -0,0 +1,17 @@
 +# DP: suggest installation of the pythonX.Y-dev package, if bdist_wininst
 +# DP: cannot find the wininst-* files.
@@ -17721,8 +17721,8 @@
 +         try:
 +             return f.read()
 +         finally:
---- python2.7-2.7.1.orig/debian/patches/arm-float.dpatch
-+++ python2.7-2.7.1/debian/patches/arm-float.dpatch
+--- python2.7-2.7.2.orig/debian/patches/arm-float.dpatch
++++ python2.7-2.7.2/debian/patches/arm-float.dpatch
 @@ -0,0 +1,119 @@
 +#! /bin/sh -e
 +
@@ -17843,8 +17843,8 @@
 + 		else {
 + 			memcpy(&x, p, 8);
 + 		}
---- python2.7-2.7.1.orig/debian/patches/doc-faq.dpatch
-+++ python2.7-2.7.1/debian/patches/doc-faq.dpatch
+--- python2.7-2.7.2.orig/debian/patches/doc-faq.dpatch
++++ python2.7-2.7.2/debian/patches/doc-faq.dpatch
 @@ -0,0 +1,54 @@
 +#! /bin/sh -e
 +
@@ -17900,8 +17900,8 @@
 +       </tbody>
 +     </table>
 +     <p>
---- python2.7-2.7.1.orig/debian/patches/site-builddir.diff
-+++ python2.7-2.7.1/debian/patches/site-builddir.diff
+--- python2.7-2.7.2.orig/debian/patches/site-builddir.diff
++++ python2.7-2.7.2/debian/patches/site-builddir.diff
 @@ -0,0 +1,32 @@
 +--- site.py~	2010-06-29 00:20:33.000000000 +0200
 ++++ site.py	2010-06-29 00:26:17.440243273 +0200
@@ -17935,8 +17935,8 @@
 +     if ENABLE_USER_SITE is None:
 +         ENABLE_USER_SITE = check_enableusersite()
 +     known_paths = addusersitepackages(known_paths)
---- python2.7-2.7.1.orig/debian/patches/hotshot-import.diff
-+++ python2.7-2.7.1/debian/patches/hotshot-import.diff
+--- python2.7-2.7.2.orig/debian/patches/hotshot-import.diff
++++ python2.7-2.7.2/debian/patches/hotshot-import.diff
 @@ -0,0 +1,17 @@
 +# DP: hotshot: Check for the availability of the profile and pstats modules.
 +
@@ -17955,8 +17955,8 @@
 + 
 + import hotshot.log
 + 
---- python2.7-2.7.1.orig/debian/patches/make-pydoc-more-robust.diff
-+++ python2.7-2.7.1/debian/patches/make-pydoc-more-robust.diff
+--- python2.7-2.7.2.orig/debian/patches/make-pydoc-more-robust.diff
++++ python2.7-2.7.2/debian/patches/make-pydoc-more-robust.diff
 @@ -0,0 +1,18 @@
 +--- a/Lib/pydoc.py
 ++++ b/Lib/pydoc.py
@@ -17976,8 +17976,8 @@
 + 
 + # --------------------------------------------------- web browser interface
 + 
---- python2.7-2.7.1.orig/debian/patches/plat-linux2_mips.diff
-+++ python2.7-2.7.1/debian/patches/plat-linux2_mips.diff
+--- python2.7-2.7.2.orig/debian/patches/plat-linux2_mips.diff
++++ python2.7-2.7.2/debian/patches/plat-linux2_mips.diff
 @@ -0,0 +1,88 @@
 +Index: Lib/plat-linux2/DLFCN.py
 +===================================================================
@@ -18067,8 +18067,8 @@
 + SOCK_RAW = 3
 + SOCK_RDM = 4
 + SOCK_SEQPACKET = 5
---- python2.7-2.7.1.orig/debian/patches/setup-modules.dpatch
-+++ python2.7-2.7.1/debian/patches/setup-modules.dpatch
+--- python2.7-2.7.2.orig/debian/patches/setup-modules.dpatch
++++ python2.7-2.7.2/debian/patches/setup-modules.dpatch
 @@ -0,0 +1,75 @@
 +#! /bin/sh -e
 +
@@ -18145,8 +18145,8 @@
 + 
 + # Hye-Shik Chang's CJKCodecs
 + 
---- python2.7-2.7.1.orig/debian/patches/platform-lsbrelease.diff
-+++ python2.7-2.7.1/debian/patches/platform-lsbrelease.diff
+--- python2.7-2.7.2.orig/debian/patches/platform-lsbrelease.diff
++++ python2.7-2.7.2/debian/patches/platform-lsbrelease.diff
 @@ -0,0 +1,41 @@
 +# DP: Use /etc/lsb-release to identify the platform.
 +
@@ -18189,8 +18189,8 @@
 +     try:
 +         etc = os.listdir('/etc')
 +     except os.error:
---- python2.7-2.7.1.orig/debian/patches/profile-doc.diff
-+++ python2.7-2.7.1/debian/patches/profile-doc.diff
+--- python2.7-2.7.2.orig/debian/patches/profile-doc.diff
++++ python2.7-2.7.2/debian/patches/profile-doc.diff
 @@ -0,0 +1,32 @@
 +# DP: hotshot/pstats.py: Error out on missing profile/pstats modules.
 +# DP: Add a note to the library documentation, that the profile and pstats
@@ -18224,8 +18224,8 @@
 + The primary entry point for the profiler is the global function
 + :func:`profile.run` (resp. :func:`cProfile.run`). It is typically used to create
 + any profile information.  The reports are formatted and printed using methods of
---- python2.7-2.7.1.orig/debian/patches/subprocess-eintr-safety.dpatch
-+++ python2.7-2.7.1/debian/patches/subprocess-eintr-safety.dpatch
+--- python2.7-2.7.2.orig/debian/patches/subprocess-eintr-safety.dpatch
++++ python2.7-2.7.2/debian/patches/subprocess-eintr-safety.dpatch
 @@ -0,0 +1,81 @@
 +#! /bin/sh -e
 +
@@ -18308,8 +18308,8 @@
 +                 self.stderr.close()
 +             self.wait()
 +             return (stdout, stderr)
---- python2.7-2.7.1.orig/debian/patches/setup-modules-ssl.diff
-+++ python2.7-2.7.1/debian/patches/setup-modules-ssl.diff
+--- python2.7-2.7.2.orig/debian/patches/setup-modules-ssl.diff
++++ python2.7-2.7.2/debian/patches/setup-modules-ssl.diff
 @@ -0,0 +1,24 @@
 +# DP: Modules/Setup.dist: patch to build _hashlib and _ssl extensions statically
 +
@@ -18335,8 +18335,8 @@
 + 
 + # SGI IRIX specific modules -- off by default.
 + 
---- python2.7-2.7.1.orig/debian/patches/distutils-link.diff
-+++ python2.7-2.7.1/debian/patches/distutils-link.diff
+--- python2.7-2.7.2.orig/debian/patches/distutils-link.diff
++++ python2.7-2.7.2/debian/patches/distutils-link.diff
 @@ -0,0 +1,18 @@
 +# DP: Don't add standard library dirs to library_dirs and runtime_library_dirs.
 +
@@ -18356,8 +18356,8 @@
 +         lib_opts = gen_lib_options(self, library_dirs, runtime_library_dirs,
 +                                    libraries)
 +         if type(output_dir) not in (StringType, NoneType):
---- python2.7-2.7.1.orig/debian/patches/issue9054.diff
-+++ python2.7-2.7.1/debian/patches/issue9054.diff
+--- python2.7-2.7.2.orig/debian/patches/issue9054.diff
++++ python2.7-2.7.2/debian/patches/issue9054.diff
 @@ -0,0 +1,14 @@
 +# DP: Proposed fix for issue 9054.
 +
@@ -18373,8 +18373,8 @@
 +     args = PyTuple_New(1);
 +     if (args == NULL)
 +         return -1;
---- python2.7-2.7.1.orig/debian/patches/plat-gnukfreebsd.diff
-+++ python2.7-2.7.1/debian/patches/plat-gnukfreebsd.diff
+--- python2.7-2.7.2.orig/debian/patches/plat-gnukfreebsd.diff
++++ python2.7-2.7.2/debian/patches/plat-gnukfreebsd.diff
 @@ -0,0 +1,2478 @@
 +--- /dev/null
 ++++ b/Lib/plat-gnukfreebsd7/IN.py
@@ -20854,8 +20854,8 @@
 ++RTLD_NODELETE = 0x01000
 ++LM_ID_BASE = 0
 ++LM_ID_NEWLM = -1
---- python2.7-2.7.1.orig/debian/patches/apport-support.dpatch
-+++ python2.7-2.7.1/debian/patches/apport-support.dpatch
+--- python2.7-2.7.2.orig/debian/patches/apport-support.dpatch
++++ python2.7-2.7.2/debian/patches/apport-support.dpatch
 @@ -0,0 +1,42 @@
 +#! /bin/sh -e
 +
@@ -20899,8 +20899,8 @@
 + 
 + main()
 + 
---- python2.7-2.7.1.orig/debian/patches/no-zip-on-sys.path.diff
-+++ python2.7-2.7.1/debian/patches/no-zip-on-sys.path.diff
+--- python2.7-2.7.2.orig/debian/patches/no-zip-on-sys.path.diff
++++ python2.7-2.7.2/debian/patches/no-zip-on-sys.path.diff
 @@ -0,0 +1,52 @@
 +# DP: Do not add /usr/lib/pythonXY.zip on sys.path.
 +
@@ -20954,8 +20954,8 @@
 + 
 +         /* Next goes merge of compile-time $PYTHONPATH with
 +          * dynamically located prefix.
---- python2.7-2.7.1.orig/debian/patches/doc-nodownload.diff
-+++ python2.7-2.7.1/debian/patches/doc-nodownload.diff
+--- python2.7-2.7.2.orig/debian/patches/doc-nodownload.diff
++++ python2.7-2.7.2/debian/patches/doc-nodownload.diff
 @@ -0,0 +1,13 @@
 +# DP: Don't try to download documentation tools
 +
@@ -20970,8 +20970,8 @@
 + 	mkdir -p build/$(BUILDER) build/doctrees
 + 	$(PYTHON) tools/sphinx-build.py $(ALLSPHINXOPTS)
 + 	@echo
---- python2.7-2.7.1.orig/debian/patches/cthreads.diff
-+++ python2.7-2.7.1/debian/patches/cthreads.diff
+--- python2.7-2.7.2.orig/debian/patches/cthreads.diff
++++ python2.7-2.7.2/debian/patches/cthreads.diff
 @@ -0,0 +1,39 @@
 +# DP: Remove cthreads detection
 +
@@ -21012,8 +21012,8 @@
 + 
 +     AC_CHECK_LIB(mpc, usconfig, [AC_DEFINE(WITH_THREAD)
 +     LIBS="$LIBS -lmpc"
---- python2.7-2.7.1.orig/debian/patches/profiled-build.diff
-+++ python2.7-2.7.1/debian/patches/profiled-build.diff
+--- python2.7-2.7.2.orig/debian/patches/profiled-build.diff
++++ python2.7-2.7.2/debian/patches/profiled-build.diff
 @@ -0,0 +1,17 @@
 +# DP: Fix profiled build; don't use Python/thread.gc*, gcc complains
 +
@@ -21032,8 +21032,8 @@
 + 
 + coverage:
 + 	@echo "Building with support for coverage checking:"
---- python2.7-2.7.1.orig/debian/patches/autoconf-version.diff
-+++ python2.7-2.7.1/debian/patches/autoconf-version.diff
+--- python2.7-2.7.2.orig/debian/patches/autoconf-version.diff
++++ python2.7-2.7.2/debian/patches/autoconf-version.diff
 @@ -0,0 +1,20 @@
 +# DP: remove autoconf version check
 +
@@ -21055,8 +21055,8 @@
 + AC_REVISION($Revision: 86076 $)
 + AC_INIT(python, PYTHON_VERSION, http://bugs.python.org/)
 + AC_CONFIG_SRCDIR([Include/object.h])
---- python2.7-2.7.1.orig/debian/patches/issue762963.diff
-+++ python2.7-2.7.1/debian/patches/issue762963.diff
+--- python2.7-2.7.2.orig/debian/patches/issue762963.diff
++++ python2.7-2.7.2/debian/patches/issue762963.diff
 @@ -0,0 +1,69 @@
 +# DP: Fix issue #762963, python loses current timezone.
 +
@@ -21127,8 +21127,8 @@
 +     if (!PyArg_Parse(args, "(iiiiiiiii)",
 +                      &y,
 +                      &p->tm_mon,
---- python2.7-2.7.1.orig/debian/patches/link-opt.diff
-+++ python2.7-2.7.1/debian/patches/link-opt.diff
+--- python2.7-2.7.2.orig/debian/patches/link-opt.diff
++++ python2.7-2.7.2/debian/patches/link-opt.diff
 @@ -0,0 +1,24 @@
 +# DP: Call the linker with -O1 -Bsymbolic-functions
 +
@@ -21154,8 +21154,8 @@
 + 	# -u libsys_s pulls in all symbols in libsys
 + 	Darwin/*) 
 + 		# -u _PyMac_Error is needed to pull in the mac toolbox glue,
---- python2.7-2.7.1.orig/debian/patches/no-large-file-support.diff
-+++ python2.7-2.7.1/debian/patches/no-large-file-support.diff
+--- python2.7-2.7.2.orig/debian/patches/no-large-file-support.diff
++++ python2.7-2.7.2/debian/patches/no-large-file-support.diff
 @@ -0,0 +1,14 @@
 +# DP: disable large file support for GNU/Hurd
 +
@@ -21171,8 +21171,8 @@
 + if test "$use_lfs" = "yes"; then
 + # Two defines needed to enable largefile support on various platforms
 + # These may affect some typedefs
---- python2.7-2.7.1.orig/debian/patches/pydebug-path.dpatch
-+++ python2.7-2.7.1/debian/patches/pydebug-path.dpatch
+--- python2.7-2.7.2.orig/debian/patches/pydebug-path.dpatch
++++ python2.7-2.7.2/debian/patches/pydebug-path.dpatch
 @@ -0,0 +1,100 @@
 +#! /bin/sh -e
 +
@@ -21274,8 +21274,8 @@
 +             else:
 +                 sitedirs = [prefix, os.path.join(prefix, "lib", "site-packages")]
 +             if sys.platform == 'darwin':
---- python2.7-2.7.1.orig/debian/patches/test-sundry.diff
-+++ python2.7-2.7.1/debian/patches/test-sundry.diff
+--- python2.7-2.7.2.orig/debian/patches/test-sundry.diff
++++ python2.7-2.7.2/debian/patches/test-sundry.diff
 @@ -0,0 +1,17 @@
 +# DP: test_sundry: Don't fail on import of the profile and pstats module
 +
@@ -21294,8 +21294,8 @@
 +             import py_compile
 +             import rexec
 +             import sched
---- python2.7-2.7.1.orig/debian/patches/linecache.diff
-+++ python2.7-2.7.1/debian/patches/linecache.diff
+--- python2.7-2.7.2.orig/debian/patches/linecache.diff
++++ python2.7-2.7.2/debian/patches/linecache.diff
 @@ -0,0 +1,16 @@
 +# DP: Proper handling of packages in linecache.py
 +
@@ -21313,8 +21313,8 @@
 +         for dirname in sys.path:
 +             # When using imputil, sys.path may contain things other than
 +             # strings; ignore them when it happens.
---- python2.7-2.7.1.orig/debian/patches/tkinter-import.diff
-+++ python2.7-2.7.1/debian/patches/tkinter-import.diff
+--- python2.7-2.7.2.orig/debian/patches/tkinter-import.diff
++++ python2.7-2.7.2/debian/patches/tkinter-import.diff
 @@ -0,0 +1,16 @@
 +# DP: suggest installation of python-tk package on failing _tkinter import
 +
@@ -21332,8 +21332,8 @@
 + tkinter = _tkinter # b/w compat for export
 + TclError = _tkinter.TclError
 + from types import *
---- python2.7-2.7.1.orig/debian/patches/debug-build.diff
-+++ python2.7-2.7.1/debian/patches/debug-build.diff
+--- python2.7-2.7.2.orig/debian/patches/debug-build.diff
++++ python2.7-2.7.2/debian/patches/debug-build.diff
 @@ -0,0 +1,181 @@
 +# DP: Change the interpreter to build and install python extensions
 +# DP: built with the python-dbg interpreter with a different name into
@@ -21516,8 +21516,8 @@
 + 	esac
 + else
 + 	# this might also be a termcap variable, see #610332
---- python2.7-2.7.1.orig/debian/patches/distutils-sysconfig.diff
-+++ python2.7-2.7.1/debian/patches/distutils-sysconfig.diff
+--- python2.7-2.7.2.orig/debian/patches/distutils-sysconfig.diff
++++ python2.7-2.7.2/debian/patches/distutils-sysconfig.diff
 @@ -0,0 +1,31 @@
 +# DP: Allow setting BASECFLAGS, OPT and EXTRA_LDFLAGS (like, CC, CXX, CPP,
 +# DP: CFLAGS, CPPFLAGS, CCSHARED, LDSHARED) from the environment.
@@ -21550,8 +21550,8 @@
 +             ldshared = ldshared + ' ' + os.environ['CFLAGS']
 +         if 'CPPFLAGS' in os.environ:
 +             cpp = cpp + ' ' + os.environ['CPPFLAGS']
---- python2.7-2.7.1.orig/debian/patches/svn-updates.diff
-+++ python2.7-2.7.1/debian/patches/svn-updates.diff
+--- python2.7-2.7.2.orig/debian/patches/svn-updates.diff
++++ python2.7-2.7.2/debian/patches/svn-updates.diff
 @@ -0,0 +1,12340 @@
 +# DP: SVN updates of the 2.7 release branch (until 2011-02-24).
 +
@@ -22331,8 +22331,8 @@
 + #define PY_RELEASE_SERIAL	0
 + 
 + /* Version as a string */
-+-#define PY_VERSION      	"2.7.1"
-++#define PY_VERSION      	"2.7.1+"
++-#define PY_VERSION      	"2.7.2"
+++#define PY_VERSION      	"2.7.2+"
 + /*--end constants--*/
 + 
 + /* Subversion Revision number of this file (not of the repository) */
@@ -23008,7 +23008,7 @@
 ++  tracebacks to stderr rather than stdout.
 ++
 ++
-+ What's New in Python 2.7.1?
++ What's New in Python 2.7.2?
 + ===========================
 + 
 +@@ -10,12 +229,25 @@
@@ -26485,7 +26485,7 @@
 +-   If the file is created with mode ``'a'`` or ``'w'`` and then
 +-   :meth:`close`\ d without adding any files to the archive, the appropriate
 +-   ZIP structures for an empty archive will be written to the file.
-++   .. versionchanged:: 2.7.1
+++   .. versionchanged:: 2.7.2
 ++      If the file is created with mode ``'a'`` or ``'w'`` and then
 ++      :meth:`close`\ d without adding any files to the archive, the appropriate
 ++      ZIP structures for an empty archive will be written to the file.
@@ -30354,7 +30354,7 @@
 +             if line == '\r\n': break
 + 
 + 
-+@@ -1233,6 +1247,11 @@
++@@ -1233,6 +12.7.21 @@
 +         self.args = line,
 +         self.line = line
 + 
@@ -33893,8 +33893,8 @@
 +     }
 +     return PyString_FromString(buffer);
 + }
---- python2.7-2.7.1.orig/debian/patches/distutils-install-layout.diff
-+++ python2.7-2.7.1/debian/patches/distutils-install-layout.diff
+--- python2.7-2.7.2.orig/debian/patches/distutils-install-layout.diff
++++ python2.7-2.7.2/debian/patches/distutils-install-layout.diff
 @@ -0,0 +1,331 @@
 +# DP: distutils: Add an option --install-layout=deb, which
 +# DP: - installs into $prefix/dist-packages instead of $prefix/site-packages.
@@ -34227,8 +34227,8 @@
 +         self.assertEqual(get_scheme_names(), wanted)
 + 
 +     def test_symlink(self):
---- python2.7-2.7.1.orig/debian/patches/libre.diff
-+++ python2.7-2.7.1/debian/patches/libre.diff
+--- python2.7-2.7.2.orig/debian/patches/libre.diff
++++ python2.7-2.7.2/debian/patches/libre.diff
 @@ -0,0 +1,9 @@
 +--- Doc/lib/libre.tex~	2003-07-25 09:29:22.000000000 +0200
 ++++ Doc/lib/libre.tex	2003-07-25 09:30:58.000000000 +0200
@@ -34239,8 +34239,8 @@
 +-\regexp{Begin [a-zA-Z0-9_ ]*?end}.  As a further benefit, such regular
 ++`Begin [a-zA-Z0-9_ ]*?end'.  As a further benefit, such regular
 + expressions will run faster than their recursive equivalents.
---- python2.7-2.7.1.orig/debian/patches/plat-linux2_hppa.diff
-+++ python2.7-2.7.1/debian/patches/plat-linux2_hppa.diff
+--- python2.7-2.7.2.orig/debian/patches/plat-linux2_hppa.diff
++++ python2.7-2.7.2/debian/patches/plat-linux2_hppa.diff
 @@ -0,0 +1,72 @@
 +Index: Lib/plat-linux2/IN.py
 +===================================================================
@@ -34314,8 +34314,8 @@
 + SOCK_STREAM = 1
 + SOCK_DGRAM = 2
 + SOCK_RAW = 3
---- python2.7-2.7.1.orig/debian/patches/enable-fpectl.diff
-+++ python2.7-2.7.1/debian/patches/enable-fpectl.diff
+--- python2.7-2.7.2.orig/debian/patches/enable-fpectl.diff
++++ python2.7-2.7.2/debian/patches/enable-fpectl.diff
 @@ -0,0 +1,14 @@
 +# DP: Enable the build of the fpectl module.
 +
@@ -34331,8 +34331,8 @@
 +         # Andrew Kuchling's zlib module.  Note that some versions of zlib
 +         # 1.1.3 have security problems.  See CERT Advisory CA-2002-07:
 +         # http://www.cert.org/advisories/CA-2002-07.html
---- python2.7-2.7.1.orig/debian/patches/series.in
-+++ python2.7-2.7.1/debian/patches/series.in
+--- python2.7-2.7.2.orig/debian/patches/series.in
++++ python2.7-2.7.2/debian/patches/series.in
 @@ -0,0 +1,52 @@
 +autoconf-version.diff
 +svn-updates.diff
@@ -34386,8 +34386,8 @@
 +issue9054.diff
 +link-system-expat.diff
 +plat-gnukfreebsd.diff
---- python2.7-2.7.1.orig/debian/patches/locale-module.diff
-+++ python2.7-2.7.1/debian/patches/locale-module.diff
+--- python2.7-2.7.2.orig/debian/patches/locale-module.diff
++++ python2.7-2.7.2/debian/patches/locale-module.diff
 @@ -0,0 +1,17 @@
 +# DP:   * Lib/locale.py:
 +# DP:     - Don't map 'utf8', 'utf-8' to 'utf', which is not a known encoding
@@ -34406,8 +34406,8 @@
 +     'universal.utf8@ucs4':                  'en_US.UTF-8',
 +     'ur':                                   'ur_PK.CP1256',
 +     'ur_pk':                                'ur_PK.CP1256',
---- python2.7-2.7.1.orig/debian/patches/webbrowser.diff
-+++ python2.7-2.7.1/debian/patches/webbrowser.diff
+--- python2.7-2.7.2.orig/debian/patches/webbrowser.diff
++++ python2.7-2.7.2/debian/patches/webbrowser.diff
 @@ -0,0 +1,27 @@
 +# DP: Recognize other browsers: www-browser, x-www-browser, iceweasel, iceape.
 +
@@ -34436,8 +34436,8 @@
 +     # The Links/elinks browsers <http://artax.karlin.mff.cuni.cz/~mikulas/links/>
 +     if _iscommand("links"):
 +         register("links", None, GenericBrowser("links"))
---- python2.7-2.7.1.orig/debian/patches/langpack-gettext.diff
-+++ python2.7-2.7.1/debian/patches/langpack-gettext.diff
+--- python2.7-2.7.2.orig/debian/patches/langpack-gettext.diff
++++ python2.7-2.7.2/debian/patches/langpack-gettext.diff
 @@ -0,0 +1,34 @@
 +# DP: Description: support alternative gettext tree in
 +# DP: /usr/share/locale-langpack; if a file is present in both trees,
@@ -34473,8 +34473,8 @@
 +     return result
 + 
 + 
---- python2.7-2.7.1.orig/debian/patches/plat-linux2_alpha.diff
-+++ python2.7-2.7.1/debian/patches/plat-linux2_alpha.diff
+--- python2.7-2.7.2.orig/debian/patches/plat-linux2_alpha.diff
++++ python2.7-2.7.2/debian/patches/plat-linux2_alpha.diff
 @@ -0,0 +1,73 @@
 +Index: Lib/plat-linux2/IN.py
 +===================================================================
@@ -34549,8 +34549,8 @@
 + SOCK_STREAM = 1
 + SOCK_DGRAM = 2
 + SOCK_RAW = 3
---- python2.7-2.7.1.orig/debian/patches/issue9012a.diff
-+++ python2.7-2.7.1/debian/patches/issue9012a.diff
+--- python2.7-2.7.2.orig/debian/patches/issue9012a.diff
++++ python2.7-2.7.2/debian/patches/issue9012a.diff
 @@ -0,0 +1,13 @@
 +# DP: Link _math.o only once to the static library.
 +
@@ -34565,8 +34565,8 @@
 + #math mathmodule.c _math.c # -lm # math library functions, e.g. sin()
 + #_struct _struct.c	# binary structure packing/unpacking
 + #time timemodule.c # -lm # time operations and variables
---- python2.7-2.7.1.orig/debian/patches/hurd-disable-nonworking-constants.diff
-+++ python2.7-2.7.1/debian/patches/hurd-disable-nonworking-constants.diff
+--- python2.7-2.7.2.orig/debian/patches/hurd-disable-nonworking-constants.diff
++++ python2.7-2.7.2/debian/patches/hurd-disable-nonworking-constants.diff
 @@ -0,0 +1,34 @@
 +# DP: Comment out constant exposed on the API which are not implemented on
 +# DP: GNU/Hurd. They would not work at runtime anyway.
@@ -34602,16 +34602,16 @@
 + #ifdef  SO_SNDBUF
 +     PyModule_AddIntConstant(m, "SO_SNDBUF", SO_SNDBUF);
 + #endif
---- python2.7-2.7.1.orig/debian/patches/deb-setup.diff
-+++ python2.7-2.7.1/debian/patches/deb-setup.diff
+--- python2.7-2.7.2.orig/debian/patches/deb-setup.diff
++++ python2.7-2.7.2/debian/patches/deb-setup.diff
 @@ -0,0 +1,31 @@
 +# DP: Don't include /usr/local/include and /usr/local/lib as gcc search paths
 +# DP: Include /usr/include/<triplet> and /usr/lib/<triplet> as gcc search paths
 +
-+Index: python2.7-2.7.1/setup.py
++Index: python2.7-2.7.2/setup.py
 +===================================================================
-+--- python2.7-2.7.1.orig/setup.py
-++++ python2.7-2.7.1/setup.py
++--- python2.7-2.7.2.orig/setup.py
+++++ python2.7-2.7.2/setup.py
 +@@ -347,8 +347,12 @@
 + 
 +     def detect_modules(self):
@@ -34636,8 +34636,8 @@
 +             curses_library = readline_termcap_library
 +         elif self.compiler.find_library_file(lib_dirs, 'ncursesw'):
 +             curses_library = 'ncursesw'
---- python2.7-2.7.1.orig/debian/patches/hurd-broken-poll.diff
-+++ python2.7-2.7.1/debian/patches/hurd-broken-poll.diff
+--- python2.7-2.7.2.orig/debian/patches/hurd-broken-poll.diff
++++ python2.7-2.7.2/debian/patches/hurd-broken-poll.diff
 @@ -0,0 +1,23 @@
 +# DP: Fix build failure on hurd, working around poll() on systems
 +# DP: on which it returns an error on invalid FDs.
@@ -34662,8 +34662,8 @@
 + #ifdef __APPLE__
 +     if (select_have_broken_poll()) {
 +         if (PyObject_DelAttrString(m, "poll") == -1) {
---- python2.7-2.7.1.orig/debian/patches/makesetup-bashism.diff
-+++ python2.7-2.7.1/debian/patches/makesetup-bashism.diff
+--- python2.7-2.7.2.orig/debian/patches/makesetup-bashism.diff
++++ python2.7-2.7.2/debian/patches/makesetup-bashism.diff
 @@ -0,0 +1,13 @@
 +# DP: Fix bashism in makesetup shell script
 +
@@ -34678,7 +34678,7 @@
 + 		str="# Generated automatically from $makepre by makesetup."
 + 		echo "$str" >>$sedf
 + 		echo "s%_MODOBJS_%$OBJS%" >>$sedf
---- python2.7-2.7.1.orig/debian/source/format
-+++ python2.7-2.7.1/debian/source/format
+--- python2.7-2.7.2.orig/debian/source/format
++++ python2.7-2.7.2/debian/source/format
 @@ -0,0 +1 @@
 +1.0
