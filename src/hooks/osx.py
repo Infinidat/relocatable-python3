@@ -108,3 +108,10 @@ def patch_python(options, buildout, version):
         assert '@rpath' in content
         open(file, 'w').write(content)
 
+def autogen_libevent(options, buildout, version):
+    from subprocess import Popen
+    process = Popen(['./autogen.sh'])
+    assert process.wait() == 0
+
+
+
