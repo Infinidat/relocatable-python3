@@ -51,6 +51,7 @@ if not has_broken_dash_S and 'site' in sys.modules:
     args = sys.argv[:]
     args[0:0] = [sys.executable, '-S']
     args = map(quote, args)
+    os.execv(sys.executable, args)
 # Now we are running with -S.  We'll get the clean sys.path, import site
 # because distutils will do it later, and then reset the path and clean
 # out any namespace packages from site-packages that might have been
@@ -102,7 +103,7 @@ parser = OptionParser(usage=usage)
 parser.add_option("-v", "--version", dest="version",
                           help="use a specific zc.buildout version")
 parser.add_option("-d", "--distribute",
-                   action="store_true", dest="use_distribute", default=False,
+                   action="store_true", dest="use_distribute", default=True,
                    help="Use Distribute rather than Setuptools.")
 parser.add_option("--setup-source", action="callback", dest="setup_source",
                   callback=normalize_to_url, nargs=1, type="string",
@@ -121,7 +122,7 @@ parser.add_option("--eggs",
                         "bootstrap script completes."))
 parser.add_option("-t", "--accept-buildout-test-releases",
                   dest='accept_buildout_test_releases',
-                  action="store_true", default=False,
+                  action="store_true", default=True,
                   help=("Normally, if you do not specify a --version, the "
                         "bootstrap script and buildout gets the newest "
                         "*final* versions of zc.buildout and its recipes and "
