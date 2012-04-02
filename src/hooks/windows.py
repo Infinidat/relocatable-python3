@@ -1,6 +1,6 @@
 
 import os, subprocess
-from os import path
+from os import path, makedirs
 import glob, shutil
 
 def _execute(cmd, env):
@@ -33,7 +33,7 @@ class PythonPostMake(object):
         self.python_source_path = path.abspath(path.join(curdir, path.pardir))
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
         self.prefix = environ['PREFIX']
-
+        self.environ = environ
         print self.python_source_path, self.pcbuild_path, self.prefix
 
     def make_install(self):
@@ -46,6 +46,7 @@ class PythonPostMake(object):
         self.make_includes()
         self.make_libraries()
         self.move_dlls()
+        self.copy_crt_assemblies()
 
     def move_dlls(self):
         dst = path.join(self.prefix, 'DLLs')
@@ -90,6 +91,12 @@ class PythonPostMake(object):
     def make_ico(self):
         dst = path.join(self.prefix, 'bin')
         src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
+        _copy_files(src, dst)
+
+    def copy_crt_assemblies(self, environ):
+        dst = path.join(self.prefix, 'bin', 'Microsoft.VC90.CRT')
+        makedirs(dst)
+        src = glob.glob(path.join(self.environ['VC90CRT'], '*'))
         _copy_files(src, dst)
 
     def make_includes(self):
