@@ -93,7 +93,7 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
         _copy_files(src, dst)
 
-    def copy_crt_assemblies(self, environ):
+    def copy_crt_assemblies(self):
         dst = path.join(self.prefix, 'bin', 'Microsoft.VC90.CRT')
         makedirs(dst)
         src = glob.glob(path.join(self.environ['VC90CRT'], '*'))
