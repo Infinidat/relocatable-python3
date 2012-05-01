@@ -136,6 +136,11 @@ def _system(cmd):
     print cmd
     os.system(cmd.replace(os.path.sep, '/'))
 
+def libevent_post_make(options, buildout, environ):
+    import os
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    os.system('cp -fvr *lib %s/lib' % prefix)
+
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ)
     instance.make_install()
