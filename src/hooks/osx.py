@@ -16,7 +16,6 @@ def find_files(directory, pattern):
         for basename in files:
             if fnmatch.fnmatch(basename, pattern):
                 filename = os.path.join(root, basename)
-
                 yield filename
 
 def change_install_name_in_file(filepath):
@@ -34,9 +33,9 @@ def remove_rpath_in_file(filepath):
     content = content.replace(r'$rpath/$soname', r'@rpath/$soname')
     content = content.replace(r'\$rpath/\$soname', r'@rpath/\$soname')
     content = content.replace(r'\$rpath/\$soname', r'@rpath/\$soname')
-    content = content.replace(r'${wl}-rpath ${wl}$libdir}', '')
-    content = content.replace(r'${wl}-rpath,$libdir}', '')
-    content = content.replace(r'-rpath $libdir}', '')
+    content = content.replace(r'${wl}-rpath ${wl}$libdir', '')
+    content = content.replace(r'${wl}-rpath,$libdir', '')
+    content = content.replace(r'-rpath $libdir', '')
     open(filepath, 'w').write(content)
 
 def change_install_name(options, buildout, version):
@@ -55,6 +54,9 @@ def change_install_name(options, buildout, version):
         change_install_name_in_file(item)
         remove_rpath_in_file(item)
     for item in find_files(abspath(curdir), 'libtool'):
+        change_install_name_in_file(item)
+        remove_rpath_in_file(item)
+    for item in find_files(abspath(curdir), 'aclocal.m4'):
         change_install_name_in_file(item)
         remove_rpath_in_file(item)
 
@@ -112,6 +114,5 @@ def autogen_libevent(options, buildout, version):
     from subprocess import Popen
     process = Popen(['./autogen.sh'])
     assert process.wait() == 0
-
-
+    change_install_name(options, buildout, version)
 

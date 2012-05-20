@@ -136,6 +136,11 @@ def _system(cmd):
     print cmd
     os.system(cmd.replace(os.path.sep, '/'))
 
+def libevent_post_make(options, buildout, environ):
+    import os
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    os.system('cp -fvr *lib %s/lib' % prefix)
+
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ)
     instance.make_install()
@@ -144,6 +149,3 @@ def python_post_make64(options, buildout, environ):
     instance = PythonPostMake(environ)
     instance.make_install()
 
-if __name__ == '__main__':
-    environ = {'PREFIX': r'C:\Users\jenkins\workspace\python-feature-v2.7.2-windows\label\windows-x86\dist'}
-    python_post_make(None, None, environ)
