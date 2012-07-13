@@ -15,3 +15,18 @@ $ python bootstrap.py
 $ ./bin/buildout
 $ ./bin/build
 
+Build environment
+=================
+
+For building on Mac OS X, you'll need to install first:
+* Xcode command line tools
+* Homebrew
+* autoconf, automake, libtool, pkgconfig
+
+For ubuntu, you'll need to install:
+* build-essential
+
+For windows, you'll need to install:
+* Microsot Visual Studio 2008 (No SP)
+* Perl
+* Python
