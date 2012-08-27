@@ -8,9 +8,12 @@ from sys import exit
 def build(argv = ' '.join(argv[1:])):
     command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Linux':
-        from platform import linux_distribution
-        if linux_distribution()[0] == 'Ubuntu':
+        from platform import dist
+        dist_name = dist()[0].lower()
+        if dist_name == 'ubuntu':
             command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
+        if dist_name in ['redhat', 'centos']:
+            command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
     elif system() == 'Darwin':
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     elif system() == 'Windows':
