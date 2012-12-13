@@ -7,6 +7,8 @@ from sys import exit
 
 def build(argv = ' '.join(argv[1:])):
     from sys import maxsize
+    from os import environ
+    environ = environ.copy()
     command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Linux':
         from platform import dist
@@ -16,6 +18,8 @@ def build(argv = ' '.join(argv[1:])):
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
             command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
     elif system() == 'Darwin':
+        from platform import mac_ver
+        environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     elif system() == 'Windows':
         if maxsize > 2**32:
@@ -23,7 +27,7 @@ def build(argv = ' '.join(argv[1:])):
         else:
             command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
     print 'executing "%s"' % command
-    process = Popen(command.split())
+    process = Popen(command.split(), env=environ)
     stdout, stderr = process.communicate()
     exit(process.returncode)
 

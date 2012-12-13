@@ -110,6 +110,13 @@ def patch_python(options, buildout, version):
         assert '@rpath' in content
         open(file, 'w').write(content)
 
+def patch_python_Makefile_after_configure(options, buildout, version):
+    import re
+    filename = "Makefile"
+    content = open(filename).read()
+    content = re.sub(r"LDFLAGS=", r"LDFLAGS=-Wl,-rpath,@loader_path/../lib ", content)
+    open(filename, 'w').write(content)
+
 def autogen_libevent(options, buildout, version):
     from subprocess import Popen
     process = Popen(['./autogen.sh'])
