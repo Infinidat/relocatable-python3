@@ -117,9 +117,20 @@ def patch_python_Makefile_after_configure(options, buildout, version):
     content = re.sub(r"LDFLAGS=", r"LDFLAGS=-Wl,-rpath,@loader_path/../lib ", content)
     open(filename, 'w').write(content)
 
+
+def patch_libevent_configure_in(options, buildout, version):
+    from os import curdir
+    from os.path import sep, abspath
+    for item in find_files(abspath(curdir), 'configure.in*'):
+        print 'fixing files "%s"' % item
+        filepath = item
+        content = open(filepath).read()
+        content = content.replace('AM_CONFIG_HEADER', 'AC_CONFIG_HEADERS')
+        open(filepath, 'w').write(content)
+
 def autogen_libevent(options, buildout, version):
     from subprocess import Popen
+    patch_libevent_configure_in(options, buildout, version)
     process = Popen(['./autogen.sh'])
     assert process.wait() == 0
     change_install_name(options, buildout, version)
-

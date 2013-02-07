@@ -24,7 +24,7 @@ from optparse import OptionParser
 if sys.platform == 'win32':
     def quote(c):
         if ' ' in c:
-            return '"%s"' % c # work around spawn lamosity on windows
+            return '"%s"' % c  # work around spawn lamosity on windows
         else:
             return c
 else:
@@ -58,13 +58,13 @@ if not has_broken_dash_S and 'site' in sys.modules:
 # out any namespace packages from site-packages that might have been
 # loaded by .pth files.
 clean_path = sys.path[:]
-import site
+import site  # imported because of its side effects
 sys.path[:] = clean_path
 for k, v in sys.modules.items():
     if k in ('setuptools', 'pkg_resources') or (
         hasattr(v, '__path__') and
-        len(v.__path__)==1 and
-        not os.path.exists(os.path.join(v.__path__[0],'__init__.py'))):
+        len(v.__path__) == 1 and
+        not os.path.exists(os.path.join(v.__path__[0], '__init__.py'))):
         # This is a namespace package.  Remove it.
         sys.modules.pop(k)
 
@@ -73,10 +73,11 @@ is_jython = sys.platform.startswith('java')
 setuptools_source = 'http://peak.telecommunity.com/dist/ez_setup.py'
 distribute_source = 'http://python-distribute.org/distribute_setup.py'
 
+
 # parsing arguments
 def normalize_to_url(option, opt_str, value, parser):
     if value:
-        if '://' not in value: # It doesn't smell like a URL.
+        if '://' not in value:  # It doesn't smell like a URL.
             value = 'file://%s' % (
                 urllib.pathname2url(
                     os.path.abspath(os.path.expanduser(value))),)
@@ -104,14 +105,14 @@ parser = OptionParser(usage=usage)
 parser.add_option("-v", "--version", dest="version",
                           help="use a specific zc.buildout version")
 parser.add_option("-d", "--distribute",
-                   action="store_true", dest="use_distribute", default=True,
+                   action="store_true", dest="use_distribute", default=False,
                    help="Use Distribute rather than Setuptools.")
 parser.add_option("--setup-source", action="callback", dest="setup_source",
                   callback=normalize_to_url, nargs=1, type="string",
                   help=("Specify a URL or file location for the setup file. "
                         "If you use Setuptools, this will default to " +
                         setuptools_source + "; if you use Distribute, this "
-                        "will default to " + distribute_source +"."))
+                        "will default to " + distribute_source + "."))
 parser.add_option("--download-base", action="callback", dest="download_base",
                   callback=normalize_to_url, nargs=1, type="string",
                   help=("Specify a URL or directory for downloading "
@@ -123,7 +124,7 @@ parser.add_option("--eggs",
                         "bootstrap script completes."))
 parser.add_option("-t", "--accept-buildout-test-releases",
                   dest='accept_buildout_test_releases',
-                  action="store_true", default=True,
+                  action="store_true", default=False,
                   help=("Normally, if you do not specify a --version, the "
                         "bootstrap script and buildout gets the newest "
                         "*final* versions of zc.buildout and its recipes and "
@@ -134,7 +135,9 @@ parser.add_option("-c", None, action="store", dest="config_file",
                    help=("Specify the path to the buildout configuration "
                          "file to be used."))
 
-options, args = parser.parse_args()
+options, orig_args = parser.parse_args()
+
+args = []
 
 # if -c was provided, we push it back into args for buildout's main function
 if options.config_file is not None:
@@ -153,11 +156,10 @@ if options.setup_source is None:
 
 if options.accept_buildout_test_releases:
     args.append('buildout:accept-buildout-test-releases=true')
-args.append('bootstrap')
 
 try:
     import pkg_resources
-    import setuptools # A flag.  Sometimes pkg_resources is installed alone.
+    import setuptools  # A flag.  Sometimes pkg_resources is installed alone.
     if not hasattr(pkg_resources, '_distribute'):
         raise ImportError
 except ImportError:
@@ -212,6 +214,7 @@ if version is None and not options.accept_buildout_test_releases:
     # Figure out the most recent final version of zc.buildout.
     import setuptools.package_index
     _final_parts = '*final-', '*final'
+
     def _final_version(parsed_version):
         for part in parsed_version:
             if (part[:1] == '*') and (part not in _final_parts):
@@ -243,7 +246,7 @@ cmd.append(requirement)
 if is_jython:
     import subprocess
     exitcode = subprocess.Popen(cmd, env=env).wait()
-else: # Windows prefers this, apparently; otherwise we would prefer subprocess
+else:  # Windows prefers this, apparently; otherwise we would prefer subprocess
     exitcode = os.spawnle(*([os.P_WAIT, sys.executable] + cmd + [env]))
 if exitcode != 0:
     sys.stdout.flush()
@@ -256,6 +259,9 @@ if exitcode != 0:
 ws.add_entry(eggs_dir)
 ws.require(requirement)
 import zc.buildout.buildout
-zc.buildout.buildout.main(args)
-if not options.eggs: # clean up temporary egg directory
+if orig_args:
+    # run buildout with commands passed to bootstrap.py, then actually bootstrap
+    zc.buildout.buildout.main(args + orig_args)
+zc.buildout.buildout.main(args + ['bootstrap'])
+if not options.eggs:  # clean up temporary egg directory
     shutil.rmtree(eggs_dir)
