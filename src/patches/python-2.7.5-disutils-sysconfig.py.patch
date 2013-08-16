@@ -2,8 +2,8 @@ diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
 index ba48173..64c2d5e 100644
 --- a/Lib/distutils/sysconfig.py
 +++ b/Lib/distutils/sysconfig.py
-@@ -432,7 +432,17 @@ def _init_posix():
- 
+@@ -432,7 +432,19 @@ def _init_posix():
+
      global _config_vars
      _config_vars = g
 -
@@ -11,6 +11,8 @@ index ba48173..64c2d5e 100644
 +
 +def _fix_prefix(config_vars):
 +    import sys
++    if config_vars is None:
++        return
 +    makefile_prefix = config_vars.get('prefix', None)
 +    if not makefile_prefix:
 +        return
@@ -18,6 +20,6 @@ index ba48173..64c2d5e 100644
 +        if not isinstance(value, str):
 +            continue
 +        config_vars[key] = value.replace(makefile_prefix, sys.prefix)
- 
+
  def _init_nt():
      """Initialize the module as appropriate for NT"""

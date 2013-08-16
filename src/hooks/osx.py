@@ -99,7 +99,7 @@ def patch_cyrus_sasl(options, buildout, version):
 def patch_python(options, buildout, version):
     from os.path import abspath
     change_install_name(options, buildout, version)
-    for file in ['Makefile.pre.in', 'configure', 'configure.in']:
+    for file in ['Makefile.pre.in', 'configure']:
         content = open(file).read()
         print abspath('./%s' % file)
         assert len(content)
