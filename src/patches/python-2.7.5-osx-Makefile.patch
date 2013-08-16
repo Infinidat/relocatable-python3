@@ -1,24 +1,13 @@
-diff --git a/Makefile.pre.in b/Makefile.pre.in
-index 9bcbdab..6a8e257 100644
---- a/Makefile.pre.in
-+++ b/Makefile.pre.in
-@@ -404,8 +404,8 @@ platform: $(BUILDPYTHON)
- # Build the shared modules
- sharedmods: $(BUILDPYTHON)
- 	@case $$MAKEFLAGS in \
--	*s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py -q build;; \
--	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
-+	*s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' /$(BUILDPYTHON) -E $(srcdir)/setup.py -q build;; \
-+	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
- 	esac
+diff --git i/Makefile.pre.in w/Makefile.pre.in
+index 9d55550..33624be 100644
+--- i/Makefile.pre.in
++++ w/Makefile.pre.in
+@@ -455,7 +455,7 @@ sharedmods: $(BUILDPYTHON) pybuilddir.txt
+ 	    *\ -s*|s*) quiet="-q";; \
+ 	    *) quiet="";; \
+ 	esac; \
+-	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
++	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' \
+ 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
  
  # Build static library
-@@ -1044,7 +1044,7 @@ libainstall:	all python-config
- # Install the dynamically loadable modules
- # This goes into $(exec_prefix)
- sharedinstall: sharedmods
--	$(RUNSHARED) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
-+	$(RUNSHARED) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
- 	   	--prefix=$(prefix) \
- 		--install-scripts=$(BINDIR) \
- 		--install-platlib=$(DESTSHARED) \
