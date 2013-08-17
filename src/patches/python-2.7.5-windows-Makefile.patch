@@ -431,7 +431,7 @@ diff --git i/PCbuild/pyproject.vsprops w/PCbuild/pyproject.vsprops
 index 024bfa8..1f82f7a 100644
 --- i/PCbuild/pyproject.vsprops
 +++ w/PCbuild/pyproject.vsprops
-@@ -45,12 +45,19 @@
+@@ -45,12 +45,20 @@
  		Value="$(SolutionDir)\python.exe"
  	/>
  	<UserMacro
@@ -447,6 +447,7 @@ index 024bfa8..1f82f7a 100644
 +	<UserMacro
 +		Name="partsDir"
 +		Value="..\..\..\"
++   />
 +	<UserMacro
  		Name="bsddb47Dir"
 -		Value="$(externalsDir)\db-4.7.25.0\build_windows"
