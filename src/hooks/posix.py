@@ -11,7 +11,9 @@ for key, value in build_time_vars.items():
 def purge_sysconfigdata(options, buildout, environ):
     from glob import glob
     from os import path, curdir
-    dist = path.join(environ.get("PWD"), "dist")
+    dist = path.join(environ.get("PWD"), path.abspath('.'))
+    print 'dist = {}'.format(dist)
+    print 'sysconfig = {!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
     [_sysconfigdata] = glob(path.join(dist, "*", "*", "_sysconfigdata.py"))
     with open(_sysconfigdata, 'a') as fd:
         fd.write(TRICK)
