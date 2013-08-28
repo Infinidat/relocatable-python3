@@ -1,8 +1,6 @@
 __import__("pkg_resources").declare_namespace(__name__)
 
-from sys import argv
-from subprocess import Popen, PIPE
-from platform import system
+from hooks.editline import replace_readline_with_editline
 
 def _catch_and_print(func, *args, **kwargs):
     try:
@@ -38,7 +36,8 @@ def remove_rpath_in_file(filepath):
     content = content.replace(r'-rpath $libdir', '')
     open(filepath, 'w').write(content)
 
-def change_install_name(options, buildout, version):
+
+def change_install_name(options, buildout, version=None):
     from os import curdir
     from os.path import exists, sep, abspath
     for item in find_files(abspath(curdir), 'configure'):
@@ -59,6 +58,8 @@ def change_install_name(options, buildout, version):
     for item in find_files(abspath(curdir), 'aclocal.m4'):
         change_install_name_in_file(item)
         remove_rpath_in_file(item)
+    replace_readline_with_editline(options, buildout, version)
+
 
 def patch_ncurses(options, buildout, version):
     from os import curdir
@@ -70,6 +71,8 @@ def patch_ncurses(options, buildout, version):
         src = 'LIBRARIES\t=  ../lib/libncurses.dylib'
         dst = 'LIBRARIES\t=  ../lib/libncurses.${ABI_VERSION}.dylib'
         open(filepath, 'w').write(content.replace(src,dst).replace('-o$@', '-o $@'))
+    replace_readline_with_editline(options, buildout, version)
+
 
 def patch_openssl(options, buildout, version):
     from os import curdir
@@ -84,9 +87,11 @@ def patch_openssl(options, buildout, version):
         content = content.replace("-install_name $(INSTALLTOP)/$(LIBDIR)", "-install_name @rpath")
         open(filepath, 'w').write(content)
 
+
 def patch_pdb(options, buildout, version):
     import pdb
     pdb.set_trace()
+
 
 def patch_cyrus_sasl(options, buildout, version):
     change_install_name(options, buildout, version)
@@ -95,6 +100,7 @@ def patch_cyrus_sasl(options, buildout, version):
     for item in find_files(abspath(curdir), 'ltconfig'):
         change_install_name_in_file(item)
         remove_rpath_in_file(item)
+    replace_readline_with_editline(options, buildout, version)
 
 def patch_python(options, buildout, version):
     from os.path import abspath
@@ -109,6 +115,8 @@ def patch_python(options, buildout, version):
         content = content.replace(r'-install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
         assert '@rpath' in content
         open(file, 'w').write(content)
+    replace_readline_with_editline(options, buildout, version)
+
 
 def patch_python_Makefile_after_configure(options, buildout, version):
     import re
@@ -116,6 +124,7 @@ def patch_python_Makefile_after_configure(options, buildout, version):
     content = open(filename).read()
     content = re.sub(r"LDFLAGS=", r"LDFLAGS=-Wl,-rpath,@loader_path/../lib ", content)
     open(filename, 'w').write(content)
+    replace_readline_with_editline(options, buildout, version)
 
 
 def patch_libevent_configure_in(options, buildout, version):
@@ -127,6 +136,8 @@ def patch_libevent_configure_in(options, buildout, version):
         content = open(filepath).read()
         content = content.replace('AM_CONFIG_HEADER', 'AC_CONFIG_HEADERS')
         open(filepath, 'w').write(content)
+    replace_readline_with_editline(options, buildout, version)
+
 
 def autogen_libevent(options, buildout, version):
     from subprocess import Popen
@@ -134,3 +145,4 @@ def autogen_libevent(options, buildout, version):
     process = Popen(['./autogen.sh'])
     assert process.wait() == 0
     change_install_name(options, buildout, version)
+    replace_readline_with_editline(options, buildout, version)
