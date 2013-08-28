@@ -13,5 +13,5 @@ def editline_preconfigure_hook(options, buildout, environ):
     env = {key: value for key, value in os.environ.iteritems()}
     env['LC_ALL'] = 'C'
     execute_assert_success(["aclocal"], env=env)
-    execute_assert_success(["autoconf"], env=env)
+    execute_assert_success(["autoreconf", "--force", "--install"], env=env)
     execute_assert_success(["automake"], env=env)
