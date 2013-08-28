@@ -1,5 +1,12 @@
 __import__("pkg_resources").declare_namespace(__name__)
 
+import sys
+import os
+
+srcdir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
+if srcdir not in sys.path:
+    sys.path[0:0] = [srcdir]
+
 from hooks.editline import replace_readline_with_editline
 
 def _catch_and_print(func, *args, **kwargs):
