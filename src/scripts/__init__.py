@@ -3,6 +3,7 @@ __import__("pkg_resources").declare_namespace(__name__)
 from sys import argv
 from subprocess import Popen
 from platform import system
+from infi.execute import execute_assert_success
 from sys import exit
 
 def build(argv = ' '.join(argv[1:])):
@@ -20,7 +21,10 @@ def build(argv = ' '.join(argv[1:])):
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
-        command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
+        if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
+            command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+        else:
+            command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     elif system() == 'Windows':
         if maxsize > 2**32:
             command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
