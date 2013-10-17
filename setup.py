@@ -6,7 +6,7 @@ SETUP_INFO = dict(
     description = 'builds python',
     long_description = (),
     classifiers = [],
-    install_requires = ['setuptools'],
+    install_requires = ['setuptools', 'infi.execute'],
     extras_require = {},
 
     test_suite = '',
