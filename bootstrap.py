@@ -22,6 +22,8 @@ import os
 import shutil
 import sys
 import tempfile
+import glob
+import re
 
 from optparse import OptionParser
 
@@ -91,7 +93,10 @@ parser.add_option("--index-url", action="callback", dest="index_url",
                   callback=normalize_to_url, nargs=1, type="string",
                   help=("Specify an alternative for PyPI simple index url"),
                   default=pypi_index)
-
+# explicit setuptools version
+parser.add_option("--setuptools-version", action="store", dest="setuptools_version", type="string",
+                  help=("Specifiy a specific version of setuptools to use"),
+                  )
 options, args = parser.parse_args()
 
 ######################################################################
@@ -108,23 +113,46 @@ def _cleanup_old_zc_buildout_modules():
         if 'zc' in module:
             del sys.modules[module]
 
+def _cleanup_setuptools_and_distribute_modules():
+    # installing setuptools imported the site module, which added all the stuff in site-packages to sys.path,
+    # even though in the case Python was executed -S.
+    # we want to remove all traces for this
+    paths_to_remove = [item for item in sys.path if 'setuptools-' in item or 'distribute-' in item]
+    # the python-setuptools installs setuptools in a different way
+    paths_to_remove.extend(item for item in sys.path if glob.glob(os.path.join(item, 'setuptools-*'))
+                           and 'dist-packages' in item)
+    paths_to_remove.extend(item for item in sys.path if glob.glob(os.path.join(item, 'distribute-*'))
+                           and 'dist-packages' in item)
+    # virtualenv creates under site-packages a directory named setuptools/ with an __init__.py inside in
+    # this causes makes setuptools importable if that site-packages is in sys.path
+    # in this case, pkg_resources is directly under site-packages/
+    # so it must go
+    paths_to_remove.extend(item for item in sys.path if
+                           os.path.exists(os.path.join(item, "setuptools")) and
+                           os.path.exists(os.path.join(item, "pkg_resources.py")) and
+                           'site-packages' in item)
+    sys.path = list(set(sys.path) - set(paths_to_remove))
+
+
 to_reload = False
-import glob
-import re
 try:
     from urlparse import urlparse
 except ImportError:
     from urllib.parse import urlparse
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
+
+_cleanup_setuptools_and_distribute_modules()
+_cleanup_setuptools_and_distribute_modules()  # wtf need to run twice
+
 try:
     import pkg_resources
     import setuptools
 except ImportError:
     ez = {}
-
-    try:
-        from urllib.request import urlopen
-    except ImportError:
-        from urllib2 import urlopen
 
     # XXX use a more permanent ez_setup.py URL when available.
     exec(urlopen(options.setup_source).read(), ez)
@@ -139,6 +167,8 @@ except ImportError:
                     setuptools_version = re.match("setuptools-(?P<version>.*).tar.gz",
                                                   os.path.basename(files[0])).groupdict()['version']
                     setup_args['version'] = setuptools_version
+    if options.setuptools_version:
+        setup_args['version'] = options.setuptools_version
     ez['use_setuptools'](**setup_args)
 
     if to_reload:
