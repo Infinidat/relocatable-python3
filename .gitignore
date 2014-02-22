@@ -19,3 +19,5 @@ parts/
 build/
 dist/
 .cache
+eggs
+parts
