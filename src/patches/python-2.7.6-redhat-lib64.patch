@@ -3,7 +3,7 @@ index b9f1c6c..138144b 100644
 --- i/Lib/distutils/command/install.py
 +++ w/Lib/distutils/command/install.py
 @@ -41,15 +41,15 @@ else:
- 
+
  INSTALL_SCHEMES = {
      'unix_prefix': {
 -        'purelib': '$base/lib/python$py_version_short/site-packages',
@@ -27,7 +27,7 @@ index 0c726d9..bf17c0f 100644
 --- i/Lib/distutils/sysconfig.py
 +++ w/Lib/distutils/sysconfig.py
 @@ -120,7 +120,7 @@ def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
- 
+
      if os.name == "posix":
          libpython = os.path.join(prefix,
 -                                 "lib", "python" + get_python_version())
@@ -54,7 +54,7 @@ index aa69351..4717da9 100644
 --- i/Lib/sysconfig.py
 +++ w/Lib/sysconfig.py
 @@ -7,20 +7,20 @@ from os.path import pardir, realpath
- 
+
  _INSTALL_SCHEMES = {
      'posix_prefix': {
 -        'stdlib': '{base}/lib/python{py_version_short}',
@@ -157,7 +157,7 @@ index f4b5fc6..c4dee8f 100644
 +            self.assertEquals(dirs[0], 'xoxo')
 +            wanted = os.path.join('xoxo', 'lib64', 'site-packages')
 +            self.assertEquals(dirs[1], wanted)
- 
+
  class PthFile(object):
      """Helper class for handling testing of .pth files"""
 diff --git i/Makefile.pre.in w/Makefile.pre.in
@@ -170,7 +170,7 @@ index 9d55550..12195d0 100644
  CONFINCLUDEDIR=	$(exec_prefix)/include
 -SCRIPTDIR=	$(prefix)/lib
 +SCRIPTDIR=	$(prefix)/lib64
- 
+
  # Detailed destination directories
  BINLIBDEST=	$(LIBDIR)/python$(VERSION)
 diff --git i/Modules/Setup.dist w/Modules/Setup.dist
@@ -184,7 +184,7 @@ index 2ad1aa3..3874e27 100644
 -#DBLIB=$(DB)/lib
 +DBLIB=$(DB)/lib
  #_bsddb _bsddb.c -I$(DBINC) -L$(DBLIB) -ldb-$(DBLIBVER)
- 
+
  # Historical Berkeley DB 1.85
 @@ -464,7 +464,7 @@ GLHACK=-Dclear=__GLclear
  # Andrew Kuchling's zlib module.
@@ -192,7 +192,7 @@ index 2ad1aa3..3874e27 100644
  # See http://www.gzip.org/zlib/
 -#zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz
 +zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib64 -lz
- 
+
  # Interface to the Expat XML parser
  #
 diff --git i/Modules/getpath.c w/Modules/getpath.c
@@ -221,14 +221,14 @@ index de96d47..6a36378 100644
   * installation location, even though sys.path points into the build
 @@ -117,8 +117,8 @@
  #endif
- 
+
  #ifndef PYTHONPATH
 -#define PYTHONPATH PREFIX "/lib/python" VERSION ":" \
 -              EXEC_PREFIX "/lib/python" VERSION "/lib-dynload"
 +#define PYTHONPATH PREFIX "/lib64/python" VERSION ":" \
 +              EXEC_PREFIX "/lib64/python" VERSION "/lib-dynload"
  #endif
- 
+
  #ifndef LANDMARK
 @@ -129,7 +129,7 @@ static char prefix[MAXPATHLEN+1];
  static char exec_prefix[MAXPATHLEN+1];
@@ -236,7 +236,7 @@ index de96d47..6a36378 100644
  static char *module_search_path = NULL;
 -static char lib_python[] = "lib/python" VERSION;
 +static char lib_python[] = "lib64/python" VERSION;
- 
+
  static void
  reduce(char *dir)
 @@ -543,7 +543,7 @@ calculate_path(void)
@@ -256,10 +256,10 @@ index de96d47..6a36378 100644
 +        joinpath(exec_prefix, "lib64/lib-dynload");
      }
      /* If we found EXEC_PREFIX do *not* reduce it!  (Yet.) */
- 
+
 @@ -645,7 +645,7 @@ calculate_path(void)
      }
- 
+
      /* Reduce prefix and exec_prefix to their essence,
 -     * e.g. /usr/local/lib/python1.5 is reduced to /usr/local.
 +     * e.g. /usr/local/lib64/python1.5 is reduced to /usr/local.
@@ -267,19 +267,19 @@ index de96d47..6a36378 100644
       * return the compiled-in defaults instead.
       */
 diff --git i/setup.py w/setup.py
-index 716f08e..097c55e 100644
+index 40ad843..4650b82 100644
 --- i/setup.py
 +++ w/setup.py
-@@ -437,7 +437,7 @@ class PyBuildExt(build_ext):
- 
+@@ -438,7 +438,7 @@ class PyBuildExt(build_ext):
      def detect_modules(self):
          # Ensure that /usr/local is always used
--        add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
-+        add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib64')
-         add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
-         self.add_gcc_paths()
-         self.add_multiarch_paths()
-@@ -756,11 +756,11 @@ class PyBuildExt(build_ext):
+         if not cross_compiling:
+-            add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
++            add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib64')
+             add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+         if cross_compiling:
+             self.add_gcc_paths()
+@@ -758,11 +758,11 @@ class PyBuildExt(build_ext):
              elif curses_library:
                  readline_libs.append(curses_library)
              elif self.compiler.find_library_file(lib_dirs +
@@ -293,7 +293,7 @@ index 716f08e..097c55e 100644
                                     extra_link_args=readline_extra_link_args,
                                     libraries=readline_libs) )
          else:
-@@ -795,8 +795,8 @@ class PyBuildExt(build_ext):
+@@ -797,8 +797,8 @@ class PyBuildExt(build_ext):
              if krb5_h:
                  ssl_incs += krb5_h
          ssl_libs = find_library_file(self.compiler, 'ssl',lib_dirs,
@@ -302,5 +302,5 @@ index 716f08e..097c55e 100644
 +                                     ['/usr/local/ssl/lib64',
 +                                      '/usr/contrib/ssl/lib64/'
                                       ] )
- 
+
          if (ssl_incs is not None and
