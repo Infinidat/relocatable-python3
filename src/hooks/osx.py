@@ -134,3 +134,10 @@ def autogen_libevent(options, buildout, version):
     process = Popen(['./autogen.sh'])
     assert process.wait() == 0
     change_install_name(options, buildout, version)
+
+def autoreconf(options, buildout, version):
+    from subprocess import Popen
+    patch_libevent_configure_in(options, buildout, version)
+    process = Popen(['autoreconf'])
+    assert process.wait() == 0
+    change_install_name(options, buildout, version)
