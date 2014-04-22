@@ -1,0 +1,169 @@
+diff --git i/tea/win/makefile.vc w/tea/win/makefile.vc
+index a1d7f95..8021447 100644
+--- i/tea/win/makefile.vc
++++ w/tea/win/makefile.vc
+@@ -2,7 +2,7 @@
+ #
+ # Microsoft Visual C++ makefile for use with nmake.exe v1.62+ (VC++ 5.0+)
+ #
+-# This makefile is based upon the Tcl 8.4 Makefile.vc and modified to 
++# This makefile is based upon the Tcl 8.4 Makefile.vc and modified to
+ # make it suitable as a general package makefile. Look for the word EDIT
+ # which marks sections that may need modification. As a minumum you will
+ # need to change the PROJECT, DOTVERSION and DLLOBJS variables to values
+@@ -10,7 +10,7 @@
+ #
+ # See the file "license.terms" for information on usage and redistribution
+ # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+-# 
++#
+ # Copyright (c) 1995-1996 Sun Microsystems, Inc.
+ # Copyright (c) 1998-2000 Ajuba Solutions.
+ # Copyright (c) 2001 ActiveState Corporation.
+@@ -21,7 +21,7 @@
+ # RCS: @(#)$Id: makefile.vc,v 1.4 2004/07/26 08:22:05 patthoyts Exp $
+ #-------------------------------------------------------------------------
+ 
+-!if !defined(MSDEVDIR) && !defined(MSVCDIR) && !defined(VCToolkitInstallDir)
++!if !defined(MSDEVDIR) && !defined(MSVCDIR) && !defined(VCINSTALLDIR) && !defined(MSSDK) && !defined(WINDOWSSDKDIR)
+ MSG = ^
+ You will need to run vcvars32.bat from Developer Studio, first, to setup^
+ the environment.  Jump to this line to read the new instructions.
+@@ -97,7 +97,7 @@ the environment.  Jump to this line to read the new instructions.
+ #	TMP_DIR=<path>
+ #	OUT_DIR=<path>
+ #		Hooks to allow the intermediate and output directories to be
+-#		changed.  $(OUT_DIR) is assumed to be 
++#		changed.  $(OUT_DIR) is assumed to be
+ #		$(BINROOT)\(Release|Debug) based on if symbols are requested.
+ #		$(TMP_DIR) will de $(OUT_DIR)\<buildtype> by default.
+ #
+@@ -153,16 +153,26 @@ Please `cd` to its location first.
+ #
+ #-------------------------------------------------------------------------
+ 
+-PROJECT = sample
++PROJECT = sqlite3
+ !include "rules.vc"
+ 
+-DOTVERSION      = 0.5
++# nmakehelp -V <file> <tag> will search the file for tag, skips until a
++#	number and returns all character until a character not in [0-9.ab]
++#	is read.
++
++!if [echo REM = This file is generated from Makefile.vc > versions.vc]
++!endif
++# get project version from row "AC_INIT([sqlite], [3.7.14])"
++!if [echo DOTVERSION = \>> versions.vc] \
++   && [nmakehlp -V ..\configure.in AC_INIT >> versions.vc]
++!endif
++!include "versions.vc"
++
+ VERSION         = $(DOTVERSION:.=)
+ STUBPREFIX      = $(PROJECT)stub
+ 
+ DLLOBJS = \
+-	$(TMP_DIR)\tclsample.obj \
+-	$(TMP_DIR)\sample.obj
++	$(TMP_DIR)\tclsqlite3.obj
+ 
+ #-------------------------------------------------------------------------
+ # Target names and paths ( shouldn't need changing )
+@@ -179,11 +189,11 @@ PRJSTUBLIBNAME	= $(STUBPREFIX)$(VERSION).lib
+ PRJSTUBLIB	= $(OUT_DIR)\$(PRJSTUBLIBNAME)
+ 
+ ### Make sure we use backslash only.
+-PRJ_INSTALL_DIR         = $(_INSTALLDIR)\$(PROJECT)$(DOTVERSION)
+-LIB_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+-BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+-DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+-SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)
++PRJ_INSTALL_DIR         = $(_INSTALLDIR)
++LIB_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\lib
++BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\bin
++DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\doc
++SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)\bin
+ INCLUDE_INSTALL_DIR	= $(_TCLDIR)\include
+ 
+ ### The following paths CANNOT have spaces in them.
+@@ -215,14 +225,6 @@ cdebug	= -Z7 -WX -Od -GZ
+ ### Declarations common to all compiler options
+ cflags = -nologo -c -W3 -YX -Fp$(TMP_DIR)^\
+ 
+-!if $(PENT_0F_ERRATA)
+-cflags = $(cflags) -QI0f
+-!endif
+-
+-!if $(ITAN_B_ERRATA)
+-cflags = $(cflags) -QIA64_Bx
+-!endif
+-
+ !if $(MSVCRT)
+ !if $(DEBUG)
+ crt = -MDd
+@@ -237,11 +239,15 @@ crt = -MT
+ !endif
+ !endif
+ 
+-INCLUDES	= $(TCL_INCLUDES) -I"$(WINDIR)" -I"$(GENERICDIR)"
+-BASE_CLFAGS	= $(cflags) $(cdebug) $(crt) $(INCLUDES)
+-CON_CFLAGS	= $(cflags) $(cdebug) $(crt) -DCONSOLE
+-TCL_CFLAGS	= -DUSE_TCL_STUBS -DPACKAGE_VERSION="\"$(DOTVERSION)\"" \
+-                  $(BASE_CLFAGS) $(OPTDEFINES)
++INCLUDES	= $(TCL_INCLUDES) -I"$(WINDIR)" -I"$(GENERICDIR)" \
++                  -I"$(ROOT)\.."
++BASE_CLFAGS	= $(cflags) $(cdebug) $(crt) $(INCLUDES) \
++                  -DSQLITE_3_SUFFIX_ONLY=1 -DSQLITE_ENABLE_RTREE=1 \
++                  -DSQLITE_ENABLE_FTS3=1
++CON_CFLAGS	= $(cflags) $(cdebug) $(crt) -DCONSOLE -DSQLITE_ENABLE_FTS3=1
++TCL_CFLAGS	= -DBUILD_sqlite -DUSE_TCL_STUBS \
++                  -DPACKAGE_VERSION="\"$(DOTVERSION)\"" $(BASE_CLFAGS) \
++                  $(OPTDEFINES)
+ 
+ #---------------------------------------------------------------------
+ # Link flags
+@@ -272,7 +278,6 @@ lflags	= $(lflags) -align:4096
+ lflags	= $(lflags) -ws:aggressive
+ !endif
+ 
+-dlllflags = $(lflags) -dll
+ conlflags = $(lflags) -subsystem:console
+ guilflags = $(lflags) -subsystem:windows
+ baselibs   = $(TCLSTUBLIB)
+@@ -323,7 +328,7 @@ setup:
+ 	@if not exist $(TMP_DIR)\nul mkdir $(TMP_DIR)
+ 
+ $(PRJLIB): $(DLLOBJS)
+-	$(link32) $(dlllflags) -out:$@ $(baselibs) @<<
++	$(lib32) -out:$@ $(baselibs) @<<
+ $**
+ <<
+ 	-@del $*.exp
+@@ -379,25 +384,13 @@ install-binaries:
+ 	@if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
+ 	@$(CPY) $(PRJLIB) "$(SCRIPT_INSTALL_DIR)" >NUL
+ 
+-### Automatic creation of pkgIndex
+-#install-libraries:
+-#	@echo Installing library files to '$(SCRIPT_INSTALL_DIR)'
+-#	@if exist $(LIBDIR) $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)"
+-#	@echo cd "$(SCRIPT_INSTALL_DIR:\=/)" ; pkg_mkIndex . | $(TCLSH)
+-
+-### Manual creation of pkgIndex
+-### Normally the ifneeded command would be:
+-###   package ifneeded $(PROJECT) $(DOTVERSION) \
+-###      [list load [file join $$dir $(PROJECT)$(VERSION).$(EXT)]]
+-### but this project has been named oddly. It has Sample_Init but provides
+-### the Tclsha1 package.
+ install-libraries:
+         @echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
+         @if exist $(LIBDIR) $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)"
+         @echo Installing package index in '$(SCRIPT_INSTALL_DIR)'
+         @type << >"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+-# Hand-crafted pkgIndex.tcl
+-package ifneeded Tclsha1 $(DOTVERSION) [list load [file join $$dir $(PROJECT)$(VERSION).$(EXT)] Sample]
++package ifneeded $(PROJECT) $(DOTVERSION) \
++    [list load [file join $$dir $(PRJLIBNAME)] sqlite3]
+ <<
+ 
+ install-docs:
