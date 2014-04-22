@@ -1,9 +1,49 @@
+[34mTue Apr 22 14:28:47 2014 +0300[m [33m2d2b7bf[32m (HEAD, master)[m [34my [35m [Guy Rozendorn][m
 diff --git a/makefile.msc b/makefile.msc
-index 799a18a..4345aac 100644
+index 799a18a..b03fbcb 100644
 --- a/makefile.msc
 +++ b/makefile.msc
-@@ -61,3 +61,7 @@ clean:
- .c.obj: 
+@@ -4,7 +4,7 @@
+ # Fixed up by JRS for bzip2-0.9.5d release.
+ 
+ CC=cl
+-CFLAGS= -DWIN32 -MD -Ox -D_FILE_OFFSET_BITS=64 -nologo
++CFLAGS= -DWIN32 -MT -Ox -D_FILE_OFFSET_BITS=64 -nologo
+ 
+ OBJS= blocksort.obj  \
+       huffman.obj    \
+@@ -37,7 +37,7 @@ test: bzip2
+ 	@echo is too clever for its own good.  Disable this option.
+ 	@echo The correct size for sample3.ref is 120,244.  If it
+ 	@echo is 150,251, WinZip has messed it up.
+-	fc sample1.bz2 sample1.rb2 
++	fc sample1.bz2 sample1.rb2
+ 	fc sample2.bz2 sample2.rb2
+ 	fc sample3.bz2 sample3.rb2
+ 	fc sample1.tst sample1.ref
+@@ -46,18 +46,22 @@ test: bzip2
+ 
+ 
+ 
+-clean: 
++clean:
+ 	del *.obj
+-	del libbz2.lib 
++	del libbz2.lib
+ 	del bzip2.exe
+ 	del bzip2recover.exe
+-	del sample1.rb2 
+-	del sample2.rb2 
++	del sample1.rb2
++	del sample2.rb2
+ 	del sample3.rb2
+-	del sample1.tst 
++	del sample1.tst
+ 	del sample2.tst
+ 	del sample3.tst
+ 
+-.c.obj: 
++.c.obj:
  	$(CC) $(CFLAGS) -c $*.c -o $*.obj
  
 +install:
