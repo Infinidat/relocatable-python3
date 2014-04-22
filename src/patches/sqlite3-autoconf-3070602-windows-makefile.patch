@@ -1,5 +1,5 @@
 diff --git i/tea/win/makefile.vc w/tea/win/makefile.vc
-index a1d7f95..8021447 100644
+index a1d7f95..a57ea86 100644
 --- i/tea/win/makefile.vc
 +++ w/tea/win/makefile.vc
 @@ -2,7 +2,7 @@
@@ -69,7 +69,15 @@ index a1d7f95..8021447 100644
  
  #-------------------------------------------------------------------------
  # Target names and paths ( shouldn't need changing )
-@@ -179,11 +189,11 @@ PRJSTUBLIBNAME	= $(STUBPREFIX)$(VERSION).lib
+@@ -170,6 +180,7 @@ DLLOBJS = \
+ 
+ BINROOT		= .
+ ROOT            = ..
++ROOT_PARENT            = ..\..
+ 
+ PRJIMPLIB	= $(OUT_DIR)\$(PROJECT)$(VERSION)$(SUFX).lib
+ PRJLIBNAME	= $(PROJECT)$(VERSION)$(SUFX).$(EXT)
+@@ -179,18 +190,19 @@ PRJSTUBLIBNAME	= $(STUBPREFIX)$(VERSION).lib
  PRJSTUBLIB	= $(OUT_DIR)\$(PRJSTUBLIBNAME)
  
  ### Make sure we use backslash only.
@@ -78,15 +86,25 @@ index a1d7f95..8021447 100644
 -BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
 -DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
 -SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)
+-INCLUDE_INSTALL_DIR	= $(_TCLDIR)\include
 +PRJ_INSTALL_DIR         = $(_INSTALLDIR)
-+LIB_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\lib
++LIB_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\..\lib
 +BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\bin
 +DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\doc
 +SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)\bin
- INCLUDE_INSTALL_DIR	= $(_TCLDIR)\include
++INCLUDE_INSTALL_DIR	= $(PRJ_INSTALL_DIR)\..\include
  
  ### The following paths CANNOT have spaces in them.
-@@ -215,14 +225,6 @@ cdebug	= -Z7 -WX -Od -GZ
+ GENERICDIR	= $(ROOT)\generic
+ WINDIR		= $(ROOT)\win
+ LIBDIR          = $(ROOT)\library
+-DOCDIR		= $(ROOT)\doc
++DOCDIR      = $(ROOT)\doc
++INCLUDEDIR	= $(ROOT_PARENT)
+ TOOLSDIR	= $(ROOT)\tools
+ COMPATDIR	= $(ROOT)\compat
+ 
+@@ -215,14 +227,6 @@ cdebug	= -Z7 -WX -Od -GZ
  ### Declarations common to all compiler options
  cflags = -nologo -c -W3 -YX -Fp$(TMP_DIR)^\
  
@@ -101,7 +119,7 @@ index a1d7f95..8021447 100644
  !if $(MSVCRT)
  !if $(DEBUG)
  crt = -MDd
-@@ -237,11 +239,15 @@ crt = -MT
+@@ -237,11 +241,15 @@ crt = -MT
  !endif
  !endif
  
@@ -122,7 +140,7 @@ index a1d7f95..8021447 100644
  
  #---------------------------------------------------------------------
  # Link flags
-@@ -272,7 +278,6 @@ lflags	= $(lflags) -align:4096
+@@ -272,7 +280,6 @@ lflags	= $(lflags) -align:4096
  lflags	= $(lflags) -ws:aggressive
  !endif
  
@@ -130,7 +148,16 @@ index a1d7f95..8021447 100644
  conlflags = $(lflags) -subsystem:console
  guilflags = $(lflags) -subsystem:windows
  baselibs   = $(TCLSTUBLIB)
-@@ -323,7 +328,7 @@ setup:
+@@ -291,7 +298,7 @@ TESTFLAGS = $(TESTFLAGS) -file $(TESTPAT)
+ 
+ all:	    setup $(PROJECT)
+ $(PROJECT): setup $(PRJLIB)
+-install:    install-binaries install-libraries install-docs
++install:    install-libraries install-headers
+ 
+ # Tests need to ensure we load the right dll file we
+ # have to handle the output differently on Win9x.
+@@ -323,14 +330,11 @@ setup:
  	@if not exist $(TMP_DIR)\nul mkdir $(TMP_DIR)
  
  $(PRJLIB): $(DLLOBJS)
@@ -139,10 +166,22 @@ index a1d7f95..8021447 100644
  $**
  <<
  	-@del $*.exp
-@@ -379,25 +384,13 @@ install-binaries:
- 	@if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
- 	@$(CPY) $(PRJLIB) "$(SCRIPT_INSTALL_DIR)" >NUL
  
+-$(PRJSTUBLIB): $(PRJSTUBOBJS)
+-	$(lib32) -nologo -out:$@ $(PRJSTUBOBJS)
+-
+ #---------------------------------------------------------------------
+ # Implicit rules
+ #---------------------------------------------------------------------
+@@ -374,35 +378,14 @@ $<
+ #
+ #---------------------------------------------------------------------
+ 
+-install-binaries:
+-	@echo Installing binaries to '$(SCRIPT_INSTALL_DIR)'
+-	@if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
+-	@$(CPY) $(PRJLIB) "$(SCRIPT_INSTALL_DIR)" >NUL
+-
 -### Automatic creation of pkgIndex
 -#install-libraries:
 -#	@echo Installing library files to '$(SCRIPT_INSTALL_DIR)'
@@ -155,15 +194,24 @@ index a1d7f95..8021447 100644
 -###      [list load [file join $$dir $(PROJECT)$(VERSION).$(EXT)]]
 -### but this project has been named oddly. It has Sample_Init but provides
 -### the Tclsha1 package.
++
  install-libraries:
-         @echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
-         @if exist $(LIBDIR) $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)"
-         @echo Installing package index in '$(SCRIPT_INSTALL_DIR)'
-         @type << >"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+-        @echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
+-        @if exist $(LIBDIR) $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)"
+-        @echo Installing package index in '$(SCRIPT_INSTALL_DIR)'
+-        @type << >"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 -# Hand-crafted pkgIndex.tcl
 -package ifneeded Tclsha1 $(DOTVERSION) [list load [file join $$dir $(PROJECT)$(VERSION).$(EXT)] Sample]
-+package ifneeded $(PROJECT) $(DOTVERSION) \
-+    [list load [file join $$dir $(PRJLIBNAME)] sqlite3]
- <<
+-<<
++    @echo Installing libraries to '$(LIB_INSTALL_DIR)'
++    @if exist $(OUT_DIR) $(CPY) $(OUT_DIR)\*.lib "$(LIB_INSTALL_DIR)"
  
- install-docs:
+-install-docs:
+-	@echo Installing documentation files to '$(DOC_INSTALL_DIR)'
+-	@if exist $(DOCDIR) $(CPY) $(DOCDIR)\*.n "$(DOC_INSTALL_DIR)"
++install-headers:
++    @echo Installing header files to '$(INCLUDE_INSTALL_DIR)'
++    @if exist $(INCLUDEDIR) $(CPY) $(INCLUDEDIR)\*.h "$(INCLUDE_INSTALL_DIR)"
+ 
+ #---------------------------------------------------------------------
+ # Clean up
