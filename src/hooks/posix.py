@@ -16,8 +16,8 @@ def purge_sysconfigdata(options, buildout, environ):
                                                                 path.pardir,  # parts,
                                                                 path.pardir,  # python-build
                                                                 "dist")))
-    print 'dist = {}'.format(dist)
-    print 'sysconfig = {!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
+    print 'dist = {0}'.format(dist)
+    print 'sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
     [_sysconfigdata] = glob(path.join(dist, "*", "*", "_sysconfigdata.py"))
     with open(_sysconfigdata, 'a') as fd:
         fd.write(TRICK)

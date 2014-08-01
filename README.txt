@@ -11,7 +11,7 @@ It works on Linux, OSX and Windows for now.
 
 In order to build python, execute:
 
-$ python bootstrap.py -v 1.6.3 -d
+$ python bootstrap.py
 $ ./bin/buildout
 $ ./bin/build
 
