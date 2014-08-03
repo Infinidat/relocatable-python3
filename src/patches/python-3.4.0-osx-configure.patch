@@ -1,0 +1,20 @@
+diff --git i/configure w/configure
+index 101dd44..8ba484c 100755
+--- i/configure
++++ w/configure
+@@ -726,7 +726,6 @@ PYTHONFRAMEWORK
+ LIPO_32BIT_FLAGS
+ ARCH_RUN_32BIT
+ UNIVERSALSDK
+-CONFIG_ARGS
+ SOVERSION
+ VERSION
+ PYTHON_FOR_BUILD
+@@ -3033,7 +3032,6 @@ define_xopen_source=yes
+ 
+ # Arguments passed to configure.
+ 
+-CONFIG_ARGS="$ac_configure_args"
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-universalsdk" >&5
+ $as_echo_n "checking for --enable-universalsdk... " >&6; }

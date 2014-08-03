@@ -1,0 +1,14 @@
+diff --git i/Lib/sysconfig.py w/Lib/sysconfig.py
+index dbf7767..c2ce0af 100644
+--- i/Lib/sysconfig.py
++++ w/Lib/sysconfig.py
+@@ -408,7 +408,9 @@ def _init_posix(vars):
+     """Initialize the module as appropriate for POSIX systems."""
+     # _sysconfigdata is generated at build time, see _generate_posix_vars()
+     from _sysconfigdata import build_time_vars
++    from distutils.sysconfig import _fix_prefix
+     vars.update(build_time_vars)
++    _fix_prefix(vars)
+ 
+ def _init_non_posix(vars):
+     """Initialize the module as appropriate for NT"""
