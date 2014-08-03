@@ -1,0 +1,12 @@
+diff --git a/tests/test_connect_delay.cpp b/tests/test_connect_delay.cpp
+index e7e21bb..eebd139 100644
+--- a/tests/test_connect_delay.cpp
++++ b/tests/test_connect_delay.cpp
+@@ -257,4 +257,5 @@ int main (void)
+     
+     rc = zmq_ctx_destroy(context2);
+     assert (rc == 0);
+-}
+\ No newline at end of file
++}
++

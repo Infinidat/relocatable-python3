@@ -1,0 +1,13 @@
+diff --git i/Makefile.pre.in w/Makefile.pre.in
+index 9d55550..474fd86 100644
+--- i/Makefile.pre.in
++++ w/Makefile.pre.in
+@@ -473,7 +473,7 @@ $(LIBRARY): $(LIBRARY_OBJS)
+ libpython$(VERSION).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+ 		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+-		$(LN) -f $(INSTSONAME) $@; \
++		$(LN) -fsn $(INSTSONAME) $@; \
+ 	else \
+ 		$(BLDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+ 	fi

@@ -1,0 +1,15 @@
+diff --git a/NTMakefile b/NTMakefile
+index d3aac8a..1ba823f 100644
+--- a/NTMakefile
++++ b/NTMakefile
+@@ -44,8 +44,8 @@
+ 
+ !INCLUDE .\win32\common.mak
+ 
+-SUBDIRS=lib plugins utils sample
+-INCSUBDIRS=include sasldb win32\include
++SUBDIRS=lib plugins
++INCSUBDIRS=include win32\include
+ DOCSUBDIRS=doc
+ 
+ all-first: all

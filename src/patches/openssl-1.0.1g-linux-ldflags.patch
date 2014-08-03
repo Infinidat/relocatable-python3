@@ -1,0 +1,17 @@
+diff --git c/Makefile.shared w/Makefile.shared
+index e753f44..6297341 100644
+--- c/Makefile.shared
++++ w/Makefile.shared
+@@ -151,9 +151,10 @@ DO_GNU_SO=$(CALC_VERSIONS); \
+ 	SHLIB_SUFFIX=; \
+ 	ALLSYMSFLAGS='-Wl,--whole-archive'; \
+ 	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
+-	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared -Wl,-Bsymbolic -Wl,-soname=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX"
++	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared -Wl,-Bsymbolic -Wl,-soname=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX"; \
++	LDFLAGS="$(LDFLAGS) $(CFLAGS)"
+
+-DO_GNU_APP=LDFLAGS="$(CFLAGS) -Wl,-rpath,$(LIBRPATH)"
++DO_GNU_APP=LDFLAGS="$(LDFLAGS) $(CFLAGS)"
+
+ #This is rather special.  It's a special target with which one can link
+ #applications without bothering with any features that have anything to
