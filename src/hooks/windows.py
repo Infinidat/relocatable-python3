@@ -13,6 +13,18 @@ def openssl_pre_make(options, buildout, environ):
 def openssl_pre_make64(options, buildout, environ):
     _execute(r'ms\do_win64a.bat', environ)
 
+def _xz_post_make(environ, platform):
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    os.system('cp -fvr include/* %s/include' % prefix)
+    os.system('cp -fvr bin_%s/*a %s/lib' % (platform, prefix))
+    os.system('cp -fvr bin_%s/*dll %s/bin' % (platform, prefix))
+
+def xz_post_make(options, buildout, environ):
+    _xz_post_make(environ, "i486")
+
+def xz_post_make64(options, buildout, environ):
+    _xz_post_make(environ, "x86-64")
+
 def _db_post_make(platform_name, prefix):
     import os
     os.system('cp -fvr build_windows/*h %s/include' % prefix)
