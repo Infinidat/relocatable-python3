@@ -1,0 +1,24 @@
+diff --git i/include/Makefile.am w/include/Makefile.am
+index fd28024..285b375 100644
+--- i/include/Makefile.am
++++ w/include/Makefile.am
+@@ -5,5 +5,5 @@ AUTOMAKE_OPTIONS=foreign
+ DISTCLEANFILES=ffitarget.h
+ EXTRA_DIST=ffi.h.in ffi_common.h
+ 
+-includesdir = $(libdir)/@PACKAGE_NAME@-@PACKAGE_VERSION@/include
++includesdir = $(prefix)//include
+ nodist_includes_HEADERS = ffi.h ffitarget.h
+diff --git i/include/Makefile.in w/include/Makefile.in
+index 136f36c..66ec543 100644
+--- i/include/Makefile.in
++++ w/include/Makefile.in
+@@ -203,7 +203,7 @@ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = foreign
+ DISTCLEANFILES = ffitarget.h
+ EXTRA_DIST = ffi.h.in ffi_common.h
+-includesdir = $(libdir)/@PACKAGE_NAME@-@PACKAGE_VERSION@/include
++includesdir = $(prefix)/include
+ nodist_includes_HEADERS = ffi.h ffitarget.h
+ all: all-am
+ 
