@@ -1,17 +1,17 @@
-diff --git i/PCbuild/_bz2.vcxproj w/PCbuild/_bz2.vcxproj
-index 9387e54..ea6ec08 100644
---- i/PCbuild/_bz2.vcxproj
-+++ w/PCbuild/_bz2.vcxproj
+diff --git a/PCbuild/_bz2.vcxproj b/PCbuild/_bz2.vcxproj
+index 9387e54..3b834bb 100644
+--- a/PCbuild/_bz2.vcxproj
++++ b/PCbuild/_bz2.vcxproj
 @@ -151,10 +151,11 @@
    </PropertyGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-+      <!-- <AdditionalDependencies>$(prefix)\lib\libbz2.lib</AdditionalDependencies> -->
++      <!-- <AdditionalDependencies>$(prefixDir)\lib\libbz2.lib</AdditionalDependencies> -->
        <BaseAddress>0x1D170000</BaseAddress>
      </Link>
    </ItemDefinitionGroup>
@@ -20,7 +20,7 @@ index 9387e54..ea6ec08 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -29,7 +29,7 @@ index 9387e54..ea6ec08 100644
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -38,7 +38,7 @@ index 9387e54..ea6ec08 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -47,7 +47,7 @@ index 9387e54..ea6ec08 100644
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -56,7 +56,7 @@ index 9387e54..ea6ec08 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -65,7 +65,7 @@ index 9387e54..ea6ec08 100644
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -74,20 +74,20 @@ index 9387e54..ea6ec08 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-diff --git i/PCbuild/_hashlib.vcxproj w/PCbuild/_hashlib.vcxproj
-index 52433ed..86fc237 100644
---- i/PCbuild/_hashlib.vcxproj
-+++ w/PCbuild/_hashlib.vcxproj
+diff --git a/PCbuild/_hashlib.vcxproj b/PCbuild/_hashlib.vcxproj
+index 52433ed..a2dc9d5 100644
+--- a/PCbuild/_hashlib.vcxproj
++++ b/PCbuild/_hashlib.vcxproj
 @@ -151,14 +151,14 @@
    </PropertyGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -95,7 +95,7 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -104,7 +104,7 @@ index 52433ed..86fc237 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -112,13 +112,13 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -126,7 +126,7 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +135,7 @@ index 52433ed..86fc237 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -143,13 +143,13 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -157,7 +157,7 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
@@ -166,7 +166,7 @@ index 52433ed..86fc237 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -174,14 +174,14 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
        <TargetMachine>MachineX64</TargetMachine>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -189,7 +189,7 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
@@ -198,7 +198,7 @@ index 52433ed..86fc237 100644
      </Midl>
      <ClCompile>
 -      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefix)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <PreLinkEvent>
        <Command>
@@ -206,14 +206,391 @@ index 52433ed..86fc237 100644
      </PreLinkEvent>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;$(prefix)\lib\libeay32.lib;$(prefix)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
        <TargetMachine>MachineX64</TargetMachine>
      </Link>
    </ItemDefinitionGroup>
-diff --git i/PCbuild/pyproject.props w/PCbuild/pyproject.props
+diff --git a/PCbuild/_lzma.vcxproj b/PCbuild/_lzma.vcxproj
+index ac25c80..3455510 100644
+--- a/PCbuild/_lzma.vcxproj
++++ b/PCbuild/_lzma.vcxproj
+@@ -151,11 +151,11 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -163,20 +163,20 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -184,20 +184,20 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
+@@ -205,21 +205,21 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
+@@ -227,11 +227,11 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+diff --git a/PCbuild/_ssl.vcxproj b/PCbuild/_ssl.vcxproj
+index 7378794..aef3b2f 100644
+--- a/PCbuild/_ssl.vcxproj
++++ b/PCbuild/_ssl.vcxproj
+@@ -151,14 +151,14 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -166,26 +166,26 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -193,26 +193,26 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
+@@ -220,27 +220,27 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
+@@ -248,14 +248,14 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+diff --git a/PCbuild/_tkinter.vcxproj b/PCbuild/_tkinter.vcxproj
+index 67f72fe..44b2e37 100644
+--- a/PCbuild/_tkinter.vcxproj
++++ b/PCbuild/_tkinter.vcxproj
+@@ -151,11 +151,12 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltkDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltkLibDebug);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -163,20 +164,22 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltk64Dir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltk64LibDebug);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltkDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltkLib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -184,20 +187,22 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltk64Dir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltk64Lib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltkDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltkLib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
+@@ -205,21 +210,23 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltk64Dir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltk64Lib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltkDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltkLib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
+@@ -227,11 +234,12 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(tcltk64Dir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WITH_APPINIT;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(tcltk64Lib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\tcl86ts.lib;$(prefixDir)\lib\tk86ts.lib;$(prefixDir)\lib\tclstub86.lib;$(prefixDir)\lib\tkstub86.lib;Netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+diff --git a/PCbuild/pgupdate.props b/PCbuild/pgupdate.props
+index d775a02..8b9a602 100644
+--- a/PCbuild/pgupdate.props
++++ b/PCbuild/pgupdate.props
+@@ -5,7 +5,7 @@
+   </ImportGroup>
+   <PropertyGroup>
+     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+-    <OutDir>$(SolutionDir)$(PlatformName)-pgo\</OutDir>
++    <OutDir>$(SolutionDir)</OutDir>
+   </PropertyGroup>
+   <ItemDefinitionGroup>
+     <Link>
+diff --git a/PCbuild/pyproject.props b/PCbuild/pyproject.props
 index 5f40b15..99be46b 100644
---- i/PCbuild/pyproject.props
-+++ w/PCbuild/pyproject.props
+--- a/PCbuild/pyproject.props
++++ b/PCbuild/pyproject.props
 @@ -9,7 +9,7 @@
    <PropertyGroup Condition="'$(Platform)'=='x64'">
      <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
@@ -240,10 +617,10 @@ index 5f40b15..99be46b 100644
      <tcltkDir>$(externalsDir)\tcltk</tcltkDir>
      <tcltk64Dir>$(externalsDir)\tcltk64</tcltk64Dir>
      <tcltkLib>$(tcltkDir)\lib\tcl86t.lib;$(tcltkDir)\lib\tk86t.lib</tcltkLib>
-diff --git i/PCbuild/ssl.vcxproj w/PCbuild/ssl.vcxproj
+diff --git a/PCbuild/ssl.vcxproj b/PCbuild/ssl.vcxproj
 index d5eac9a..3f1cbfd 100644
---- i/PCbuild/ssl.vcxproj
-+++ w/PCbuild/ssl.vcxproj
+--- a/PCbuild/ssl.vcxproj
++++ b/PCbuild/ssl.vcxproj
 @@ -116,97 +116,6 @@
      <Import Project="x64.props" />
    </ImportGroup>
