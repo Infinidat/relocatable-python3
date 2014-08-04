@@ -103,16 +103,12 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
         _copy_files(src, dst)
 
-    def _copy_crt_assemblies(self, dst):
-        makedirs(dst)
-        src = glob.glob(path.join(self.environ['VC100CRT'], '*'))
-        _copy_files(src, dst)
-
     def copy_crt_assemblies(self):
-        dst = path.join(self.prefix, 'bin', 'Microsoft.VC100.CRT')
-        self._copy_crt_assemblies(dst)
-        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC100.CRT')
-        self._copy_crt_assemblies(dst)
+        src = self.environ['VC100CRT']
+        dst = path.join(self.prefix, 'bin')
+        _copy_files([src], dst)
+        dst = path.join(self.prefix, 'DLLs')
+        _copy_files([src], dst)
 
     def make_includes(self):
         import shutil
