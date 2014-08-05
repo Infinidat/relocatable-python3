@@ -63,8 +63,6 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
         _mk_path(dst)
         for item in src:
-            if 'python27.dll' in item:
-                continue
             cmd = 'mv %s %s' % (item, dst)
             _system(cmd)
 
