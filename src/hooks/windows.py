@@ -13,6 +13,18 @@ def openssl_pre_make(options, buildout, environ):
 def openssl_pre_make64(options, buildout, environ):
     _execute(r'ms\do_win64a.bat', environ)
 
+def _xz_post_make(environ, platform):
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    os.system('cp -fvr include/* %s/include' % prefix)
+    os.system('cp -fvr bin_%s/*a %s/lib' % (platform, prefix))
+    os.system('cp -fvr bin_%s/*dll %s/bin' % (platform, prefix))
+
+def xz_post_make(options, buildout, environ):
+    _xz_post_make(environ, "i486")
+
+def xz_post_make64(options, buildout, environ):
+    _xz_post_make(environ, "x86-64")
+
 def _db_post_make(platform_name, prefix):
     import os
     os.system('cp -fvr build_windows/*h %s/include' % prefix)
@@ -53,7 +65,7 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
         _mk_path(dst)
         for item in src:
-            if 'python27.dll' in item:
+            if 'python34.dll' in item:
                 continue
             cmd = 'mv %s %s' % (item, dst)
             _system(cmd)
@@ -63,8 +75,6 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
         _mk_path(dst)
         for item in src:
-            if 'python27.dll' in item:
-                continue
             cmd = 'mv %s %s' % (item, dst)
             _system(cmd)
 
@@ -93,16 +103,12 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
         _copy_files(src, dst)
 
-    def _copy_crt_assemblies(self, dst):
-        makedirs(dst)
-        src = glob.glob(path.join(self.environ['VC100CRT'], '*'))
-        _copy_files(src, dst)
-
     def copy_crt_assemblies(self):
-        dst = path.join(self.prefix, 'bin', 'Microsoft.VC100.CRT')
-        self._copy_crt_assemblies(dst)
-        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC100.CRT')
-        self._copy_crt_assemblies(dst)
+        src = self.environ['VC100CRT']
+        dst = path.join(self.prefix, 'bin')
+        _copy_files([src], dst)
+        dst = path.join(self.prefix, 'DLLs')
+        _copy_files([src], dst)
 
     def make_includes(self):
         import shutil
