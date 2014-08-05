@@ -4,9 +4,9 @@ index ca53ebb..3fe2c34 100644
 +++ b/gettext-tools/gnulib-lib/stpncpy.c
 @@ -25,7 +25,6 @@
  #include <string.h>
-
+ 
  #ifndef weak_alias
 -# define __stpncpy stpncpy
  #endif
-
+ 
  /* Copy no more than N bytes of SRC to DST, returning a pointer past the
