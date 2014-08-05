@@ -1,8 +1,8 @@
 diff --git a/PCbuild/_bz2.vcxproj b/PCbuild/_bz2.vcxproj
-index 9387e54..3b834bb 100644
+index 9387e54..a32d7a9 100644
 --- a/PCbuild/_bz2.vcxproj
 +++ b/PCbuild/_bz2.vcxproj
-@@ -151,10 +151,11 @@
+@@ -151,7 +151,7 @@
    </PropertyGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
      <ClCompile>
@@ -11,11 +11,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-+      <!-- <AdditionalDependencies>$(prefixDir)\lib\libbz2.lib</AdditionalDependencies> -->
-       <BaseAddress>0x1D170000</BaseAddress>
-     </Link>
-   </ItemDefinitionGroup>
-@@ -163,7 +164,7 @@
+@@ -163,7 +163,7 @@
        <TargetEnvironment>X64</TargetEnvironment>
      </Midl>
      <ClCompile>
@@ -24,7 +20,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-@@ -172,7 +173,7 @@
+@@ -172,7 +172,7 @@
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
      <ClCompile>
@@ -33,7 +29,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-@@ -184,7 +185,7 @@
+@@ -184,7 +184,7 @@
        <TargetEnvironment>X64</TargetEnvironment>
      </Midl>
      <ClCompile>
@@ -42,7 +38,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-@@ -193,7 +194,7 @@
+@@ -193,7 +193,7 @@
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
      <ClCompile>
@@ -51,7 +47,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-@@ -205,7 +206,7 @@
+@@ -205,7 +205,7 @@
        <TargetEnvironment>X64</TargetEnvironment>
      </Midl>
      <ClCompile>
@@ -60,7 +56,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-@@ -215,7 +216,7 @@
+@@ -215,7 +215,7 @@
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
      <ClCompile>
@@ -69,7 +65,7 @@ index 9387e54..3b834bb 100644
        <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-@@ -227,7 +228,7 @@
+@@ -227,7 +227,7 @@
        <TargetEnvironment>X64</TargetEnvironment>
      </Midl>
      <ClCompile>
@@ -451,7 +447,7 @@ index 7378794..aef3b2f 100644
      </Link>
    </ItemDefinitionGroup>
 diff --git a/PCbuild/pcbuild.sln b/PCbuild/pcbuild.sln
-index f45903d..eb9e78d 100644
+index a346e10..7957fc7 100644
 --- a/PCbuild/pcbuild.sln
 +++ b/PCbuild/pcbuild.sln
 @@ -351,13 +351,9 @@ Global
@@ -468,66 +464,6 @@ index f45903d..eb9e78d 100644
  		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|Win32.ActiveCfg = Release|Win32
  		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|Win32.Build.0 = Release|Win32
  		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|x64.ActiveCfg = Release|x64
-@@ -615,38 +611,6 @@ Global
- 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGUpdate|x64.ActiveCfg = Release|Win32
- 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Release|Win32.ActiveCfg = Release|Win32
- 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Release|x64.ActiveCfg = Release|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Debug|Win32.ActiveCfg = Debug|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Debug|Win32.Build.0 = Debug|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Debug|x64.ActiveCfg = Debug|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Debug|x64.Build.0 = Debug|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGInstrument|Win32.ActiveCfg = PGInstrument|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGInstrument|Win32.Build.0 = PGInstrument|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGInstrument|x64.ActiveCfg = PGInstrument|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGInstrument|x64.Build.0 = PGInstrument|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGUpdate|Win32.ActiveCfg = PGUpdate|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGUpdate|Win32.Build.0 = PGUpdate|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.PGUpdate|x64.Build.0 = PGUpdate|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Release|Win32.ActiveCfg = Release|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Release|Win32.Build.0 = Release|Win32
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Release|x64.ActiveCfg = Release|x64
--		{254A0C05-6696-4B08-8CB2-EF7D533AEE01}.Release|x64.Build.0 = Release|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|Win32.ActiveCfg = Debug|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|Win32.Build.0 = Debug|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|x64.ActiveCfg = Debug|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|x64.Build.0 = Debug|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|Win32.ActiveCfg = PGInstrument|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|Win32.Build.0 = PGInstrument|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|x64.ActiveCfg = PGInstrument|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|x64.Build.0 = PGInstrument|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|Win32.ActiveCfg = PGUpdate|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|Win32.Build.0 = PGUpdate|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|x64.Build.0 = PGUpdate|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|Win32.ActiveCfg = Release|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|Win32.Build.0 = Release|Win32
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|x64.ActiveCfg = Release|x64
--		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|x64.Build.0 = Release|x64
- 		{EB6E69DD-04BF-4543-9B92-49FAABCEAC2E}.Debug|Win32.ActiveCfg = Debug|Win32
- 		{EB6E69DD-04BF-4543-9B92-49FAABCEAC2E}.Debug|Win32.Build.0 = Debug|Win32
- 		{EB6E69DD-04BF-4543-9B92-49FAABCEAC2E}.Debug|x64.ActiveCfg = Debug|x64
-@@ -663,6 +627,20 @@ Global
- 		{EB6E69DD-04BF-4543-9B92-49FAABCEAC2E}.Release|Win32.Build.0 = Release|Win32
- 		{EB6E69DD-04BF-4543-9B92-49FAABCEAC2E}.Release|x64.ActiveCfg = Release|x64
- 		{EB6E69DD-04BF-4543-9B92-49FAABCEAC2E}.Release|x64.Build.0 = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|Win32.ActiveCfg = Debug|Win32
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|Win32.Build.0 = Debug|Win32
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|x64.ActiveCfg = Debug|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Debug|x64.Build.0 = Debug|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|Win32.ActiveCfg = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|x64.ActiveCfg = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGInstrument|x64.Build.0 = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|Win32.ActiveCfg = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|x64.ActiveCfg = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.PGUpdate|x64.Build.0 = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|Win32.ActiveCfg = Release|Win32
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|Win32.Build.0 = Release|Win32
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|x64.ActiveCfg = Release|x64
-+		{6DAC66D9-E703-4624-BE03-49112AB5AA62}.Release|x64.Build.0 = Release|x64
- 	EndGlobalSection
- 	GlobalSection(SolutionProperties) = preSolution
- 		HideSolutionNode = FALSE
 diff --git a/PCbuild/pgupdate.props b/PCbuild/pgupdate.props
 index d775a02..8b9a602 100644
 --- a/PCbuild/pgupdate.props
@@ -542,10 +478,15 @@ index d775a02..8b9a602 100644
    <ItemDefinitionGroup>
      <Link>
 diff --git a/PCbuild/pyproject.props b/PCbuild/pyproject.props
-index 5f40b15..99be46b 100644
+index 2219c95..3dc5b2e 100644
 --- a/PCbuild/pyproject.props
 +++ b/PCbuild/pyproject.props
-@@ -9,7 +9,7 @@
+@@ -5,11 +5,11 @@
+     <OutDir>$(SolutionDir)</OutDir>
+     <IntDir>$(SolutionDir)$(PlatformName)-temp-$(Configuration)\$(ProjectName)\</IntDir>
+     <LinkIncremental>false</LinkIncremental>
+-  </PropertyGroup>  
++  </PropertyGroup>
    <PropertyGroup Condition="'$(Platform)'=='x64'">
      <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
      <_PropertySheetDisplayName>amd64</_PropertySheetDisplayName>
@@ -566,7 +507,7 @@ index 5f40b15..99be46b 100644
 +    <sqlite3Dir>$(partsDir)\sqlite3__compile__\sqlite-autoconf-3070602</sqlite3Dir>
 +    <bz2Dir>$(partsDir)\bzip2__compile__\bzip2-1.0.6</bz2Dir>
      <lzmaDir>$(externalsDir)\xz-5.0.5</lzmaDir>
--    <opensslDir>$(externalsDir)\openssl-1.0.1e</opensslDir>
+-    <opensslDir>$(externalsDir)\openssl-1.0.1g</opensslDir>
 +    <opensslDir>$(partsDir)\openssl__compile__\openssl-1.0.1g</opensslDir>
      <tcltkDir>$(externalsDir)\tcltk</tcltkDir>
      <tcltk64Dir>$(externalsDir)\tcltk64</tcltk64Dir>
