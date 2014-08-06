@@ -1,8 +1,8 @@
-# DP: Use /etc/lsb-release to identify the platform.
-
+diff --git a/Lib/platform.py b/Lib/platform.py
+index c4ffe95..9dfad49 100755
 --- a/Lib/platform.py
 +++ b/Lib/platform.py
-@@ -288,6 +288,10 @@
+@@ -294,6 +294,10 @@ def _parse_release_file(firstline):
              id = l[1]
      return '', version, id
  
@@ -13,7 +13,7 @@
  def linux_distribution(distname='', version='', id='',
  
                         supported_dists=_supported_dists,
-@@ -312,6 +316,25 @@
+@@ -318,6 +322,24 @@ def linux_distribution(distname='', version='', id='',
          args given as parameters.
  
      """
@@ -34,8 +34,7 @@
 +        if _u_distname and _u_version:
 +            return (_u_distname, _u_version, _u_id)
 +    except (EnvironmentError, UnboundLocalError):
-+            pass
-+
++        pass
      try:
-         etc = os.listdir('/etc')
-     except os.error:
+         etc = os.listdir(_UNIXCONFDIR)
+     except OSError:

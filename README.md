@@ -11,9 +11,9 @@ It works on Linux, OSX and Windows for now.
 
 In order to build python, execute:
 
-$ python bootstrap.py
-$ ./bin/buildout
-$ ./bin/build
+    python bootstrap.py
+    ./bin/buildout
+    ./bin/build
 
 Build environment
 =================
@@ -28,5 +28,6 @@ For ubuntu, you'll need to install:
 
 For windows, you'll need to install:
 * Microsot Visual Studio 2008 (No SP)
+* Microsot Visual Studio 2010 (No SP)
 * Perl
 * Python

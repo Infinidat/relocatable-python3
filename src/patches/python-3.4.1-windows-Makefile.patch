@@ -1,0 +1,616 @@
+diff --git a/PCbuild/_bz2.vcxproj b/PCbuild/_bz2.vcxproj
+index 9387e54..a32d7a9 100644
+--- a/PCbuild/_bz2.vcxproj
++++ b/PCbuild/_bz2.vcxproj
+@@ -151,7 +151,7 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -163,7 +163,7 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -172,7 +172,7 @@
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -184,7 +184,7 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -193,7 +193,7 @@
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -205,7 +205,7 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -215,7 +215,7 @@
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+@@ -227,7 +227,7 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+diff --git a/PCbuild/_hashlib.vcxproj b/PCbuild/_hashlib.vcxproj
+index 52433ed..a2dc9d5 100644
+--- a/PCbuild/_hashlib.vcxproj
++++ b/PCbuild/_hashlib.vcxproj
+@@ -151,14 +151,14 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -166,26 +166,26 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -193,26 +193,26 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
+@@ -220,27 +220,27 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
+@@ -248,14 +248,14 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+diff --git a/PCbuild/_lzma.vcxproj b/PCbuild/_lzma.vcxproj
+index ac25c80..3455510 100644
+--- a/PCbuild/_lzma.vcxproj
++++ b/PCbuild/_lzma.vcxproj
+@@ -151,11 +151,11 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -163,20 +163,20 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -184,20 +184,20 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
+@@ -205,21 +205,21 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_i486\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
+@@ -227,11 +227,11 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(lzmaDir)\bin_x86-64\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+diff --git a/PCbuild/_ssl.vcxproj b/PCbuild/_ssl.vcxproj
+index 7378794..aef3b2f 100644
+--- a/PCbuild/_ssl.vcxproj
++++ b/PCbuild/_ssl.vcxproj
+@@ -151,14 +151,14 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -166,26 +166,26 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -193,26 +193,26 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">
+@@ -220,27 +220,27 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out32\libeay32.lib;$(opensslDir)\out32\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">
+@@ -248,14 +248,14 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslDir)\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <PreLinkEvent>
+       <Command>
+       </Command>
+     </PreLinkEvent>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(opensslDir)\out64\libeay32.lib;$(opensslDir)\out64\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(prefixDir)\lib\libeay32.lib;$(prefixDir)\lib\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+diff --git a/PCbuild/pcbuild.sln b/PCbuild/pcbuild.sln
+index a346e10..7957fc7 100644
+--- a/PCbuild/pcbuild.sln
++++ b/PCbuild/pcbuild.sln
+@@ -351,13 +351,9 @@ Global
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Debug|x64.ActiveCfg = Debug|x64
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Debug|x64.Build.0 = Debug|x64
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGInstrument|Win32.ActiveCfg = PGInstrument|Win32
+-		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGInstrument|Win32.Build.0 = PGInstrument|Win32
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGInstrument|x64.ActiveCfg = PGInstrument|x64
+-		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGInstrument|x64.Build.0 = PGInstrument|x64
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGUpdate|Win32.ActiveCfg = PGUpdate|Win32
+-		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGUpdate|Win32.Build.0 = PGUpdate|Win32
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
+-		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.PGUpdate|x64.Build.0 = PGUpdate|x64
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|Win32.ActiveCfg = Release|Win32
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|Win32.Build.0 = Release|Win32
+ 		{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}.Release|x64.ActiveCfg = Release|x64
+diff --git a/PCbuild/pgupdate.props b/PCbuild/pgupdate.props
+index d775a02..8b9a602 100644
+--- a/PCbuild/pgupdate.props
++++ b/PCbuild/pgupdate.props
+@@ -5,7 +5,7 @@
+   </ImportGroup>
+   <PropertyGroup>
+     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+-    <OutDir>$(SolutionDir)$(PlatformName)-pgo\</OutDir>
++    <OutDir>$(SolutionDir)</OutDir>
+   </PropertyGroup>
+   <ItemDefinitionGroup>
+     <Link>
+diff --git a/PCbuild/pyproject.props b/PCbuild/pyproject.props
+index 2219c95..3dc5b2e 100644
+--- a/PCbuild/pyproject.props
++++ b/PCbuild/pyproject.props
+@@ -5,11 +5,11 @@
+     <OutDir>$(SolutionDir)</OutDir>
+     <IntDir>$(SolutionDir)$(PlatformName)-temp-$(Configuration)\$(ProjectName)\</IntDir>
+     <LinkIncremental>false</LinkIncremental>
+-  </PropertyGroup>  
++  </PropertyGroup>
+   <PropertyGroup Condition="'$(Platform)'=='x64'">
+     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+     <_PropertySheetDisplayName>amd64</_PropertySheetDisplayName>
+-    <OutDir>$(SolutionDir)amd64\</OutDir>
++    <OutDir>$(SolutionDir)</OutDir>
+     <IntDir>$(SolutionDir)$(PlatformName)-temp-$(Configuration)\$(ProjectName)\</IntDir>
+   </PropertyGroup>
+   <PropertyGroup Label="UserMacros">
+@@ -17,10 +17,13 @@
+     <PythonExe>$(OutDir)python$(PyDebugExt).exe</PythonExe>
+     <KillPythonExe>$(OutDir)kill_python$(PyDebugExt).exe</KillPythonExe>
+     <externalsDir>..\..</externalsDir>
+-    <sqlite3Dir>$(externalsDir)\sqlite-3.8.3.1</sqlite3Dir>
+-    <bz2Dir>$(externalsDir)\bzip2-1.0.6</bz2Dir>
++    <buildoutDir>..\..\..\..\</buildoutDir>
++    <prefixDir>..\..\..\..\dist\</prefixDir>
++    <partsDir>..\..\..\</partsDir>
++    <sqlite3Dir>$(partsDir)\sqlite3__compile__\sqlite-autoconf-3070602</sqlite3Dir>
++    <bz2Dir>$(partsDir)\bzip2__compile__\bzip2-1.0.6</bz2Dir>
+     <lzmaDir>$(externalsDir)\xz-5.0.5</lzmaDir>
+-    <opensslDir>$(externalsDir)\openssl-1.0.1g</opensslDir>
++    <opensslDir>$(partsDir)\openssl__compile__\openssl-1.0.1g</opensslDir>
+     <tcltkDir>$(externalsDir)\tcltk</tcltkDir>
+     <tcltk64Dir>$(externalsDir)\tcltk64</tcltk64Dir>
+     <tcltkLib>$(tcltkDir)\lib\tcl86t.lib;$(tcltkDir)\lib\tk86t.lib</tcltkLib>
+diff --git a/PCbuild/ssl.vcxproj b/PCbuild/ssl.vcxproj
+index d5eac9a..3f1cbfd 100644
+--- a/PCbuild/ssl.vcxproj
++++ b/PCbuild/ssl.vcxproj
+@@ -116,97 +116,6 @@
+     <Import Project="x64.props" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+-  <PropertyGroup>
+-    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='PGInstrument|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">cd "$(SolutionDir)"
+-"$(PythonExe)" build_ssl.py Release $(Platform) -a
+-</NMakeBuildCommandLine>
+-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'" />
+-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">echo OpenSSL must be cleaned manually if you want to rebuild it.</NMakeCleanCommandLine>
+-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'" />
+-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='PGUpdate|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+-  </PropertyGroup>
+   <ItemDefinitionGroup>
+   </ItemDefinitionGroup>
+   <ItemGroup>

@@ -5,7 +5,7 @@ prefix = sys.real_prefix if hasattr(sys, 'real_prefix') else sys.prefix  # virtu
 old_prefix = build_time_vars.get("prefix", "_some_path_that_does_not_exist")
 
 for key, value in build_time_vars.items():
-    build_time_vars[key] = value.replace(old_prefix, prefix) if isinstance(value, basestring) else value
+    build_time_vars[key] = value.replace(old_prefix, prefix) if isinstance(value, str) else value
 """
 
 def purge_sysconfigdata(options, buildout, environ):

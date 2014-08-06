@@ -1,8 +1,8 @@
 diff --git a/PCbuild/make_buildinfo.c b/PCbuild/make_buildinfo.c
-index 5a3d385..1f6a713 100644
+index f9aadee..31465b9 100644
 --- a/PCbuild/make_buildinfo.c
 +++ b/PCbuild/make_buildinfo.c
-@@ -92,3 +92,9 @@ int main(int argc, char*argv[])
+@@ -192,3 +192,8 @@ int main(int argc, char*argv[])
          return EXIT_FAILURE;
      return 0;
  }
@@ -11,4 +11,3 @@ index 5a3d385..1f6a713 100644
 +int WINAPI WinMain(HINSTANCE hI, HINSTANCE hP, LPSTR lpCmd, int nShow) {
 +    return main(__argc, __argv);
 +}
-+

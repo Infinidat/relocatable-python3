@@ -1,5 +1,5 @@
 diff --git a/PC/make_versioninfo.c b/PC/make_versioninfo.c
-index e969671..69e346f 100644
+index e969671..8906694 100644
 --- a/PC/make_versioninfo.c
 +++ b/PC/make_versioninfo.c
 @@ -1,5 +1,7 @@
@@ -10,7 +10,7 @@ index e969671..69e346f 100644
  /*
   * This program prints out an include file containing fields required to build
   * the version info resource of pythonxx.dll because the resource compiler
-@@ -36,3 +38,9 @@ int main(int argc, char **argv)
+@@ -36,3 +38,8 @@ int main(int argc, char **argv)
      printf("#endif\n");
      return 0;
  }
@@ -19,4 +19,3 @@ index e969671..69e346f 100644
 +int WINAPI WinMain(HINSTANCE hI, HINSTANCE hP, LPSTR lpCmd, int nShow) {
 +    return main(__argc, __argv);
 +}
-+
