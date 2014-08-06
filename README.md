@@ -11,9 +11,9 @@ It works on Linux, OSX and Windows for now.
 
 In order to build python, execute:
 
-$ python bootstrap.py
-$ ./bin/buildout
-$ ./bin/build
+* python bootstrap.py
+* ./bin/buildout
+* ./bin/build
 
 Build environment
 =================
