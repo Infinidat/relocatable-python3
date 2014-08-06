@@ -28,5 +28,6 @@ For ubuntu, you'll need to install:
 
 For windows, you'll need to install:
 * Microsot Visual Studio 2008 (No SP)
+* Microsot Visual Studio 2010 (No SP)
 * Perl
 * Python
