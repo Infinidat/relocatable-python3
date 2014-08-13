@@ -11,9 +11,11 @@ It works on Linux, OSX and Windows for now.
 
 In order to build python, execute:
 
-$ python bootstrap.py
-$ ./bin/buildout
-$ ./bin/build
+    python bootstrap.py
+    ./bin/buildout
+    ./bin/build
+
+** For Python 3.x, see [relocatable-python3](https://github.com/Infinidat/relocatable-python3) **
 
 Build environment
 =================
