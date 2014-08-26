@@ -27,7 +27,7 @@ ncurses-5.9.tar.gz                      http://ftp.gnu.org/pub/gnu/ncurses/ncurs
 nettle-2.7.1.tar.gz                     https://ftp.gnu.org/gnu/nettle/nettle-2.7.1.tar.gz
 openldap-stable-20100719.tgz            http://www.openldap.org/software/download/OpenLDAP/openldap-stable/openldap-stable-20100719.tgz
 openssh-5.8p1.tar.gz
-openssl-1.0.1g.tar.gz                   https://www.openssl.org/source/openssl-1.0.1g.tar.gz
+openssl-1.0.1i.tar.gz                   https://www.openssl.org/source/openssl-1.0.1i.tar.gz
 Python-2.7.6.tgz                        https://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz
 Python-3.4.1.tgz                        https://www.python.org/ftp/python/3.4.1/Python-3.4.1.tgz
 readline-6.2.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
