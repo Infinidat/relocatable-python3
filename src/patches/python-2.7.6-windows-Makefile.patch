@@ -470,7 +470,7 @@ index 024bfa8..1f82f7a 100644
  	<UserMacro
  		Name="opensslDir"
 -		Value="$(externalsDir)\openssl-0.9.8y"
-+		Value="$(partsDir)\openssl__compile__\openssl-1.0.1g"
++		Value="$(partsDir)\openssl__compile__\openssl-1.0.1i"
  	/>
  	<UserMacro
  		Name="tcltkDir"
