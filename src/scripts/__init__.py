@@ -30,6 +30,8 @@ def build(argv = ' '.join(argv[1:])):
             command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
         else:
             command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
+    elif system() == "SunOS":
+            command = './bin/buildout -c buildout-build-solaris.cfg %s' % argv
     print 'executing "%s"' % command
     process = Popen(command.split(), env=environ)
     stdout, stderr = process.communicate()
