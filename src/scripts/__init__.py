@@ -31,7 +31,10 @@ def build(argv = ' '.join(argv[1:])):
         else:
             command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
     elif system() == "SunOS":
-            command = './bin/buildout -c buildout-build-solaris.cfg %s' % argv
+        if '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
+            command = './bin/buildout -c buildout-build-solaris-64bit.cfg %s' % argv
+        else:
+            pass #TODO support SPARC or 32 bit solaris
     print 'executing "%s"' % command
     process = Popen(command.split(), env=environ)
     stdout, stderr = process.communicate()
