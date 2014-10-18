@@ -23,6 +23,8 @@ def build(argv = ' '.join(argv[1:])):
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
             command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+        elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
+            command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
         else:
             command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     elif system() == 'Windows':
