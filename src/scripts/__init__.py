@@ -12,16 +12,21 @@ def build(argv = ' '.join(argv[1:])):
     environ = environ.copy()
     command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Linux':
-        from platform import dist
+        from platform import dist, linux_distribution
+        _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
             command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
             command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
+        if dist_name in ['suse'] and version in ['10']:
+            command = './bin/buildout -c buildout-build-suse-10.cfg %s' % argv
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
+            command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+        elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
             command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
         else:
             command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
