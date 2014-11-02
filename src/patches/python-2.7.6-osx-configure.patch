@@ -1,8 +1,8 @@
 diff --git i/configure w/configure
-index dc0dfd0..21cd84a 100755
+index f865054..2b672f8 100755
 --- i/configure
 +++ w/configure
-@@ -719,7 +719,6 @@ PYTHONFRAMEWORK
+@@ -721,7 +721,6 @@ PYTHONFRAMEWORK
  LIPO_32BIT_FLAGS
  ARCH_RUN_32BIT
  UNIVERSALSDK
@@ -10,7 +10,7 @@ index dc0dfd0..21cd84a 100755
  SOVERSION
  VERSION
  PYTHON_FOR_BUILD
-@@ -2932,7 +2931,6 @@ define_xopen_source=yes
+@@ -2940,7 +2939,6 @@ define_xopen_source=yes
  
  # Arguments passed to configure.
  
@@ -18,8 +18,26 @@ index dc0dfd0..21cd84a 100755
  
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-universalsdk" >&5
  $as_echo_n "checking for --enable-universalsdk... " >&6; }
+@@ -6046,7 +6044,7 @@ $as_echo "$CC" >&6; }
+ 	    # Calculate the right deployment target for this build.
+ 	    #
+ 	    cur_target=`sw_vers -productVersion | sed 's/\(10\.[0-9]*\).*/\1/'`
+-	    if test ${cur_target} '>' 10.2; then
++	    if test ${cur_target} '>' 10; then
+ 		    cur_target=10.3
+ 		    if test ${enable_universalsdk}; then
+ 			    if test "${UNIVERSAL_ARCHS}" = "all"; then
+@@ -8230,7 +8228,7 @@ then
+ 		# Use -undefined dynamic_lookup whenever possible (10.3 and later).
+ 		# This allows an extension to be used in any Python
+ 
+-		if test ${MACOSX_DEPLOYMENT_TARGET} '>' 10.2
++		if test ${MACOSX_DEPLOYMENT_TARGET} '>' 10
+ 		then
+ 			if test "${enable_universalsdk}"; then
+ 				LDFLAGS="${UNIVERSAL_ARCH_FLAGS} -isysroot ${UNIVERSALSDK} ${LDFLAGS}"
 diff --git i/configure.ac w/configure.ac
-index 30f5bf4..351612b 100644
+index 891d568..340adc6 100644
 --- i/configure.ac
 +++ w/configure.ac
 @@ -46,7 +46,7 @@ dnl can cause trouble.
@@ -49,7 +67,7 @@ index 30f5bf4..351612b 100644
  ],[
     	UNIVERSALSDK=
  	enable_universalsdk=
-@@ -188,7 +186,7 @@ AC_ARG_ENABLE(framework,
+@@ -189,7 +187,7 @@ AC_ARG_ENABLE(framework,
                AS_HELP_STRING([--enable-framework@<:@=INSTALLDIR@:>@], [Build (MacOSX|Darwin) framework]),
  [
  	case $enableval in
@@ -58,7 +76,7 @@ index 30f5bf4..351612b 100644
  		enableval=/Library/Frameworks
  	esac
  	case $enableval in
-@@ -243,7 +241,7 @@ AC_ARG_ENABLE(framework,
+@@ -244,7 +242,7 @@ AC_ARG_ENABLE(framework,
  			FRAMEWORKINSTALLAPPSPREFIX="${MDIR}/Applications"
  
  			if test "${prefix}" = "NONE"; then
@@ -67,7 +85,7 @@ index 30f5bf4..351612b 100644
  				# --prefix option, but wants to install
  				# the framework in a non-default location,
  				# ensure that the compatibility links get
-@@ -371,7 +369,7 @@ if test "$cross_compiling" = yes; then
+@@ -372,7 +370,7 @@ if test "$cross_compiling" = yes; then
  	esac
  	_PYTHON_HOST_PLATFORM="$MACHDEP${_host_cpu:+-$_host_cpu}"
  fi
@@ -76,7 +94,7 @@ index 30f5bf4..351612b 100644
  # Some systems cannot stand _XOPEN_SOURCE being defined at all; they
  # disable features if it is defined, without any means to access these
  # features as extensions. For these systems, we skip the definition of
-@@ -388,7 +386,7 @@ case $ac_sys_system/$ac_sys_release in
+@@ -389,7 +387,7 @@ case $ac_sys_system/$ac_sys_release in
    # Reconfirmed for OpenBSD 3.3 by Zachary Hamm, for 3.4 by Jason Ish.
    # In addition, Stefan Krah confirms that issue #1244610 exists through
    # OpenBSD 4.6, but is fixed in 4.7.
@@ -85,7 +103,7 @@ index 30f5bf4..351612b 100644
      define_xopen_source=no
      # OpenBSD undoes our definition of __BSD_VISIBLE if _XOPEN_SOURCE is
      # also defined. This can be overridden by defining _BSD_SOURCE
-@@ -426,12 +424,12 @@ case $ac_sys_system/$ac_sys_release in
+@@ -427,12 +425,12 @@ case $ac_sys_system/$ac_sys_release in
    # with _XOPEN_SOURCE and __BSD_VISIBLE does not re-enable them.
    FreeBSD/4.*)
      define_xopen_source=no;;
@@ -100,7 +118,7 @@ index 30f5bf4..351612b 100644
    # has no effect, don't bother defining them
    Darwin/@<:@6789@:>@.*)
      define_xopen_source=no;;
-@@ -457,7 +455,7 @@ esac
+@@ -458,7 +456,7 @@ esac
  
  if test $define_xopen_source = yes
  then
@@ -109,7 +127,7 @@ index 30f5bf4..351612b 100644
              Define to the level of X/Open that your system supports)
  
    # On Tru64 Unix 4.0F, defining _XOPEN_SOURCE also requires
-@@ -468,7 +466,7 @@ then
+@@ -469,7 +467,7 @@ then
     	    Define to activate Unix95-and-earlier features)
  
    AC_DEFINE(_POSIX_C_SOURCE, 200112L, Define to activate features from IEEE Stds 1003.1-2001)
@@ -118,7 +136,7 @@ index 30f5bf4..351612b 100644
  fi
  
  #
-@@ -496,11 +494,11 @@ AC_MSG_CHECKING(EXTRAPLATDIR)
+@@ -497,11 +495,11 @@ AC_MSG_CHECKING(EXTRAPLATDIR)
  if test -z "$EXTRAPLATDIR"
  then
  	case $MACHDEP in
@@ -132,7 +150,7 @@ index 30f5bf4..351612b 100644
  		EXTRAPLATDIR=""
  		EXTRAMACHDEPPATH=""
  		;;
-@@ -622,7 +620,7 @@ AC_ARG_WITH(cxx_main,
+@@ -623,7 +621,7 @@ AC_ARG_WITH(cxx_main,
              AS_HELP_STRING([--with-cxx-main=<compiler>],
                             [compile main() and link python executable with C++ compiler]),
  [
@@ -141,7 +159,7 @@ index 30f5bf4..351612b 100644
  	case $withval in
  	no)	with_cxx_main=no
  		MAINCC='$(CC)';;
-@@ -749,7 +747,7 @@ AC_MSG_RESULT($LIBRARY)
+@@ -750,7 +748,7 @@ AC_MSG_RESULT($LIBRARY)
  # systems without shared libraries, LDLIBRARY is the same as LIBRARY
  # (defined in the Makefiles). On Cygwin LDLIBRARY is the import library,
  # DLLLIBRARY is the shared (i.e., DLL) library.
@@ -150,7 +168,7 @@ index 30f5bf4..351612b 100644
  # RUNSHARED is used to run shared python without installed libraries
  #
  # INSTSONAME is the name of the shared library that will be use to install
-@@ -771,7 +769,7 @@ RUNSHARED=''
+@@ -772,7 +770,7 @@ RUNSHARED=''
  # If CXX is set, and if it is needed to link a main function that was
  # compiled with CXX, LINKCC is CXX instead. Always using CXX is undesirable:
  # python might then depend on the C++ runtime
@@ -159,7 +177,7 @@ index 30f5bf4..351612b 100644
  # linking.
  AC_SUBST(LINKCC)
  AC_MSG_CHECKING(LINKCC)
-@@ -818,7 +816,7 @@ AC_ARG_ENABLE(shared,
+@@ -819,7 +817,7 @@ AC_ARG_ENABLE(shared,
                AS_HELP_STRING([--enable-shared], [disable/enable building shared python library]))
  
  if test -z "$enable_shared"
@@ -168,7 +186,7 @@ index 30f5bf4..351612b 100644
    case $ac_sys_system in
    CYGWIN* | atheos*)
      enable_shared="yes";;
-@@ -863,7 +861,7 @@ then
+@@ -864,7 +862,7 @@ then
    BLDLIBRARY=''
  else
    BLDLIBRARY='$(LDLIBRARY)'
@@ -177,7 +195,7 @@ index 30f5bf4..351612b 100644
  
  # Other platforms follow
  if test $enable_shared = "yes"; then
-@@ -1014,14 +1012,14 @@ fi
+@@ -1015,14 +1013,14 @@ fi
  
  # Check for --with-pydebug
  AC_MSG_CHECKING(for --with-pydebug)
@@ -197,7 +215,7 @@ index 30f5bf4..351612b 100644
    Py_DEBUG='true'
  else AC_MSG_RESULT(no); Py_DEBUG='false'
  fi],
-@@ -1136,7 +1134,7 @@ yes)
+@@ -1137,7 +1135,7 @@ yes)
  		AC_MSG_CHECKING(which compiler should be used)
  		case "${UNIVERSALSDK}" in
  		*/MacOSX10.4u.sdk)
@@ -206,7 +224,12 @@ index 30f5bf4..351612b 100644
  			# compiler is gcc, otherwise the user will get very
  			# confusing error messages when building on OSX 10.6
  			CC=gcc-4.0
-@@ -1153,9 +1151,9 @@ yes)
+@@ -1150,13 +1148,13 @@ yes)
+ 	    # Calculate the right deployment target for this build.
+ 	    #
+ 	    cur_target=`sw_vers -productVersion | sed 's/\(10\.[[0-9]]*\).*/\1/'`
+-	    if test ${cur_target} '>' 10.2; then
++	    if test ${cur_target} '>' 10; then
  		    cur_target=10.3
  		    if test ${enable_universalsdk}; then
  			    if test "${UNIVERSAL_ARCHS}" = "all"; then
@@ -219,7 +242,7 @@ index 30f5bf4..351612b 100644
  				    # 4-way builds make sense.
  				    cur_target='10.5'
  
-@@ -1178,8 +1176,8 @@ yes)
+@@ -1179,8 +1177,8 @@ yes)
  		    fi
  	    fi
  	    CONFIGURE_MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET-${cur_target}}
@@ -230,7 +253,7 @@ index 30f5bf4..351612b 100644
  	    # environment with a value that is the same as what we'll use
  	    # in the Makefile to ensure that we'll get the same compiler
  	    # environment during configure and build time.
-@@ -1221,7 +1219,7 @@ yes)
+@@ -1222,7 +1220,7 @@ yes)
  
  
  		CFLAGS="${UNIVERSAL_ARCH_FLAGS} ${CFLAGS}"
@@ -239,7 +262,7 @@ index 30f5bf4..351612b 100644
  		then
  			CPPFLAGS="-isysroot ${UNIVERSALSDK} ${CPPFLAGS}"
  			LDFLAGS="-isysroot ${UNIVERSALSDK} ${LDFLAGS}"
-@@ -1368,7 +1366,7 @@ int main(){
+@@ -1369,7 +1367,7 @@ int main(){
  AC_MSG_RESULT($ac_cv_pthread_is_default)
  
  
@@ -248,7 +271,7 @@ index 30f5bf4..351612b 100644
  then
    ac_cv_kpthread=no
  else
-@@ -1467,14 +1465,14 @@ ac_save_cxx="$CXX"
+@@ -1468,14 +1466,14 @@ ac_save_cxx="$CXX"
  
  if test "$ac_cv_kpthread" = "yes"
  then
@@ -265,7 +288,7 @@ index 30f5bf4..351612b 100644
    CXX="$CXX -pthread"
    ac_cv_cxx_thread=yes
  fi
-@@ -1600,11 +1598,11 @@ if test "$use_lfs" = "yes"; then
+@@ -1601,11 +1599,11 @@ if test "$use_lfs" = "yes"; then
  # These may affect some typedefs
  case $ac_sys_system/$ac_sys_release in
  AIX*)
@@ -279,7 +302,7 @@ index 30f5bf4..351612b 100644
  [This must be defined on some systems to enable large file support.])
  AC_DEFINE(_FILE_OFFSET_BITS, 64,
  [This must be set to 64 on some systems to enable large file support.])
-@@ -1666,7 +1664,7 @@ AC_CHECK_SIZEOF(pid_t, 4)
+@@ -1667,7 +1665,7 @@ AC_CHECK_SIZEOF(pid_t, 4)
  AC_MSG_CHECKING(for long long support)
  have_long_long=no
  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[long long x; x = (long long)0;]])],[
@@ -288,7 +311,7 @@ index 30f5bf4..351612b 100644
    have_long_long=yes
  ],[])
  AC_MSG_RESULT($have_long_long)
-@@ -1688,7 +1686,7 @@ fi
+@@ -1689,7 +1687,7 @@ fi
  AC_MSG_CHECKING(for _Bool support)
  have_c99_bool=no
  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[_Bool x; x = (_Bool)0;]])],[
@@ -297,7 +320,7 @@ index 30f5bf4..351612b 100644
    have_c99_bool=yes
  ],[])
  AC_MSG_RESULT($have_c99_bool)
-@@ -1696,8 +1694,8 @@ if test "$have_c99_bool" = yes ; then
+@@ -1697,8 +1695,8 @@ if test "$have_c99_bool" = yes ; then
  AC_CHECK_SIZEOF(_Bool, 1)
  fi
  
@@ -308,7 +331,7 @@ index 30f5bf4..351612b 100644
     [], [#ifdef HAVE_STDINT_H
          #include <stdint.h>
          #endif
-@@ -1716,7 +1714,7 @@ if test "$have_long_long" = yes
+@@ -1717,7 +1715,7 @@ if test "$have_long_long" = yes
  then
  if test "$ac_cv_sizeof_off_t" -gt "$ac_cv_sizeof_long" -a \
  	"$ac_cv_sizeof_long_long" -ge "$ac_cv_sizeof_off_t"; then
@@ -317,7 +340,7 @@ index 30f5bf4..351612b 100644
    [Defined to enable large file support when an off_t is bigger than a long
     and long long is available and at least as big as an off_t. You may need
     to add some flags for configuration and compilation to enable this mode.
-@@ -1767,7 +1765,7 @@ AC_ARG_ENABLE(toolbox-glue,
+@@ -1768,7 +1766,7 @@ AC_ARG_ENABLE(toolbox-glue,
                AS_HELP_STRING([--enable-toolbox-glue], [disable/enable MacOSX glue code for extensions]))
  
  if test -z "$enable_toolbox_glue"
@@ -326,7 +349,7 @@ index 30f5bf4..351612b 100644
  	case $ac_sys_system/$ac_sys_release in
  	Darwin/*)
  		enable_toolbox_glue="yes";;
-@@ -1792,7 +1790,7 @@ AC_MSG_RESULT($enable_toolbox_glue)
+@@ -1793,7 +1791,7 @@ AC_MSG_RESULT($enable_toolbox_glue)
  
  AC_SUBST(OTHER_LIBTOOL_OPT)
  case $ac_sys_system/$ac_sys_release in
@@ -336,7 +359,7 @@ index 30f5bf4..351612b 100644
      ;;
    Darwin/*)
 @@ -1804,7 +1802,7 @@ esac
- ARCH_RUN_32BIT=""
+ 
  AC_SUBST(LIBTOOL_CRUFT)
  case $ac_sys_system/$ac_sys_release in
 -  Darwin/@<:@01567@:>@\..*) 
@@ -419,6 +442,15 @@ index 30f5bf4..351612b 100644
  		if test "$GCC" = "yes" ; then
  			LDSHARED='$(CC) -shared'
  			LDCXXSHARED='$(CXX) -shared'
+@@ -2000,7 +1998,7 @@ then
+ 		# Use -undefined dynamic_lookup whenever possible (10.3 and later).
+ 		# This allows an extension to be used in any Python
+ 
+-		if test ${MACOSX_DEPLOYMENT_TARGET} '>' 10.2
++		if test ${MACOSX_DEPLOYMENT_TARGET} '>' 10
+ 		then
+ 			if test "${enable_universalsdk}"; then
+ 				LDFLAGS="${UNIVERSAL_ARCH_FLAGS} -isysroot ${UNIVERSALSDK} ${LDFLAGS}"
 @@ -2130,7 +2128,7 @@ then
  	BSD/OS/4*) LINKFORSHARED="-Xlinker -export-dynamic";;
  	Linux*|GNU*) LINKFORSHARED="-Xlinker -export-dynamic";;
@@ -437,7 +469,7 @@ index 30f5bf4..351612b 100644
  		if [[ "`$CC -dM -E - </dev/null | grep __ELF__`" != "" ]]
  		then
  			LINKFORSHARED="-Wl,--export-dynamic"
-@@ -2377,7 +2375,7 @@ then
+@@ -2405,7 +2403,7 @@ then
      # Defining _REENTRANT on system with POSIX threads should not hurt.
      AC_DEFINE(_REENTRANT)
      posix_threads=yes
@@ -446,7 +478,7 @@ index 30f5bf4..351612b 100644
  elif test "$ac_cv_kpthread" = "yes"
  then
      CC="$CC -Kpthread"
-@@ -2501,7 +2499,7 @@ pthread_create (NULL, NULL, start_routine, NULL)]])],[
+@@ -2529,7 +2527,7 @@ pthread_create (NULL, NULL, start_routine, NULL)]])],[
      THREADOBJ="Python/thread.o"
      USE_THREAD_MODULE=""])
  
@@ -455,7 +487,7 @@ index 30f5bf4..351612b 100644
        AC_CHECK_LIB(thread, thr_create, [AC_DEFINE(WITH_THREAD)
        LIBS="$LIBS -lthread"
        THREADOBJ="Python/thread.o"
-@@ -2521,7 +2519,7 @@ fi
+@@ -2549,7 +2547,7 @@ fi
  if test "$posix_threads" = "yes"; then
        if test "$unistd_defines_pthreads" = "no"; then
           AC_DEFINE(_POSIX_THREADS, 1,
@@ -464,7 +496,7 @@ index 30f5bf4..351612b 100644
            and your system does not define that.])
        fi
  
-@@ -2765,9 +2763,9 @@ AC_MSG_CHECKING(for --with-tsc)
+@@ -2794,9 +2792,9 @@ AC_MSG_CHECKING(for --with-tsc)
  AC_ARG_WITH(tsc,
  	    AS_HELP_STRING([--with(out)-tsc],[enable/disable timestamp counter profile]),[
  if test "$withval" != no
@@ -477,7 +509,7 @@ index 30f5bf4..351612b 100644
      AC_MSG_RESULT(yes)
  else AC_MSG_RESULT(no)
  fi],
-@@ -2783,7 +2781,7 @@ then with_pymalloc="yes"
+@@ -2812,7 +2810,7 @@ then with_pymalloc="yes"
  fi
  if test "$with_pymalloc" != "no"
  then
@@ -486,7 +518,7 @@ index 30f5bf4..351612b 100644
       [Define if you want to compile in Python-specific mallocs])
  fi
  AC_MSG_RESULT($with_pymalloc)
-@@ -2803,14 +2801,14 @@ fi
+@@ -2832,14 +2830,14 @@ fi
  
  # Check for --with-wctype-functions
  AC_MSG_CHECKING(for --with-wctype-functions)
@@ -504,7 +536,7 @@ index 30f5bf4..351612b 100644
    AC_MSG_RESULT(yes)
  else AC_MSG_RESULT(no)
  fi],
-@@ -3052,12 +3050,12 @@ dnl before searching for static libraries. setup.py adds -Wl,-search_paths_first
+@@ -3081,12 +3079,12 @@ dnl before searching for static libraries. setup.py adds -Wl,-search_paths_first
  dnl to revert to a more traditional unix behaviour and make it possible to
  dnl override the system libz with a local static library of libz. Temporarily
  dnl add that flag to our CFLAGS as well to ensure that we check the version
@@ -520,7 +552,7 @@ index 30f5bf4..351612b 100644
  	_CUR_CFLAGS="${CFLAGS}"
  	_CUR_LDFLAGS="${LDFLAGS}"
  	CFLAGS="${CFLAGS} -Wl,-search_paths_first"
-@@ -3068,7 +3066,7 @@ esac
+@@ -3097,7 +3095,7 @@ esac
  AC_CHECK_LIB(z, inflateCopy, AC_DEFINE(HAVE_ZLIB_COPY, 1, [Define if the zlib library has inflateCopy]))
  
  case $ac_sys_system/$ac_sys_release in
@@ -529,7 +561,7 @@ index 30f5bf4..351612b 100644
  	CFLAGS="${_CUR_CFLAGS}"
  	LDFLAGS="${_CUR_LDFLAGS}"
  	;;
-@@ -3122,14 +3120,14 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+@@ -3151,14 +3149,14 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
  
  # check for openpty and forkpty
  
@@ -547,7 +579,7 @@ index 30f5bf4..351612b 100644
       [AC_DEFINE(HAVE_FORKPTY) LIBS="$LIBS -lutil"],
       AC_CHECK_LIB(bsd,forkpty, [AC_DEFINE(HAVE_FORKPTY) LIBS="$LIBS -lbsd"])
     )
-@@ -3142,7 +3140,7 @@ AC_CHECK_FUNCS(memmove)
+@@ -3171,7 +3169,7 @@ AC_CHECK_FUNCS(memmove)
  AC_CHECK_FUNCS(fseek64 fseeko fstatvfs ftell64 ftello statvfs)
  
  AC_REPLACE_FUNCS(dup2 getcwd strdup)
@@ -556,7 +588,7 @@ index 30f5bf4..351612b 100644
    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unistd.h>]], [[getpgrp(0);]])],
      [AC_DEFINE(GETPGRP_HAVE_ARG, 1, [Define if getpgrp() must be called as getpgrp(0).])],
      [])
-@@ -3152,7 +3150,7 @@ AC_CHECK_FUNCS(setpgrp,
+@@ -3181,7 +3179,7 @@ AC_CHECK_FUNCS(setpgrp,
      [AC_DEFINE(SETPGRP_HAVE_ARG, 1, [Define if setpgrp() must be called as setpgrp(0, 0).])],
      [])
  )
@@ -565,7 +597,7 @@ index 30f5bf4..351612b 100644
    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/time.h>]],
    				     [[gettimeofday((struct timeval*)0,(struct timezone*)0);]])],
      [],
-@@ -3182,7 +3180,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+@@ -3211,7 +3209,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
  ])
  
  # On OSF/1 V5.1, getaddrinfo is available, but a define
@@ -574,7 +606,7 @@ index 30f5bf4..351612b 100644
  AC_MSG_CHECKING(for getaddrinfo)
  AC_LINK_IFELSE([AC_LANG_PROGRAM([[
  #include <sys/types.h>
-@@ -3342,7 +3340,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+@@ -3371,7 +3369,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
  ]], [[;]])],[
    AC_DEFINE(SYS_SELECT_WITH_SYS_TIME, 1,
    [Define if  you can safely include both <sys/select.h> and <sys/time.h>
@@ -583,7 +615,7 @@ index 30f5bf4..351612b 100644
    was_it_defined=yes
  ],[])
  AC_MSG_RESULT($was_it_defined)
-@@ -3393,8 +3391,8 @@ AC_MSG_RESULT($works)
+@@ -3422,8 +3420,8 @@ AC_MSG_RESULT($works)
  have_prototypes=no
  AC_MSG_CHECKING(for prototypes)
  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[int foo(int x) { return 0; }]], [[return foo(10);]])],
@@ -594,7 +626,7 @@ index 30f5bf4..351612b 100644
     have_prototypes=yes],
    []
  )
-@@ -3415,7 +3413,7 @@ int foo(int x, ...) {
+@@ -3444,7 +3442,7 @@ int foo(int x, ...) {
  ]], [[return foo(10, "", 3.14);]])],[
    AC_DEFINE(HAVE_STDARG_PROTOTYPES, 1,
     [Define if your compiler supports variable length function prototypes
@@ -603,7 +635,7 @@ index 30f5bf4..351612b 100644
    works=yes
  ],[])
  AC_MSG_RESULT($works)
-@@ -3450,7 +3448,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+@@ -3479,7 +3477,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
  #include <varargs.h>
  #endif
  ]], [[va_list list1, list2; list1 = list2;]])],[],[
@@ -612,7 +644,7 @@ index 30f5bf4..351612b 100644
   va_list_is_array=yes
  ])
  AC_MSG_RESULT($va_list_is_array)
-@@ -3545,9 +3543,9 @@ AC_ARG_WITH(fpectl,
+@@ -3574,9 +3572,9 @@ AC_ARG_WITH(fpectl,
              AS_HELP_STRING([--with-fpectl], [enable SIGFPE catching]),
  [
  if test "$withval" != no
@@ -624,7 +656,7 @@ index 30f5bf4..351612b 100644
    AC_MSG_RESULT(yes)
  else AC_MSG_RESULT(no)
  fi],
-@@ -3862,8 +3860,8 @@ AC_DEFINE_UNQUOTED(PYLONG_BITS_IN_DIGIT, $enable_big_digits, [Define as the pref
+@@ -3891,8 +3889,8 @@ AC_DEFINE_UNQUOTED(PYLONG_BITS_IN_DIGIT, $enable_big_digits, [Define as the pref
  
  # check for wchar.h
  AC_CHECK_HEADER(wchar.h, [
@@ -635,7 +667,7 @@ index 30f5bf4..351612b 100644
    wchar_h="yes"
  ],
  wchar_h="no"
-@@ -3906,10 +3904,10 @@ then
+@@ -3935,10 +3933,10 @@ then
    [ac_cv_wchar_t_signed=yes])])
    AC_MSG_RESULT($ac_cv_wchar_t_signed)
  fi
@@ -648,7 +680,7 @@ index 30f5bf4..351612b 100644
                AS_HELP_STRING([--enable-unicode@<:@=ucs@<:@24@:>@@:>@], [Enable Unicode strings (default is ucs2)]),
                [],
                [enable_unicode=yes])
-@@ -4153,7 +4151,7 @@ then
+@@ -4182,7 +4180,7 @@ then
        [Define if poll() sets errno on invalid file descriptors.])
  fi
  
@@ -657,7 +689,7 @@ index 30f5bf4..351612b 100644
  # (which is not required by ISO C or UNIX spec) and/or if we support
  # tzname[]
  AC_STRUCT_TIMEZONE
-@@ -4179,7 +4177,7 @@ int main()
+@@ -4208,7 +4206,7 @@ int main()
  	   tm->tm_zone does not exist since it is the alternative way
  	   of getting timezone info.
  
@@ -666,7 +698,7 @@ index 30f5bf4..351612b 100644
  	   after New Year's Day.
  	*/
  
-@@ -4192,7 +4190,7 @@ int main()
+@@ -4221,7 +4219,7 @@ int main()
  	    exit(1);
  #if HAVE_TZNAME
  	/* For UTC, tzname[1] is sometimes "", sometimes "   " */
@@ -675,7 +707,7 @@ index 30f5bf4..351612b 100644
  		(tzname[1][0] != 0 && tzname[1][0] != ' '))
  	    exit(1);
  #endif
-@@ -4297,7 +4295,7 @@ AC_MSG_RESULT($ac_cv_window_has_flags)
+@@ -4326,7 +4324,7 @@ AC_MSG_RESULT($ac_cv_window_has_flags)
  
  if test "$ac_cv_window_has_flags" = yes
  then
