@@ -27,7 +27,7 @@ def build(argv = ' '.join(argv[1:])):
         if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
             command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
         elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
-            command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+            command = './bin/buildout -c buildout-build-osx-xcode-6.cfg %s' % argv
         else:
             command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     elif system() == 'Windows':
