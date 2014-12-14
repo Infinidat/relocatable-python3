@@ -57,7 +57,7 @@ def normalize_to_url(option, opt_str, value, parser):
     name = opt_str[2:].replace('-', '_')
     setattr(parser.values, name, value)
 
-ezsetup_source = 'https://bitbucket.org/pypa/setuptools/raw/0.8/ez_setup.py'
+ezsetup_source = 'https://bootstrap.pypa.io/ez_setup.py'
 setuptools_source = "https://pypi.python.org/packages/source/s/setuptools/"
 pypi_index = "https://pypi.python.org/simple/"
 
