@@ -6,6 +6,17 @@ from platform import system
 from infi.execute import execute_assert_success
 from sys import exit
 
+
+def test():
+    from logging import basicConfig, getLogger, DEBUG
+    from subprocess import Popen
+    from os import path, name
+    basicConfig(level=DEBUG)
+    python = path.join('dist', 'bin', 'python%s' % ('.exe' if name=='nt' else ''))
+    getLogger(__name__).info("testing %s" % python)
+    assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
+
+
 def build(argv = ' '.join(argv[1:])):
     from sys import maxsize
     from os import environ
@@ -101,6 +112,7 @@ def clean(argv = ' '.join(argv[1:])):
     src = sep.join([base ,'buildout'])
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
+
 
 def _catch_and_print(func, *args, **kwargs):
     try:
