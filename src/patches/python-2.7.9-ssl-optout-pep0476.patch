@@ -1,0 +1,10 @@
+diff --git i/Lib/ssl.py w/Lib/ssl.py
+index 0f82227..a45e5b2 100644
+--- i/Lib/ssl.py
++++ w/Lib/ssl.py
+@@ -993,3 +993,5 @@ def sslwrap_simple(sock, keyfile=None, certfile=None):
+         ssl_sock.do_handshake()
+ 
+     return ssl_sock
++
++_create_default_https_context = _create_unverified_context
