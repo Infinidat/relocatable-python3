@@ -28,11 +28,8 @@ def build(argv = ' '.join(argv[1:])):
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
             command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
-        if dist_name in ['redhat', 'centos']:
-            if maxsize > 2**32:
-                command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
-            else:
-                command = './bin/buildout -c buildout-build-redhat.cfg %s' % argv
+        if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
+            command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
         if dist_name in ['suse'] and version in ['10']:
             command = './bin/buildout -c buildout-build-suse-10.cfg %s' % argv
     elif system() == 'Darwin':
