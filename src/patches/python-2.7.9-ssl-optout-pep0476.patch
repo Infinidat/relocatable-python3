@@ -1,10 +1,13 @@
 diff --git i/Lib/ssl.py w/Lib/ssl.py
-index 0f82227..a45e5b2 100644
+index 0f82227..ca7a24c 100644
 --- i/Lib/ssl.py
 +++ w/Lib/ssl.py
-@@ -993,3 +993,5 @@ def sslwrap_simple(sock, keyfile=None, certfile=None):
-         ssl_sock.do_handshake()
+@@ -469,7 +469,7 @@ def _create_unverified_context(protocol=PROTOCOL_SSLv23, cert_reqs=None,
+     return context
  
-     return ssl_sock
-+
+ # Used by http.client if no context is explicitly passed.
+-_create_default_https_context = create_default_context
 +_create_default_https_context = _create_unverified_context
+ 
+ 
+ # Backwards compatibility alias, even though it's not a public name.
