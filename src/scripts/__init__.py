@@ -15,6 +15,7 @@ def test():
     python = path.join('dist', 'bin', 'python%s' % ('.exe' if name=='nt' else ''))
     getLogger(__name__).info("testing %s" % python)
     assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
+    assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
 
 
 def build(argv = ' '.join(argv[1:])):
