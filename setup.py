@@ -18,8 +18,9 @@ SETUP_INFO = dict(
 
     entry_points = dict(
         console_scripts = [
-			'build = scripts:build',
-			'pack = scripts:pack',
+            'test = scripts:test',
+            'build = scripts:build',
+            'pack = scripts:pack',
             'clean = scripts:clean',
         ],
         gui_scripts = [])
