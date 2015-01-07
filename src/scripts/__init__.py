@@ -6,23 +6,40 @@ from platform import system
 from infi.execute import execute_assert_success
 from sys import exit
 
+
+def test():
+    from logging import basicConfig, getLogger, DEBUG
+    from subprocess import Popen
+    from os import path, name
+    basicConfig(level=DEBUG)
+    python = path.join('dist', 'bin', 'python%s' % ('.exe' if name=='nt' else ''))
+    getLogger(__name__).info("testing %s" % python)
+    assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
+    assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
+
+
 def build(argv = ' '.join(argv[1:])):
     from sys import maxsize
     from os import environ
     environ = environ.copy()
     command = './bin/buildout -c buildout-build.cfg %s' % argv
     if system() == 'Linux':
-        from platform import dist
+        from platform import dist, linux_distribution
+        _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
             command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
             command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
+        if dist_name in ['suse'] and version in ['10']:
+            command = './bin/buildout -c buildout-build-suse-10.cfg %s' % argv
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
             command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+        elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
+            command = './bin/buildout -c buildout-build-osx-xcode-6.cfg %s' % argv
         else:
             command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
     elif system() == 'Windows':
@@ -30,6 +47,13 @@ def build(argv = ' '.join(argv[1:])):
             command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
         else:
             command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
+    elif system() == "SunOS":
+        if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
+            command = './bin/buildout -c buildout-build-solaris-sparc.cfg %s' % argv
+        elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
+            command = './bin/buildout -c buildout-build-solaris-64bit.cfg %s' % argv
+        else:
+            pass #TODO support 32 bit
     print 'executing "%s"' % command
     process = Popen(command.split(), env=environ)
     stdout, stderr = process.communicate()
@@ -86,6 +110,7 @@ def clean(argv = ' '.join(argv[1:])):
     src = sep.join([base ,'buildout'])
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
+
 
 def _catch_and_print(func, *args, **kwargs):
     try:

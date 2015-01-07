@@ -1,7 +1,7 @@
-diff --git a/ms/do_ms.bat b/ms/do_ms.bat
-index 55014d3..2b37969 100644
---- a/ms/do_ms.bat
-+++ b/ms/do_ms.bat
+diff --git i/ms/do_ms.bat w/ms/do_ms.bat
+index 55014d3..2b37969 100755
+--- i/ms/do_ms.bat
++++ w/ms/do_ms.bat
 @@ -1,11 +1,11 @@
  
 -perl util\mkfiles.pl >MINFO
@@ -21,19 +21,30 @@ index 55014d3..2b37969 100644
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%PerlExe% util\mkdef.pl 32 libeay > ms\libeay32.def
 +%PerlExe% util\mkdef.pl 32 ssleay > ms\ssleay32.def
-diff --git a/ms/do_win64a.bat b/ms/do_win64a.bat
-index 495f1ea..40d5495 100644
---- a/ms/do_win64a.bat
-+++ b/ms/do_win64a.bat
-@@ -1,9 +1,9 @@
- 
+diff --git i/ms/do_win64a.bat w/ms/do_win64a.bat
+index 8768dc6..f5f338c 100755
+--- i/ms/do_win64a.bat
++++ w/ms/do_win64a.bat
+@@ -1,19 +1,19 @@
 -perl util\mkfiles.pl >MINFO
--perl ms\uplink.pl win64a > ms\uptable.asm
 +%PerlExe% util\mkfiles.pl >MINFO
-+%PerlExe% ms\uplink.pl win64a > ms\uptable.asm
+ 
+ cmd /c "nasm -f win64 -v" >NUL 2>&1
+ if %errorlevel% neq 0 goto ml64
+ 
+-perl ms\uplink-x86_64.pl nasm > ms\uptable.asm
++%PerlExe% ms\uplink-x86_64.pl nasm > ms\uptable.asm
+ nasm -f win64 -o ms\uptable.obj ms\uptable.asm
+ goto proceed
+ 
+ :ml64
+-perl ms\uplink-x86_64.pl masm > ms\uptable.asm
++%PerlExe% ms\uplink-x86_64.pl win64a > ms\uptable.asm
  ml64 -c -Foms\uptable.obj ms\uptable.asm
--perl util\mk1mf.pl no-asm VC-WIN64A >ms\nt.mak
--perl util\mk1mf.pl dll no-asm VC-WIN64A >ms\ntdll.mak
+ 
+ :proceed
+-perl util\mk1mf.pl VC-WIN64A >ms\nt.mak
+-perl util\mk1mf.pl dll VC-WIN64A >ms\ntdll.mak
 +%PerlExe% util\mk1mf.pl no-asm VC-WIN64A >ms\nt.mak
 +%PerlExe% util\mk1mf.pl dll no-asm VC-WIN64A >ms\ntdll.mak
  
