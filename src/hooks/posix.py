@@ -8,7 +8,7 @@ for key, value in build_time_vars.items():
     build_time_vars[key] = value.replace(old_prefix, prefix) if isinstance(value, basestring) else value
 """
 
-def purge_sysconfigdata(options, buildout, environ):
+def get_sysconfigdata_files(environ):
     from glob import glob
     from os import path, curdir
     dist = path.join(environ.get("PWD"), path.abspath(path.join('.',  # Python-2.7.6
@@ -19,5 +19,29 @@ def purge_sysconfigdata(options, buildout, environ):
     print 'dist = {0}'.format(dist)
     print 'sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
     for _sysconfigdata in glob(path.join(dist, "*", "*", "_sysconfigdata.py")):
-        with open(_sysconfigdata, 'a') as fd:
-            fd.write(TRICK)
+        yield _sysconfigdata
+
+
+def purge_sysconfigdata(path):
+    with open(path, 'a') as fd:
+        fd.write(TRICK)
+
+
+def fix_linker_rpath(path):
+    # we want to link against the .so files in python/lib, but $ORIGIN may point to
+    # python/lib/python2.7/site-packages/<package-root>/<package-src>
+    # (e.g. python/lib/python2.7/site-packages/lxml-3.4.1-py2.7-linux-i686.egg/lxml)
+    # so we add $ORIGIN/../../../.. to rpath in linker options
+    src_str = r"-Wl,-rpath,\\$ORIGIN/../.."
+    dst_str = r"-Wl,-rpath,\\$ORIGIN/../..,-rpath,\\$ORIGIN/../../../.."
+    with open(path, 'r') as fd:
+        data = fd.read()
+    data = data.replace(src_str, dst_str)
+    with open(path, 'w') as fd:
+        fd.write(data)
+
+
+def fix_sysconfigdata(options, buildout, environ):
+    for path in get_sysconfigdata_files(environ):
+        purge_sysconfigdata(path)
+        fix_linker_rpath(path)
