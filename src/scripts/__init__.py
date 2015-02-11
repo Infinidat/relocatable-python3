@@ -22,38 +22,39 @@ def build(argv = ' '.join(argv[1:])):
     from sys import maxsize
     from os import environ
     environ = environ.copy()
-    command = './bin/buildout -c buildout-build.cfg %s' % argv
+    buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
         from platform import dist, linux_distribution
         _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
-            command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
+            buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
-            command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
+            buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse'] and version in ['10']:
-            command = './bin/buildout -c buildout-build-suse-10.cfg %s' % argv
+            buildout_file = 'buildout-build-suse-10.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
-            command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+            buildout_file = 'buildout-build-osx-xcode-5.cfg'
         elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
-            command = './bin/buildout -c buildout-build-osx-xcode-6.cfg %s' % argv
+            buildout_file = 'buildout-build-osx-xcode-6.cfg'
         else:
-            command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
+            buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
         if maxsize > 2**32:
-            command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
+            buildout_file = 'buildout-build-windows-64bit.cfg'
         else:
-            command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
+            buildout_file = 'buildout-build-windows.cfg'
     elif system() == "SunOS":
         if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
-            command = './bin/buildout -c buildout-build-solaris-sparc.cfg %s' % argv
+            buildout_file = 'buildout-build-solaris-sparc.cfg'
         elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
-            command = './bin/buildout -c buildout-build-solaris-64bit.cfg %s' % argv
+            buildout_file = 'buildout-build-solaris-64bit.cfg'
         else:
             pass #TODO support 32 bit
+    command = "./bin/buildout -c {} {}".format(buildout_file, argv)
     print 'executing "%s"' % command
     process = Popen(command.split(), env=environ)
     stdout, stderr = process.communicate()
