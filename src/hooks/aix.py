@@ -1,0 +1,48 @@
+import os
+
+TRICK = """
+# isolated-python trick
+import sys
+prefix = sys.real_prefix if hasattr(sys, 'real_prefix') else sys.prefix  # virtualenv
+old_prefix = build_time_vars.get("prefix", "_some_path_that_does_not_exist")
+
+for key, value in build_time_vars.items():
+    value = value.replace(old_prefix, prefix) if isinstance(value, basestring) else value
+    build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python2.7/config") if isinstance(value, basestring) else value
+"""
+
+def get_sysconfigdata_files(options):
+    from glob import glob
+    from os import path
+    dist = options["prefix"]
+    print 'dist = {0}'.format(dist)
+    print 'sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
+    for _sysconfigdata in glob(path.join(dist, "*", "*", "_sysconfigdata.py")):
+        yield _sysconfigdata
+
+def purge_sysconfigdata(path):
+    with open(path, 'a') as fd:
+        fd.write(TRICK)
+
+def create_blibpath_fix(options, buildout, environ):
+    os.system("mv {0}/bin/python2.7 {0}/bin/python2.7.bin".format(options["prefix"]))
+    os.system("gcc -s {}/aix.c -o {}/bin/python2.7".format(options["hooks-dir"], options["prefix"]))
+
+def fix_sysconfigdata(options, buildout, environ):
+    for path in get_sysconfigdata_files(options):
+        purge_sysconfigdata(path)
+
+def fix_large_files(options, buildout, environ):
+    # _LARGE_FILES definition causes redefinition errors in external library compilation
+    dist = options["prefix"]
+    pyconfig_path = os.path.join(dist, "include", "python2.7", "pyconfig.h")
+    with open(pyconfig_path, "r") as fd:
+        data = fd.read()
+    data = data.replace("#define _LARGE_FILES 1", "#define _LARGE_FILES 0")
+    with open(pyconfig_path, "w") as fd:
+        fd.write(data)
+
+def python_post_make(options, buildout, environ):
+    create_blibpath_fix(options, buildout, environ)
+    fix_sysconfigdata(options, buildout, environ)
+    fix_large_files(options, buildout, environ)

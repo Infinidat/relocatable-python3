@@ -54,6 +54,8 @@ def build(argv=' '.join(argv[1:])):
             buildout_file = 'buildout-build-solaris-64bit.cfg'
         else:
             pass #TODO support 32 bit
+    elif system() == "AIX":
+        buildout_file = 'buildout-build-aix.cfg'
     command = "./bin/buildout -c {} {}".format(buildout_file, argv)
     print 'executing "%s"' % command
     process = Popen(command.split(), env=environ)
@@ -64,6 +66,8 @@ def pack(argv=' '.join(argv[1:])):
     command = './bin/buildout -c buildout-pack.cfg %s' % argv
     if system() == 'Windows':
         command = './bin/buildout -c buildout-pack-windows.cfg %s' % argv
+    elif system() == "AIX":
+        command = './bin/buildout -c buildout-pack-aix.cfg %s' % argv
     print 'executing "%s"' % command
     process = Popen(command.split())
     stdout, stderr = process.communicate()
