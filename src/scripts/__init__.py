@@ -12,13 +12,13 @@ def test():
     from subprocess import Popen
     from os import path, name
     basicConfig(level=DEBUG)
-    python = path.join('dist', 'bin', 'python%s' % ('.exe' if name=='nt' else ''))
+    python = path.join('dist', 'bin', 'python%s' % ('.exe' if name == 'nt' else ''))
     getLogger(__name__).info("testing %s" % python)
     assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
     assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
 
 
-def build(argv = ' '.join(argv[1:])):
+def build(argv=' '.join(argv[1:])):
     from sys import maxsize
     from os import environ
     environ = environ.copy()
@@ -60,7 +60,7 @@ def build(argv = ' '.join(argv[1:])):
     stdout, stderr = process.communicate()
     exit(process.returncode)
 
-def pack(argv = ' '.join(argv[1:])):
+def pack(argv=' '.join(argv[1:])):
     command = './bin/buildout -c buildout-pack.cfg %s' % argv
     if system() == 'Windows':
         command = './bin/buildout -c buildout-pack-windows.cfg %s' % argv
@@ -69,8 +69,8 @@ def pack(argv = ' '.join(argv[1:])):
     stdout, stderr = process.communicate()
     exit(process.returncode)
 
-def clean(argv = ' '.join(argv[1:])):
-    from os.path import abspath, curdir, pardir, exists
+def clean(argv=' '.join(argv[1:])):
+    from os.path import abspath, pardir, exists
     from os import mkdir, remove, path
     from glob import glob
     from shutil import rmtree, move
@@ -92,7 +92,7 @@ def clean(argv = ' '.join(argv[1:])):
     _catch_and_print(rmtree, *[dist])
 
     src = sep.join([parts, 'buildout'])
-    dst = sep.join([base ,'buildout'])
+    dst = sep.join([base, 'buildout'])
 
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
@@ -108,7 +108,7 @@ def clean(argv = ' '.join(argv[1:])):
     _catch_and_print(mkdir, *[parts])
 
     dst = sep.join([parts, 'buildout'])
-    src = sep.join([base ,'buildout'])
+    src = sep.join([base, 'buildout'])
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
 
