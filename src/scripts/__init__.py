@@ -1,10 +1,8 @@
 __import__("pkg_resources").declare_namespace(__name__)
 
-from sys import argv
 from subprocess import Popen
 from platform import system
 from infi.execute import execute_assert_success
-from sys import exit
 
 
 def test():
@@ -18,7 +16,17 @@ def test():
     assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
 
 
-def build(argv=' '.join(argv[1:])):
+def execte_buildout(buildout_file, env=None):
+    import sys
+    argv=' '.join(sys.argv[1:])
+    command = "./bin/buildout -c {} {}".format(buildout_file, argv)
+    print 'executing "%s"' % command
+    process = Popen(command.split(), env=env)
+    stdout, stderr = process.communicate()
+    sys.exit(process.returncode)
+
+
+def build():
     from sys import maxsize
     from os import environ
     environ = environ.copy()
@@ -53,27 +61,20 @@ def build(argv=' '.join(argv[1:])):
         elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
             buildout_file = 'buildout-build-solaris-64bit.cfg'
         else:
-            pass #TODO support 32 bit
+            pass  # TODO support 32 bit
     elif system() == "AIX":
         buildout_file = 'buildout-build-aix.cfg'
-    command = "./bin/buildout -c {} {}".format(buildout_file, argv)
-    print 'executing "%s"' % command
-    process = Popen(command.split(), env=environ)
-    stdout, stderr = process.communicate()
-    exit(process.returncode)
+    execte_buildout(buildout_file, environ)
 
-def pack(argv=' '.join(argv[1:])):
-    command = './bin/buildout -c buildout-pack.cfg %s' % argv
+def pack():
+    buildout_file = 'buildout-pack.cfg'
     if system() == 'Windows':
-        command = './bin/buildout -c buildout-pack-windows.cfg %s' % argv
+        buildout_file = 'buildout-pack-windows.cfg'
     elif system() == "AIX":
-        command = './bin/buildout -c buildout-pack-aix.cfg %s' % argv
-    print 'executing "%s"' % command
-    process = Popen(command.split())
-    stdout, stderr = process.communicate()
-    exit(process.returncode)
+        buildout_file = 'buildout-pack-aix.cfg'
+    execte_buildout(buildout_file)
 
-def clean(argv=' '.join(argv[1:])):
+def clean():
     from os.path import abspath, pardir, exists
     from os import mkdir, remove, path
     from glob import glob
