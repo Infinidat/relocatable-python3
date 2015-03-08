@@ -1,0 +1,68 @@
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 4d0c8fa..bf4648e 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -2799,6 +2799,7 @@ posix_system(PyObject *self, PyObject *args)
+     if (!PyArg_ParseTuple(args, "s:system", &command))
+         return NULL;
+     Py_BEGIN_ALLOW_THREADS
++    unsetenv("LIBPATH");
+     sts = system(command);
+     Py_END_ALLOW_THREADS
+     return PyInt_FromLong(sts);
+@@ -3161,6 +3162,7 @@ posix_execv(PyObject *self, PyObject *args)
+     }
+     argvlist[argc] = NULL;
+
++    unsetenv("LIBPATH");
+     execv(path, argvlist);
+
+     /* If we get here it's definitely an error */
+@@ -3280,6 +3282,7 @@ posix_execve(PyObject *self, PyObject *args)
+         /* Omit Pseudo-Env Vars that Would Confuse Programs if Passed On */
+         if (stricmp(k, "BEGINLIBPATH") != 0 && stricmp(k, "ENDLIBPATH") != 0) {
+ #endif
++        if (strcmp(k, "LIBPATH") != 0) {
+         len = PyString_Size(key) + PyString_Size(val) + 2;
+         p = PyMem_NEW(char, len);
+         if (p == NULL) {
+@@ -3288,6 +3291,7 @@ posix_execve(PyObject *self, PyObject *args)
+         }
+         PyOS_snprintf(p, len, "%s=%s", k, v);
+         envlist[envc++] = p;
++        }
+ #if defined(PYOS_OS2)
+         }
+ #endif
+@@ -3376,6 +3380,7 @@ posix_spawnv(PyObject *self, PyObject *args)
+     }
+     argvlist[argc] = NULL;
+
++    unsetenv("LIBPATH");
+ #if defined(PYOS_OS2) && defined(PYCC_GCC)
+     Py_BEGIN_ALLOW_THREADS
+     spawnval = spawnv(mode, path, argvlist);
+@@ -3510,6 +3515,7 @@ posix_spawnve(PyObject *self, PyObject *args)
+         {
+             goto fail_2;
+         }
++        if (strcmp(k, "LIBPATH") != 0) {
+         len = PyString_Size(key) + PyString_Size(val) + 2;
+         p = PyMem_NEW(char, len);
+         if (p == NULL) {
+@@ -3518,6 +3524,7 @@ posix_spawnve(PyObject *self, PyObject *args)
+         }
+         PyOS_snprintf(p, len, "%s=%s", k, v);
+         envlist[envc++] = p;
++        }
+     }
+     envlist[envc] = 0;
+
+@@ -4546,6 +4553,7 @@ posix_popen(PyObject *self, PyObject *args)
+     if (!PyArg_ParseTuple(args, "s|si:popen", &name, &mode, &bufsize))
+         return NULL;
+     Py_BEGIN_ALLOW_THREADS
++    unsetenv("LIBPATH");
+     fp = popen(name, mode, (bufsize > 0) ? bufsize : 4096, &err);
+     Py_END_ALLOW_THREADS
+     if (fp == NULL)
