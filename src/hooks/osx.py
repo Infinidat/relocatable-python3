@@ -100,7 +100,6 @@ def patch_python(options, buildout, version):
         print abspath('./%s' % file)
         assert len(content)
         content = content.replace(r'-install_name,$(prefix)/lib', '-install_name,@rpath')
-        previous = content
         content = content.replace(r'-install_name $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
         content = content.replace(r'-install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
         assert '@rpath' in content

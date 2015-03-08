@@ -18,7 +18,7 @@ def test():
 
 def execte_buildout(buildout_file, env=None):
     import sys
-    argv=' '.join(sys.argv[1:])
+    argv = ' '.join(sys.argv[1:])
     command = "./bin/buildout -c {} {}".format(buildout_file, argv)
     print 'executing "%s"' % command
     process = Popen(command.split(), env=env)
