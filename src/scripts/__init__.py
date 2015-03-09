@@ -1,10 +1,8 @@
 __import__("pkg_resources").declare_namespace(__name__)
 
-from sys import argv
 from subprocess import Popen
 from platform import system
 from infi.execute import execute_assert_success
-from sys import exit
 
 
 def test():
@@ -12,64 +10,72 @@ def test():
     from subprocess import Popen
     from os import path, name
     basicConfig(level=DEBUG)
-    python = path.join('dist', 'bin', 'python%s' % ('.exe' if name=='nt' else ''))
+    python = path.join('dist', 'bin', 'python%s' % ('.exe' if name == 'nt' else ''))
     getLogger(__name__).info("testing %s" % python)
     assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
     assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
 
 
-def build(argv = ' '.join(argv[1:])):
+def execte_buildout(buildout_file, env=None):
+    import sys
+    argv = ' '.join(sys.argv[1:])
+    command = "./bin/buildout -c {} {}".format(buildout_file, argv)
+    print 'executing "%s"' % command
+    process = Popen(command.split(), env=env)
+    stdout, stderr = process.communicate()
+    sys.exit(process.returncode)
+
+
+def build():
     from sys import maxsize
     from os import environ
     environ = environ.copy()
-    command = './bin/buildout -c buildout-build.cfg %s' % argv
+    buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
         from platform import dist, linux_distribution
         _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
-            command = './bin/buildout -c buildout-build-ubuntu.cfg %s' % argv
+            buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
-            command = './bin/buildout -c buildout-build-redhat-64bit.cfg %s' % argv
+            buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse'] and version in ['10']:
-            command = './bin/buildout -c buildout-build-suse-10.cfg %s' % argv
+            buildout_file = 'buildout-build-suse-10.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
-            command = './bin/buildout -c buildout-build-osx-xcode-5.cfg %s' % argv
+            buildout_file = 'buildout-build-osx-xcode-5.cfg'
         elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
-            command = './bin/buildout -c buildout-build-osx-xcode-6.cfg %s' % argv
+            buildout_file = 'buildout-build-osx-xcode-6.cfg'
         else:
-            command = './bin/buildout -c buildout-build-osx.cfg %s' % argv
+            buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
         if maxsize > 2**32:
-            command = './bin/buildout -c buildout-build-windows-64bit.cfg %s' % argv
+            buildout_file = 'buildout-build-windows-64bit.cfg'
         else:
-            command = './bin/buildout -c buildout-build-windows.cfg %s' % argv
+            buildout_file = 'buildout-build-windows.cfg'
     elif system() == "SunOS":
         if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
-            command = './bin/buildout -c buildout-build-solaris-sparc.cfg %s' % argv
+            buildout_file = 'buildout-build-solaris-sparc.cfg'
         elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
-            command = './bin/buildout -c buildout-build-solaris-64bit.cfg %s' % argv
+            buildout_file = 'buildout-build-solaris-64bit.cfg'
         else:
-            pass #TODO support 32 bit
-    print 'executing "%s"' % command
-    process = Popen(command.split(), env=environ)
-    stdout, stderr = process.communicate()
-    exit(process.returncode)
+            pass  # TODO support 32 bit
+    elif system() == "AIX":
+        buildout_file = 'buildout-build-aix.cfg'
+    execte_buildout(buildout_file, environ)
 
-def pack(argv = ' '.join(argv[1:])):
-    command = './bin/buildout -c buildout-pack.cfg %s' % argv
+def pack():
+    buildout_file = 'buildout-pack.cfg'
     if system() == 'Windows':
-        command = './bin/buildout -c buildout-pack-windows.cfg %s' % argv
-    print 'executing "%s"' % command
-    process = Popen(command.split())
-    stdout, stderr = process.communicate()
-    exit(process.returncode)
+        buildout_file = 'buildout-pack-windows.cfg'
+    elif system() == "AIX":
+        buildout_file = 'buildout-pack-aix.cfg'
+    execte_buildout(buildout_file)
 
-def clean(argv = ' '.join(argv[1:])):
-    from os.path import abspath, curdir, pardir, exists
+def clean():
+    from os.path import abspath, pardir, exists
     from os import mkdir, remove, path
     from glob import glob
     from shutil import rmtree, move
@@ -91,7 +97,7 @@ def clean(argv = ' '.join(argv[1:])):
     _catch_and_print(rmtree, *[dist])
 
     src = sep.join([parts, 'buildout'])
-    dst = sep.join([base ,'buildout'])
+    dst = sep.join([base, 'buildout'])
 
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
@@ -107,7 +113,7 @@ def clean(argv = ' '.join(argv[1:])):
     _catch_and_print(mkdir, *[parts])
 
     dst = sep.join([parts, 'buildout'])
-    src = sep.join([base ,'buildout'])
+    src = sep.join([base, 'buildout'])
     print "mv %s %s" % (repr(src), repr(dst))
     _catch_and_print(move, *[src, dst])
 

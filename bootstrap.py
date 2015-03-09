@@ -197,10 +197,10 @@ find_links = os.environ.get(
     ('http://downloads.buildout.org/'
      if options.accept_buildout_test_releases else None)
     )
-if find_links:
-    cmd.extend(['-f', find_links])
-if options.download_base:
-    cmd.extend(["-f", options.download_base])
+# if find_links:
+#     cmd.extend(['-f', find_links])
+# if options.download_base:
+#     cmd.extend(["-f", options.download_base])
 if options.index_url:
     cmd.extend(["-i", options.index_url])
 setuptools_path = ws.find(
