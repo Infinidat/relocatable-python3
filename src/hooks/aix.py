@@ -38,7 +38,7 @@ def fix_large_files(options, buildout, environ):
     pyconfig_path = os.path.join(dist, "include", "python2.7", "pyconfig.h")
     with open(pyconfig_path, "r") as fd:
         data = fd.read()
-    data = data.replace("#define _LARGE_FILES 1", "#define _LARGE_FILES 0")
+    data = data.replace("#define _LARGE_FILES 1", "")
     with open(pyconfig_path, "w") as fd:
         fd.write(data)
 
