@@ -42,7 +42,12 @@ def fix_large_files(options, buildout, environ):
     with open(pyconfig_path, "w") as fd:
         fd.write(data)
 
+def fix_max_memory(options, buildout, environ):
+    # allow 512MB memory allocation for the process. See README.AIX in Python's code
+    os.system("ldedit -b maxdata:0x20000000 {0}/bin/python2.7".format(options["prefix"]))
+
 def python_post_make(options, buildout, environ):
+    fix_max_memory(options, buildout, environ)
     create_blibpath_fix(options, buildout, environ)
     fix_sysconfigdata(options, buildout, environ)
     fix_large_files(options, buildout, environ)
