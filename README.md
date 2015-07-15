@@ -7,7 +7,7 @@ The build system itself is written in Python, based on zc.buildout and some reci
 
 The sources are downloaded from the Internet, stored locally and then built.
 
-It works on Linux, OSX and Windows for now.
+The current supported platforms are: Linux, OS X, Windows, Solaris and AIX.
 
 In order to build python, execute:
 
@@ -15,7 +15,7 @@ In order to build python, execute:
     ./bin/buildout
     ./bin/build
 
-** For Python 3.x, see [relocatable-python3](https://github.com/Infinidat/relocatable-python3) **
+**For Python 3.x, see [relocatable-python3](https://github.com/Infinidat/relocatable-python3)**
 
 Build environment
 =================
@@ -25,10 +25,10 @@ For building on Mac OS X, you'll need to install first:
 * Homebrew
 * autoconf, automake, libtool, pkgconfig
 
-For ubuntu, you'll need to install:
+For Ubuntu, you'll need to install:
 * build-essential
 
-For windows, you'll need to install:
+For Windows, you'll need to install:
 * Microsot Visual Studio 2008 (No SP)
 * Perl
 * Python
