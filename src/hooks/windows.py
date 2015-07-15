@@ -1,7 +1,8 @@
-
-import os, subprocess
-from os import path, makedirs
-import glob, shutil
+import os
+import subprocess
+from os import path
+import glob
+import shutil
 
 def _execute(cmd, env):
     process = subprocess.Popen(cmd.split(), env=env)
@@ -41,7 +42,7 @@ def db_post_make64(options, buildout, environ):
 
 class PythonPostMake(object):
     def __init__(self, environ):
-        from os import path, curdir
+        from os import curdir
         self.python_source_path = path.abspath(path.join(curdir, path.pardir))
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
         self.prefix = environ['PREFIX']
@@ -112,7 +113,6 @@ class PythonPostMake(object):
 
     def make_includes(self):
         import shutil
-        from os import path
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
                                 path.join(self.prefix))
         _system(cmd)
@@ -120,7 +120,6 @@ class PythonPostMake(object):
                      path.join(self.prefix, 'Include'))
 
     def make_libraries(self):
-        from os import path
         dst = path.join(self.prefix,)
         src = path.join(self.python_source_path, 'lib')
         _mk_path(dst)
@@ -154,4 +153,3 @@ def python_post_make(options, buildout, environ):
 def python_post_make64(options, buildout, environ):
     instance = PythonPostMake(environ)
     instance.make_install()
-

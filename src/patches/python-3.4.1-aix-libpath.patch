@@ -1,0 +1,28 @@
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 8cd5485..15d1d05 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -4444,6 +4444,7 @@ posix_system(PyObject *self, PyObject *args)
+ 
+     command = PyBytes_AsString(command_obj);
+     Py_BEGIN_ALLOW_THREADS
++    unsetenv("LIBPATH");
+     sts = system(command);
+     Py_END_ALLOW_THREADS
+     Py_DECREF(command_obj);
+@@ -5220,6 +5221,7 @@ posix_execv(PyObject *self, PyObject *args)
+         return NULL;
+     }
+ 
++    unsetenv("LIBPATH");
+     execv(path, argvlist);
+ 
+     /* If we get here it's definitely an error */
+@@ -5375,6 +5377,7 @@ posix_spawnv(PyObject *self, PyObject *args)
+     if (mode == _OLD_P_OVERLAY)
+         mode = _P_OVERLAY;
+ 
++    unsetenv("LIBPATH");
+     Py_BEGIN_ALLOW_THREADS
+     spawnval = _spawnv(mode, path, argvlist);
+     Py_END_ALLOW_THREADS
