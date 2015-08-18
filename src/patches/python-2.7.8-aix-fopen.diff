@@ -1,0 +1,27 @@
+diff --git a/Objects/fileobject.c b/Objects/fileobject.c
+index 5594058..5beafb0 100644
+--- a/Objects/fileobject.c
++++ b/Objects/fileobject.c
+@@ -319,6 +319,7 @@ static PyObject *
+ open_the_file(PyFileObject *f, char *name, char *mode)
+ {
+     char *newmode;
++    int newmodelen;
+     assert(f != NULL);
+     assert(PyFile_Check(f));
+ #ifdef MS_WINDOWS
+@@ -331,7 +332,13 @@ open_the_file(PyFileObject *f, char *name, char *mode)
+     assert(f->f_fp == NULL);
+ 
+     /* probably need to replace 'U' by 'rb' */
+-    newmode = PyMem_MALLOC(strlen(mode) + 3);
++    newmodelen = strlen(mode) + 3;
++    newmode = PyMem_MALLOC(newmodelen);
++    /* Due to a bug, AIX looks after the NULL terminator in the mode string
++     * (it looks for '+' or 'x' in mode[2] regardless of mode's length).
++     * We must not have "junk" in the buffer. Zero out everything and
++     * especially the 3 extra bytes */
++    memset(newmode, 0, newmodelen);
+     if (!newmode) {
+         PyErr_NoMemory();
+         return NULL;
