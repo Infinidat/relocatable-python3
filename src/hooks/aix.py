@@ -7,8 +7,8 @@ prefix = sys.real_prefix if hasattr(sys, 'real_prefix') else sys.prefix  # virtu
 old_prefix = build_time_vars.get("prefix", "_some_path_that_does_not_exist")
 
 for key, value in build_time_vars.items():
-    value = value.replace(old_prefix, prefix) if isinstance(value, basestring) else value
-    build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python3.4/config") if isinstance(value, basestring) else value
+    value = value.replace(old_prefix, prefix) if isinstance(value, str) else value
+    build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python3.4/config") if isinstance(value, str) else value
 """
 
 def get_sysconfigdata_files(options):
@@ -35,7 +35,7 @@ def fix_sysconfigdata(options, buildout, environ):
 def fix_large_files(options, buildout, environ):
     # _LARGE_FILES definition causes redefinition errors in external library compilation
     dist = options["prefix"]
-    pyconfig_path = os.path.join(dist, "include", "python3.4", "pyconfig.h")
+    pyconfig_path = os.path.join(dist, "include", "python3.4m", "pyconfig.h")
     with open(pyconfig_path, "r") as fd:
         data = fd.read()
     data = data.replace("#define _LARGE_FILES 1", "")
