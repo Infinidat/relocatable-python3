@@ -1,5 +1,5 @@
 diff --git a/PCbuild/_bz2.vcxproj b/PCbuild/_bz2.vcxproj
-index 9387e54..a32d7a9 100644
+index 9387e54..d8e72e6 100644
 --- a/PCbuild/_bz2.vcxproj
 +++ b/PCbuild/_bz2.vcxproj
 @@ -151,7 +151,7 @@
@@ -447,7 +447,7 @@ index 7378794..aef3b2f 100644
      </Link>
    </ItemDefinitionGroup>
 diff --git a/PCbuild/pcbuild.sln b/PCbuild/pcbuild.sln
-index a346e10..7957fc7 100644
+index 9fe874e..472135d 100644
 --- a/PCbuild/pcbuild.sln
 +++ b/PCbuild/pcbuild.sln
 @@ -351,13 +351,9 @@ Global
@@ -478,7 +478,7 @@ index d775a02..8b9a602 100644
    <ItemDefinitionGroup>
      <Link>
 diff --git a/PCbuild/pyproject.props b/PCbuild/pyproject.props
-index 2219c95..3dc5b2e 100644
+index 2219c95..178a4a3 100644
 --- a/PCbuild/pyproject.props
 +++ b/PCbuild/pyproject.props
 @@ -5,11 +5,11 @@
