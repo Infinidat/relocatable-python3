@@ -123,6 +123,17 @@ def patch_libevent_configure_in(options, buildout, version):
         content = content.replace('AM_CONFIG_HEADER', 'AC_CONFIG_HEADERS')
         open(filepath, 'w').write(content)
 
+def patch_nettle_configure(options, buildout, version):
+    from os import curdir
+    from os.path import abspath, join
+    filepath = join(abspath(curdir), 'configure')
+    print 'fixing files "%s"' % filepath
+    content = open(filepath).read()
+    dist = options["prefix"]
+    dist_lib = join(dist, "lib")
+    content = content.replace('./conftest', 'LD_LIBRARY_PATH={} ./conftest'.format(dist_lib))
+    open(filepath, 'w').write(content)
+
 def autogen_libevent(options, buildout, version):
     from subprocess import Popen
     patch_libevent_configure_in(options, buildout, version)
