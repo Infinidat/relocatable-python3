@@ -1,16 +1,16 @@
 diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
-index 8cd5485..9815171 100644
+index 854a749..55fbd50 100644
 --- a/Modules/posixmodule.c
 +++ b/Modules/posixmodule.c
-@@ -4444,6 +4444,7 @@ posix_system(PyObject *self, PyObject *args)
- 
-     command = PyBytes_AsString(command_obj);
+@@ -4265,6 +4265,7 @@ os_system_impl(PyModuleDef *module, Py_UNICODE *command)
+ {
+     long result;
      Py_BEGIN_ALLOW_THREADS
 +    unsetenv("LIBPATH");
-     sts = system(command);
+     result = _wsystem(command);
      Py_END_ALLOW_THREADS
-     Py_DECREF(command_obj);
-@@ -5120,15 +5121,17 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
+     return result;
+@@ -4963,15 +4964,17 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
          v = PyBytes_AsString(val2);
          len = PyBytes_GET_SIZE(key2) + PyBytes_GET_SIZE(val2) + 2;
  
@@ -36,19 +36,19 @@ index 8cd5485..9815171 100644
          Py_DECREF(key2);
          Py_DECREF(val2);
      }
-@@ -5220,6 +5223,7 @@ posix_execv(PyObject *self, PyObject *args)
+@@ -5061,6 +5064,7 @@ os_execv_impl(PyModuleDef *module, PyObject *path, PyObject *argv)
          return NULL;
      }
  
 +    unsetenv("LIBPATH");
-     execv(path, argvlist);
+     execv(path_char, argvlist);
  
      /* If we get here it's definitely an error */
-@@ -5375,6 +5379,7 @@ posix_spawnv(PyObject *self, PyObject *args)
+@@ -5202,6 +5206,7 @@ os_spawnv_impl(PyModuleDef *module, int mode, PyObject *path, PyObject *argv)
      if (mode == _OLD_P_OVERLAY)
          mode = _P_OVERLAY;
  
 +    unsetenv("LIBPATH");
      Py_BEGIN_ALLOW_THREADS
-     spawnval = _spawnv(mode, path, argvlist);
+     spawnval = _spawnv(mode, path_char, argvlist);
      Py_END_ALLOW_THREADS

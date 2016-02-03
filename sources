@@ -28,7 +28,7 @@ nettle-2.7.1.tar.gz                     https://ftp.gnu.org/gnu/nettle/nettle-2.
 openldap-stable-20100719.tgz            http://www.openldap.org/software/download/OpenLDAP/openldap-stable/openldap-stable-20100719.tgz
 openssh-5.8p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-5.8p1.tar.gz
 openssl-1.0.2f.tar.gz                   https://www.openssl.org/source/openssl-1.0.2f.tar.gz
-Python-3.4.1.tgz                        https://www.python.org/ftp/python/3.4.1/Python-3.4.1.tgz
+Python-3.5.1.tgz                        https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz
 readline-6.2.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
 sqlite-autoconf-3070602.tar.gz          ftp://ftp.funet.fi/ftp/pub/NetBSD/packages/distfiles/sqlite-autoconf-3070602.tar.gz
 tcl8.5.15-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.5.15-src.tar.gz
