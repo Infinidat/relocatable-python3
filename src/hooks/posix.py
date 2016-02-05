@@ -45,3 +45,12 @@ def fix_sysconfigdata(options, buildout, environ):
     for path in get_sysconfigdata_files(environ):
         purge_sysconfigdata(path)
         fix_linker_rpath(path)
+
+
+def link_python_binary(options, buildout, environ):
+    os.system("ln -s {0}/bin/python3 {0}/bin/python".format(options["prefix"]))
+
+
+def python_post_make(options, buildout, environ):
+    fix_sysconfigdata(options, buildout, environ)
+    link_python_binary(options, buildout, environ)

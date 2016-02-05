@@ -46,8 +46,12 @@ def fix_max_memory(options, buildout, environ):
     # allow 512MB memory allocation for the process. See README.AIX in Python's code
     os.system("ldedit -b maxdata:0x20000000 {0}/bin/python3.5".format(options["prefix"]))
 
+def link_python_binary(options, buildout, environ):
+    os.system("ln -s {0}/bin/python3 {0}/bin/python".format(options["prefix"]))
+
 def python_post_make(options, buildout, environ):
     fix_max_memory(options, buildout, environ)
     create_blibpath_fix(options, buildout, environ)
     fix_sysconfigdata(options, buildout, environ)
     fix_large_files(options, buildout, environ)
+    link_python_binary(options, buildout, environ)
