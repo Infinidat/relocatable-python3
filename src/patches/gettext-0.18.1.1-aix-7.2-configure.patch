@@ -1,0 +1,22 @@
+diff --git a/gettext-tools/gnulib-lib/spawn.in.h b/gettext-tools/gnulib-lib/spawn.in.h
+index cc8d9a9..83b8b86 100644
+--- a/gettext-tools/gnulib-lib/spawn.in.h
++++ b/gettext-tools/gnulib-lib/spawn.in.h
+@@ -112,7 +112,7 @@ typedef struct
+ 
+ 
+ /* Flags to be set in the `posix_spawnattr_t'.  */
+-#if @HAVE_POSIX_SPAWN@
++#if 0
+ /* Use the values from the system, but provide the missing ones.  */
+ # ifndef POSIX_SPAWN_SETSCHEDPARAM
+ #  define POSIX_SPAWN_SETSCHEDPARAM 0
+@@ -121,7 +121,7 @@ typedef struct
+ #  define POSIX_SPAWN_SETSCHEDULER 0
+ # endif
+ #else
+-# if @REPLACE_POSIX_SPAWN@
++# if 0
+ /* Use the values from the system, for better compatibility.  */
+ /* But this implementation does not support AIX extensions.  */
+ #  undef POSIX_SPAWN_FORK_HANDLERS

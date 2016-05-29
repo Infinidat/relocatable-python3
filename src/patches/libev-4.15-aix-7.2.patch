@@ -1,0 +1,12 @@
+diff --git a/ev.c b/ev.c
+index e5bd5ab..fb5a21a 100644
+--- a/ev.c
++++ b/ev.c
+@@ -1217,7 +1217,6 @@ ecb_inline ecb_bool ecb_little_endian (void) { return ecb_byteorder_helper () ==
+  * alternatively, you can remove this #error and link against libpthread,
+  * which will then provide the memory fences.
+  */
+-# error "memory fences not defined for your architecture, please report"
+ #endif
+ 
+ #ifndef ECB_MEMORY_FENCE
