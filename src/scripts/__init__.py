@@ -28,7 +28,7 @@ def execte_buildout(buildout_file, env=None):
 
 def build():
     from sys import maxsize
-    from os import environ, uname
+    from os import environ
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
@@ -69,6 +69,7 @@ def build():
         else:
             pass  # TODO support 32 bit
     elif system() == "AIX":
+        from os import uname
         aix_version = "{0[3]}.{0[2]}".format(uname())
         if aix_version == "7.1":
             buildout_file = 'buildout-build-aix.cfg'
