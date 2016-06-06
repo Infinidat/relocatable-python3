@@ -48,7 +48,8 @@ def fix_sysconfigdata(options, buildout, environ):
 
 
 def link_python_binary(options, buildout, environ):
-    os.system("ln -s {0}/bin/python3 {0}/bin/python".format(options["prefix"]))
+    from os import system
+    system("ln -s {0}/bin/python3 {0}/bin/python".format(options["prefix"]))
 
 
 def python_post_make(options, buildout, environ):
