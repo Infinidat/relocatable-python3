@@ -1,0 +1,19 @@
+diff --git a/PCbuild/pyproject.props b/PCbuild/pyproject.props
+index 25cdfcc..dccde37 100644
+--- a/PCbuild/pyproject.props
++++ b/PCbuild/pyproject.props
+@@ -43,7 +43,6 @@
+       <CompileAs>Default</CompileAs>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <WholeProgramOptimization>true</WholeProgramOptimization>
+-      <EnableEnhancedInstructionSet Condition="'$(Platform)'=='Win32'">NoExtensions</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <ClCompile Condition="$(Configuration) == 'Debug'">
+       <Optimization>Disabled</Optimization>
+@@ -158,4 +157,4 @@ foreach (System.Diagnostics.Process p in System.Diagnostics.Process.GetProcesses
+     <Error Text="Unable to locate signtool.exe. Set /p:SignToolPath and rebuild" Condition="'$(_SignCommand)' == ''" />
+     <Exec Command='$(_SignCommand) "$(TargetPath)" || $(_SignCommand) "$(TargetPath)" || $(_SignCommand) "$(TargetPath)"' ContinueOnError="false" />
+   </Target>
+-</Project>
+\ No newline at end of file
++</Project>
