@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         return WRAPPER_ERROR;
     }
     *last_sep = 0;      /*! make cur_executable_path hold dirname only !*/
-    sprintf(python_bin_path, "%s/python3.4.bin", cur_executable_path);
+    sprintf(python_bin_path, "%s/python3.5.bin", cur_executable_path);
     sprintf(python_lib_path, "%s/../lib", cur_executable_path);
     setenv("LIBPATH", python_lib_path, TRUE);
     execve(python_bin_path, argv, environ);

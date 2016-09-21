@@ -105,12 +105,24 @@ def patch_python(options, buildout, version):
         assert '@rpath' in content
         open(file, 'w').write(content)
 
+def add_ld_library_path_to_python_makefile(options, buildout, version):
+    # Inject LD_LIBRARY_PATH to setup.py's runtime (see comment in add_ld_library_path_to_configure)
+    # without this, the dynamic modules will fail to load and be renamed to *_failed.so
+    from os.path import join
+    dist = options["prefix"]
+    dist_lib = join(dist, "lib")
+    filename = "Makefile"
+    content = open(filename).read()
+    content = content.replace('$(PYTHON_FOR_BUILD) $(srcdir)/setup.py', 'LD_LIBRARY_PATH={} $(PYTHON_FOR_BUILD) $(srcdir)/setup.py'.format(dist_lib))
+    open(filename, 'w').write(content)
+
 def patch_python_Makefile_after_configure(options, buildout, version):
     import re
     filename = "Makefile"
     content = open(filename).read()
     content = re.sub(r"LDFLAGS=", r"LDFLAGS=-Wl,-rpath,@loader_path/../lib ", content)
     open(filename, 'w').write(content)
+    add_ld_library_path_to_python_makefile(options, buildout, version)
 
 
 def patch_libevent_configure_in(options, buildout, version):
@@ -123,7 +135,20 @@ def patch_libevent_configure_in(options, buildout, version):
         content = content.replace('AM_CONFIG_HEADER', 'AC_CONFIG_HEADERS')
         open(filepath, 'w').write(content)
 
-def autogen_libevent(options, buildout, version):
+def add_ld_library_path_to_configure(options, buildout, version):
+    # The LD_LIBRARY_PATH (runtime search path) that is set by buildout is not passed to
+    # the childrent processes due to SIP on El Capitan and newer. We set it manually inside the configure script
+    from os import curdir
+    from os.path import abspath, join
+    filepath = join(abspath(curdir), 'configure')
+    print 'fixing files "%s"' % filepath
+    content = open(filepath).read()
+    dist = options["prefix"]
+    dist_lib = join(dist, "lib")
+    content = "export LD_LIBRARY_PATH={}\n".format(dist_lib) + content
+    open(filepath, 'w').write(content)
+
+def autogen(options, buildout, version):
     from subprocess import Popen
     patch_libevent_configure_in(options, buildout, version)
     process = Popen(['./autogen.sh'])

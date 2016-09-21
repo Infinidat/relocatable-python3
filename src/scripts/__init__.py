@@ -36,7 +36,10 @@ def build():
         _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
-            buildout_file = 'buildout-build-ubuntu.cfg'
+            if version == '16.04':
+                buildout_file = 'buildout-build-ubuntu-16.04.cfg'
+            else:
+                buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
             buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse'] and version in ['10']:
@@ -44,10 +47,13 @@ def build():
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
-        if 'version 5.' in execute_assert_success(["gcc", "--version"]).get_stdout():
+        gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout()
+        if 'version 5.' in gcc_version:
             buildout_file = 'buildout-build-osx-xcode-5.cfg'
-        elif 'version 6.' in execute_assert_success(["gcc", "--version"]).get_stdout():
+        elif 'version 6.' in gcc_version:
             buildout_file = 'buildout-build-osx-xcode-6.cfg'
+        elif 'version 7.' in gcc_version:
+            buildout_file = 'buildout-build-osx-xcode-7.cfg'
         else:
             buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
@@ -63,7 +69,12 @@ def build():
         else:
             pass  # TODO support 32 bit
     elif system() == "AIX":
-        buildout_file = 'buildout-build-aix.cfg'
+        from os import uname
+        aix_version = "{0[3]}.{0[2]}".format(uname())
+        if aix_version == "7.1":
+            buildout_file = 'buildout-build-aix.cfg'
+        elif aix_version == "7.2":
+            buildout_file = 'buildout-build-aix-7.2.cfg'
     execte_buildout(buildout_file, environ)
 
 def pack():

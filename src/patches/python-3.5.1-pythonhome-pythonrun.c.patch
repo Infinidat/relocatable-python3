@@ -1,8 +1,8 @@
-diff --git i/Python/pythonrun.c w/Python/pythonrun.c
-index e9947e9..6bbb416 100644
---- i/Python/pythonrun.c
-+++ w/Python/pythonrun.c
-@@ -899,16 +899,7 @@ wchar_t *
+diff --git a/Python/pylifecycle.c b/Python/pylifecycle.c
+index 4f5efc9..dc0e14e 100644
+--- a/Python/pylifecycle.c
++++ b/Python/pylifecycle.c
+@@ -863,16 +863,7 @@ wchar_t *
  Py_GetPythonHome(void)
  {
      wchar_t *home = default_home;
