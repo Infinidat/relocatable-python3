@@ -57,6 +57,8 @@ def build():
             buildout_file = 'buildout-build-osx-xcode-6.cfg'
         elif 'version 7.' in gcc_version:
             buildout_file = 'buildout-build-osx-xcode-7.cfg'
+        elif 'version 8.' in gcc_version:
+            buildout_file = 'buildout-build-osx-xcode-8.cfg'
         else:
             buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
