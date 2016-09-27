@@ -47,7 +47,7 @@ def fix_max_memory(options, buildout, environ):
     os.system("ldedit -b maxdata:0x20000000 {0}/bin/python3.5".format(options["prefix"]))
 
 def link_python_binary(options, buildout, environ):
-    os.system("ln -s {0}/bin/python3 {0}/bin/python".format(options["prefix"]))
+    os.system("ln -s ./python3 {0}/bin/python".format(options["prefix"]))
 
 def python_post_make(options, buildout, environ):
     fix_max_memory(options, buildout, environ)
