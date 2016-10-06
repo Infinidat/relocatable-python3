@@ -9,11 +9,13 @@ def test():
     from logging import basicConfig, getLogger, DEBUG
     from subprocess import Popen
     from os import path, name
+    from glob import glob
     basicConfig(level=DEBUG)
     python = path.join('dist', 'bin', 'python%s' % ('.exe' if name == 'nt' else ''))
     getLogger(__name__).info("testing %s" % python)
-    assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
-    assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
+    test_files = glob.glob(path.join("tests", "test_*.py"))
+    for test_file in test_files:
+        assert Popen([python, test_file]).wait() == 0
 
 
 def execte_buildout(buildout_file, env=None):
