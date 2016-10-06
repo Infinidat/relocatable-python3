@@ -41,7 +41,10 @@ def build():
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
-            if 'ppc64' in execute_assert_success(["uname", "-i"]).get_stdout().lower():
+            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+            if 'ppc64le' in arch:
+                buildout_file = 'buildout-build-redhat-ppc64le.cfg'
+            elif 'ppc64' in arch:
                 buildout_file = 'buildout-build-redhat-ppc64.cfg'
             else:
                 buildout_file = 'buildout-build-redhat-64bit.cfg'
