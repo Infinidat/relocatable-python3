@@ -9,11 +9,13 @@ def test():
     from logging import basicConfig, getLogger, DEBUG
     from subprocess import Popen
     from os import path, name
+    from glob import glob
     basicConfig(level=DEBUG)
     python = path.join('dist', 'bin', 'python%s' % ('.exe' if name == 'nt' else ''))
     getLogger(__name__).info("testing %s" % python)
-    assert Popen([python, path.join("tests", "test_ssl.py")]).wait() == 0
-    assert Popen([python, path.join("tests", "test_ctypes.py")]).wait() == 0
+    test_files = glob(path.join("tests", "test_*.py"))
+    for test_file in test_files:
+        assert Popen([python, test_file]).wait() == 0
 
 
 def execte_buildout(buildout_file, env=None):
@@ -41,7 +43,13 @@ def build():
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
-            buildout_file = 'buildout-build-redhat-64bit.cfg'
+            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+            if 'ppc64le' in arch:
+                buildout_file = 'buildout-build-redhat-ppc64le.cfg'
+            elif 'ppc64' in arch:
+                buildout_file = 'buildout-build-redhat-ppc64.cfg'
+            else:
+                buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse'] and version in ['10']:
             buildout_file = 'buildout-build-suse-10.cfg'
     elif system() == 'Darwin':
@@ -54,6 +62,8 @@ def build():
             buildout_file = 'buildout-build-osx-xcode-6.cfg'
         elif 'version 7.' in gcc_version:
             buildout_file = 'buildout-build-osx-xcode-7.cfg'
+        elif 'version 8.' in gcc_version:
+            buildout_file = 'buildout-build-osx-xcode-8.cfg'
         else:
             buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
