@@ -94,13 +94,13 @@ class PythonPostMake(object):
 
     def _copy_crt_assemblies(self, dst):
         os.makedirs(dst)
-        src = glob.glob(path.join(self.environ['VC90CRT'], '*'))
+        src = glob.glob(path.join(self.environ['VC100CRT'], '*'))
         _copy_files(src, dst)
 
     def copy_crt_assemblies(self):
-        dst = path.join(self.prefix, 'bin', 'Microsoft.VC90.CRT')
+        dst = path.join(self.prefix, 'bin', 'Microsoft.VC100.CRT')
         self._copy_crt_assemblies(dst)
-        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC90.CRT')
+        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC100.CRT')
         self._copy_crt_assemblies(dst)
 
     def make_includes(self):

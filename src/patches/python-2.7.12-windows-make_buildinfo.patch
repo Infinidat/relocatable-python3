@@ -1,7 +1,7 @@
-diff --git a/PCbuild/make_buildinfo.c b/PCbuild/make_buildinfo.c
+diff --git a/PC/VS9.0/make_buildinfo.c b/PC/VS9.0/make_buildinfo.c
 index 5a3d385..1f6a713 100644
---- a/PCbuild/make_buildinfo.c
-+++ b/PCbuild/make_buildinfo.c
+--- a/PC/VS9.0/make_buildinfo.c
++++ b/PC/VS9.0/make_buildinfo.c
 @@ -92,3 +92,9 @@ int main(int argc, char*argv[])
          return EXIT_FAILURE;
      return 0;
