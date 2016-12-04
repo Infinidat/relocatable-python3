@@ -50,9 +50,15 @@ def build():
                 elif 'ppc64' in arch:
                     buildout_file = 'buildout-build-redhat-ppc64.cfg'
                 else:
-                    buildout_file = 'buildout-build-redhat-64bit.cfg'
+                    if version.startswith('4.'):
+                        buildout_file = 'buildout-build-redhat-4-64bit.cfg'
+                    else:
+                        buildout_file = 'buildout-build-redhat-64bit.cfg'
             else:
-                buildout_file = 'buildout-build-redhat-32bit.cfg'
+                if version.startswith('4.'):
+                    buildout_file = 'buildout-build-redhat-4-32bit.cfg'
+                else:
+                    buildout_file = 'buildout-build-redhat-32bit.cfg'
         if dist_name in ['suse'] and version in ['10']:
             buildout_file = 'buildout-build-suse-10.cfg'
     elif system() == 'Darwin':
