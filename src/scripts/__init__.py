@@ -42,14 +42,23 @@ def build():
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
-        if dist_name in ['redhat', 'centos'] and maxsize > 2**32:
-            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-            if 'ppc64le' in arch:
-                buildout_file = 'buildout-build-redhat-ppc64le.cfg'
-            elif 'ppc64' in arch:
-                buildout_file = 'buildout-build-redhat-ppc64.cfg'
+        if dist_name in ['redhat', 'centos']:
+            if maxsize > 2**32:
+                arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+                if 'ppc64le' in arch:
+                    buildout_file = 'buildout-build-redhat-ppc64le.cfg'
+                elif 'ppc64' in arch:
+                    buildout_file = 'buildout-build-redhat-ppc64.cfg'
+                else:
+                    if version.startswith('4.'):
+                        buildout_file = 'buildout-build-redhat-4-64bit.cfg'
+                    else:
+                        buildout_file = 'buildout-build-redhat-64bit.cfg'
             else:
-                buildout_file = 'buildout-build-redhat-64bit.cfg'
+                if version.startswith('4.'):
+                    buildout_file = 'buildout-build-redhat-4-32bit.cfg'
+                else:
+                    buildout_file = 'buildout-build-redhat-32bit.cfg'
         if dist_name in ['suse'] and version in ['10']:
             buildout_file = 'buildout-build-suse-10.cfg'
     elif system() == 'Darwin':
