@@ -9,11 +9,11 @@ The sources are downloaded from the Internet, stored locally and then built.
 
 The current supported platforms are: Linux, OS X, Windows, Solaris and AIX.
 
-In order to build python, execute:
+In order to build python, install zc.buildout (with pip or easy_install) and execute:
 
-    python bootstrap.py
-    ./bin/buildout
-    ./bin/build
+    buildout bootstrap
+    bin/buildout
+    bin/build
 
 **For Python 3.x, see [relocatable-python3](https://github.com/Infinidat/relocatable-python3)**
 
