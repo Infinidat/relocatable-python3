@@ -9,8 +9,9 @@ The sources are downloaded from the Internet, stored locally and then built.
 
 The current supported platforms are: Linux, OS X, Windows, Solaris and AIX.
 
-In order to build python, install zc.buildout (with pip or easy_install) and execute:
+In order to build python, execute:
 
+    pip install zc.buildout
     buildout bootstrap
     bin/buildout
     bin/build
