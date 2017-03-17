@@ -13,8 +13,8 @@ In order to build python, execute:
 
     pip install zc.buildout
     buildout bootstrap
-    ./bin/buildout
-    ./bin/build
+    bin/buildout
+    bin/build
 
 Build environment
 =================
