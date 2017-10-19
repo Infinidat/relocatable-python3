@@ -105,7 +105,7 @@ index d094e59..e65477d 100644
        <PreprocessorDefinitions>$(_PreprocessorDefinitionList);%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
    </ItemDefinitionGroup>
-
+   
 -  <Target Name="FindNasm">
 -    <PropertyGroup>
 -      <nasm Condition="$(Platform) == 'Win32'">nasm.exe -f win32</nasm>
@@ -220,7 +220,7 @@ index 862f041..69fc4a7 100644
 --- a/PCbuild/python.props
 +++ b/PCbuild/python.props
 @@ -32,10 +32,12 @@
-
+     
      <!-- Directories of external projects. tcltk is handled in tcltk.props -->
      <ExternalsDir>$([System.IO.Path]::GetFullPath(`$(PySourcePath)externals\`))</ExternalsDir>
 -    <sqlite3Dir>$(ExternalsDir)sqlite-3.8.11.0\</sqlite3Dir>
@@ -233,7 +233,7 @@ index 862f041..69fc4a7 100644
 -    <opensslDir>$(ExternalsDir)openssl-1.0.2d\</opensslDir>
 +    <opensslDir>$(partsDir)openssl__compile__\openssl-1.0.2h\</opensslDir>
      <nasmDir>$(ExternalsDir)\nasm-2.11.06\</nasmDir>
-
+     
      <!-- Suffix for all binaries when building for debug -->
 diff --git a/PCbuild/xxlimited.vcxproj b/PCbuild/xxlimited.vcxproj
 index 0144fa9..562bd51 100644
