@@ -21,7 +21,7 @@ def test():
 def execte_buildout(buildout_file, env=None):
     import sys
     argv = ' '.join(sys.argv[1:])
-    command = "./bin/buildout -c {} {}".format(buildout_file, argv)
+    command = "./bin/buildout -c {0} {1}".format(buildout_file, argv)
     print 'executing "%s"' % command
     process = Popen(command.split(), env=env)
     stdout, stderr = process.communicate()
@@ -59,8 +59,15 @@ def build():
                     buildout_file = 'buildout-build-redhat-4-32bit.cfg'
                 else:
                     buildout_file = 'buildout-build-redhat-32bit.cfg'
-        if dist_name in ['suse'] and version in ['10']:
-            buildout_file = 'buildout-build-suse-10.cfg'
+        if dist_name in ['suse']:
+            if version in ['10']:
+                buildout_file = 'buildout-build-suse-10.cfg'
+            else:
+                arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+                if 'ppc64le' in arch:
+                    buildout_file = 'buildout-build-suse-ppc64le.cfg'
+                elif 'ppc64' in arch:
+                    buildout_file = 'buildout-build-suse-ppc64.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
