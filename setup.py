@@ -9,9 +9,6 @@ SETUP_INFO = dict(
     install_requires = ['setuptools', 'infi.execute'],
     extras_require = {},
 
-    test_suite = '',
-    tests_require = {},
-
     packages = [],
     package_dir = {'': 'src'},
     include_package_data = True,
