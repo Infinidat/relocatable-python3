@@ -53,14 +53,11 @@ def build():
             else:
                 buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse']:
-            if version in ['10']:
-                buildout_file = 'buildout-build-suse-10.cfg'
-            else:
-                arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-                if 'ppc64le' in arch:
-                    buildout_file = 'buildout-build-suse-ppc64le.cfg'
-                elif 'ppc64' in arch:
-                    buildout_file = 'buildout-build-suse-ppc64.cfg'
+            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+            if 'ppc64le' in arch:
+                buildout_file = 'buildout-build-suse-ppc64le.cfg'
+            elif 'ppc64' in arch:
+                buildout_file = 'buildout-build-suse-ppc64.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
