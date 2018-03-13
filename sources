@@ -14,8 +14,9 @@ libev-4.15.tar.gz                       http://dist.schmorp.de/libev/libev-4.15.
 libevent-1.4.13-stable.tar.gz           https://github.com/downloads/libevent/libevent/libevent-1.4.13-stable.tar.gz
 libevent-2.0.17-stable.tar.gz           https://github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
 libffi-3.2.1.tar.gz                     ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
-libgcrypt-1.7.3.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.7.3.tar.bz2
-libgpg-error-1.24.tar.bz2               http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.24.tar.bz2
+libgcrypt-1.5.0.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.5.0.tar.bz2
+libgcrypt-1.5.3.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.5.3.tar.bz2
+libgpg-error-1.10.tar.bz2               http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.10.tar.bz2
 libiconv-1.11.1.tar.gz                  http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.11.1.tar.gz
 libiconv-1.13.1.tar.gz                  http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.13.1.tar.gz
 libiconv-1.9.1.tar.gz                   http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.9.1.tar.gz
