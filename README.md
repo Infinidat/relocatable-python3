@@ -11,9 +11,10 @@ The current supported platforms are: Linux, OS X, Windows, Solaris and AIX.
 
 In order to build python, execute:
 
-    python bootstrap.py
-    ./bin/buildout
-    ./bin/build
+    pip install zc.buildout
+    buildout bootstrap
+    bin/buildout
+    bin/build
 
 Build environment
 =================

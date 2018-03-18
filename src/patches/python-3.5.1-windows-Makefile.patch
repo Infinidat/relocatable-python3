@@ -231,7 +231,7 @@ index 862f041..69fc4a7 100644
 +    <bz2Dir>$(partsDir)bzip2__compile__\bzip2-1.0.6\</bz2Dir>
      <lzmaDir>$(ExternalsDir)xz-5.0.5\</lzmaDir>
 -    <opensslDir>$(ExternalsDir)openssl-1.0.2d\</opensslDir>
-+    <opensslDir>$(partsDir)openssl__compile__\openssl-1.0.2f\</opensslDir>
++    <opensslDir>$(partsDir)openssl__compile__\openssl-1.0.2h\</opensslDir>
      <nasmDir>$(ExternalsDir)\nasm-2.11.06\</nasmDir>
      
      <!-- Suffix for all binaries when building for debug -->
