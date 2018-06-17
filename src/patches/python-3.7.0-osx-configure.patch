@@ -1,0 +1,23 @@
+Index: cpython/configure
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cpython/configure	(date 1529223927000)
++++ cpython/configure	(date 1529223927000)
+@@ -744,7 +744,6 @@
+ LIPO_32BIT_FLAGS
+ ARCH_RUN_32BIT
+ UNIVERSALSDK
+-CONFIG_ARGS
+ SOVERSION
+ VERSION
+ PYTHON_FOR_BUILD
+@@ -2995,7 +2994,6 @@
+ 
+ # Arguments passed to configure.
+ 
+-CONFIG_ARGS="$ac_configure_args"
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-universalsdk" >&5
+ $as_echo_n "checking for --enable-universalsdk... " >&6; }

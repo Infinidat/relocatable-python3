@@ -1,0 +1,20 @@
+Index: cpython/Makefile.pre.in
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cpython/Makefile.pre.in	(date 1529224274000)
++++ cpython/Makefile.pre.in	(date 1529224274000)
+@@ -607,10 +607,10 @@
+ 	    *\ -s*|s*) quiet="-q";; \
+ 	    *) quiet="";; \
+ 	esac; \
+-	echo "$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
++	echo "$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' \
+ 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
+ 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build"; \
+-	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
++	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' \
+ 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
+ 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
+ 

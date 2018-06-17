@@ -1,0 +1,16 @@
+Index: cpython/Makefile.pre.in
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cpython/Makefile.pre.in	(date 1529223691000)
++++ cpython/Makefile.pre.in	(date 1529223691000)
+@@ -623,7 +623,7 @@
+ libpython$(LDVERSION).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+ 		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+-		$(LN) -f $(INSTSONAME) $@; \
++		$(LN) -fsn $(INSTSONAME) $@; \
+ 	else \
+ 		$(BLDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+ 	fi
