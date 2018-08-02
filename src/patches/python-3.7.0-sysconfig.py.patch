@@ -3,10 +3,13 @@ IDEA additional info:
 Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
---- cpython/Lib/sysconfig.py	(date 1529244314000)
-+++ cpython/Lib/sysconfig.py	(date 1529244314000)
-@@ -416,6 +416,7 @@
-     from distutils.sysconfig import _fix_prefix
+--- cpython/Lib/sysconfig.py	(date 1531752177000)
++++ cpython/Lib/sysconfig.py	(date 1531752177000)
+@@ -413,8 +413,10 @@
+     # _sysconfigdata is generated at build time, see _generate_posix_vars()
+     name = _get_sysconfigdata_name()
+     _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
++    from distutils.sysconfig import _fix_prefix
      build_time_vars = _temp.build_time_vars
      vars.update(build_time_vars)
 +    _fix_prefix(vars)

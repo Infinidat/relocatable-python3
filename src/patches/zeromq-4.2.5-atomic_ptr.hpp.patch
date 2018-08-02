@@ -1,0 +1,19 @@
+Index: zeromq-4.2.5/src/atomic_ptr.hpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- zeromq-4.2.5/src/atomic_ptr.hpp	(date 1533028751000)
++++ zeromq-4.2.5/src/atomic_ptr.hpp	(date 1533028751000)
+@@ -280,11 +280,7 @@
+ #endif
+ 
+ #if defined ZMQ_ATOMIC_PTR_MUTEX
+-#if defined ZMQ_HAVE_VXWORKS
+     mutable mutex_t sync;
+-#else
+-    mutex_t sync;
+-#endif
+ #endif
+ 
+   private:

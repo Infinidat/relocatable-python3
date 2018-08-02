@@ -3,9 +3,22 @@ IDEA additional info:
 Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
---- cpython/Lib/platform.py	(date 1529244582000)
-+++ cpython/Lib/platform.py	(date 1529244582000)
-@@ -334,6 +334,24 @@
+--- cpython/Lib/platform.py	(date 1531749722000)
++++ cpython/Lib/platform.py	(date 1531749722000)
+@@ -296,6 +296,12 @@
+             id = l[1]
+     return '', version, id
+
++
++_distributor_id_file_re = re.compile("(?:DISTRIB_ID\s*=)\s*(.*)", re.I)
++_release_file_re = re.compile("(?:DISTRIB_RELEASE\s*=)\s*(.*)", re.I)
++_codename_file_re = re.compile("(?:DISTRIB_CODENAME\s*=)\s*(.*)", re.I)
++
++
+ def linux_distribution(distname='', version='', id='',
+
+                        supported_dists=_supported_dists,
+@@ -328,6 +334,24 @@
          args given as parameters.
  
      """

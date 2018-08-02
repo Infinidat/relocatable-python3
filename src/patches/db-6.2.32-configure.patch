@@ -1,0 +1,16 @@
+Index: db-6.2.32/dist/configure
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- db-6.2.32/dist/configure	(date 1533060280000)
++++ db-6.2.32/dist/configure	(date 1533060280000)
+@@ -5267,7 +5267,7 @@
+ 	# when ordinary optimization is enabled because they make strong
+ 	# assumptions about the types held at each memory location, and some
+ 	# Berkeley DB code violates those assumptions.  [#16141]
+-	extra_cflags=" -qalias=noansi"
++	extra_cflags=" -fno-strict-aliasing"
+ 	optimize_flag="-O2"
+ 	CC=${CC-"xlc_r"}
+ 	CPPFLAGS="$CPPFLAGS -D_THREAD_SAFE"

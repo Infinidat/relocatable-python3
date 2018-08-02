@@ -1,0 +1,25 @@
+Index: cyrus-sasl-2.1.27/Makefile.in
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cyrus-sasl-2.1.27/Makefile.in	(date 1533137637000)
++++ cyrus-sasl-2.1.27/Makefile.in	(date 1533137637000)
+@@ -1128,14 +1128,14 @@
+ 	find $(top_distdir) -type f -name .sphinx-build.stamp -delete
+ 	rm -rf $(top_distdir)/$(SPHINX_CACHE)
+ install-exec-local: $(INSTALLOSX)
+-	@if test "$(plugindir)" != "$(prefix)/lib/sasl2"; then \
++	@if test "$(plugindir)" != "$(prefix)/lib64/sasl2"; then \
+ 	  echo "********************************************************"; \
+ 	  echo "* WARNING:"; \
+-	  echo "* Plugins are being installed into $(prefix)/lib/sasl2,"; \
++	  echo "* Plugins are being installed into $(prefix)/lib64/sasl2,"; \
+ 	  echo "* but the library will look for them in $(plugindir)."; \
+ 	  echo "* You need to make sure that the plugins will eventually"; \
+ 	  echo "* be in $(plugindir) -- the easiest way is to make a"; \
+-	  echo "* symbolic link from $(plugindir) to $(prefix)/lib/sasl2,"; \
++	  echo "* symbolic link from $(plugindir) to $(prefix)/lib64/sasl2,"; \
+ 	  echo "* but this may not be appropriate for your site, so this"; \
+ 	  echo "* installation procedure won't do it for you."; \
+ 	  echo "*"; \

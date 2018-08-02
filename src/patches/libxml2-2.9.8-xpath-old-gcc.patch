@@ -1,0 +1,17 @@
+Index: libxml2-2.9.8/xpath.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- libxml2-2.9.8/xpath.c	(date 1532951393000)
++++ libxml2-2.9.8/xpath.c	(date 1532951393000)
+@@ -481,6 +481,9 @@
+ #define NAN (0.0 / 0.0)
+ #endif
+ 
++#undef HUGE_VAL
++#define HUGE_VAL (__builtin_huge_val())
++
+ #ifndef INFINITY
+ #define INFINITY HUGE_VAL
+ #endif

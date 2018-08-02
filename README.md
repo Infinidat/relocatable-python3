@@ -32,3 +32,14 @@ For Windows, you'll need to install:
 * Microsot Visual Studio 2010 (No SP)
 * Perl
 * Python
+
+
+Caveats
+=======
+
+* cyrus-sasl is compiled without GSSAPI support on solaris systems
+* gnutls, gcryct, gpg-error, nettle, gmp have been removed, now using only openssl as SSL backend
+* Link time optimiziation and profile guided optimization flags ar eused only on ubuntu, osx, windows, arch.
+* missing _dbm in python is OK because we are compiling with gdbm.
+* Solaris platforms doesn't support ossaudiodev in python3
+* UUID capabilites is provided by a 3rd-party library extract from linux-utils

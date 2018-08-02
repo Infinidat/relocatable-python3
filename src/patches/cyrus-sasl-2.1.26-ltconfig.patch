@@ -1,0 +1,16 @@
+Index: cyrus-sasl-2.1.26/config/ltconfig
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cyrus-sasl-2.1.26/config/ltconfig	(date 1532421120000)
++++ cyrus-sasl-2.1.26/config/ltconfig	(date 1532421120000)
+@@ -1374,7 +1374,7 @@
+ 
+   darwin[15].* | rhapsody*)
+     allow_undefined_flag='-undefined error'
+-    archive_cmds='$CC $(test x$module = xyes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib $libobjs $deplibs $linkopts $(test x$module != xyes && echo -install_name $rpath/$soname) $(test -n "$verstring" -a x$verstring != x0.0 && echo $verstring)'
++    archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs $linkopts -install_name $rpath/$soname $verstring'
+     # We need to add '_' to the symbols in $export_symbols first
+     #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols $lib'
+     hardcode_direct=yes

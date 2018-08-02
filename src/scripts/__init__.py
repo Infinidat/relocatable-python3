@@ -22,23 +22,26 @@ def execte_buildout(buildout_file, env=None):
     import sys
     argv = ' '.join(sys.argv[1:])
     command = "./bin/buildout -c {0} {1}".format(buildout_file, argv)
-    print 'executing "%s"' % command
+    print('executing "%s"' % command)
     process = Popen(command.split(), env=env)
     stdout, stderr = process.communicate()
     sys.exit(process.returncode)
 
 
 def build():
-    from sys import maxsize
+    from sys import maxsize, platform
     from os import environ
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
-        from platform import dist, linux_distribution
+        from platform import dist, linux_distribution, architecture
         _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
+        environ["ABI"] = architecture()[0][:2]
+        environ["_PYTHON_HOST_PLATFORM"] = 'osf1' if platform.startswith('osf1') else platform
         if dist_name == 'ubuntu':
-            if version == '16.04':
+            version = int(version.split('.')[0])
+            if version >= 16:
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
@@ -50,8 +53,7 @@ def build():
                 buildout_file = 'buildout-build-redhat-ppc64.cfg'
             elif 'i386' in arch:
                 buildout_file = 'buildout-build-redhat-32bit.cfg'
-            elif int(version.split(".")[0]) > 6 or \
-                (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
+            elif int(version.split(".")[0]) > 6 or (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
                 # arch is 64 bit and supports libvirt
                 buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
             else:
@@ -100,6 +102,7 @@ def build():
             buildout_file = 'buildout-build-aix-7.2.cfg'
     execte_buildout(buildout_file, environ)
 
+
 def pack():
     buildout_file = 'buildout-pack.cfg'
     if system() == 'Windows':
@@ -107,6 +110,7 @@ def pack():
     elif system() == "AIX":
         buildout_file = 'buildout-pack-aix.cfg'
     execte_buildout(buildout_file)
+
 
 def clean():
     from os.path import abspath, pardir, exists
@@ -121,40 +125,39 @@ def clean():
     parts = sep.join([base, 'parts'])
     installed_file = sep.join([base, '.installed-build.cfg'])
 
-    print "base = %s" % repr(base)
+    print("base = %s" % repr(base))
 
     for tar_gz in glob(sep.join([base, '*tar.gz'])):
-        print "rm %s" % tar_gz
+        print("rm %s" % tar_gz)
         remove(tar_gz)
 
-    print "rm -rf %s" % repr(dist)
+    print("rm -rf %s" % repr(dist))
     _catch_and_print(rmtree, *[dist])
 
     src = sep.join([parts, 'buildout'])
     dst = sep.join([base, 'buildout'])
 
-    print "mv %s %s" % (repr(src), repr(dst))
+    print("mv %s %s" % (repr(src), repr(dst)))
     _catch_and_print(move, *[src, dst])
 
-    print "rm %s" % repr(installed_file)
+    print("rm %s" % repr(installed_file))
     if exists(installed_file):
         remove(installed_file)
 
-    print "rm -rf %s" % repr(parts)
+    print("rm -rf %s" % repr(parts))
     _catch_and_print(rmtree, *[parts])
 
-    print "mkdir %s" % repr(parts)
+    print("mkdir %s" % repr(parts))
     _catch_and_print(mkdir, *[parts])
 
     dst = sep.join([parts, 'buildout'])
     src = sep.join([base, 'buildout'])
-    print "mv %s %s" % (repr(src), repr(dst))
+    print("mv %s %s" % (repr(src), repr(dst)))
     _catch_and_print(move, *[src, dst])
 
 
 def _catch_and_print(func, *args, **kwargs):
     try:
         func(*args, **kwargs)
-    except (OSError, IOError), e:
-        print e
-
+    except (OSError, IOError) as e:
+        print(e)

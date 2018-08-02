@@ -47,7 +47,7 @@ class PythonPostMake(object):
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
         self.prefix = environ['PREFIX']
         self.environ = environ
-        print self.python_source_path, self.pcbuild_path, self.prefix
+        print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
         self.move_libs()
@@ -66,7 +66,7 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
         _mk_path(dst)
         for item in src:
-            if 'python35.dll' in item:
+            if 'python37.dll' in item:
                 continue
             cmd = 'mv %s %s' % (item, dst)
             _system(cmd)
@@ -138,11 +138,11 @@ def _mk_path(path):
 def _copy_files(src_glob, dst):
     _mk_path(dst)
     for item in src_glob:
-        print 'cp %s %s' % (item, dst)
+        print('cp %s %s' % (item, dst))
         shutil.copy(item, dst)
 
 def _system(cmd):
-    print cmd
+    print(cmd)
     os.system(cmd.replace(os.path.sep, '/'))
 
 def libevent_post_make(options, buildout, environ):

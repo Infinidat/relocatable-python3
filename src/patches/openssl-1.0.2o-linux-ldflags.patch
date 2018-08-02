@@ -1,0 +1,20 @@
+Index: openssl-1.0.2o/Makefile.shared
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- openssl-1.0.2o/Makefile.shared	(date 1532422464000)
++++ openssl-1.0.2o/Makefile.shared	(date 1532422464000)
+@@ -151,9 +151,10 @@
+ 	SHLIB_SUFFIX=; \
+ 	ALLSYMSFLAGS='-Wl,--whole-archive'; \
+ 	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
+-	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared -Wl,-Bsymbolic -Wl,-soname=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX"
++	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared -Wl,-Bsymbolic -Wl,-soname=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX"; \
++	LDFLAGS="$(LDFLAGS) $(CFLAGS)"
+ 
+-DO_GNU_APP=LDFLAGS="$(CFLAGS) -Wl,-rpath,$(LIBRPATH)"
++DO_GNU_APP=LDFLAGS="$(LDFLAGS) $(CFLAGS)"
+ 
+ #This is rather special.  It's a special target with which one can link
+ #applications without bothering with any features that have anything to

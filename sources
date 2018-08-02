@@ -17,6 +17,7 @@ libffi-3.2.1.tar.gz                     ftp://sourceware.org/pub/libffi/libffi-3
 libgcrypt-1.5.0.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.5.0.tar.bz2
 libgcrypt-1.5.3.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.5.3.tar.bz2
 libgpg-error-1.10.tar.bz2               http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.10.tar.bz2
+libgpg-error-1.31.tar.bz2               https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2
 libiconv-1.11.1.tar.gz                  http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.11.1.tar.gz
 libiconv-1.13.1.tar.gz                  http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.13.1.tar.gz
 libiconv-1.9.1.tar.gz                   http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.9.1.tar.gz
@@ -31,8 +32,8 @@ openssh-7.3p1.tar.gz                    http://ftp.spline.de/pub/OpenBSD/OpenSSH
 openssh-5.8p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-5.8p1.tar.gz
 openssl-1.0.1j.tar.gz                   https://www.openssl.org/source/openssl-1.0.1j.tar.gz
 openssl-1.0.2h.tar.gz                   https://www.openssl.org/source/openssl-1.0.2h.tar.gz
-Python-3.5.1.tgz                        https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz
-readline-6.3.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
+Python-3.7.0.tgz                        https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz
+readline-6.3.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.3.tar.gz
 sqlite-autoconf-3070602.tar.gz          ftp://ftp.funet.fi/ftp/pub/NetBSD/packages/distfiles/sqlite-autoconf-3070602.tar.gz
 tcl8.5.15-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.5.15-src.tar.gz
 tk8.5.15-src.tar.gz                     http://prdownloads.sourceforge.net/tcl/tk8.5.15-src.tar.gz
