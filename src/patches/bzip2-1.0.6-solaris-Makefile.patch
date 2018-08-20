@@ -45,7 +45,7 @@ index 7eb730a..044b3bd 100644
 +	ginstall bzip2recover $(PREFIX)/bin/bzip2recover
 +	ginstall bzip2.1 $(PREFIX)/man/man1
 +	ginstall bzlib.h $(PREFIX)/include
-+	ginstall libbz2.a $(PREFIX)/lib
++	ginstall libbz2.a $(PREFIX)/lib64
 +	ginstall bzgrep $(PREFIX)/bin/bzgrep
  	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzegrep
  	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzfgrep
@@ -73,12 +73,3 @@ index 7eb730a..044b3bd 100644
  	rm -f *.o libbz2.a bzip2 bzip2recover \
  	sample1.rb2 sample2.rb2 sample3.rb2 \
  	sample1.tst sample2.tst sample3.tst
-@@ -203,7 +190,7 @@ dist: check manual
- # For rebuilding the manual from sources on my SuSE 9.1 box
- 
- MANUAL_SRCS= 	bz-common.xsl bz-fo.xsl bz-html.xsl bzip.css \
--		entities.xml manual.xml 
-+		entities.xml manual.xml
- 
- manual: manual.html manual.ps manual.pdf
- 

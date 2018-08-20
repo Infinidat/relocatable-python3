@@ -1,0 +1,17 @@
+Index: cyrus-sasl-2.1.27/Makefile.in
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cyrus-sasl-2.1.27/Makefile.in	(date 1533567190000)
++++ cyrus-sasl-2.1.27/Makefile.in	(date 1533567190000)
+@@ -200,8 +200,7 @@
+ ETAGS = etags
+ CTAGS = ctags
+ CSCOPE = cscope
+-DIST_SUBDIRS = include sasldb common lib plugins utils pwcheck sample \
+-	java saslauthd
++DIST_SUBDIRS = include sasldb common lib plugins utils pwcheck sample
+ am__DIST_COMMON = $(dist_man3_MANS) $(srcdir)/Makefile.in \
+ 	$(srcdir)/config.h.in $(srcdir)/libsasl2.pc.in \
+ 	$(top_srcdir)/config/compile $(top_srcdir)/config/config.guess \

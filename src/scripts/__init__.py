@@ -34,65 +34,45 @@ def build():
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
-        from platform import dist, linux_distribution, architecture
+        from platform import dist, linux_distribution, architecture, uname
         _, version, distid = linux_distribution()
+        gcc_version = map(int, execute_assert_success(["gcc", "-dumpversion"]).get_stdout().split('.'))
         dist_name = dist()[0].lower()
         environ["ABI"] = architecture()[0][:2]
         environ["_PYTHON_HOST_PLATFORM"] = 'osf1' if platform.startswith('osf1') else platform
-        if dist_name == 'ubuntu':
-            version = int(version.split('.')[0])
-            if version >= 16:
-                buildout_file = 'buildout-build-ubuntu-16.04.cfg'
-            else:
-                buildout_file = 'buildout-build-ubuntu.cfg'
+        if gcc_version >= [4, 9]:
+            environ["_WITH_LTO"] = 'true'
         if dist_name in ['redhat', 'centos']:
-            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-            if 'ppc64le' in arch:
-                buildout_file = 'buildout-build-redhat-ppc64le.cfg'
-            elif 'ppc64' in arch:
-                buildout_file = 'buildout-build-redhat-ppc64.cfg'
-            elif 'i386' in arch:
-                buildout_file = 'buildout-build-redhat-32bit.cfg'
-            elif int(version.split(".")[0]) > 6 or (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
+            buildout_file = 'buildout-build-redhat.cfg'
+            if map(int, version.split('.')) >= [6, 4] and "x86_64" in uname():
                 # arch is 64 bit and supports libvirt
                 buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
-            else:
-                # arch is 64 bit
-                buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse']:
-            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-            if 'ppc64le' in arch:
-                buildout_file = 'buildout-build-suse-ppc64le.cfg'
-            elif 'ppc64' in arch:
-                buildout_file = 'buildout-build-suse-ppc64.cfg'
+            buildout_file = 'buildout-build-redhat.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
-        gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout()
-        if 'version 5.' in gcc_version:
-            buildout_file = 'buildout-build-osx-xcode-5.cfg'
-        elif 'version 6.' in gcc_version:
-            buildout_file = 'buildout-build-osx-xcode-6.cfg'
-        elif 'version 7.' in gcc_version:
-            buildout_file = 'buildout-build-osx-xcode-7.cfg'
-        elif 'version 8.' in gcc_version:
-            buildout_file = 'buildout-build-osx-xcode-8.cfg'
-        elif 'version 9.' in gcc_version:
-            buildout_file = 'buildout-build-osx-xcode-8.cfg'
-        else:
-            buildout_file = 'buildout-build-osx.cfg'
+        # gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout()
+        # if 'version 5.' in gcc_version:
+        #     buildout_file = 'buildout-build-osx-xcode-5.cfg'
+        # elif 'version 6.' in gcc_version:
+        #     buildout_file = 'buildout-build-osx-xcode-6.cfg'
+        # elif 'version 7.' in gcc_version:
+        #     buildout_file = 'buildout-build-osx-xcode-7.cfg'
+        # elif 'version 8.' in gcc_version:
+        #     buildout_file = 'buildout-build-osx-xcode-8.cfg'
+        # elif 'version 9.' in gcc_version:
+        #     buildout_file = 'buildout-build-osx-xcode-8.cfg'
+        # else:
+        buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
         if maxsize > 2**32:
             buildout_file = 'buildout-build-windows-64bit.cfg'
         else:
             buildout_file = 'buildout-build-windows.cfg'
     elif system() == "SunOS":
-        if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
-            buildout_file = 'buildout-build-solaris-sparc.cfg'
-        elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
-            buildout_file = 'buildout-build-solaris-64bit.cfg'
-        else:
-            pass  # TODO support 32 bit
+        buildout_file = 'buildout-build-solaris.cfg'
+        # TODO support 32 bit
     elif system() == "AIX":
         from os import uname
         aix_version = "{0[3]}.{0[2]}".format(uname())

@@ -1,0 +1,16 @@
+Index: zeromq-4.2.5/src/config.hpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- zeromq-4.2.5/src/config.hpp	(date 1534428991000)
++++ zeromq-4.2.5/src/config.hpp	(date 1534428991000)
+@@ -29,7 +29,7 @@
+ 
+ #ifndef __ZMQ_CONFIG_HPP_INCLUDED__
+ #define __ZMQ_CONFIG_HPP_INCLUDED__
+-
++#define __cplusplus 201102L
+ namespace zmq
+ {
+ //  Compile-time settings.

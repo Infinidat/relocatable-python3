@@ -63,9 +63,24 @@ def patch_ncurses(options, buildout, version):
         print('fixing files "%s"' % item)
         filepath = item
         content = open(filepath).read()
-        src = 'LIBRARIES\t=  ../lib/libncurses.dylib'
-        dst = 'LIBRARIES\t=  ../lib/libncurses.${ABI_VERSION}.dylib'
-        open(filepath, 'w').write(content.replace(src, dst).replace('-o$@', '-o $@'))
+        content.replace('LIBRARIES\t=  ../lib/libncurses.dylib', 'LIBRARIES\t=  ../lib/libncurses.${ABI_VERSION}.dylib')
+        content.replace('-o$@', '-o $@')
+        open(filepath, 'w').write(content)
+
+def symlink_ncurses(options, buildout, version):
+    from os import symlink
+    from os.path import join, exists
+    dist = options["prefix"]
+    dist_lib = join(dist, "lib")
+    files = [('libncurses++w.a', 'libncurses++.a'),
+             ('libncurses.a', 'libcurses.a'),
+             ('libncurses.dylib', 'libcurses.dylib'),
+             ('libncurses.a', 'libcurses.a'),
+             ('libncurses_g.a', 'libcurses_g.a')]
+    for src, dst in files:
+        if exists(join(dist_lib, src)) and not exists(join(dist_lib, dst)):
+            symlink(join(dist_lib, src), join(dist_lib, dst))
+
 
 def patch_openssl(options, buildout, version):
     from os import curdir
@@ -161,3 +176,33 @@ def autoreconf(options, buildout, version):
     process = Popen(['autoreconf'])
     assert process.wait() == 0
     change_install_name(options, buildout, version)
+
+
+def post_build_install_name(options, buildout, version):
+    import os
+    directory = options["prefix"]
+    install_name_tool(os.path.join(directory, 'lib'), directory, '@loader_path/', "*dylib")
+    install_name_tool(os.path.join(directory, 'bin'), directory, '@loader_path/../lib/')
+    install_name_tool(os.path.join(directory, 'sbin'), directory, '@loader_path/../lib/')
+
+
+def install_name_tool(walk_path, hardcode_prefix, dynamic_prefix, file_pattern="*"):
+    import os
+    import subprocess
+    import re
+    dylib_pattern = re.compile(r'\s*(.*)\s+\(')
+    for file_name in find_files(walk_path, file_pattern):
+        if os.path.islink(file_name):
+            continue
+
+        p = subprocess.Popen(['otool', '-L', file_name], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        output, err = p.communicate()
+        rc = p.returncode
+        output = output.decode()
+        libs = dylib_pattern.findall(output)
+        for l in libs:
+            if hardcode_prefix in l:
+                lib = os.path.basename(l)
+                subprocess.call(['install_name_tool', '-change', l, dynamic_prefix + lib, file_name])
+        subprocess.call(['install_name_tool', '-change', hardcode_prefix + '/lib', dynamic_prefix, file_name])

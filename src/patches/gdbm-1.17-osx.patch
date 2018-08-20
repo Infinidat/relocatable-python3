@@ -1,0 +1,16 @@
+Index: gdbm-1.17/src/gdbmsync.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gdbm-1.17/src/gdbmsync.c	(date 1533823040000)
++++ gdbm-1.17/src/gdbmsync.c	(date 1533823040000)
+@@ -28,7 +28,7 @@
+ gdbm_sync (GDBM_FILE dbf)
+ {
+   /* Return immediately if the database needs recovery */	
+-  GDBM_ASSERT_CONSISTENCY (dbf, );
++  GDBM_ASSERT_CONSISTENCY (dbf, -1);
+ 
+   /* Initialize the gdbm_errno variable. */
+   gdbm_set_errno (dbf, GDBM_NO_ERROR, FALSE);

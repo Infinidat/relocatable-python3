@@ -1,12 +1,14 @@
 import ssl
 import hashlib
 import ctypes
+import _ctypes
+import _uuid
 import readline
 import dbm
 import _gdbm
 import lzma
 import zlib
-
+import _curses_panel
 
 def main():
     # hopefully, even the oldest ca-certificates will verify node js npm registry
