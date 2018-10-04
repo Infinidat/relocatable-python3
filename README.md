@@ -11,11 +11,11 @@ The current supported platforms are: Linux, macOS, Windows, Solaris and AIX.
 
 In order to build python, execute:
 
-    sh build.sh
+    make
 
 Or, for Windows:
 
-    build.bat
+    nmake -f Makefile.win
 
 **For Python 3.x, see [relocatable-python3](https://github.com/Infinidat/relocatable-python3)**
 
