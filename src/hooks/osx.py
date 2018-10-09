@@ -181,7 +181,8 @@ def autoreconf(options, buildout, version):
 def post_build_install_name(options, buildout, version):
     import os
     directory = options["prefix"]
-    install_name_tool(os.path.join(directory, 'lib'), directory, '@loader_path/', "*dylib")
+    install_name_tool(os.path.join(directory, 'lib'), directory, '@loader_path/../lib/', "*.dylib")
+    install_name_tool(os.path.join(directory, 'lib'), directory, '@loader_path/../lib/', "*.so")
     install_name_tool(os.path.join(directory, 'bin'), directory, '@loader_path/../lib/')
     install_name_tool(os.path.join(directory, 'sbin'), directory, '@loader_path/../lib/')
 

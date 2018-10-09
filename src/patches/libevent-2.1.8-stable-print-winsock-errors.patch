@@ -1,0 +1,15 @@
+Index: libevent-2.1.8-stable/test/include.am
+IDEA additional info: https://github.com/libevent/libevent/issues/523
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- libevent-2.1.8-stable/test/include.am	(date 1535469246000)
++++ libevent-2.1.8-stable/test/include.am	(date 1535469246000)
+@@ -12,6 +12,7 @@
+ 	test/regress.gen.h				\
+ 	test/regress.rpc				\
+ 	test/rpcgen_wrapper.sh			\
++	test/print-winsock-errors.c         \
+ 	test/test.sh
+ 
+ TESTPROGRAMS = \

@@ -66,9 +66,9 @@ def build():
         # else:
         buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
-        if maxsize > 2**32:
-            buildout_file = 'buildout-build-windows-64bit.cfg'
-        else:
+        # if maxsize > 2**32:
+        #     buildout_file = 'buildout-build-windows-64bit.cfg'
+        # else:
             buildout_file = 'buildout-build-windows.cfg'
     elif system() == "SunOS":
         buildout_file = 'buildout-build-solaris.cfg'

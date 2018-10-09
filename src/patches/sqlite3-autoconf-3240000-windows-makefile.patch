@@ -1,0 +1,103 @@
+Index: sqlite-autoconf-3240000/tea/win/makefile.vc
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- sqlite-autoconf-3240000/tea/win/makefile.vc	(date 1535461858000)
++++ sqlite-autoconf-3240000/tea/win/makefile.vc	(date 1535461858000)
+@@ -180,6 +180,7 @@
+ 
+ BINROOT		= .
+ ROOT            = ..
++ROOT_PARENT            = ..\..
+ 
+ PRJIMPLIB	= $(OUT_DIR)\$(PROJECT)$(VERSION)$(SUFX).lib
+ PRJLIBNAME	= $(PROJECT)$(VERSION)$(SUFX).$(EXT)
+@@ -189,18 +190,19 @@
+ PRJSTUBLIB	= $(OUT_DIR)\$(PRJSTUBLIBNAME)
+ 
+ ### Make sure we use backslash only.
+-PRJ_INSTALL_DIR         = $(_INSTALLDIR)\$(PROJECT)$(DOTVERSION)
+-LIB_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+-BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+-DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+-SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)
+-INCLUDE_INSTALL_DIR	= $(_TCLDIR)\include
++PRJ_INSTALL_DIR         = $(_INSTALLDIR)
++LIB_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\..\lib
++BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\bin
++DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)\doc
++SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)\bin
++INCLUDE_INSTALL_DIR	= $(PRJ_INSTALL_DIR)\..\include
+ 
+ ### The following paths CANNOT have spaces in them.
+ GENERICDIR	= $(ROOT)\generic
+ WINDIR		= $(ROOT)\win
+ LIBDIR          = $(ROOT)\library
+ DOCDIR		= $(ROOT)\doc
++INCLUDEDIR	= $(ROOT_PARENT)
+ TOOLSDIR	= $(ROOT)\tools
+ COMPATDIR	= $(ROOT)\compat
+ 
+@@ -278,7 +280,6 @@
+ lflags	= $(lflags) -ws:aggressive
+ !endif
+ 
+-dlllflags = $(lflags) -dll
+ conlflags = $(lflags) -subsystem:console
+ guilflags = $(lflags) -subsystem:windows
+ baselibs   = $(TCLSTUBLIB)
+@@ -297,7 +298,7 @@
+ 
+ all:	    setup $(PROJECT)
+ $(PROJECT): setup $(PRJLIB)
+-install:    install-binaries install-libraries install-docs
++install:    install-libraries install-headers
+ 
+ # Tests need to ensure we load the right dll file we
+ # have to handle the output differently on Win9x.
+@@ -329,14 +330,11 @@
+ 	@if not exist $(TMP_DIR)\nul mkdir $(TMP_DIR)
+ 
+ $(PRJLIB): $(DLLOBJS)
+-	$(link32) $(dlllflags) -out:$@ $(baselibs) @<<
++	$(lib32) -out:$@ $(baselibs) @<<
+ $**
+ <<
+ 	-@del $*.exp
+ 
+-$(PRJSTUBLIB): $(PRJSTUBOBJS)
+-	$(lib32) -nologo -out:$@ $(PRJSTUBOBJS)
+-
+ #---------------------------------------------------------------------
+ # Implicit rules
+ #---------------------------------------------------------------------
+@@ -380,23 +378,13 @@
+ #
+ #---------------------------------------------------------------------
+ 
+-install-binaries:
+-	@echo Installing binaries to '$(SCRIPT_INSTALL_DIR)'
+-	@if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
+-	@$(CPY) $(PRJLIB) "$(SCRIPT_INSTALL_DIR)" >NUL
+-
+ install-libraries:
+-        @echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
+-        @if exist $(LIBDIR) $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)"
+-        @echo Installing package index in '$(SCRIPT_INSTALL_DIR)'
+-        @type << >"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+-package ifneeded $(PROJECT) $(DOTVERSION) \
+-    [list load [file join $$dir $(PRJLIBNAME)] sqlite3]
+-<<
++    @echo Installing libraries to '$(LIB_INSTALL_DIR)'
++    @if exist $(OUT_DIR) $(CPY) $(OUT_DIR)\*.lib "$(LIB_INSTALL_DIR)"
+ 
+-install-docs:
+-	@echo Installing documentation files to '$(DOC_INSTALL_DIR)'
+-	@if exist $(DOCDIR) $(CPY) $(DOCDIR)\*.n "$(DOC_INSTALL_DIR)"
++install-headers:
++    @echo Installing header files to '$(INCLUDE_INSTALL_DIR)'
++    @if exist $(INCLUDEDIR) $(CPY) $(INCLUDEDIR)\*.h "$(INCLUDE_INSTALL_DIR)"
+ 
+ #---------------------------------------------------------------------
+ # Clean up

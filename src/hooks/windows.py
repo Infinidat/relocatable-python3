@@ -26,6 +26,13 @@ def xz_post_make(options, buildout, environ):
 def xz_post_make64(options, buildout, environ):
     _xz_post_make(environ, "x86-64")
 
+def gettext_post_make(options, buildout, environ):
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    os.system('cp -fv libiconv-1.14/iconv.h %s/include' % prefix)
+    os.system('cp -fv libiconv-1.14/localcharset.h %s/include' % prefix)
+    os.system('cp -fv gettext-0.19.4/libgnuintl.h %s/include' % prefix)
+    os.system('mklink {0}/lib/iconv.lib {0}/lib/libiconv.lib'.format(prefix))
+
 def _db_post_make(platform_name, prefix):
     import os
     os.system('cp -fvr build_windows/*h %s/include' % prefix)
@@ -106,13 +113,13 @@ class PythonPostMake(object):
 
     def _copy_crt_assemblies(self, dst):
         os.makedirs(dst)
-        src = glob.glob(path.join(self.environ['VC100CRT'], '*'))
+        src = glob.glob(path.join(self.environ['VC140CRT'], '*'))
         _copy_files(src, dst)
 
     def copy_crt_assemblies(self):
-        dst = path.join(self.prefix, 'bin', 'Microsoft.VC100.CRT')
+        dst = path.join(self.prefix, 'bin', 'Microsoft.VC140.CRT')
         self._copy_crt_assemblies(dst)
-        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC100.CRT')
+        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC140.CRT')
         self._copy_crt_assemblies(dst)
 
     def make_includes(self):

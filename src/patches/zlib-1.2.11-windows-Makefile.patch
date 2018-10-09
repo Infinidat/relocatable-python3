@@ -1,0 +1,28 @@
+Index: zlib-1.2.11/win32/Makefile.msc
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- zlib-1.2.11/win32/Makefile.msc	(date 1535030259000)
++++ zlib-1.2.11/win32/Makefile.msc	(date 1535030259000)
+@@ -26,7 +26,7 @@
+ LD = link
+ AR = lib
+ RC = rc
+-CFLAGS  = -nologo -MD -W3 -O2 -Oy- -Zi -Fd"zlib" $(LOC)
++CFLAGS  = -nologo -MT -W3 -O2 -Oy- -Zi -Fd"zlib" $(LOC)
+ WFLAGS  = -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+ ASFLAGS = -coff -Zi $(LOC)
+ LDFLAGS = -nologo -debug -incremental:no -opt:ref
+@@ -161,3 +161,11 @@
+ 	-del *.pdb
+ 	-del *.manifest
+ 	-del foo.gz
++
++install:
++    -cp zlib.h $(PREFIX)\include
++    -cp zlibdefs.h $(PREFIX)\include
++    -cp zconf.h $(PREFIX)\include
++    -cp *.lib $(PREFIX)\lib
++    -cp *.dll $(PREFIX)\lib
++
