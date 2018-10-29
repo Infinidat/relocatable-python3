@@ -38,7 +38,7 @@ def build():
         _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
-            if version == '16.04':
+            if version >= '16.04':
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
@@ -63,6 +63,8 @@ def build():
                 buildout_file = 'buildout-build-suse-ppc64le.cfg'
             elif 'ppc64' in arch:
                 buildout_file = 'buildout-build-suse-ppc64.cfg'
+            elif version == "15":
+                buildout_file = 'buildout-build-suse-15.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
