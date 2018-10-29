@@ -38,36 +38,33 @@ def build():
         _, version, distid = linux_distribution()
         dist_name = dist()[0].lower()
         if dist_name == 'ubuntu':
-            if version == '16.04':
+            if version >= '16.04':
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos']:
-            if maxsize > 2**32:
-                arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-                if 'ppc64le' in arch:
-                    buildout_file = 'buildout-build-redhat-ppc64le.cfg'
-                elif 'ppc64' in arch:
-                    buildout_file = 'buildout-build-redhat-ppc64.cfg'
-                else:
-                    if version.startswith('4.'):
-                        buildout_file = 'buildout-build-redhat-4-64bit.cfg'
-                    else:
-                        buildout_file = 'buildout-build-redhat-64bit.cfg'
+            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+            if 'ppc64le' in arch:
+                buildout_file = 'buildout-build-redhat-ppc64le.cfg'
+            elif 'ppc64' in arch:
+                buildout_file = 'buildout-build-redhat-ppc64.cfg'
+            elif 'i386' in arch:
+                buildout_file = 'buildout-build-redhat-32bit.cfg'
+            elif int(version.split(".")[0]) > 6 or \
+                (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
+                # arch is 64 bit and supports libvirt
+                buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
             else:
-                if version.startswith('4.'):
-                    buildout_file = 'buildout-build-redhat-4-32bit.cfg'
-                else:
-                    buildout_file = 'buildout-build-redhat-32bit.cfg'
+                # arch is 64 bit
+                buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse']:
-            if version in ['10']:
-                buildout_file = 'buildout-build-suse-10.cfg'
-            else:
-                arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-                if 'ppc64le' in arch:
-                    buildout_file = 'buildout-build-suse-ppc64le.cfg'
-                elif 'ppc64' in arch:
-                    buildout_file = 'buildout-build-suse-ppc64.cfg'
+            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
+            if 'ppc64le' in arch:
+                buildout_file = 'buildout-build-suse-ppc64le.cfg'
+            elif 'ppc64' in arch:
+                buildout_file = 'buildout-build-suse-ppc64.cfg'
+            elif version == "15":
+                buildout_file = 'buildout-build-suse-15.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])

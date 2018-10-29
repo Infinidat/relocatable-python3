@@ -32,7 +32,7 @@ openssh-5.8p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenS
 openssl-1.0.1j.tar.gz                   https://www.openssl.org/source/openssl-1.0.1j.tar.gz
 openssl-1.0.2h.tar.gz                   https://www.openssl.org/source/openssl-1.0.2h.tar.gz
 Python-2.7.8.tgz                        https://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz
-readline-6.2.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
+readline-6.3.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.3.tar.gz
 sqlite-autoconf-3070602.tar.gz          ftp://ftp.funet.fi/ftp/pub/NetBSD/packages/distfiles/sqlite-autoconf-3070602.tar.gz
 tcl8.5.15-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.5.15-src.tar.gz
 tk8.5.15-src.tar.gz                     http://prdownloads.sourceforge.net/tcl/tk8.5.15-src.tar.gz
