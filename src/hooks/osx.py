@@ -24,7 +24,7 @@ def change_install_name_in_file(filepath):
     open(filepath, 'w').write(sub(pattern, repl, content))
 
 def remove_rpath_in_file(filepath):
-    print("pre-configure-hook: changing install_name in %s" % filepath)
+    print("pre-configure-hook: removing rpath in %s" % filepath)
     content = open(filepath).read()
     content = content.replace(r'$rpath/$soname', r'@rpath/$soname')
     content = content.replace(r'\$rpath/\$soname', r'@rpath/\$soname')
@@ -53,6 +53,9 @@ def change_install_name(options, buildout, version):
         change_install_name_in_file(item)
         remove_rpath_in_file(item)
     for item in find_files(abspath(curdir), 'aclocal.m4'):
+        change_install_name_in_file(item)
+        remove_rpath_in_file(item)
+    for item in find_files(abspath(curdir), 'shobj-conf'):
         change_install_name_in_file(item)
         remove_rpath_in_file(item)
 
@@ -94,6 +97,7 @@ def patch_openssl(options, buildout, version):
         content = content.replace('-rpath $(LIBRPATH)', '')
         content = content.replace("-install_name $(INSTALLTOP)/$(LIBDIR)", "-install_name @rpath")
         open(filepath, 'w').write(content)
+
 
 def patch_pdb(options, buildout, version):
     import pdb
