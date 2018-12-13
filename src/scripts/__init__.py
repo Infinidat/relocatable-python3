@@ -42,28 +42,11 @@ def build():
         environ["_PYTHON_HOST_PLATFORM"] = 'osf1' if platform.startswith('osf1') else platform
         if gcc_version >= [4, 9]:
             environ["_WITH_LTO"] = 'true'
-        if dist_name in ['redhat', 'centos']:
-            buildout_file = 'buildout-build-redhat.cfg'
-            if map(int, version.split('.')) >= [6, 4] and "x86_64" in uname():
-                # arch is 64 bit and supports libvirt
-                buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
-        if dist_name in ['suse']:
+        if dist_name in ['redhat', 'centos', 'suse']:
             buildout_file = 'buildout-build-redhat.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
-        # gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout()
-        # if 'version 5.' in gcc_version:
-        #     buildout_file = 'buildout-build-osx-xcode-5.cfg'
-        # elif 'version 6.' in gcc_version:
-        #     buildout_file = 'buildout-build-osx-xcode-6.cfg'
-        # elif 'version 7.' in gcc_version:
-        #     buildout_file = 'buildout-build-osx-xcode-7.cfg'
-        # elif 'version 8.' in gcc_version:
-        #     buildout_file = 'buildout-build-osx-xcode-8.cfg'
-        # elif 'version 9.' in gcc_version:
-        #     buildout_file = 'buildout-build-osx-xcode-8.cfg'
-        # else:
         buildout_file = 'buildout-build-osx.cfg'
     elif system() == 'Windows':
         # if maxsize > 2**32:
