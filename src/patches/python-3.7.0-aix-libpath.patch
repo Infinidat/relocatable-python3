@@ -1,3 +1,22 @@
+Index: cpython/Lib/subprocess.py
+--- cpython/Lib/subprocess.py	(date 1544947261000)
++++ cpython/Lib/subprocess.py	(date 1544947261000)
+@@ -1404,10 +1404,11 @@
+                     if env is not None:
+                         env_list = []
+                         for k, v in env.items():
+-                            k = os.fsencode(k)
+-                            if b'=' in k:
+-                                raise ValueError("illegal environment variable name")
+-                            env_list.append(k + b'=' + os.fsencode(v))
++                            if k != 'LIBPATH':
++                                k = os.fsencode(k)
++                                if b'=' in k:
++                                    raise ValueError("illegal environment variable name")
++                                env_list.append(k + b'=' + os.fsencode(v))
+                     else:
+                         env_list = None  # Use execv instead of execve.
+                     executable = os.fsencode(executable)
 Index: cpython/Modules/posixmodule.c
 --- cpython/Modules/posixmodule.c	(date 1528994252000)
 +++ cpython/Modules/posixmodule.c	(date 1528994252000)
