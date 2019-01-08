@@ -211,3 +211,11 @@ def install_name_tool(walk_path, hardcode_prefix, dynamic_prefix, file_pattern="
                 lib = os.path.basename(l)
                 subprocess.call(['install_name_tool', '-change', l, dynamic_prefix + lib, file_name])
         subprocess.call(['install_name_tool', '-change', hardcode_prefix + '/lib', dynamic_prefix, file_name])
+
+
+def python_post_make(options, buildout, version):
+    import imp
+    posix = imp.load_source('posix', '{}/posix.py'.format(options.get('hooks-dir')))
+    post_build_install_name(options, buildout, version)
+    posix.fix_sysconfigdata(options, buildout, version)
+    posix.link_python_binary(options, buildout, version)
