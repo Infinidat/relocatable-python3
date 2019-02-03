@@ -11,7 +11,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
  CSCOPE = cscope
 -DIST_SUBDIRS = include sasldb common lib plugins utils pwcheck sample \
 -	java saslauthd
-+DIST_SUBDIRS = include sasldb common lib plugins utils pwcheck sample
++DIST_SUBDIRS = include sasldb common lib plugins utils pwcheck
  am__DIST_COMMON = $(dist_man3_MANS) $(srcdir)/Makefile.in \
  	$(srcdir)/config.h.in $(srcdir)/libsasl2.pc.in \
  	$(top_srcdir)/config/compile $(top_srcdir)/config/config.guess \
