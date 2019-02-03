@@ -11,7 +11,7 @@ for key, value in build_time_vars.items():
 def get_sysconfigdata_files(environ):
     from glob import glob
     from os import path
-    dist = path.join(environ.get("PWD"), path.abspath(path.join('.',  # Python-3.7.0
+    dist = path.join(environ.get("PWD"), path.abspath(path.join('.',  # Python-3.7
                                                                 path.pardir,  # python__compile__,
                                                                 path.pardir,  # parts,
                                                                 path.pardir,  # python-build
