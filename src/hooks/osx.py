@@ -88,13 +88,10 @@ def symlink_ncurses(options, buildout, version):
 def patch_openssl(options, buildout, version):
     from os import curdir
     from os.path import abspath
-    for item in find_files(abspath(curdir), 'Makefile*'):
+    for item in find_files(abspath(curdir), 'shared-info*'):
         print('fixing files "%s"' % item)
         filepath = item
         content = open(filepath).read()
-        content = content.replace('-Wl,-rpath,$(LIBRPATH)', '')
-        content = content.replace('-Wl,-rpath,$(LIBPATH)', '')
-        content = content.replace('-rpath $(LIBRPATH)', '')
         content = content.replace("-install_name $(INSTALLTOP)/$(LIBDIR)", "-install_name @rpath")
         open(filepath, 'w').write(content)
 
