@@ -11,6 +11,15 @@ for key, value in build_time_vars.items():
     build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python3.7/config") if isinstance(value, str) else value
 """
 
+def find_files(directory, pattern):
+    import os
+    import fnmatch
+    for root, dirs, files in os.walk(directory):
+        for basename in files:
+            if fnmatch.fnmatch(basename, pattern):
+                filename = os.path.join(root, basename)
+                yield filename
+
 def get_sysconfigdata_files(options):
     from glob import glob
     from os import path
@@ -49,9 +58,22 @@ def fix_max_memory(options, buildout, environ):
 def link_python_binary(options, buildout, environ):
     os.system("ln -s ./python3 {0}/bin/python".format(options["prefix"]))
 
+def check_relocatability(options, buildout, environ):
+    from os.path import abspath
+    from subprocess import check_output
+    print('\n====RELOCATABILITY CHECK====\n')
+    try:
+        for item in find_files(abspath(options["prefix"]), '*.so*'):
+            dump_output = check_output(['dump -H {} | grep "^0 " || true'.format(item)], shell=True)
+            if dump_output and '$ORIGIN' not in dump_output:
+                print("{} : dump: {}".format(item, dump_output))
+    except:
+        pass
+
 def python_post_make(options, buildout, environ):
     fix_max_memory(options, buildout, environ)
     create_blibpath_fix(options, buildout, environ)
     fix_sysconfigdata(options, buildout, environ)
     fix_large_files(options, buildout, environ)
     link_python_binary(options, buildout, environ)
+    check_relocatability(options, buildout, environ)

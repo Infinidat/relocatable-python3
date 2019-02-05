@@ -8,6 +8,17 @@ for key, value in build_time_vars.items():
     build_time_vars[key] = value.replace(old_prefix, prefix) if isinstance(value, str) else value
 """
 
+
+def find_files(directory, pattern):
+    import os
+    import fnmatch
+    for root, dirs, files in os.walk(directory):
+        for basename in files:
+            if fnmatch.fnmatch(basename, pattern):
+                filename = os.path.join(root, basename)
+                yield filename
+
+
 def get_sysconfigdata_files(environ):
     from glob import glob
     from os import path
@@ -52,6 +63,22 @@ def link_python_binary(options, buildout, environ):
     system("ln -s ./python3 {0}/bin/python".format(options["prefix"]))
 
 
+def check_relocatability(options, buildout, environ):
+    from os.path import abspath
+    from subprocess import check_output
+    print('\n====RELOCATABILITY CHECK====\n')
+    try:
+        for item in find_files(abspath(options["prefix"]), '*.so*'):
+            objdump_output = check_output(["objdump -x {} | grep PATH || true".format(item)], shell=True)
+            ldd_output = check_output(["ldd {} | grep usr || true".format(item)], shell=True)
+            if ldd_output:
+                print("{} : ldd: {}".format(item, ldd_output))
+            if objdump_output and '$ORIGIN' not in objdump_output:
+                print("{} : objdump: {}".format(item, objdump_output))
+    except:
+        pass
+
 def python_post_make(options, buildout, environ):
     fix_sysconfigdata(options, buildout, environ)
     link_python_binary(options, buildout, environ)
+    check_relocatability(options, buildout, environ)

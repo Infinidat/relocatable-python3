@@ -210,9 +210,22 @@ def install_name_tool(walk_path, hardcode_prefix, dynamic_prefix, file_pattern="
         subprocess.call(['install_name_tool', '-change', hardcode_prefix + '/lib', dynamic_prefix, file_name])
 
 
+def check_relocatability(options, buildout, environ):
+    from os.path import abspath
+    from subprocess import check_output
+    print('\n====RELOCATABILITY CHECK====\n')
+    try:
+        for item in find_files(abspath(options["prefix"]), '*.so*'):
+            ldd_output = check_output(["otool -l {} | grep usr || true".format(item)], shell=True)
+            if ldd_output:
+                print("{} : otool: {}".format(item, ldd_output))
+    except:
+        pass
+
 def python_post_make(options, buildout, version):
     import imp
     posix = imp.load_source('posix', '{}/posix.py'.format(options.get('hooks-dir')))
     post_build_install_name(options, buildout, version)
     posix.fix_sysconfigdata(options, buildout, version)
     posix.link_python_binary(options, buildout, version)
+    check_relocatability(options, buildout, version)
