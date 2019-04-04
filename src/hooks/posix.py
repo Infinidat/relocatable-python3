@@ -63,6 +63,18 @@ def link_python_binary(options, buildout, environ):
     system("ln -s ./python3 {0}/bin/python".format(options["prefix"]))
 
 
+def fix_lib64_libdir(options, buildout, environ):
+    from os import curdir
+    from os.path import abspath
+    from itertools import chain
+    files = chain(*[find_files(abspath(curdir), filename) for filename in ['configure', 'Makefile', 'Makefile.am', 'configure.in', 'Makefile.in']])
+    for item in files:
+        print('fixing file "%s"' % item)
+        content = open(item).read()
+        content = content.replace("$(prefix)/lib", "$(prefix)/lib64")
+        open(item, 'w').write(content)
+
+
 def check_relocatability(options, buildout, environ):
     from os.path import abspath
     from subprocess import check_output
