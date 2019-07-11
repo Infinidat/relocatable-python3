@@ -36,7 +36,7 @@ def build():
     if system() == 'Linux':
         from platform import dist, linux_distribution, architecture, uname
         _, version, distid = linux_distribution()
-        gcc_version = map(int, execute_assert_success(["gcc", "-dumpversion"]).get_stdout().split('.'))
+        gcc_version = [int(x) for x in execute_assert_success(["gcc", "-dumpversion"]).get_stdout().decode('utf-8').strip('\n').split('.')]
         dist_name = dist()[0].lower()
         environ["ABI"] = architecture()[0][:2]
         environ["_PYTHON_HOST_PLATFORM"] = 'osf1' if platform.startswith('osf1') else platform
