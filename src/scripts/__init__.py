@@ -52,8 +52,11 @@ def build():
                 buildout_file = 'buildout-build-redhat-32bit.cfg'
             elif int(version.split(".")[0]) > 6 or \
                 (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
-                # arch is 64 bit and supports libvirt
-                buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
+                if version >= '8.0':
+                    buildout_file = 'buildout-build-redhat-8-64bit.cfg'
+                else:
+                    # arch is 64 bit and supports libvirt
+                    buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
             else:
                 # arch is 64 bit
                 buildout_file = 'buildout-build-redhat-64bit.cfg'
