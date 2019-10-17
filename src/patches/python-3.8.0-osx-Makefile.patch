@@ -1,0 +1,17 @@
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 502317a..655398e 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -603,10 +603,10 @@ sharedmods: $(BUILDPYTHON) pybuilddir.txt Modules/_math.o
+ 	    *\ -s*|s*) quiet="-q";; \
+ 	    *) quiet="";; \
+ 	esac; \
+-	echo "$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
++	echo "$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' \
+ 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
+ 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build"; \
+-	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
++	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' CONFIG_ARGS='$(CONFIG_ARGS)' OPT='$(OPT)' \
+ 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
+ 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
+ 
