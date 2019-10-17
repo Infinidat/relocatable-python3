@@ -51,16 +51,11 @@ def build():
                 buildout_file = 'buildout-build-redhat-ppc64.cfg'
             elif 'i386' in arch:
                 buildout_file = 'buildout-build-redhat-32bit.cfg'
-            elif int(version.split(".")[0]) > 6 or \
-                (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
+            else:
                 if version.startswith('8'):
                     buildout_file = 'buildout-build-redhat-8-64bit.cfg'
                 else:
-                    # arch is 64 bit and supports libvirt
-                    buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
-            else:
-                # arch is 64 bit
-                buildout_file = 'buildout-build-redhat-64bit.cfg'
+                    buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse']:
             arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
             if 'ppc64le' in arch:
