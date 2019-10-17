@@ -1,0 +1,13 @@
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
+index 97973bc..c04cbf2 100644
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
+@@ -236,7 +236,7 @@ elif os.name == "posix":
+             with proc:
+                 for line in proc.stdout:
+                     line = line.strip()
+-                    if line.startswith(b'Default Library Path (ELF):'):
++                    if line.startswith(b'Default Library Path'):
+                         paths = os.fsdecode(line).split()[4]
+ 
+             if not paths:

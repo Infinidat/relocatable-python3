@@ -3,7 +3,7 @@ __import__("pkg_resources").declare_namespace(__name__)
 def _catch_and_print(func, *args, **kwargs):
     try:
         func(*args, **kwargs)
-    except (OSError, IOError), e:
+    except (OSError, IOError) as e:
         print e
 
 def find_files(directory, pattern):

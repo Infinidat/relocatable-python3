@@ -1,0 +1,15 @@
+diff --git a/Python/initconfig.c b/Python/initconfig.c
+index a41a329..313f269 100644
+--- a/Python/initconfig.c
++++ b/Python/initconfig.c
+@@ -1184,8 +1184,8 @@ config_init_home(PyConfig *config)
+         return _PyStatus_OK();
+     }
+ 
+-    return CONFIG_GET_ENV_DUP(config, &config->home,
+-                              L"PYTHONHOME", "PYTHONHOME");
++    config->home = NULL;
++    return _PyStatus_OK();
+ }
+ 
+ 

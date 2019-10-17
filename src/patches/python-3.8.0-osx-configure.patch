@@ -1,8 +1,8 @@
-diff --git i/configure w/configure
-index 101dd44..8ba484c 100755
---- i/configure
-+++ w/configure
-@@ -726,7 +726,6 @@ PYTHONFRAMEWORK
+diff --git a/configure b/configure
+index 2a933cd..5496177 100755
+--- a/configure
++++ b/configure
+@@ -745,7 +745,6 @@ PYTHONFRAMEWORK
  LIPO_32BIT_FLAGS
  ARCH_RUN_32BIT
  UNIVERSALSDK
@@ -10,7 +10,7 @@ index 101dd44..8ba484c 100755
  SOVERSION
  VERSION
  PYTHON_FOR_BUILD
-@@ -3033,7 +3032,6 @@ define_xopen_source=yes
+@@ -3009,7 +3008,6 @@ define_xopen_source=yes
  
  # Arguments passed to configure.
  

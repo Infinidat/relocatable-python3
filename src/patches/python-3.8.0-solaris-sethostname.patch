@@ -1,0 +1,15 @@
+diff --git a/Modules/socketmodule.c b/Modules/socketmodule.c
+index 594a0d6..ffa2424 100644
+--- a/Modules/socketmodule.c
++++ b/Modules/socketmodule.c
+@@ -5412,6 +5412,10 @@ socket_sethostname(PyObject *self, PyObject *args)
+ extern int sethostname(const char *, size_t);
+ #endif
+ 
++#if (defined(__sun) && defined(__SVR4))
++extern int sethostname(const char *, size_t);
++#endif
++
+     if (!PyArg_ParseTuple(args, "S:sethostname", &hnobj)) {
+         PyErr_Clear();
+         if (!PyArg_ParseTuple(args, "O&:sethostname",
