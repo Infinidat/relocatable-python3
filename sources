@@ -26,11 +26,10 @@ libxslt-1.1.26.tar.gz                   http://xmlsoft.org/sources/libxslt-1.1.2
 ncurses-5.9.tar.gz                      http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
 ncurses-6.0.tar.gz                      http://ftp.gnu.org/gnu/ncurses/ncurses-6.0.tar.gz
 nettle-2.7.1.tar.gz                     https://ftp.gnu.org/gnu/nettle/nettle-2.7.1.tar.gz
-openldap-stable-20100719.tgz            http://www.openldap.org/software/download/OpenLDAP/openldap-stable/openldap-stable-20100719.tgz
-openssh-7.3p1.tar.gz                    http://ftp.spline.de/pub/OpenBSD/OpenSSH/portable/openssh-7.3p1.tar.gz
-openssh-5.8p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-5.8p1.tar.gz
-openssl-1.0.1j.tar.gz                   https://www.openssl.org/source/openssl-1.0.1j.tar.gz
-openssl-1.0.2h.tar.gz                   https://www.openssl.org/source/openssl-1.0.2h.tar.gz
+openldap-2.4.47.tgz                     ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.4.47.tgz
+openssh-7.9p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.9p1.tar.gz
+openssl-1.0.8q.tar.gz                   https://www.openssl.org/source/openssl-1.0.8q.tar.gz
+openssl-1.1.1d.tar.gz                   https://www.openssl.org/source/openssl-1.1.1d.tar.gz
 Python-3.8.0.tgz                        https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz
 readline-6.3.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
 sqlite-autoconf-3070602.tar.gz          ftp://ftp.funet.fi/ftp/pub/NetBSD/packages/distfiles/sqlite-autoconf-3070602.tar.gz
