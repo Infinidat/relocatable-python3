@@ -1,8 +1,11 @@
-diff --git a/Makefile.org b/Makefile.org
-index 76fdbdf..7d3072e 100644
---- a/Makefile.org
-+++ b/Makefile.org
-@@ -536,9 +536,6 @@ install_sw:
+Index: openssl-1.0.2o/Makefile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- openssl-1.0.2o/Makefile	(date 1532422245000)
++++ openssl-1.0.2o/Makefile	(date 1532422245000)
+@@ -550,9 +550,6 @@
  		$(INSTALL_PREFIX)$(INSTALLTOP)/$(LIBDIR)/engines \
  		$(INSTALL_PREFIX)$(INSTALLTOP)/$(LIBDIR)/pkgconfig \
  		$(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl \
