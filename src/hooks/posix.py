@@ -22,7 +22,7 @@ def find_files(directory, pattern):
 def get_sysconfigdata_files(environ):
     from glob import glob
     from os import path
-    dist = path.join(environ.get("PWD"), path.abspath(path.join('.',  # Python-3.7
+    dist = path.join(environ.get("PWD"), path.abspath(path.join('.',  # Python-3.x
                                                                 path.pardir,  # python__compile__,
                                                                 path.pardir,  # parts,
                                                                 path.pardir,  # python-build
@@ -40,8 +40,8 @@ def purge_sysconfigdata(path):
 
 def fix_linker_rpath(path):
     # we want to link against the .so files in python/lib, but $ORIGIN may point to
-    # python/lib/python3.7/site-packages/<package-root>/<package-src>
-    # (e.g. python/lib/python3.7/site-packages/lxml-3.4.1-py3.7-linux-i686.egg/lxml)
+    # python/lib/python3.x/site-packages/<package-root>/<package-src>
+    # (e.g. python/lib/python3.x/site-packages/lxml-3.4.1-py3.x-linux-i686.egg/lxml)
     # so we add $ORIGIN/../../../.. to rpath in linker options
     src_str = r"-Wl,-rpath,\\$ORIGIN/../.."
     dst_str = r"-Wl,-rpath,\\$ORIGIN/../..,-rpath,\\$ORIGIN/../../../.."

@@ -8,7 +8,7 @@ old_prefix = build_time_vars.get("prefix", "_some_path_that_does_not_exist")
 
 for key, value in build_time_vars.items():
     value = value.replace(old_prefix, prefix) if isinstance(value, str) else value
-    build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python3.7/config") if isinstance(value, str) else value
+    build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python3.x/config") if isinstance(value, str) else value
 """
 
 def find_files(directory, pattern):
@@ -34,8 +34,10 @@ def purge_sysconfigdata(path):
         fd.write(TRICK)
 
 def create_blibpath_fix(options, buildout, environ):
-    os.system("mv {0}/bin/python3.7 {0}/bin/python3.7.bin".format(options["prefix"]))
-    os.system("gcc -s {}/aix.c -o {}/bin/python3.7".format(options["hooks-dir"], options["prefix"]))
+    os.system("mv {0}/bin/python{1} {0}/bin/python{1}.bin".format(options["prefix"], options["py_major"]))
+    os.system("gcc -s {0}/aix.c -o {1}/bin/python{2}".format(options["hooks-dir"], options["prefix"],
+                                                             options["py_major"]))
+
 
 def fix_sysconfigdata(options, buildout, environ):
     for path in get_sysconfigdata_files(options):
@@ -44,7 +46,7 @@ def fix_sysconfigdata(options, buildout, environ):
 def fix_large_files(options, buildout, environ):
     # _LARGE_FILES definition causes redefinition errors in external library compilation
     dist = options["prefix"]
-    pyconfig_path = os.path.join(dist, "include", "python3.7m", "pyconfig.h")
+    pyconfig_path = os.path.join(dist, "include", "python{}m".format(options["py_major"]), "pyconfig.h")
     with open(pyconfig_path, "r") as fd:
         data = fd.read()
     data = data.replace("#define _LARGE_FILES 1", "")
@@ -53,7 +55,8 @@ def fix_large_files(options, buildout, environ):
 
 def fix_max_memory(options, buildout, environ):
     # allow 512MB memory allocation for the process. See README.AIX in Python's code
-    os.system("ldedit -b maxdata:0x20000000 {0}/bin/python3.7".format(options["prefix"]))
+    os.system("ldedit -b maxdata:0x20000000 {0}/bin/python{1}".format(options["prefix"], options["py_major"]))
+
 
 def link_python_binary(options, buildout, environ):
     os.system("ln -s ./python3 {0}/bin/python".format(options["prefix"]))
