@@ -48,9 +48,7 @@ Caveats and Heads up
 * SuSE ships with an /etc/inputrc that is not compliant with readline, python start with readline: /etc/inputrc: line 18: term: unknown variable name.
 this can be fixed by removing 'set term xy' from your ~/inputrc file. For more information here on how to fix that:
 https://unix.stackexchange.com/questions/432763/suse-linux-enterprise-python3-error-with-readline-in-etc-inputrc
-* GDBM on suse is version 1.8.3 in contrast to other platforms where it is 1.17
 * Gettext is linked against /usr/lib libgcc and libidmap (this was also the case in previous releases as it --enable-relocatable flag leads to a faulty code)
 * OSX lion and above doesn't come with SPWD (The shadow password database) so currently python is built without it.
-* TODO: move to clang and llvm as compilers
 * TODO: check if soname for gdbm on suse for version3 will work maybe post make hook
 * Solaris libraries that link against /usr are libgcc libidmap and libcrypt
