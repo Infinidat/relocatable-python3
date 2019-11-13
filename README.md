@@ -42,13 +42,12 @@ Caveats and Heads up
 * cyrus-sasl is compiled without GSSAPI support on solaris systems
 * gnutls, gcryct, gpg-error, nettle, gmp have been removed, now using only openssl as SSL backend
 * Link time optimiziation is used on platforms with gcc >4.9.
-* Profile Guided Optimization (PGO) is used in all platforms.
-* Solaris and macos platforms doesn't support ossaudiodev in python3
+* Profile Guided Optimization (PGO) is used in all platforms*.
+* Solaris and macos platforms don't support ossaudiodev in python3
 * UUID capabilites is provided by a 3rd-party library extract from linux-utils
 * SuSE ships with an /etc/inputrc that is not compliant with readline, python start with readline: /etc/inputrc: line 18: term: unknown variable name.
-this can be fixed by removing 'set term xy' from your ~/inputrc file. For more information here on how to fix that:
+this can be fixed by removing 'set term xy' from your ~/inputrc file. For more information on how to fix that:
 https://unix.stackexchange.com/questions/432763/suse-linux-enterprise-python3-error-with-readline-in-etc-inputrc
-* Gettext is linked against /usr/lib libgcc and libidmap (this was also the case in previous releases as it --enable-relocatable flag leads to a faulty code)
+* Gettext is linked against /usr/lib libgcc and libidmap (this was also the case in previous releases as the --enable-relocatable flag leads to a faulty code)
 * OSX lion and above doesn't come with SPWD (The shadow password database) so currently python is built without it.
-* TODO: check if soname for gdbm on suse for version3 will work maybe post make hook
-* Solaris libraries that link against /usr are libgcc libidmap and libcrypt
+* Some Solaris libraries are linked against /usr: libgcc libidmap and libcrypt
