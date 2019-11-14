@@ -34,9 +34,9 @@ def build():
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
-        from platform import dist, linux_distribution
-        _, version, distid = linux_distribution()
-        dist_name = dist()[0].lower()
+        from distro import linux_distribution
+        dist_name, version, distid = linux_distribution(full_distribution_name=0)
+        dist_name = dist_name.lower()
         if dist_name == 'ubuntu':
             if version >= '16.04':
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'

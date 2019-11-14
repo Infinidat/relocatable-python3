@@ -1,5 +1,5 @@
 make:
-	pip install zc.buildout
+	pip install zc.buildout distro
 	buildout bootstrap
 	bin/buildout
 	bin/build
