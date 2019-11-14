@@ -1,7 +1,7 @@
-diff --git a/lib64/python3.5/ctypes/util.py b/lib64/python3.5/ctypes/util.py
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
 index 9e74ccd..909d0bb 100644
---- a/lib64/python3.5/ctypes/util.py
-+++ b/lib64/python3.5/ctypes/util.py
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
 @@ -187,7 +187,7 @@ elif os.name == "posix":
              with contextlib.closing(os.popen(cmd)) as f:
                  for line in f.readlines():
