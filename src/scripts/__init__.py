@@ -31,6 +31,7 @@ def execte_buildout(buildout_file, env=None):
 def build():
     from sys import maxsize
     from os import environ
+    from platform import version
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
@@ -96,8 +97,12 @@ def build():
     elif system() == "SunOS":
         if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
             buildout_file = 'buildout-build-solaris-sparc.cfg'
+            if '11.4' in version():
+                buildout_file = 'buildout-build-solaris-11.4-sparc.cfg'
         elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
             buildout_file = 'buildout-build-solaris-64bit.cfg'
+            if '11.4' in version():
+                buildout_file = 'buildout-build-solaris-11.4-64bit.cfg'
         else:
             pass  # TODO support 32 bit
     elif system() == "AIX":
