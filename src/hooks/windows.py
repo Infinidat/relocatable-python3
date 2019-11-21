@@ -8,12 +8,6 @@ def _execute(cmd, env):
     process = subprocess.Popen(cmd.split(), env=env)
     return process.wait()
 
-def openssl_pre_make(options, buildout, environ):
-    _execute(r'ms\do_ms.bat', environ)
-
-def openssl_pre_make64(options, buildout, environ):
-    _execute(r'ms\do_win64a.bat', environ)
-
 def _xz_post_make(environ, platform):
     prefix = environ['PREFIX'].replace(os.path.sep, '/')
     os.system('cp -fvr include/* %s/include' % prefix)
@@ -21,9 +15,6 @@ def _xz_post_make(environ, platform):
     os.system('cp -fvr bin_%s/*dll %s/bin' % (platform, prefix))
 
 def xz_post_make(options, buildout, environ):
-    _xz_post_make(environ, "i486")
-
-def xz_post_make64(options, buildout, environ):
     _xz_post_make(environ, "x86-64")
 
 def _db_post_make(platform_name, prefix):
@@ -34,16 +25,35 @@ def _db_post_make(platform_name, prefix):
 
 def db_post_make(options, buildout, environ):
     prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    _db_post_make('Win32', prefix)
-
-def db_post_make64(options, buildout, environ):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
     _db_post_make('x64', prefix)
+
+def _libiconv_post_make(platform_name, prefix):
+    import os
+    os.system('cp -fvr include/*h %s/include' % prefix)
+    os.system('cp -fvr build-VS2017/%s/Release/*lib %s/lib' % (platform_name, prefix))
+    os.system('cp -fvr build-VS2017/%s/Release/*dll %s/lib' % (platform_name, prefix))
+    os.system('cp -fvr build-VS2017/%s/Release/*exe %s/bin' % (platform_name, prefix))
+    os.system('cp -fvr %s/lib/libiconv.lib %s/lib/iconv.lib' % (prefix, prefix))
+
+def libiconv_post_make(options, buildout, environ):
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    _libiconv_post_make('x64', prefix)
+
+def _libffi_post_make(platform_name, prefix):
+    import os
+    # libffi-python runs from Python source
+    python_source_path = path.abspath(path.join(os.curdir, path.pardir))
+    os.system('cp -fvr %s/externals/libffi/%s/include/*h %s/include' % (python_source_path, platform_name, prefix))
+    os.system('cp -fvr %s/externals/libffi/%s/*lib %s/lib' % (python_source_path, platform_name, prefix))
+    os.system('cp -fvr %s/externals/libffi/%s/*dll %s/lib' % (python_source_path, platform_name, prefix))
+
+def libffi_post_make(options, buildout, environ):
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    _libffi_post_make('amd64', prefix)
 
 class PythonPostMake(object):
     def __init__(self, environ):
-        from os import curdir
-        self.python_source_path = path.abspath(path.join(curdir, path.pardir))
+        self.python_source_path = path.abspath(path.join(os.curdir, path.pardir))
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
         self.prefix = environ['PREFIX']
         self.environ = environ
@@ -59,7 +69,6 @@ class PythonPostMake(object):
         self.make_includes()
         self.make_libraries()
         self.move_dlls()
-        self.copy_crt_assemblies()
 
     def move_dlls(self):
         dst = path.join(self.prefix, 'DLLs')
@@ -104,17 +113,6 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
         _copy_files(src, dst)
 
-    def _copy_crt_assemblies(self, dst):
-        os.makedirs(dst)
-        src = glob.glob(path.join(self.environ['VC100CRT'], '*'))
-        _copy_files(src, dst)
-
-    def copy_crt_assemblies(self):
-        dst = path.join(self.prefix, 'bin', 'Microsoft.VC100.CRT')
-        self._copy_crt_assemblies(dst)
-        dst = path.join(self.prefix, 'DLLs', 'Microsoft.VC100.CRT')
-        self._copy_crt_assemblies(dst)
-
     def make_includes(self):
         import shutil
         cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
@@ -151,9 +149,5 @@ def libevent_post_make(options, buildout, environ):
     os.system('cp -fvr *lib %s/lib' % prefix)
 
 def python_post_make(options, buildout, environ):
-    instance = PythonPostMake(environ)
-    instance.make_install()
-
-def python_post_make64(options, buildout, environ):
     instance = PythonPostMake(environ)
     instance.make_install()
