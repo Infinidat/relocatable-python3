@@ -67,7 +67,7 @@ def build():
                 buildout_file = 'buildout-build-suse-ppc64le.cfg'
             elif 'ppc64' in arch:
                 buildout_file = 'buildout-build-suse-ppc64.cfg'
-            elif version == "15":
+            elif version >= "15":
                 buildout_file = 'buildout-build-suse-15.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
