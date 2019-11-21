@@ -1,5 +1,5 @@
 __import__("pkg_resources").declare_namespace(__name__)
-
+from __future__ import print_function
 from subprocess import Popen
 from platform import system
 from infi.execute import execute_assert_success
@@ -22,7 +22,7 @@ def execte_buildout(buildout_file, env=None):
     import sys
     argv = ' '.join(sys.argv[1:])
     command = "./bin/buildout -c {0} {1}".format(buildout_file, argv)
-    print ('executing "%s"' % command)
+    print('executing "%s"' % command)
     process = Popen(command.split(), env=env)
     stdout, stderr = process.communicate()
     sys.exit(process.returncode)
@@ -135,34 +135,34 @@ def clean():
     parts = sep.join([base, 'parts'])
     installed_file = sep.join([base, '.installed-build.cfg'])
 
-    print ("base = %s" % repr(base))
+    print("base = %s" % repr(base))
 
     for tar_gz in glob(sep.join([base, '*tar.gz'])):
-        print ("rm %s" % tar_gz)
+        print("rm %s" % tar_gz)
         remove(tar_gz)
 
-    print ("rm -rf %s" % repr(dist))
+    print("rm -rf %s" % repr(dist))
     _catch_and_print(rmtree, *[dist])
 
     src = sep.join([parts, 'buildout'])
     dst = sep.join([base, 'buildout'])
 
-    print ("mv %s %s" % (repr(src), repr(dst)))
+    print("mv %s %s" % (repr(src), repr(dst)))
     _catch_and_print(move, *[src, dst])
 
-    print ("rm %s" % repr(installed_file))
+    print("rm %s" % repr(installed_file))
     if exists(installed_file):
         remove(installed_file)
 
-    print ("rm -rf %s" % repr(parts))
+    print("rm -rf %s" % repr(parts))
     _catch_and_print(rmtree, *[parts])
 
-    print ("mkdir %s" % repr(parts))
+    print("mkdir %s" % repr(parts))
     _catch_and_print(mkdir, *[parts])
 
     dst = sep.join([parts, 'buildout'])
     src = sep.join([base, 'buildout'])
-    print ("mv %s %s" % (repr(src), repr(dst)))
+    print("mv %s %s" % (repr(src), repr(dst)))
     _catch_and_print(move, *[src, dst])
 
 
@@ -170,5 +170,5 @@ def _catch_and_print(func, *args, **kwargs):
     try:
         func(*args, **kwargs)
     except (OSError, IOError) as e:
-        print (e)
+        print(e)
 
