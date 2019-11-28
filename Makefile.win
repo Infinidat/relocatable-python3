@@ -1,0 +1,8 @@
+make:
+    pip install zc.buildout
+    buildout bootstrap
+    bin\buildout
+    bin\build
+
+pack:
+    bin\pack

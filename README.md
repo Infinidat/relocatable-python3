@@ -7,19 +7,22 @@ The build system itself is written in Python, based on zc.buildout and some reci
 
 The sources are downloaded from the Internet, stored locally and then built.
 
-The current supported platforms are: Linux, OS X, Windows, Solaris and AIX.
+The current supported platforms are: Linux, macOS, Windows, Solaris and AIX.
 
 In order to build python, execute:
 
-    pip install zc.buildout
-    buildout bootstrap
-    bin/buildout
-    bin/build
+    make
+
+Or, for Windows:
+
+    nmake -f Makefile.win
 
 Build environment
 =================
 
-For building on Mac OS X, you'll need to install first:
+You'll need to have pip installed on the build environment.
+
+For building on macOS, you'll need to install:
 * Xcode command line tools
 * Homebrew
 * autoconf, automake, libtool, pkgconfig

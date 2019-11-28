@@ -1,5 +1,5 @@
+from __future__ import print_function
 __import__("pkg_resources").declare_namespace(__name__)
-
 from subprocess import Popen
 from platform import system
 from infi.execute import execute_assert_success
@@ -31,6 +31,7 @@ def execte_buildout(buildout_file, env=None):
 def build():
     from sys import maxsize, platform
     from os import environ
+    from platform import version
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':

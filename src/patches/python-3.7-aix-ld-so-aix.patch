@@ -1,0 +1,39 @@
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 823def3..61b61dc 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -1396,16 +1396,16 @@ libainstall:	all python-config
+ 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
+ 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
+ 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
+-	@if [ -s Programs/python.exp -a \
++	@if [ -s Modules/python.exp -a \
+ 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
+ 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
+-		$(INSTALL_DATA) Programs/python.exp		\
++		$(INSTALL_DATA) Modules/python.exp		\
+ 				$(DESTDIR)$(LIBPL)/python.exp;		\
+ 		echo; echo "$(LIBPL)/python.exp";		\
+ 		$(INSTALL_SCRIPT) $(srcdir)/Modules/makexp_aix	\
+ 				$(DESTDIR)$(LIBPL)/makexp_aix;		\
+ 		echo "$(LIBPL)/makexp_aix";			\
+-		$(INSTALL_SCRIPT) $(srcdir)/Modules/ld_so_aix	\
++		$(INSTALL_SCRIPT) Modules/ld_so_aix	\
+ 				$(DESTDIR)$(LIBPL)/ld_so_aix;		\
+ 		echo "$(LIBPL)/ld_so_aix";			\
+ 		echo; echo "See Misc/AIX-NOTES for details.";	\
+diff --git a/configure b/configure
+index 398f121..73f5128 100755
+--- a/configure
++++ b/configure
+@@ -8869,8 +8869,8 @@ if test -z "$LDSHARED"
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
+-		LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		BLDSHARED="Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
++		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/python.exp"
+ 		;;
+ 	IRIX/5*) LDSHARED="ld -shared";;
+ 	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
