@@ -1,13 +1,11 @@
-diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
-index 9e74ccd..909d0bb 100644
---- a/Lib/ctypes/util.py
-+++ b/Lib/ctypes/util.py
-@@ -187,7 +187,7 @@ elif os.name == "posix":
-             with contextlib.closing(os.popen(cmd)) as f:
-                 for line in f.readlines():
+--- cpython/Lib/ctypes/util.py  2019-10-15 01:32:36.000000000 +0300
++++ cpython/Lib/ctypes/util.py  2019-12-01 18:57:09.155169331 +0200
+@@ -236,7 +236,7 @@
+             with proc:
+                 for line in proc.stdout:
                      line = line.strip()
--                    if line.startswith('Default Library Path (ELF):'):
-+                    if line.startswith('Default Library Path'):
-                         paths = line.split()[4]
+-                    if line.startswith(b'Default Library Path (ELF):'):
++                    if line.startswith(b'Default Library Path'):
+                         paths = os.fsdecode(line).split()[4]
 
              if not paths:
