@@ -1,0 +1,10 @@
+--- libiconv-1.16/libcharset/lib/Makefile.in    2019-12-02 12:25:06.000000000 +0200
++++ libiconv-1.16/libcharset/lib/Makefile.in  2019-12-02 12:42:25.000000000 +0200
+@@ -43,7 +43,7 @@
+ LIBCHARSET_VERSION_INFO = 1:0:0
+
+ # Needed by $(LIBTOOL).
+-top_builddir = ..
++top_builddir = ../..
+
+ SOURCES = $(srcdir)/localcharset.c $(srcdir)/relocatable-stub.c
