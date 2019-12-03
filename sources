@@ -16,7 +16,7 @@ openldap-2.4.47.tgz                     https://www.openldap.org/software/downlo
 openssh-7.9p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.9p1.tar.gz
 openssl-1.0.2q.tar.gz                   https://www.openssl.org/source/openssl-1.0.2q.tar.gz
 openssl-1.1.1d.tar.gz                   https://www.openssl.org/source/openssl-1.1.1d.tar.gz
-Python-3.7.5.tgz                        https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tgz
+Python-3.8.0.tgz                        https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz
 readline-7.0.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-7.0.tar.gz
 sqlite-autoconf-3280000.tar.gz          https://sqlite.org/2019/sqlite-autoconf-3280000.tar.gz
 tcl8.5.15-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.5.15-src.tar.gz
