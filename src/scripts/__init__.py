@@ -37,7 +37,7 @@ def build():
     if system() == 'Linux':
         from distro import linux_distribution
         dist_name, version, distid = linux_distribution(full_distribution_name=False)
-        dist_name = dist_name.replace('rhel', 'redhat').replace('sles', 'suse')
+        dist_name = dist_name.replace('rhel', 'redhat').replace('sles', 'suse').replace('enterpriseenterpriseserver', 'oracle')
         if dist_name == 'ubuntu':
             if version >= '16.04':
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
