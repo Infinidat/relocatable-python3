@@ -5,7 +5,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 --- cpython/Lib/sysconfig.py	(date 1531752177000)
 +++ cpython/Lib/sysconfig.py	(date 1531752177000)
-@@ -413,8 +413,10 @@
+@@ -420,8 +420,10 @@
      # _sysconfigdata is generated at build time, see _generate_posix_vars()
      name = _get_sysconfigdata_name()
      _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)

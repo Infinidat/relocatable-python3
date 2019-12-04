@@ -1,18 +1,14 @@
-Index: cpython/setup.py
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
---- cpython/setup.py	(date 1545042263000)
-+++ cpython/setup.py	(date 1545042263000)
-@@ -859,7 +859,9 @@
+--- Python-3.8.0/setup.py       2019-10-14 16:34:47.000000000 +0300
++++ Python-3.8.0/setup_changed.py       2019-12-04 12:32:01.575237649 +0200
+@@ -1032,7 +1032,10 @@
+             # the encryption.
+             return
  
-         # crypt module.
- 
--        if self.compiler.find_library_file(lib_dirs, 'crypt'):
-+        if self.compiler.find_library_file(lib_dirs, 'crypt_i'):
+-        if self.compiler.find_library_file(self.lib_dirs, 'crypt'):
++
++        if self.compiler.find_library_file(self.lib_dirs, 'crypt_i'):
 +            libs = ['crypt_i']
-+        elif self.compiler.find_library_file(lib_dirs, 'crypt'):
++        elif self.compiler.find_library_file(self.lib_dirs, 'crypt'):
              libs = ['crypt']
          else:
              libs = []

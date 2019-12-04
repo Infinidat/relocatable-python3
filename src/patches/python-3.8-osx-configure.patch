@@ -13,7 +13,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
  SOVERSION
  VERSION
  PYTHON_FOR_BUILD
-@@ -2995,7 +2994,6 @@
+@@ -3008,7 +3008,6 @@
  
  # Arguments passed to configure.
  
@@ -23,7 +23,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
  $as_echo_n "checking for --enable-universalsdk... " >&6; }
 --- cpython/configure.ac
 +++ cpython/configure.ac
-@@ -141,8 +141,6 @@ AC_DEFINE(_DARWIN_C_SOURCE, 1, [Define on Darwin to activate all library feature
+@@ -144,8 +144,6 @@ AC_DEFINE(_DARWIN_C_SOURCE, 1, [Define on Darwin to activate all library feature
  define_xopen_source=yes
 
  # Arguments passed to configure.

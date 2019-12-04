@@ -5,7 +5,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 --- cpython/Modules/socketmodule.c	(date 1532970391000)
 +++ cpython/Modules/socketmodule.c	(date 1532970391000)
-@@ -5192,10 +5192,8 @@
+@@ -5407,10 +5407,8 @@
      Py_buffer buf;
      int res, flag = 0;
  

@@ -5,7 +5,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 --- cpython/configure.ac	(date 1534346388000)
 +++ cpython/configure.ac	(date 1534346388000)
-@@ -2799,7 +2799,11 @@
+@@ -2823,7 +2823,11 @@
  AC_CHECK_LIB(intl, textdomain,
  	[AC_DEFINE(WITH_LIBINTL, 1,
  	[Define to 1 if libintl is needed for locale functions.])

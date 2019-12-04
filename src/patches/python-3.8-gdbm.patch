@@ -1,22 +1,12 @@
-diff --git a/setup.py b/setup.py
---- a/setup.py
-+++ b/setup.py
-@@ -1256,17 +1260,17 @@ class PyBuildExt(build_ext):
-                     if find_file("ndbm.h", inc_dirs, []) is not None:
-                         # Some systems have -lndbm, others have -lgdbm_compat,
-                         # others don't have either
-                         if self.compiler.find_library_file(lib_dirs,
-                                                                'ndbm'):
+--- Python-3.8.0/setup.py       2019-10-14 16:34:47.000000000 +0300
++++ Python-3.8.0/setup.py       2019-12-04 12:56:15.752076764 +0200
+@@ -1282,7 +1285,7 @@
                              ndbm_libs = ['ndbm']
-                         elif self.compiler.find_library_file(lib_dirs,
+                         elif self.compiler.find_library_file(self.lib_dirs,
                                                               'gdbm_compat'):
 -                            ndbm_libs = ['gdbm_compat']
 +                            ndbm_libs = ['gdbm_compat', 'gdbm']
                          else:
                              ndbm_libs = []
                          if dbm_setup_debug: print("building dbm using ndbm")
-                         dbmext = Extension('_dbm', ['_dbmmodule.c'],
-                                            define_macros=[
-                                                ('HAVE_NDBM_H',None),
-                                                ],
-                                            libraries=ndbm_libs)
+

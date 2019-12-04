@@ -5,7 +5,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 --- cpython/Makefile.pre.in	(date 1529224274000)
 +++ cpython/Makefile.pre.in	(date 1529224274000)
-@@ -607,10 +607,10 @@
+@@ -603,10 +603,10 @@
  	    *\ -s*|s*) quiet="-q";; \
  	    *) quiet="";; \
  	esac; \

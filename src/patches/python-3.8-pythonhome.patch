@@ -1,5 +1,5 @@
 --- Python-3.8.0/Python/initconfig.c    2019-10-14 16:34:47.000000000 +0300
-+++ Python-3.8.0/Python/initconfig_copy.c       2019-12-03 18:03:42.369000000 +0200
++++ Python-3.8.0/Python/initconfig.c       2019-12-03 18:03:42.369000000 +0200
 @@ -1181,11 +1181,9 @@
          if (_PyStatus_EXCEPTION(status)) {
              return status;
