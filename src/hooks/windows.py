@@ -17,16 +17,6 @@ def _xz_post_make(environ, platform):
 def xz_post_make(options, buildout, environ):
     _xz_post_make(environ, "x86-64")
 
-def _db_post_make(platform_name, prefix):
-    import os
-    os.system('cp -fvr build_windows/*h %s/include' % prefix)
-    os.system('cp -fvr build_windows/%s/Release/*lib %s/lib' % (platform_name, prefix))
-    os.system('cp -fvr build_windows/%s/Release/*exe %s/bin' % (platform_name, prefix))
-
-def db_post_make(options, buildout, environ):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    _db_post_make('x64', prefix)
-
 def _libiconv_post_make(platform_name, prefix):
     import os
     os.system('cp -fvr include/*h %s/include' % prefix)
