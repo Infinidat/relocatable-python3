@@ -43,7 +43,7 @@ def build():
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
-        if dist_name in ['redhat', 'centos']:
+        if dist_name in ['redhat', 'centos', 'oracle']:
             arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
             if 'ppc64le' in arch:
                 buildout_file = 'buildout-build-redhat-ppc64le.cfg'
