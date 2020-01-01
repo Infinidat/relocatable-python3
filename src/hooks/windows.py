@@ -51,6 +51,11 @@ def libffi_post_make(options, buildout, environ):
     prefix = environ['PREFIX'].replace(os.path.sep, '/')
     _libffi_post_make('amd64', prefix)
 
+def tcl_post_make(options, buildout, environ):
+    prefix = environ['PREFIX'].replace(os.path.sep, '/')
+    os.system('chmod -R 744 %s/lib/tcl8.5/tzdata' % prefix)
+    os.system('chmod -R 744 %s/lib/tcl8.5/msgs' % prefix)
+
 class PythonPostMake(object):
     def __init__(self, environ):
         self.python_source_path = path.abspath(path.join(os.curdir, path.pardir))
