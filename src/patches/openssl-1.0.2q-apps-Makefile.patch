@@ -1,28 +1,11 @@
-diff --git a/apps/Makefile b/apps/Makefile
-index 8c3297e..f70e556 100644
---- a/apps/Makefile
-+++ b/apps/Makefile
-@@ -15,8 +15,8 @@ KRB5_INCLUDES=
- LIBKRB5=
- 
- PEX_LIBS=
--EX_LIBS= 
--EXE_EXT= 
-+EX_LIBS=
-+EXE_EXT=
- 
- SHLIB_TARGET=
- 
-@@ -91,7 +91,7 @@ req: sreq.o $(A_OBJ) $(DLIBCRYPTO)
- 		LIBDEPS="$(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS)" \
- 		link_app.$${shlib_target}
- 
--sreq.o: req.c 
-+sreq.o: req.c
- 	$(CC) -c $(INCLUDES) $(CFLAG) -o sreq.o req.c
- 
- openssl-vms.cnf: openssl.cnf
-@@ -109,16 +109,6 @@ install:
+Index: openssl-1.0.2o/apps/Makefile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- openssl-1.0.2o/apps/Makefile	(date 1532422972000)
++++ openssl-1.0.2o/apps/Makefile	(date 1532422972000)
+@@ -109,16 +109,6 @@
  	 chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new; \
  	 mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i ); \
  	 done;

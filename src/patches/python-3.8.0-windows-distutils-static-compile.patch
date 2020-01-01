@@ -1,8 +1,8 @@
 diff --git a/Lib/distutils/_msvccompiler.py b/Lib/distutils/_msvccompiler.py
-index 10a9ffd..5cbad91 100644
+index e8e4b71..07977b8 100644
 --- a/Lib/distutils/_msvccompiler.py
 +++ b/Lib/distutils/_msvccompiler.py
-@@ -220,7 +220,7 @@ class MSVCCompiler(CCompiler) :
+@@ -263,7 +263,7 @@ class MSVCCompiler(CCompiler) :
          self.rc = _find_exe("rc.exe", paths)   # resource compiler
          self.mc = _find_exe("mc.exe", paths)   # message compiler
          self.mt = _find_exe("mt.exe", paths)   # message compiler
@@ -11,8 +11,8 @@ index 10a9ffd..5cbad91 100644
  
          for dir in vc_env.get('include', '').split(os.pathsep):
              if dir:
-@@ -231,26 +231,22 @@ class MSVCCompiler(CCompiler) :
-                 self.add_library_dir(dir)
+@@ -274,26 +274,22 @@ class MSVCCompiler(CCompiler) :
+                 self.add_library_dir(dir.rstrip(os.sep))
  
          self.preprocess_options = None
 -        # If vcruntime_redist is available, link against it dynamically. Otherwise,

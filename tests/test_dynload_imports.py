@@ -1,8 +1,9 @@
+import os
+
 def main():
     import bz2
     import ctypes
     import datetime
-    import dbm.gnu
     import hashlib
     import json
     import lzma
@@ -11,10 +12,12 @@ def main():
     import ssl
     import array
     import binascii
-    import fcntl
     import math
-    import readline
     import zlib
+    if os.name == 'posix':
+        import readline
+        import dbm.gnu
+        import fcntl
 
 if __name__ == "__main__":
     main()

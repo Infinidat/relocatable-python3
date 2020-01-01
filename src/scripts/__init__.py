@@ -1,5 +1,5 @@
+from __future__ import print_function
 __import__("pkg_resources").declare_namespace(__name__)
-
 from subprocess import Popen
 from platform import system
 from infi.execute import execute_assert_success
@@ -22,7 +22,7 @@ def execte_buildout(buildout_file, env=None):
     import sys
     argv = ' '.join(sys.argv[1:])
     command = "./bin/buildout -c {0} {1}".format(buildout_file, argv)
-    print 'executing "%s"' % command
+    print('executing "%s"' % command)
     process = Popen(command.split(), env=env)
     stdout, stderr = process.communicate()
     sys.exit(process.returncode)
@@ -31,12 +31,13 @@ def execte_buildout(buildout_file, env=None):
 def build():
     from sys import maxsize
     from os import environ
+    from platform import version
     environ = environ.copy()
     buildout_file = 'buildout-build.cfg'
     if system() == 'Linux':
-        from platform import dist, linux_distribution
-        _, version, distid = linux_distribution()
-        dist_name = dist()[0].lower()
+        from distro import linux_distribution
+        dist_name, version, distid = linux_distribution(full_distribution_name=False)
+        dist_name = dist_name.replace('rhel', 'redhat').replace('sles', 'suse').replace('enterpriseenterpriseserver', 'oracle')
         if dist_name == 'ubuntu':
             if version >= '16.04':
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
@@ -50,23 +51,18 @@ def build():
                 buildout_file = 'buildout-build-redhat-ppc64.cfg'
             elif 'i386' in arch:
                 buildout_file = 'buildout-build-redhat-32bit.cfg'
-            elif int(version.split(".")[0]) > 6 or \
-                (int(version.split(".")[0]) == 6 and int(version.split(".")[1]) >= 4):
-                if version >= '8.0':
+            else:
+                if version.startswith('8'):
                     buildout_file = 'buildout-build-redhat-8-64bit.cfg'
                 else:
-                    # arch is 64 bit and supports libvirt
-                    buildout_file = 'buildout-build-redhat-64bit-with-libvirt.cfg'
-            else:
-                # arch is 64 bit
-                buildout_file = 'buildout-build-redhat-64bit.cfg'
+                    buildout_file = 'buildout-build-redhat-64bit.cfg'
         if dist_name in ['suse']:
             arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
             if 'ppc64le' in arch:
                 buildout_file = 'buildout-build-suse-ppc64le.cfg'
             elif 'ppc64' in arch:
                 buildout_file = 'buildout-build-suse-ppc64.cfg'
-            elif version == "15":
+            elif version >= "15":
                 buildout_file = 'buildout-build-suse-15.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
@@ -96,8 +92,12 @@ def build():
     elif system() == "SunOS":
         if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
             buildout_file = 'buildout-build-solaris-sparc.cfg'
+            if '11.4' in version():
+                buildout_file = 'buildout-build-solaris-11.4-sparc.cfg'
         elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
             buildout_file = 'buildout-build-solaris-64bit.cfg'
+            if '11.4' in version():
+                buildout_file = 'buildout-build-solaris-11.4-64bit.cfg'
         else:
             pass  # TODO support 32 bit
     elif system() == "AIX":
@@ -130,40 +130,40 @@ def clean():
     parts = sep.join([base, 'parts'])
     installed_file = sep.join([base, '.installed-build.cfg'])
 
-    print "base = %s" % repr(base)
+    print("base = %s" % repr(base))
 
     for tar_gz in glob(sep.join([base, '*tar.gz'])):
-        print "rm %s" % tar_gz
+        print("rm %s" % tar_gz)
         remove(tar_gz)
 
-    print "rm -rf %s" % repr(dist)
+    print("rm -rf %s" % repr(dist))
     _catch_and_print(rmtree, *[dist])
 
     src = sep.join([parts, 'buildout'])
     dst = sep.join([base, 'buildout'])
 
-    print "mv %s %s" % (repr(src), repr(dst))
+    print("mv %s %s" % (repr(src), repr(dst)))
     _catch_and_print(move, *[src, dst])
 
-    print "rm %s" % repr(installed_file)
+    print("rm %s" % repr(installed_file))
     if exists(installed_file):
         remove(installed_file)
 
-    print "rm -rf %s" % repr(parts)
+    print("rm -rf %s" % repr(parts))
     _catch_and_print(rmtree, *[parts])
 
-    print "mkdir %s" % repr(parts)
+    print("mkdir %s" % repr(parts))
     _catch_and_print(mkdir, *[parts])
 
     dst = sep.join([parts, 'buildout'])
     src = sep.join([base, 'buildout'])
-    print "mv %s %s" % (repr(src), repr(dst))
+    print("mv %s %s" % (repr(src), repr(dst)))
     _catch_and_print(move, *[src, dst])
 
 
 def _catch_and_print(func, *args, **kwargs):
     try:
         func(*args, **kwargs)
-    except (OSError, IOError), e:
-        print e
+    except (OSError, IOError) as e:
+        print(e)
 
