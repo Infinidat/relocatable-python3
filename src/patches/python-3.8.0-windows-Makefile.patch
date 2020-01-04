@@ -290,7 +290,7 @@ index dc962f0..25d82cb 100644
             Condition="$(RequirePGCFiles) == 'true' and @(_PGCFiles) == ''" />
      <Copy SourceFiles="@(_CopyFiles)"
 diff --git a/PCbuild/python.props b/PCbuild/python.props
-index 8884c0a..ad82a99 100644
+index 8884c0a..0286cbc 100644
 --- a/PCbuild/python.props
 +++ b/PCbuild/python.props
 @@ -30,11 +30,11 @@
@@ -372,7 +372,7 @@ index 8884c0a..ad82a99 100644
      <!-- The minimum allowed SDK version to use for building -->
 -    <DefaultWindowsSDKVersion>10.0.10586.0</DefaultWindowsSDKVersion>
 -    <DefaultWindowsSDKVersion Condition="$([System.Version]::Parse($(_RegistryVersion))) > $([System.Version]::Parse($(DefaultWindowsSDKVersion)))">$(_RegistryVersion)</DefaultWindowsSDKVersion>
-+    <DefaultWindowsSDKVersion>10.0.15063.0</DefaultWindowsSDKVersion>
++    <DefaultWindowsSDKVersion>10.0.17763.0</DefaultWindowsSDKVersion>
    </PropertyGroup>
 -  
 +
