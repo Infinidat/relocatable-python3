@@ -43,8 +43,8 @@ def libffi_post_make(options, buildout, environ):
 
 def tcl_post_make(options, buildout, environ):
     prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    os.system('chmod -R 744 %s/lib/tcl8.5/tzdata' % prefix)
-    os.system('chmod -R 744 %s/lib/tcl8.5/msgs' % prefix)
+    os.system('chmod -R 744 %s/lib/tcl8.6/tzdata' % prefix)
+    os.system('chmod -R 744 %s/lib/tcl8.6/msgs' % prefix)
 
 class PythonPostMake(object):
     def __init__(self, environ):

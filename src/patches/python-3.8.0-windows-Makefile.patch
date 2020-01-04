@@ -80,10 +80,10 @@ index dfb8b6a..b7a927c 100644
      </ClCompile>
    </ItemGroup>
 diff --git a/PCbuild/_tkinter.vcxproj b/PCbuild/_tkinter.vcxproj
-index 8cbc654..677969d 100644
+index 8cbc654..4e3f483 100644
 --- a/PCbuild/_tkinter.vcxproj
 +++ b/PCbuild/_tkinter.vcxproj
-@@ -93,8 +93,8 @@
+@@ -93,12 +93,12 @@
    </PropertyGroup>
    <ItemDefinitionGroup>
      <ClCompile>
@@ -94,6 +94,11 @@ index 8cbc654..677969d 100644
        <PreprocessorDefinitions Condition="'$(BuildForRelease)' != 'true'">Py_TCLTK_DIR="$(tcltkDir.TrimEnd('\').Replace('\', '\\'))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
+-      <AdditionalDependencies>$(tcltkLib);%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>$(tcltkLib);netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
 @@ -121,12 +121,6 @@
    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
    <ImportGroup Label="ExtensionTargets">
@@ -466,17 +471,15 @@ index 1a82a65..5bb3cd9 100644
    <ItemDefinitionGroup>
      <ClCompile>
 diff --git a/PCbuild/tcltk.props b/PCbuild/tcltk.props
-index d2f9496..9b5e4b1 100644
+index d2f9496..c138e1e 100644
 --- a/PCbuild/tcltk.props
 +++ b/PCbuild/tcltk.props
-@@ -3,8 +3,8 @@
-   <Import Project="pyproject.props" Condition="$(__PyProject_Props_Imported) != 'true'" />
+@@ -4,7 +4,7 @@
    <PropertyGroup>
      <TclMajorVersion>8</TclMajorVersion>
--    <TclMinorVersion>6</TclMinorVersion>
+     <TclMinorVersion>6</TclMinorVersion>
 -    <TclPatchLevel>9</TclPatchLevel>
-+    <TclMinorVersion>5</TclMinorVersion>
-+    <TclPatchLevel>19</TclPatchLevel>
++    <TclPatchLevel>10</TclPatchLevel>
      <TclRevision>0</TclRevision>
      <TkMajorVersion>$(TclMajorVersion)</TkMajorVersion>
      <TkMinorVersion>$(TclMinorVersion)</TkMinorVersion>
@@ -500,7 +503,7 @@ index d2f9496..9b5e4b1 100644
      <tixDLLName>tix$(TixMajorVersion)$(TixMinorVersion)$(TclDebugExt).dll</tixDLLName>
      <tixDLLPath>$(tcltkDir)lib\tix$(TixMajorVersion).$(TixMinorVersion).$(TixPatchLevel)\$(tixDLLName)</tixDLLPath>
 -    <tcltkLib>$(tcltkDir)lib\tcl$(TclMajorVersion)$(TclMinorVersion)t$(TclDebugExt).lib;$(tcltkDir)lib\tk$(TkMajorVersion)$(TkMinorVersion)t$(TclDebugExt).lib</tcltkLib>
-+    <tcltkLib>$(prefixDir)lib\tcl$(TclMajorVersion)$(TclMinorVersion)ts$(TclDebugExt).lib;$(tcltkDir)lib\tk$(TkMajorVersion)$(TkMinorVersion)ts$(TclDebugExt).lib</tcltkLib>
++    <tcltkLib>$(prefixDir)lib\tcl$(TclMajorVersion)$(TclMinorVersion)ts$(TclDebugExt).lib;$(tcltkDir)lib\tk$(TkMajorVersion)$(TkMinorVersion)ts$(TclDebugExt).lib;$(tcltkDir)lib\tclstub86.lib</tcltkLib>
      <TclMachine>IX86</TclMachine>
      <TclMachine Condition="'$(Platform)' == 'x64'">AMD64</TclMachine>
      <TclVersions>TCL_MAJOR_VERSION=$(TclMajorVersion) TCL_MINOR_VERSION=$(TclMinorVersion) TCL_PATCH_LEVEL=$(TclPatchLevel)</TclVersions>
