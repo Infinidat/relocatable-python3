@@ -64,6 +64,7 @@ class PythonPostMake(object):
         self.make_includes()
         self.make_libraries()
         self.move_dlls()
+        self.copy_crt_assemblies()
 
     def move_dlls(self):
         dst = path.join(self.prefix, 'DLLs')
@@ -122,6 +123,13 @@ class PythonPostMake(object):
         _mk_path(dst)
         cmd = "cp -fr %s %s" % (src, dst)
         _system(cmd)
+
+    def copy_crt_assemblies(self):
+        dst = path.join(self.prefix, 'bin')
+        src = glob.glob(path.join(self.environ["WindowsSdkDir"], "Redist", self.environ["XSDKVer"], "ucrt/DLLs/x64/*.dll"))
+        _copy_files(src, dst)
+        src = glob.glob(path.join(self.environ["VCRoot"], "Redist/MSVC/14.16.27012/x64/Microsoft.VC141.CRT/*.dll"))
+        _copy_files(src, dst)
 
 def _mk_path(path):
     if os.path.exists(path):
