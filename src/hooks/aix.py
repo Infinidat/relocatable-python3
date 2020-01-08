@@ -26,7 +26,7 @@ def purge_sysconfigdata(path):
 
 def create_blibpath_fix(options, buildout, environ):
     os.system("mv {0}/bin/python3.8 {0}/bin/python3.8.bin".format(options["prefix"]))
-    os.system("gcc -s {}/aix.c -o {}/bin/python3.8".format(options["hooks-dir"], options["prefix"]))
+    os.system("gcc -maix64 -s {}/aix.c -o {}/bin/python3.8".format(options["hooks-dir"], options["prefix"]))
 
 def fix_sysconfigdata(options, buildout, environ):
     for path in get_sysconfigdata_files(options):
