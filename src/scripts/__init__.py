@@ -101,12 +101,7 @@ def build():
         else:
             pass  # TODO support 32 bit
     elif system() == "AIX":
-        from os import uname
-        aix_version = "{0[3]}.{0[2]}".format(uname())
-        if aix_version == "7.1":
-            buildout_file = 'buildout-build-aix.cfg'
-        elif aix_version == "7.2":
-            buildout_file = 'buildout-build-aix-7.2.cfg'
+        buildout_file = 'buildout-build-aix.cfg'
     execte_buildout(buildout_file, environ)
 
 def pack():
