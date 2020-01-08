@@ -1,0 +1,29 @@
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 502317a..b1eddad 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -185,9 +185,6 @@ LIPO_32BIT_FLAGS=@LIPO_32BIT_FLAGS@
+ # Options to enable prebinding (for fast startup prior to Mac OS X 10.3)
+ OTHER_LIBTOOL_OPT=@OTHER_LIBTOOL_OPT@
+ 
+-# Environment to run shared python without installed libraries
+-RUNSHARED=       @RUNSHARED@
+-
+ # ensurepip options
+ ENSUREPIP=      @ENSUREPIP@
+ 
+diff --git a/setup.py b/setup.py
+index 20d7f35..832f338 100644
+--- a/setup.py
++++ b/setup.py
+@@ -914,10 +914,6 @@ class PyBuildExt(build_ext):
+             curses_library = readline_termcap_library
+         elif self.compiler.find_library_file(self.lib_dirs, 'ncursesw'):
+             curses_library = 'ncursesw'
+-        # Issue 36210: OSS provided ncurses does not link on AIX
+-        # Use IBM supplied 'curses' for successful build of _curses
+-        elif AIX and self.compiler.find_library_file(self.lib_dirs, 'curses'):
+-            curses_library = 'curses'
+         elif self.compiler.find_library_file(self.lib_dirs, 'ncurses'):
+             curses_library = 'ncurses'
+         elif self.compiler.find_library_file(self.lib_dirs, 'curses'):
