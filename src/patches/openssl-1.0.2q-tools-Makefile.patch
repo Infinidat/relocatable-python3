@@ -1,0 +1,20 @@
+Index: openssl-1.0.2o/tools/Makefile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- openssl-1.0.2o/tools/Makefile	(date 1532423659000)
++++ openssl-1.0.2o/tools/Makefile	(date 1532423659000)
+@@ -26,12 +26,6 @@
+ 	chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new; \
+ 	mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i ); \
+ 	done;
+-	@for i in $(MISC_APPS) ; \
+-	do  \
+-	(cp $$i $(INSTALL_PREFIX)$(OPENSSLDIR)/misc/$$i.new; \
+-	chmod 755 $(INSTALL_PREFIX)$(OPENSSLDIR)/misc/$$i.new; \
+-	mv -f $(INSTALL_PREFIX)$(OPENSSLDIR)/misc/$$i.new $(INSTALL_PREFIX)$(OPENSSLDIR)/misc/$$i ); \
+-	done;
+ 
+ files:
+ 	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO

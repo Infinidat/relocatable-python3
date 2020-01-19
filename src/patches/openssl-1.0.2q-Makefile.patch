@@ -1,0 +1,17 @@
+Index: openssl-1.0.2o/Makefile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- openssl-1.0.2o/Makefile	(date 1532422245000)
++++ openssl-1.0.2o/Makefile	(date 1532422245000)
+@@ -550,9 +550,6 @@
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/$(LIBDIR)/engines \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/$(LIBDIR)/pkgconfig \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl \
+-		$(INSTALL_PREFIX)$(OPENSSLDIR)/misc \
+-		$(INSTALL_PREFIX)$(OPENSSLDIR)/certs \
+-		$(INSTALL_PREFIX)$(OPENSSLDIR)/private
+ 	@set -e; headerlist="$(EXHEADER)"; for i in $$headerlist;\
+ 	do \
+ 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \

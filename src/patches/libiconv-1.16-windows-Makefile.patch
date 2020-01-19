@@ -1,0 +1,216 @@
+diff --git a/build-VS2017/iconv-static/iconv-static.vcxproj b/build-VS2017/iconv-static/iconv-static.vcxproj
+index dfcf735..148cec0 100644
+--- a/build-VS2017/iconv-static/iconv-static.vcxproj
++++ b/build-VS2017/iconv-static/iconv-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{0F27FE31-A7DB-4CB2-9682-0B7869B47DED}</ProjectGuid>
+     <RootNamespace>iconv-static</RootNamespace>
+     <ProjectName>iconv</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/iconv/iconv.vcxproj b/build-VS2017/iconv/iconv.vcxproj
+index 88db87f..7701614 100644
+--- a/build-VS2017/iconv/iconv.vcxproj
++++ b/build-VS2017/iconv/iconv.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{2D7BAD64-83CF-4F80-9F0A-8CEAC546EAD6}</ProjectGuid>
+     <RootNamespace>iconv</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/libiconv-static/libiconv-static.vcxproj b/build-VS2017/libiconv-static/libiconv-static.vcxproj
+index d9f9745..a479bca 100644
+--- a/build-VS2017/libiconv-static/libiconv-static.vcxproj
++++ b/build-VS2017/libiconv-static/libiconv-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{46CAFE4A-B5BD-4422-ACC6-117D4AD041E2}</ProjectGuid>
+     <RootNamespace>libiconv-static</RootNamespace>
+     <ProjectName>libiconv-static</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/libiconv/libiconv.vcxproj b/build-VS2017/libiconv/libiconv.vcxproj
+index 04a4918..a46a9ab 100644
+--- a/build-VS2017/libiconv/libiconv.vcxproj
++++ b/build-VS2017/libiconv/libiconv.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{F2A64E15-0313-4421-ACB3-82FBCDA936B4}</ProjectGuid>
+     <RootNamespace>libiconv</RootNamespace>
+     <ProjectName>libiconv</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/gengb18030z-static/gengb18030z-static.vcxproj b/build-VS2017/tests/gengb18030z-static/gengb18030z-static.vcxproj
+index 5f899fe..4551296 100644
+--- a/build-VS2017/tests/gengb18030z-static/gengb18030z-static.vcxproj
++++ b/build-VS2017/tests/gengb18030z-static/gengb18030z-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{B0E1AE1D-7E4B-4C94-A6CC-384E96D27A3E}</ProjectGuid>
+     <RootNamespace>gengb18030z-static</RootNamespace>
+     <ProjectName>gengb18030z</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/gengb18030z/gengb18030z.vcxproj b/build-VS2017/tests/gengb18030z/gengb18030z.vcxproj
+index 9865fdc..c30d627 100644
+--- a/build-VS2017/tests/gengb18030z/gengb18030z.vcxproj
++++ b/build-VS2017/tests/gengb18030z/gengb18030z.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{1D14F393-E0B8-4756-AF30-5D598ABC4627}</ProjectGuid>
+     <RootNamespace>gengb18030z</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/genutf8-static/genutf8-static.vcxproj b/build-VS2017/tests/genutf8-static/genutf8-static.vcxproj
+index 83b32d1..3481378 100644
+--- a/build-VS2017/tests/genutf8-static/genutf8-static.vcxproj
++++ b/build-VS2017/tests/genutf8-static/genutf8-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{D9865C43-54E2-48CB-BC24-CC351DC8CF70}</ProjectGuid>
+     <RootNamespace>genutf8-static</RootNamespace>
+     <ProjectName>genutf8</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/genutf8/genutf8.vcxproj b/build-VS2017/tests/genutf8/genutf8.vcxproj
+index 8c5e74b..4260160 100644
+--- a/build-VS2017/tests/genutf8/genutf8.vcxproj
++++ b/build-VS2017/tests/genutf8/genutf8.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{2586F31B-7198-4ACE-A520-DEBA605EA950}</ProjectGuid>
+     <RootNamespace>genutf8</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/table-from-static/table-from-static.vcxproj b/build-VS2017/tests/table-from-static/table-from-static.vcxproj
+index 551c5a6..77ee167 100644
+--- a/build-VS2017/tests/table-from-static/table-from-static.vcxproj
++++ b/build-VS2017/tests/table-from-static/table-from-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{6AB2F85F-3B7E-445B-A2A9-3C23D949F8E0}</ProjectGuid>
+     <RootNamespace>table-from-static</RootNamespace>
+     <ProjectName>table-from</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/table-from/table-from.vcxproj b/build-VS2017/tests/table-from/table-from.vcxproj
+index d50f5fe..e91dd88 100644
+--- a/build-VS2017/tests/table-from/table-from.vcxproj
++++ b/build-VS2017/tests/table-from/table-from.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{6C71A57D-396C-4D34-91D1-BB821ACC4FB4}</ProjectGuid>
+     <RootNamespace>table-from</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/table-to-static/table-to-static.vcxproj b/build-VS2017/tests/table-to-static/table-to-static.vcxproj
+index 9050500..884f05e 100644
+--- a/build-VS2017/tests/table-to-static/table-to-static.vcxproj
++++ b/build-VS2017/tests/table-to-static/table-to-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{BA8A1D08-53EE-41FB-8B79-59B8A3A1FA2D}</ProjectGuid>
+     <RootNamespace>table-to-static</RootNamespace>
+     <ProjectName>table-to</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/table-to/table-to.vcxproj b/build-VS2017/tests/table-to/table-to.vcxproj
+index e6edd6a..d844a32 100644
+--- a/build-VS2017/tests/table-to/table-to.vcxproj
++++ b/build-VS2017/tests/table-to/table-to.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{CE6F83E5-3689-45C4-A6B8-A29222FA9D61}</ProjectGuid>
+     <RootNamespace>table-to</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/test-shiftseq-static/test-shiftseq-static.vcxproj b/build-VS2017/tests/test-shiftseq-static/test-shiftseq-static.vcxproj
+index 965ca28..110fa49 100644
+--- a/build-VS2017/tests/test-shiftseq-static/test-shiftseq-static.vcxproj
++++ b/build-VS2017/tests/test-shiftseq-static/test-shiftseq-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{E900C1E1-1353-4C02-B076-66D9794F8488}</ProjectGuid>
+     <RootNamespace>test-shiftseq-static</RootNamespace>
+     <ProjectName>test-shiftseq</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/test-shiftseq/test-shiftseq.vcxproj b/build-VS2017/tests/test-shiftseq/test-shiftseq.vcxproj
+index d02962c..b9f1ae2 100644
+--- a/build-VS2017/tests/test-shiftseq/test-shiftseq.vcxproj
++++ b/build-VS2017/tests/test-shiftseq/test-shiftseq.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{750848EC-7EC1-4942-B704-5C818BFD78DA}</ProjectGuid>
+     <RootNamespace>test-shiftseq</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/test-to-wchar-static/test-to-wchar-static.vcxproj b/build-VS2017/tests/test-to-wchar-static/test-to-wchar-static.vcxproj
+index 4529cd2..2bffe17 100644
+--- a/build-VS2017/tests/test-to-wchar-static/test-to-wchar-static.vcxproj
++++ b/build-VS2017/tests/test-to-wchar-static/test-to-wchar-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{910AA767-B5CC-47B9-BAFB-9ADCB80937BE}</ProjectGuid>
+     <RootNamespace>test-to-wchar-static</RootNamespace>
+     <ProjectName>test-to-wchar</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/test-to-wchar/test-to-wchar.vcxproj b/build-VS2017/tests/test-to-wchar/test-to-wchar.vcxproj
+index 862de4c..4507e3d 100644
+--- a/build-VS2017/tests/test-to-wchar/test-to-wchar.vcxproj
++++ b/build-VS2017/tests/test-to-wchar/test-to-wchar.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{B10B7610-435F-4B34-9CC0-4C23FEA8A8DB}</ProjectGuid>
+     <RootNamespace>test-to-wchar</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/uniq-u-static/uniq-u-static.vcxproj b/build-VS2017/tests/uniq-u-static/uniq-u-static.vcxproj
+index e79523e..9219949 100644
+--- a/build-VS2017/tests/uniq-u-static/uniq-u-static.vcxproj
++++ b/build-VS2017/tests/uniq-u-static/uniq-u-static.vcxproj
+@@ -22,6 +22,7 @@
+     <ProjectGuid>{203E6E8E-1082-45BA-A6A0-92D20AFB0C6E}</ProjectGuid>
+     <RootNamespace>uniq-u-static</RootNamespace>
+     <ProjectName>uniq-u</ProjectName>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+diff --git a/build-VS2017/tests/uniq-u/uniq-u.vcxproj b/build-VS2017/tests/uniq-u/uniq-u.vcxproj
+index 72a94e9..e56c641 100644
+--- a/build-VS2017/tests/uniq-u/uniq-u.vcxproj
++++ b/build-VS2017/tests/uniq-u/uniq-u.vcxproj
+@@ -21,6 +21,7 @@
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{22C32C52-A7D5-4DAD-86BA-D45600168126}</ProjectGuid>
+     <RootNamespace>uniq-u</RootNamespace>
++    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

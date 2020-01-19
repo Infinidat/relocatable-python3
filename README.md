@@ -31,7 +31,7 @@ For Ubuntu, you'll need to install:
 * build-essential
 
 For Windows, you'll need to install:
-* Microsot Visual Studio 2008 (No SP)
-* Microsot Visual Studio 2010 (No SP)
+* Microsot Visual Studio 2017 (No SP)
+* Microsoft Windows SDK 10
 * Perl
 * Python

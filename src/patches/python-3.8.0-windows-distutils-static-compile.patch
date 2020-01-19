@@ -1,0 +1,46 @@
+diff --git a/Lib/distutils/_msvccompiler.py b/Lib/distutils/_msvccompiler.py
+index e8e4b71..07977b8 100644
+--- a/Lib/distutils/_msvccompiler.py
++++ b/Lib/distutils/_msvccompiler.py
+@@ -263,7 +263,7 @@ class MSVCCompiler(CCompiler) :
+         self.rc = _find_exe("rc.exe", paths)   # resource compiler
+         self.mc = _find_exe("mc.exe", paths)   # message compiler
+         self.mt = _find_exe("mt.exe", paths)   # message compiler
+-        self._vcruntime_redist = vc_env.get('py_vcruntime_redist', '')
++        self._vcruntime_redist = ''
+ 
+         for dir in vc_env.get('include', '').split(os.pathsep):
+             if dir:
+@@ -274,26 +274,22 @@ class MSVCCompiler(CCompiler) :
+                 self.add_library_dir(dir.rstrip(os.sep))
+ 
+         self.preprocess_options = None
+-        # If vcruntime_redist is available, link against it dynamically. Otherwise,
+-        # use /MT[d] to build statically, then switch from libucrt[d].lib to ucrt[d].lib
+-        # later to dynamically link to ucrtbase but not vcruntime.
++        # we always want to link statically to runtime so we use /MT[d] and
++        # link against libucrt[d].lib and not ucrt[d].lib
+         self.compile_options = [
+-            '/nologo', '/Ox', '/W3', '/GL', '/DNDEBUG'
++            '/nologo', '/Ox', '/W3', '/GL', '/DNDEBUG', '/MT'
+         ]
+-        self.compile_options.append('/MD' if self._vcruntime_redist else '/MT')
+ 
+         self.compile_options_debug = [
+-            '/nologo', '/Od', '/MDd', '/Zi', '/W3', '/D_DEBUG'
++            '/nologo', '/Od', '/MTd', '/Zi', '/W3', '/D_DEBUG'
+         ]
+ 
+         ldflags = [
+-            '/nologo', '/INCREMENTAL:NO', '/LTCG'
++            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/nodefaultlib:ucrt.lib', 'libucrt.lib',
+         ]
+-        if not self._vcruntime_redist:
+-            ldflags.extend(('/nodefaultlib:libucrt.lib', 'ucrt.lib'))
+ 
+         ldflags_debug = [
+-            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/DEBUG:FULL'
++            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/DEBUG:FULL', '/nodefaultlib:ucrtd.lib', 'libucrtd.lib',
+         ]
+ 
+         self.ldflags_exe = [*ldflags, '/MANIFEST:EMBED,ID=1']
