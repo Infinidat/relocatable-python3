@@ -43,7 +43,7 @@ def build():
                 buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
-        if dist_name in ['redhat', 'centos', 'oracle']:
+        if dist_name in ['redhat', 'centos', 'oracle', 'suse']:
             arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
             if 'ppc64le' in arch:
                 buildout_file = 'buildout-build-redhat-ppc64le.cfg'
@@ -52,18 +52,10 @@ def build():
             elif 'i386' in arch:
                 buildout_file = 'buildout-build-redhat-32bit.cfg'
             else:
-                if version.startswith('8'):
+                if version.startswith('8') or version.startswith('15'):
                     buildout_file = 'buildout-build-redhat-8-64bit.cfg'
                 else:
                     buildout_file = 'buildout-build-redhat-64bit.cfg'
-        if dist_name in ['suse']:
-            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-            if 'ppc64le' in arch:
-                buildout_file = 'buildout-build-suse-ppc64le.cfg'
-            elif 'ppc64' in arch:
-                buildout_file = 'buildout-build-suse-ppc64.cfg'
-            elif version >= "15":
-                buildout_file = 'buildout-build-suse-15.cfg'
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
