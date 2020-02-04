@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 TRICK = """
@@ -15,8 +16,8 @@ def get_sysconfigdata_files(options):
     from glob import glob
     from os import path
     dist = options["prefix"]
-    print 'dist = {0}'.format(dist)
-    print 'sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
+    print('dist = {0}'.format(dist))
+    print('sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py"))))
     for _sysconfigdata in glob(path.join(dist, "*", "*", "_sysconfigdata.py")):
         yield _sysconfigdata
 

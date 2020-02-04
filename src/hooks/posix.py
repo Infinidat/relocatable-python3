@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 TRICK = """
 # isolated-python trick
 import sys
@@ -16,8 +18,8 @@ def get_sysconfigdata_files(environ):
                                                                 path.pardir,  # parts,
                                                                 path.pardir,  # python-build
                                                                 "dist")))
-    print 'dist = {0}'.format(dist)
-    print 'sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py")))
+    print('dist = {0}'.format(dist))
+    print('sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py"))))
     for _sysconfigdata in glob(path.join(dist, "*", "*", "_sysconfigdata.py")):
         yield _sysconfigdata
 

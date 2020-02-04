@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import subprocess
 from os import path
@@ -52,7 +53,7 @@ class PythonPostMake(object):
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
         self.prefix = environ['PREFIX']
         self.environ = environ
-        print self.python_source_path, self.pcbuild_path, self.prefix
+        print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
         self.move_libs()
@@ -139,11 +140,11 @@ def _mk_path(path):
 def _copy_files(src_glob, dst):
     _mk_path(dst)
     for item in src_glob:
-        print 'cp %s %s' % (item, dst)
+        print('cp %s %s' % (item, dst))
         shutil.copy(item, dst)
 
 def _system(cmd):
-    print cmd
+    print(cmd)
     os.system(cmd.replace(os.path.sep, '/'))
 
 def libevent_post_make(options, buildout, environ):
