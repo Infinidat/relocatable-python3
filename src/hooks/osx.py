@@ -35,27 +35,22 @@ def remove_rpath_in_file(filepath):
     content = content.replace(r'-rpath $libdir', '')
     open(filepath, 'w').write(content)
 
-def change_install_name(options, buildout, version):
+def change_install_name(options, buildout, version, additional_files=[]):
     from os import curdir
     from os.path import abspath
-    for item in find_files(abspath(curdir), 'configure'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'Makefile'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'configure.in'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'Makefile.in'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'libtool'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'aclocal.m4'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
+    files_to_search = [
+        'configure',
+        'Makefile',
+        'configure.in',
+        'Makefile.in',
+        'libtool',
+        'aclocal.m4',
+    ]
+    files_to_search.extend(additional_files)
+    for file in files_to_search:
+        for item in find_files(abspath(curdir), file):
+            change_install_name_in_file(item)
+            remove_rpath_in_file(item)
 
 def patch_ncurses(options, buildout, version):
     from os import curdir
@@ -71,13 +66,10 @@ def patch_ncurses(options, buildout, version):
 def patch_openssl(options, buildout, version):
     from os import curdir
     from os.path import abspath
-    for item in find_files(abspath(curdir), 'Makefile*'):
-        print 'fixing files "%s"' % item
+    for item in find_files(abspath(curdir), 'shared-info*'):
+        print('fixing files "%s"' % item)
         filepath = item
         content = open(filepath).read()
-        content = content.replace('-Wl,-rpath,$(LIBRPATH)', '')
-        content = content.replace('-Wl,-rpath,$(LIBPATH)', '')
-        content = content.replace('-rpath $(LIBRPATH)', '')
         content = content.replace("-install_name $(INSTALLTOP)/$(LIBDIR)", "-install_name @rpath")
         open(filepath, 'w').write(content)
 
@@ -86,12 +78,10 @@ def patch_pdb(options, buildout, version):
     pdb.set_trace()
 
 def patch_cyrus_sasl(options, buildout, version):
-    change_install_name(options, buildout, version)
-    from os import curdir
-    from os.path import abspath
-    for item in find_files(abspath(curdir), 'ltconfig'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
+    change_install_name(options, buildout, version, ['ltconfig'])
+
+def patch_readline(options, buildout, version):
+    change_install_name(options, buildout, version, ['shobj-conf'])
 
 def patch_python(options, buildout, version):
     from os.path import abspath
