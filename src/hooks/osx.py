@@ -1,10 +1,11 @@
+from __future__ import print_function
 __import__("pkg_resources").declare_namespace(__name__)
 
 def _catch_and_print(func, *args, **kwargs):
     try:
         func(*args, **kwargs)
     except (OSError, IOError) as e:
-        print e
+        print(e)
 
 def find_files(directory, pattern):
     import os
@@ -17,14 +18,14 @@ def find_files(directory, pattern):
 
 def change_install_name_in_file(filepath):
     from re import sub
-    print "pre-configure-hook: changing install_name in %s" % filepath
+    print("pre-configure-hook: changing install_name in %s" % filepath)
     content = open(filepath).read()
     pattern = r'-install_name .*/(.*) '
     repl = r'-install_name @rpath/\1 '
     open(filepath, 'w').write(sub(pattern, repl, content))
 
 def remove_rpath_in_file(filepath):
-    print "pre-configure-hook: changing install_name in %s" % filepath
+    print("pre-configure-hook: changing install_name in %s" % filepath)
     content = open(filepath).read()
     content = content.replace(r'$rpath/$soname', r'@rpath/$soname')
     content = content.replace(r'\$rpath/\$soname', r'@rpath/\$soname')
@@ -34,33 +35,28 @@ def remove_rpath_in_file(filepath):
     content = content.replace(r'-rpath $libdir', '')
     open(filepath, 'w').write(content)
 
-def change_install_name(options, buildout, version):
+def change_install_name(options, buildout, version, additional_files=[]):
     from os import curdir
     from os.path import abspath
-    for item in find_files(abspath(curdir), 'configure'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'Makefile'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'configure.in'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'Makefile.in'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'libtool'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
-    for item in find_files(abspath(curdir), 'aclocal.m4'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
+    files_to_search = [
+        'configure',
+        'Makefile',
+        'configure.in',
+        'Makefile.in',
+        'libtool',
+        'aclocal.m4',
+    ]
+    files_to_search.extend(additional_files)
+    for file in files_to_search:
+        for item in find_files(abspath(curdir), file):
+            change_install_name_in_file(item)
+            remove_rpath_in_file(item)
 
 def patch_ncurses(options, buildout, version):
     from os import curdir
     from os.path import abspath
     for item in find_files(abspath(curdir), 'Makefile'):
-        print 'fixing files "%s"' % item
+        print('fixing files "%s"' % item)
         filepath = item
         content = open(filepath).read()
         src = 'LIBRARIES\t=  ../lib/libncurses.dylib'
@@ -70,13 +66,10 @@ def patch_ncurses(options, buildout, version):
 def patch_openssl(options, buildout, version):
     from os import curdir
     from os.path import abspath
-    for item in find_files(abspath(curdir), 'Makefile*'):
-        print 'fixing files "%s"' % item
+    for item in find_files(abspath(curdir), 'shared-info*'):
+        print('fixing files "%s"' % item)
         filepath = item
         content = open(filepath).read()
-        content = content.replace('-Wl,-rpath,$(LIBRPATH)', '')
-        content = content.replace('-Wl,-rpath,$(LIBPATH)', '')
-        content = content.replace('-rpath $(LIBRPATH)', '')
         content = content.replace("-install_name $(INSTALLTOP)/$(LIBDIR)", "-install_name @rpath")
         open(filepath, 'w').write(content)
 
@@ -85,19 +78,17 @@ def patch_pdb(options, buildout, version):
     pdb.set_trace()
 
 def patch_cyrus_sasl(options, buildout, version):
-    change_install_name(options, buildout, version)
-    from os import curdir
-    from os.path import abspath
-    for item in find_files(abspath(curdir), 'ltconfig'):
-        change_install_name_in_file(item)
-        remove_rpath_in_file(item)
+    change_install_name(options, buildout, version, ['ltconfig'])
+
+def patch_readline(options, buildout, version):
+    change_install_name(options, buildout, version, ['shobj-conf'])
 
 def patch_python(options, buildout, version):
     from os.path import abspath
     change_install_name(options, buildout, version)
     for file in ['Makefile.pre.in', 'configure']:
         content = open(file).read()
-        print abspath('./%s' % file)
+        print(abspath('./%s' % file))
         assert len(content)
         content = content.replace(r'-install_name,$(prefix)/lib', '-install_name,@rpath')
         content = content.replace(r'-install_name $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)', '-install_name @rpath')
@@ -129,7 +120,7 @@ def patch_libevent_configure_in(options, buildout, version):
     from os import curdir
     from os.path import abspath
     for item in find_files(abspath(curdir), 'configure.in*'):
-        print 'fixing files "%s"' % item
+        print('fixing files "%s"' % item)
         filepath = item
         content = open(filepath).read()
         content = content.replace('AM_CONFIG_HEADER', 'AC_CONFIG_HEADERS')
@@ -141,7 +132,7 @@ def add_ld_library_path_to_configure(options, buildout, version):
     from os import curdir
     from os.path import abspath, join
     filepath = join(abspath(curdir), 'configure')
-    print 'fixing files "%s"' % filepath
+    print('fixing files "%s"' % filepath)
     content = open(filepath).read()
     dist = options["prefix"]
     dist_lib = join(dist, "lib")

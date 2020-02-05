@@ -59,7 +59,7 @@ def build():
     elif system() == 'Darwin':
         from platform import mac_ver
         environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
-        gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout()
+        gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout().decode()
         if 'version 5.' in gcc_version:
             buildout_file = 'buildout-build-osx-xcode-5.cfg'
         elif 'version 6.' in gcc_version:
