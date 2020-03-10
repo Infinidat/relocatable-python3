@@ -63,6 +63,14 @@ def link_python_binary(options, buildout, environ):
     system("ln -s ./python3 {0}/bin/python".format(options["prefix"]))
 
 
+def make_ncurses_fallbacks(options, buildout, environ):
+    from os import system, curdir
+    from os.path import abspath
+    system(
+        "{0}/ncurses/tinfo/MKfallback.sh /lib/terminfo {0}/ncurses/misc/terminfo.src `which tic` `which infocmp` linux vt100 xterm xterm-256color >{0}/ncurses/fallback.c"
+        .format(abspath(curdir)))
+
+
 def fix_lib64_libdir(options, buildout, environ):
     from os import curdir
     from os.path import abspath
