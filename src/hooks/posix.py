@@ -64,6 +64,10 @@ def link_python_binary(options, buildout, environ):
 
 
 def make_ncurses_fallbacks(options, buildout, environ):
+    """Used to generate fallback.c file for compilation
+    effectively providing built in terminfo DB if none is found on system
+    or if python can't get the relevant TERM and TERMINFO environment variables
+    """
     from os import system, curdir
     from os.path import abspath
     system(
