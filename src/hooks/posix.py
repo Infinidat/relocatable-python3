@@ -57,3 +57,11 @@ def link_python_binary(options, buildout, environ):
 def python_post_make(options, buildout, environ):
     fix_sysconfigdata(options, buildout, environ)
     link_python_binary(options, buildout, environ)
+
+def make_ncurses_fallbacks(options, buildout, environ):
+    from os import system, curdir
+    from os.path import abspath
+    system(
+        "{0}/ncurses/tinfo/MKfallback.sh /lib/terminfo {0}/ncurses/misc/terminfo.src"
+        " `which tic` `which infocmp` linux vt100 xterm xterm-256color >{0}/ncurses/fallback.c"
+        .format(abspath(curdir)))
