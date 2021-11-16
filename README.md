@@ -25,7 +25,10 @@ You'll need to have pip installed on the build environment.
 For building on macOS, you'll need to install:
 * Xcode command line tools
 * Homebrew
-* autoconf, automake, libtool, pkgconfig
+
+```
+brew install automake autoconf libtool
+```
 
 For Ubuntu, you'll need to install:
 * build-essential
