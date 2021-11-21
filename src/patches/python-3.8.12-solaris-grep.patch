@@ -15,20 +15,3 @@ index 2a933cd..16db037 100755
    if test "$ax_cv_c_float_words_bigendian" = unknown; then
      ax_cv_c_float_words_bigendian=no
    else
-diff --git a/m4/ax_c_float_words_bigendian.m4 b/m4/ax_c_float_words_bigendian.m4
-index 216b90d..746228c 100644
---- a/m4/ax_c_float_words_bigendian.m4
-+++ b/m4/ax_c_float_words_bigendian.m4
-@@ -49,10 +49,10 @@ double d = 909042349670368103374704789055050114762116927356156320147971208440534
- 
- ]])], [
- 
--if grep noonsees conftest.$ac_objext >/dev/null ; then
-+if $GREP noonsees conftest.$ac_objext >/dev/null ; then
-   ax_cv_c_float_words_bigendian=yes
- fi
--if grep seesnoon conftest.$ac_objext >/dev/null ; then
-+if $GREP seesnoon conftest.$ac_objext >/dev/null ; then
-   if test "$ax_cv_c_float_words_bigendian" = unknown; then
-     ax_cv_c_float_words_bigendian=no
-   else
