@@ -29,3 +29,4 @@ index e8e4b71..07977b8 100644
          ]
  
          self.ldflags_exe = [*ldflags, '/MANIFEST:EMBED,ID=1']
+         
