@@ -27,36 +27,36 @@ diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
 index b09204d..f0e918d 100644
 --- a/Modules/posixmodule.c
 +++ b/Modules/posixmodule.c
-@@ -4456,6 +4456,7 @@ os_system_impl(PyObject *module, const Py_UNICODE *command)
- 
+@@ -4456,6 +4456,7 @@
+
      Py_BEGIN_ALLOW_THREADS
      _Py_BEGIN_SUPPRESS_IPH
 +    unsetenv("LIBPATH");
      result = _wsystem(command);
      _Py_END_SUPPRESS_IPH
      Py_END_ALLOW_THREADS
-@@ -5163,6 +5164,8 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
+@@ -5162,6 +5163,8 @@
+         val = PyList_GetItem(vals, pos);
          if (!key || !val)
              goto error;
- 
 +        if (strcmp(key, "LIBPATH") == 0) continue;
 +
+
  #if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
          if (!PyUnicode_FSDecoder(key, &key2))
-             goto error;
-@@ -5300,6 +5303,7 @@ os_execv_impl(PyObject *module, path_t *path, PyObject *argv)
+@@ -5300,6 +5303,7 @@
          return NULL;
      }
- 
+
 +    unsetenv("LIBPATH");
-    if (PySys_Audit("os.exec", "OOO", path->object, argv, Py_None) < 0) {
-        free_string_array(argvlist, argc);
-        return NULL;
-@@ -5973,6 +5977,7 @@ os_spawnv_impl(PyObject *module, int mode, path_t *path, PyObject *argv)
+     if (PySys_Audit("os.exec", "OOO", path->object, argv, Py_None) < 0) {
+         free_string_array(argvlist, argc);
+         return NULL;
+@@ -5973,6 +5977,7 @@
          mode = _P_OVERLAY;
  #endif
- 
+
 +    unsetenv("LIBPATH");
-    if (PySys_Audit("os.spawn", "iOOO", mode, path->object, argv,
-                    Py_None) < 0) {
-        free_string_array(argvlist, argc);
+     if (PySys_Audit("os.spawn", "iOOO", mode, path->object, argv,
+                     Py_None) < 0) {
+         free_string_array(argvlist, argc);
