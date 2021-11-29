@@ -2,7 +2,7 @@ diff --git a/Lib/subprocess.py b/Lib/subprocess.py
 index 85b9ea0..9abafd6 100644
 --- a/Lib/subprocess.py
 +++ b/Lib/subprocess.py
-@@ -1618,6 +1618,8 @@ class Popen(object):
+@@ -1620,6 +1620,8 @@ class Popen(object):
                      if env is not None:
                          env_list = []
                          for k, v in env.items():
@@ -27,7 +27,7 @@ diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
 index b09204d..f0e918d 100644
 --- a/Modules/posixmodule.c
 +++ b/Modules/posixmodule.c
-@@ -4322,6 +4322,7 @@ os_system_impl(PyObject *module, const Py_UNICODE *command)
+@@ -4456,6 +4456,7 @@ os_system_impl(PyObject *module, const Py_UNICODE *command)
  
      Py_BEGIN_ALLOW_THREADS
      _Py_BEGIN_SUPPRESS_IPH
@@ -35,7 +35,7 @@ index b09204d..f0e918d 100644
      result = _wsystem(command);
      _Py_END_SUPPRESS_IPH
      Py_END_ALLOW_THREADS
-@@ -5019,6 +5020,8 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
+@@ -5163,6 +5164,8 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
          if (!key || !val)
              goto error;
  
@@ -44,19 +44,19 @@ index b09204d..f0e918d 100644
  #if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
          if (!PyUnicode_FSDecoder(key, &key2))
              goto error;
-@@ -5156,6 +5159,7 @@ os_execv_impl(PyObject *module, path_t *path, PyObject *argv)
+@@ -5300,6 +5303,7 @@ os_execv_impl(PyObject *module, path_t *path, PyObject *argv)
          return NULL;
      }
  
 +    unsetenv("LIBPATH");
-     _Py_BEGIN_SUPPRESS_IPH
- #ifdef HAVE_WEXECV
-     _wexecv(path->wide, argvlist);
-@@ -5816,6 +5820,7 @@ os_spawnv_impl(PyObject *module, int mode, path_t *path, PyObject *argv)
+    if (PySys_Audit("os.exec", "OOO", path->object, argv, Py_None) < 0) {
+        free_string_array(argvlist, argc);
+        return NULL;
+@@ -5973,6 +5977,7 @@ os_spawnv_impl(PyObject *module, int mode, path_t *path, PyObject *argv)
          mode = _P_OVERLAY;
  #endif
  
 +    unsetenv("LIBPATH");
-     Py_BEGIN_ALLOW_THREADS
-     _Py_BEGIN_SUPPRESS_IPH
- #ifdef HAVE_WSPAWNV
+    if (PySys_Audit("os.spawn", "iOOO", mode, path->object, argv,
+                    Py_None) < 0) {
+        free_string_array(argvlist, argc);
