@@ -317,13 +317,13 @@ index 8884c0a..0286cbc 100644
      <ExternalsDir>$(EXTERNALS_DIR)</ExternalsDir>
      <ExternalsDir Condition="$(ExternalsDir) == ''">$([System.IO.Path]::GetFullPath(`$(PySourcePath)externals`))</ExternalsDir>
      <ExternalsDir Condition="!HasTrailingSlash($(ExternalsDir))">$(ExternalsDir)\</ExternalsDir>
--    <sqlite3Dir>$(ExternalsDir)sqlite-3.28.0.0\</sqlite3Dir>
+-    <sqlite3Dir>$(ExternalsDir)sqlite-3.35.5.0\</sqlite3Dir>
 -    <bz2Dir>$(ExternalsDir)bzip2-1.0.6\</bz2Dir>
 -    <lzmaDir>$(ExternalsDir)xz-5.2.2\</lzmaDir>
 -    <libffiDir>$(ExternalsDir)libffi\</libffiDir>
 -    <libffiOutDir>$(ExternalsDir)libffi\$(ArchName)\</libffiOutDir>
 -    <libffiIncludeDir>$(libffiOutDir)include</libffiIncludeDir>
--    <opensslDir>$(ExternalsDir)openssl-1.1.1d\</opensslDir>
+-    <opensslDir>$(ExternalsDir)openssl-1.1.1l\</opensslDir>
 +    <prefixDir>..\..\..\..\dist\</prefixDir>
 +    <partsDir>..\..\..\</partsDir>
 +    <sqlite3Dir>$(partsDir)sqlite3__compile__\sqlite-autoconf-3070602\</sqlite3Dir>
@@ -332,8 +332,8 @@ index 8884c0a..0286cbc 100644
 +    <libffiDir>$(partsDir)libffi__compile__\libffi\</libffiDir>
 +    <libffiOutDir>$(prefixDir)lib</libffiOutDir>
 +    <libffiIncludeDir>$(prefixDir)include</libffiIncludeDir>
-+    <opensslDir>$(partsDir)openssl__compile__\openssl-1.1.1d\</opensslDir>
-     <opensslOutDir>$(ExternalsDir)openssl-bin-1.1.1d\$(ArchName)\</opensslOutDir>
++    <opensslDir>$(partsDir)openssl__compile__\openssl-1.1.1l\</opensslDir>
+     <opensslOutDir>$(ExternalsDir)openssl-bin-1.1.1l\$(ArchName)\</opensslOutDir>
 -    <opensslIncludeDir>$(opensslOutDir)include</opensslIncludeDir>
 -    <nasmDir>$(ExternalsDir)\nasm-2.11.06\</nasmDir>
 -    <zlibDir>$(ExternalsDir)\zlib-1.2.11\</zlibDir>
@@ -425,15 +425,6 @@ index 8884c0a..0286cbc 100644
    <PropertyGroup>
      <PythonVersionNumber>$(MajorVersionNumber).$(MinorVersionNumber).$(MicroVersionNumber)</PythonVersionNumber>
      <PythonVersion>$(MajorVersionNumber).$(MinorVersionNumber).$(MicroVersionNumber)$(ReleaseLevelName)</PythonVersion>
-@@ -200,7 +200,7 @@
-         ))
-     ))</Field3Value>
-     <Field3Value Condition="$(UseTestMarker) == 'true'">$([msbuild]::Add($(Field3Value), 9000))</Field3Value>
--    
-+
-     <!-- The name of the resulting pythonXY.dll (without the extension) -->
-     <PyDllName>python$(MajorVersionNumber)$(MinorVersionNumber)$(PyDebugExt)</PyDllName>
- 
 @@ -209,11 +209,11 @@
      <PydTag Condition="$(ArchName) == 'arm32'">.cp$(MajorVersionNumber)$(MinorVersionNumber)-win_arm32</PydTag>
      <PydTag Condition="$(ArchName) == 'arm64'">.cp$(MajorVersionNumber)$(MinorVersionNumber)-win_arm64</PydTag>

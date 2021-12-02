@@ -1,0 +1,32 @@
+diff --git a/Lib/distutils/_msvccompiler.py b/Lib/distutils/_msvccompiler.py
+index e8e4b71..07977b8 100644
+--- a/Lib/distutils/_msvccompiler.py
++++ b/Lib/distutils/_msvccompiler.py
+@@ -247,20 +247,22 @@
+         # bpo-38597: Always compile with dynamic linking
+         # Future releases of Python 3.x will include all past
+         # versions of vcruntime*.dll for compatibility.
++        # we always want to link statically to runtime so we use /MT[d] and
++        # link against libucrt[d].lib and not ucrt[d].lib
+         self.compile_options = [
+-            '/nologo', '/Ox', '/W3', '/GL', '/DNDEBUG', '/MD'
++            '/nologo', '/Ox', '/W3', '/GL', '/DNDEBUG', '/MT'
+         ]
+ 
+         self.compile_options_debug = [
+-            '/nologo', '/Od', '/MDd', '/Zi', '/W3', '/D_DEBUG'
++            '/nologo', '/Od', '/MTd', '/Zi', '/W3', '/D_DEBUG'
+         ]
+ 
+         ldflags = [
+-            '/nologo', '/INCREMENTAL:NO', '/LTCG'
++            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/nodefaultlib:ucrt.lib', 'libucrt.lib',
+         ]
+ 
+         ldflags_debug = [
+-            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/DEBUG:FULL'
++            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/DEBUG:FULL', '/nodefaultlib:ucrtd.lib', 'libucrtd.lib',
+         ]
+ 
+         self.ldflags_exe = [*ldflags, '/MANIFEST:EMBED,ID=1']
+         
