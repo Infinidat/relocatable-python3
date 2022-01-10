@@ -17,6 +17,11 @@ Or, for Windows:
 
     nmake -f Makefile.win
 
+
+Once the build is over:
+- Run otool/ldd to make sure no static libraries are used during python executable load: ```otool -L dist/bin/python3```
+- Run basic tests: ```make test``` (Note that the Makefile will use the right python executable whether we're on Windows or not)
+
 Build environment
 =================
 
