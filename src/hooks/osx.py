@@ -97,14 +97,14 @@ def patch_python(options, buildout, version):
         open(file, 'w').write(content)
 
 def add_ld_library_path_to_python_makefile(options, buildout, version):
-    # Inject LD_LIBRARY_PATH to setup.py's runtime (see comment in add_ld_library_path_to_configure)
+    # Inject DYLD_LIBRARY_PATH to setup.py's runtime (see comment in add_ld_library_path_to_configure)
     # without this, the dynamic modules will fail to load and be renamed to *_failed.so
     from os.path import join
     dist = options["prefix"]
     dist_lib = join(dist, "lib")
     filename = "Makefile"
     content = open(filename).read()
-    content = content.replace('$(PYTHON_FOR_BUILD) $(srcdir)/setup.py', 'LD_LIBRARY_PATH={} $(PYTHON_FOR_BUILD) $(srcdir)/setup.py'.format(dist_lib))
+    content = content.replace('$(PYTHON_FOR_BUILD) $(srcdir)/setup.py', 'DYLD_LIBRARY_PATH={} $(PYTHON_FOR_BUILD) $(srcdir)/setup.py'.format(dist_lib))
     open(filename, 'w').write(content)
 
 def patch_python_Makefile_after_configure(options, buildout, version):
@@ -127,7 +127,7 @@ def patch_libevent_configure_in(options, buildout, version):
         open(filepath, 'w').write(content)
 
 def add_ld_library_path_to_configure(options, buildout, version):
-    # The LD_LIBRARY_PATH (runtime search path) that is set by buildout is not passed to
+    # The (DY)LD_LIBRARY_PATH (runtime search path) that is set by buildout is not passed to
     # the childrent processes due to SIP on El Capitan and newer. We set it manually inside the configure script
     from os import curdir
     from os.path import abspath, join
@@ -136,7 +136,7 @@ def add_ld_library_path_to_configure(options, buildout, version):
     content = open(filepath).read()
     dist = options["prefix"]
     dist_lib = join(dist, "lib")
-    content = "export LD_LIBRARY_PATH={}\n".format(dist_lib) + content
+    content = "export DYLD_LIBRARY_PATH={}\n".format(dist_lib) + content
     open(filepath, 'w').write(content)
 
 def autogen(options, buildout, version):
