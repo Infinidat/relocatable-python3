@@ -326,7 +326,7 @@ index 8884c0a..0286cbc 100644
 -    <opensslDir>$(ExternalsDir)openssl-1.1.1l\</opensslDir>
 +    <prefixDir>..\..\..\..\dist\</prefixDir>
 +    <partsDir>..\..\..\</partsDir>
-+    <sqlite3Dir>$(partsDir)sqlite3__compile__\sqlite-autoconf-3070602\</sqlite3Dir>
++    <sqlite3Dir>$(partsDir)sqlite3__compile__\sqlite-autoconf-3380500\</sqlite3Dir>
 +    <bz2Dir>$(partsDir)bzip2__compile__\bzip2-1.0.6</bz2Dir>
 +    <lzmaDir>$(prefixDir)\</lzmaDir>
 +    <libffiDir>$(partsDir)libffi__compile__\libffi\</libffiDir>
