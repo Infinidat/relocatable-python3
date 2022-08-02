@@ -40,7 +40,10 @@ def build():
         dist_name = dist_name.replace('rhel', 'redhat').replace('sles', 'suse').replace('enterpriseenterpriseserver', 'oracle')
         if dist_name == 'ubuntu':
             if version >= '16.04':
-                buildout_file = 'buildout-build-ubuntu-16.04.cfg'
+                if version == '22.04':
+                    buildout_file = 'buildout-build-ubuntu-22.04.cfg'
+                else:
+                    buildout_file = 'buildout-build-ubuntu-16.04.cfg'
             else:
                 buildout_file = 'buildout-build-ubuntu.cfg'
         if dist_name in ['redhat', 'centos', 'oracle', 'suse']:
