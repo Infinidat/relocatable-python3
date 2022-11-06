@@ -35,6 +35,13 @@ For building on macOS, you'll need to install:
 brew install automake autoconf libtool
 ```
 
+If the ```make``` command fails with error like:
+```
+error: Setup script exited with error: SandboxViolation
+```
+Make sure you use virtualenv and not the OS's python for the build.
+
+
 For Ubuntu, you'll need to install:
 * build-essential
 
