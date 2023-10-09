@@ -1,0 +1,10 @@
+--- a/configure	2023-09-29 16:55:29.298766260 -0500
++++ b/configure	2023-09-29 16:56:09.133878667 -0500
+@@ -257,6 +257,7 @@
+             SHAREDLIB='libz.sl' ;;
+         esac ;;
+   AIX*)
++        LDSHARED=${LDSHARED-"$cc -shared"}
+         LDFLAGS="${LDFLAGS} -Wl,-brtl" ;;
+   Darwin* | darwin* | *-darwin*)
+         shared_ext='.dylib'

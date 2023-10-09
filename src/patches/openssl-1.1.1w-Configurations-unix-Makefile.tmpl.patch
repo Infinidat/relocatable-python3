@@ -1,0 +1,11 @@
+--- openssl-1.1.1w/Configurations/unix-Makefile.tmpl	2023-10-04 09:06:57.733392557 -0500
++++ openssl-1.1.1w/Configurations/unix-Makefile.tmpl	2023-10-04 09:09:24.129437409 -0500
+@@ -38,7 +38,7 @@
+ 
+      # Shared AIX support is special. We put libcrypto[64].so.ver into
+      # libcrypto.a and use libcrypto_a.a as static one.
+-     sub sharedaix  { !$disabled{shared} && $config{target} =~ /^aix/ }
++     sub sharedaix  { !$disabled{shared} && $config{target} =~ /^aix-cc/ }
+ 
+      our $sover_dirname = $config{shlib_version_number};
+      $sover_dirname =~ s|\.|_|g

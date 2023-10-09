@@ -1,0 +1,22 @@
+--- Python-3.8.12/setup.py.orig	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/setup.py	2023-10-07 18:31:43.680472390 -0500
+@@ -899,10 +899,6 @@
+             curses_library = readline_termcap_library
+         elif self.compiler.find_library_file(self.lib_dirs, 'ncursesw'):
+             curses_library = 'ncursesw'
+-        # Issue 36210: OSS provided ncurses does not link on AIX
+-        # Use IBM supplied 'curses' for successful build of _curses
+-        elif AIX and self.compiler.find_library_file(self.lib_dirs, 'curses'):
+-            curses_library = 'curses'
+         elif self.compiler.find_library_file(self.lib_dirs, 'ncurses'):
+             curses_library = 'ncurses'
+         elif self.compiler.find_library_file(self.lib_dirs, 'curses'):
+@@ -2053,7 +2049,7 @@
+         undef_macros = []
+         if '--with-system-libmpdec' in sysconfig.get_config_var("CONFIG_ARGS"):
+             include_dirs = []
+-            libraries = [':libmpdec.so.2']
++            libraries = ['mpdec']
+             sources = ['_decimal/_decimal.c']
+             depends = ['_decimal/docstrings.h']
+         else:

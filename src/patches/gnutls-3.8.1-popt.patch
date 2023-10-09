@@ -1,0 +1,132 @@
+diff -ur gnutls-3.8.1.orig/src/certtool-options.c gnutls-3.8.1/src/certtool-options.c
+--- gnutls-3.8.1.orig/src/certtool-options.c	2023-10-05 14:08:29.000000000 -0500
++++ gnutls-3.8.1/src/certtool-options.c	2023-10-05 14:43:31.219071255 -0500
+@@ -5,7 +5,7 @@
+ #include "certtool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/danetool-options.c gnutls-3.8.1/src/danetool-options.c
+--- gnutls-3.8.1.orig/src/danetool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/danetool-options.c	2023-10-05 14:43:31.239075132 -0500
+@@ -5,7 +5,7 @@
+ #include "danetool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/gnutls-cli-debug-options.c gnutls-3.8.1/src/gnutls-cli-debug-options.c
+--- gnutls-3.8.1.orig/src/gnutls-cli-debug-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/gnutls-cli-debug-options.c	2023-10-05 14:43:31.239075131 -0500
+@@ -5,7 +5,7 @@
+ #include "gnutls-cli-debug-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/gnutls-cli-options.c gnutls-3.8.1/src/gnutls-cli-options.c
+--- gnutls-3.8.1.orig/src/gnutls-cli-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/gnutls-cli-options.c	2023-10-05 14:43:31.248702669 -0500
+@@ -5,7 +5,7 @@
+ #include "gnutls-cli-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/gnutls-serv-options.c gnutls-3.8.1/src/gnutls-serv-options.c
+--- gnutls-3.8.1.orig/src/gnutls-serv-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/gnutls-serv-options.c	2023-10-05 14:43:31.249090517 -0500
+@@ -5,7 +5,7 @@
+ #include "gnutls-serv-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/ocsptool-options.c gnutls-3.8.1/src/ocsptool-options.c
+--- gnutls-3.8.1.orig/src/ocsptool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/ocsptool-options.c	2023-10-05 14:43:31.249090515 -0500
+@@ -5,7 +5,7 @@
+ #include "ocsptool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/p11tool-options.c gnutls-3.8.1/src/p11tool-options.c
+--- gnutls-3.8.1.orig/src/p11tool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/p11tool-options.c	2023-10-05 14:43:31.259105955 -0500
+@@ -5,7 +5,7 @@
+ #include "p11tool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/psktool-options.c gnutls-3.8.1/src/psktool-options.c
+--- gnutls-3.8.1.orig/src/psktool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/psktool-options.c	2023-10-05 14:43:31.259105958 -0500
+@@ -5,7 +5,7 @@
+ #include "psktool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/srptool-options.c gnutls-3.8.1/src/srptool-options.c
+--- gnutls-3.8.1.orig/src/srptool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/srptool-options.c	2023-10-05 14:43:31.272035997 -0500
+@@ -5,7 +5,7 @@
+ #include "srptool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/systemkey-tool-options.c gnutls-3.8.1/src/systemkey-tool-options.c
+--- gnutls-3.8.1.orig/src/systemkey-tool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/systemkey-tool-options.c	2023-10-05 14:43:31.279137529 -0500
+@@ -5,7 +5,7 @@
+ #include "systemkey-tool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ur gnutls-3.8.1.orig/src/tpmtool-options.c gnutls-3.8.1/src/tpmtool-options.c
+--- gnutls-3.8.1.orig/src/tpmtool-options.c	2023-08-04 03:14:55.000000000 -0500
++++ gnutls-3.8.1/src/tpmtool-options.c	2023-10-05 14:43:31.287072144 -0500
+@@ -5,7 +5,7 @@
+ #include "tpmtool-options.h"
+ #include <errno.h>
+ #include <error.h>
+-#include <getopt.h>
++#include <popt.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>

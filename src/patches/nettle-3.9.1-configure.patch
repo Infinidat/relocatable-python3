@@ -1,0 +1,18 @@
+--- nettle-3.9.1/configure	2023-10-04 14:51:10.636311771 -0500
++++ nettle-3.9.1/configure	2023-10-04 14:52:40.998685436 -0500
+@@ -7182,13 +7182,13 @@
+     LIBNETTLE_FORLINK=libnettle.so
+     LIBNETTLE_SONAME='$(LIBNETTLE_FORLINK).$(LIBNETTLE_MAJOR)'
+     LIBNETTLE_FILE='$(LIBNETTLE_SONAME).$(LIBNETTLE_MINOR)'
+-    LIBNETTLE_LINK='$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname=$(LIBNETTLE_SONAME)'
++    LIBNETTLE_LINK='$(CC) $(CFLAGS) $(LDFLAGS) -shared'
+     LIBNETTLE_LIBS=''
+ 
+     LIBHOGWEED_FORLINK=libhogweed.so
+     LIBHOGWEED_SONAME='$(LIBHOGWEED_FORLINK).$(LIBHOGWEED_MAJOR)'
+     LIBHOGWEED_FILE='$(LIBHOGWEED_SONAME).$(LIBHOGWEED_MINOR)'
+-    LIBHOGWEED_LINK='$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname=$(LIBHOGWEED_SONAME)'
++    LIBHOGWEED_LINK='$(CC) $(CFLAGS) $(LDFLAGS) -shared'
+     # Requested by debian, to make linking with only -lhogweed work
+     # (does not work in general, e.g., with static linking all of
+     # -lhogweed -lgmp -lnettle are still required). Also makes dlopen

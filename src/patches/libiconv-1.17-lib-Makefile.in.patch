@@ -1,0 +1,24 @@
+--- libiconv-1.17/lib/Makefile.in	2023-10-06 15:19:55.425166045 -0500
++++ libiconv-1.17/lib/Makefile.in	2023-10-06 15:21:33.466499101 -0500
+@@ -104,20 +104,10 @@
+ 	if [ ! -d $(libdir) ] ; then $(mkinstalldirs) $(libdir) ; fi
+ 	$(LIBTOOL_INSTALL) $(INSTALL) libiconv.la $(libdir)/libiconv.la
+ 
+-# On AIX, libiconv.a must include the object files of /lib/libiconv.a,
+-# otherwise the setlocale() call fails when invoked from executables linked
+-# with -rpath $(libdir), even if linked without -liconv.
+ install : all force
+ 	if [ ! -d $(DESTDIR)$(libdir) ] ; then $(mkinstalldirs) $(DESTDIR)$(libdir) ; fi
+ 	$(LIBTOOL_INSTALL) $(INSTALL) libiconv.la $(DESTDIR)$(libdir)/libiconv.la
+-	case "@host_os@" in \
+-	  aix*) (cd $(DESTDIR)$(libdir) && \
+-	         objects=`$(AR) t libiconv.a`" "`$(AR) t /lib/libiconv.a` && \
+-	         $(AR) x libiconv.a && $(AR) x /lib/libiconv.a && \
+-	         $(AR) q libiconv.new.a $$objects && \
+-	         rm -f $$objects && \
+-	         mv -f libiconv.new.a libiconv.a) ;; \
+-	esac
++	rm -f $(DESTDIR)$(libdir)/libiconv.a
+ 
+ install-strip : install
+ 

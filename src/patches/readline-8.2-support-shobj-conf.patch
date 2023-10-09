@@ -1,0 +1,13 @@
+--- a/support/shobj-conf	2023-09-26 15:39:12.868605000 -0500
++++ a/support/shobj-conf	2023-09-26 15:40:15.122865904 -0500
+@@ -245,8 +245,8 @@
+ 	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
+ 	SHOBJ_XLDFLAGS='-G'
+ 
+-	SHLIB_XLDFLAGS='-bM:SRE'
+-	SHLIB_LIBS='-lcurses -lc'
++	SHLIB_XLDFLAGS='-Wl,-bM:SRE -Wl,-brtl'
++	SHLIB_LIBS='-lncurses -lc'
+ 	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)'
+ 	;;
+ 

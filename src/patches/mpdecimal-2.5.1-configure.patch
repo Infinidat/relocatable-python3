@@ -1,0 +1,44 @@
+--- mpdecimal-2.5.1/configure	2021-01-20 08:07:31.000000000 -0600
++++ mpdecimal-2.5.1/configure	2023-10-07 19:02:18.499591900 -0500
+@@ -2680,7 +2680,7 @@
+         LIBSHARED="libmpdec.2.5.1.dylib"
+         CONFIGURE_LDFLAGS="-dynamiclib -install_name @rpath/$LIBSONAME -compatibility_version 2.5 -current_version 2.5.1"
+         ;;
+-    AIX)
++    XXX)
+         LIBNAME="libmpdec.so"
+         LIBSONAME="libmpdec.so.3"
+         LIBSHARED="shr.o"
+@@ -2693,9 +2693,9 @@
+         ;;
+     *)
+         LIBNAME="libmpdec.so"
+-        LIBSONAME="libmpdec.so.3"
++        LIBSONAME="libmpdec.so.2"
+         LIBSHARED="libmpdec.so.2.5.1"
+-        CONFIGURE_LDFLAGS="-shared -Wl,-soname,$LIBSONAME"
++        CONFIGURE_LDFLAGS="-shared -Wl,-brtl"
+         ;;
+ esac
+ 
+@@ -2708,7 +2708,7 @@
+         LIBSHARED_CXX="libmpdec++.2.5.1.dylib"
+         CONFIGURE_LDXXFLAGS="-dynamiclib -install_name @rpath/$LIBSONAME_CXX -undefined dynamic_lookup -compatibility_version 2.5 -current_version 2.5.1"
+         ;;
+-    AIX)
++    XXX)
+         LIBNAME_CXX="libmpdec++.so"
+         LIBSONAME_CXX="libmpdec++.so.3"
+         LIBSHARED_CXX="shr.o"
+@@ -2716,9 +2716,9 @@
+         ;;
+     *)
+         LIBNAME_CXX="libmpdec++.so"
+-        LIBSONAME_CXX="libmpdec++.so.3"
++        LIBSONAME_CXX="libmpdec++.so.2"
+         LIBSHARED_CXX="libmpdec++.so.2.5.1"
+-        CONFIGURE_LDXXFLAGS="-shared -Wl,-soname,$LIBSONAME_CXX"
++        CONFIGURE_LDXXFLAGS="-shared -Wl,-brtl"
+         ;;
+ esac
+ 

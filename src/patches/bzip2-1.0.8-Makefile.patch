@@ -1,0 +1,77 @@
+--- bzip2-1.0.8/Makefile.orig	2023-10-07 16:42:32.734298282 -0500
++++ bzip2-1.0.8/Makefile	2023-10-07 17:03:58.754498490 -0500
+@@ -21,7 +21,7 @@
+ LDFLAGS=
+ 
+ BIGFILES=-D_FILE_OFFSET_BITS=64
+-CFLAGS=-Wall -Winline -O2 -g $(BIGFILES)
++CFLAGS=-Wall -Winline $(BIGFILES)
+ 
+ # Where you want it installed when you do 'make install'
+ PREFIX=/usr/local
+@@ -35,32 +35,27 @@
+       decompress.o \
+       bzlib.o
+ 
+-all: libbz2.a bzip2 bzip2recover test
++all: libbz2.so.1 bzip2 bzip2recover test
+ 
+-bzip2: libbz2.a bzip2.o
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2 bzip2.o -L. -lbz2
++bzip2: libbz2.so.1
++	$(CC) $(CFLAGS) -o bzip2 bzip2.c libbz2.so.1
+ 
+ bzip2recover: bzip2recover.o
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2recover bzip2recover.o
+ 
+-libbz2.a: $(OBJS)
+-	rm -f libbz2.a
+-	$(AR) cq libbz2.a $(OBJS)
+-	@if ( test -f $(RANLIB) -o -f /usr/bin/ranlib -o \
+-		-f /bin/ranlib -o -f /usr/ccs/bin/ranlib ) ; then \
+-		echo $(RANLIB) libbz2.a ; \
+-		$(RANLIB) libbz2.a ; \
+-	fi
++libbz2.so.1: $(OBJS)
++	rm -f libbz2.so.1 libbz2.so
++	$(CC) -shared $(LDFLAGS) -o libbz2.so.1 $(OBJS)
+ 
+ check: test
+ test: bzip2
+ 	@cat words1
+-	./bzip2 -1  < sample1.ref > sample1.rb2
+-	./bzip2 -2  < sample2.ref > sample2.rb2
+-	./bzip2 -3  < sample3.ref > sample3.rb2
+-	./bzip2 -d  < sample1.bz2 > sample1.tst
+-	./bzip2 -d  < sample2.bz2 > sample2.tst
+-	./bzip2 -ds < sample3.bz2 > sample3.tst
++	LIBPATH=. ./bzip2 -1  < sample1.ref > sample1.rb2
++	LIBPATH=. ./bzip2 -2  < sample2.ref > sample2.rb2
++	LIBPATH=. ./bzip2 -3  < sample3.ref > sample3.rb2
++	LIBPATH=. ./bzip2 -d  < sample1.bz2 > sample1.tst
++	LIBPATH=. ./bzip2 -d  < sample2.bz2 > sample2.tst
++	LIBPATH=. ./bzip2 -ds < sample3.bz2 > sample3.tst
+ 	cmp sample1.bz2 sample1.rb2 
+ 	cmp sample2.bz2 sample2.rb2
+ 	cmp sample3.bz2 sample3.rb2
+@@ -87,8 +82,9 @@
+ 	chmod a+r $(PREFIX)/man/man1/bzip2.1
+ 	cp -f bzlib.h $(PREFIX)/include
+ 	chmod a+r $(PREFIX)/include/bzlib.h
+-	cp -f libbz2.a $(PREFIX)/lib
+-	chmod a+r $(PREFIX)/lib/libbz2.a
++	cp -f libbz2.so.1 $(PREFIX)/lib
++	chmod a+r $(PREFIX)/lib/libbz2.so.1
++	ln -s -f libbz2.so.1 $(PREFIX)/lib/libbz2.so
+ 	cp -f bzgrep $(PREFIX)/bin/bzgrep
+ 	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzegrep
+ 	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzfgrep
+@@ -128,8 +124,6 @@
+ 	$(CC) $(CFLAGS) -c decompress.c
+ bzlib.o: bzlib.c
+ 	$(CC) $(CFLAGS) -c bzlib.c
+-bzip2.o: bzip2.c
+-	$(CC) $(CFLAGS) -c bzip2.c
+ bzip2recover.o: bzip2recover.c
+ 	$(CC) $(CFLAGS) -c bzip2recover.c
+ 

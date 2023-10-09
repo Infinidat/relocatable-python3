@@ -1,0 +1,11 @@
+--- openldap-2.6.6/build/top.mk.orig	2023-10-07 06:51:21.629931921 -0500
++++ openldap-2.6.6/build/top.mk	2023-10-07 06:51:34.211116923 -0500
+@@ -20,7 +20,7 @@
+ RELEASEDATE= @OPENLDAP_RELEASE_DATE@
+ 
+ @SET_MAKE@
+-SHELL = /bin/sh
++SHELL = /bin/bash
+ 
+ top_builddir = @top_builddir@
+ 
