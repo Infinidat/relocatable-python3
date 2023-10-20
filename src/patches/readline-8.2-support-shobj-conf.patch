@@ -6,7 +6,7 @@
  
 -	SHLIB_XLDFLAGS='-bM:SRE'
 -	SHLIB_LIBS='-lcurses -lc'
-+	SHLIB_XLDFLAGS='-Wl,-bM:SRE -Wl,-brtl'
++	SHLIB_XLDFLAGS='-Wl,-bM:SRE'
 +	SHLIB_LIBS='-lncurses -lc'
  	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)'
  	;;

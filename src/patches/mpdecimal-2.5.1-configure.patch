@@ -17,7 +17,7 @@
 +        LIBSONAME="libmpdec.so.2"
          LIBSHARED="libmpdec.so.2.5.1"
 -        CONFIGURE_LDFLAGS="-shared -Wl,-soname,$LIBSONAME"
-+        CONFIGURE_LDFLAGS="-shared -Wl,-brtl"
++        CONFIGURE_LDFLAGS="-shared"
          ;;
  esac
  
@@ -38,7 +38,7 @@
 +        LIBSONAME_CXX="libmpdec++.so.2"
          LIBSHARED_CXX="libmpdec++.so.2.5.1"
 -        CONFIGURE_LDXXFLAGS="-shared -Wl,-soname,$LIBSONAME_CXX"
-+        CONFIGURE_LDXXFLAGS="-shared -Wl,-brtl"
++        CONFIGURE_LDXXFLAGS="-shared"
          ;;
  esac
  

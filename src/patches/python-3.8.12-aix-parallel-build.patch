@@ -1,0 +1,158 @@
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index a914a9c70f679..71b8ab4666f3b 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -160,6 +160,10 @@ BLDSHARED=	@BLDSHARED@ $(PY_CORE_LDFLAGS)
+ LDCXXSHARED=	@LDCXXSHARED@
+ DESTSHARED=	$(BINLIBDEST)/lib-dynload
+ 
++# List of exported symbols for AIX
++EXPORTSYMS=	@EXPORTSYMS@
++EXPORTSFROM=	@EXPORTSFROM@
++
+ # Executable suffix (.exe on Windows and Mac OS X)
+ EXE=		@EXEEXT@
+ BUILDEXE=	@BUILDEXEEXT@
+@@ -562,7 +566,7 @@ clinic: check-clean-src $(srcdir)/Modules/_blake2/blake2s_impl.c
+ 	$(PYTHON_FOR_REGEN) $(srcdir)/Tools/clinic/clinic.py --make --srcdir $(srcdir)
+ 
+ # Build the interpreter
+-$(BUILDPYTHON):	Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
++$(BUILDPYTHON):	Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY) $(EXPORTSYMS)
+ 	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS)
+ 
+ platform: $(BUILDPYTHON) pybuilddir.txt
+@@ -634,6 +638,10 @@ libpython$(LDVERSION).dylib: $(LIBRARY_OBJS)
+ libpython$(VERSION).sl: $(LIBRARY_OBJS)
+ 	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM)
+ 
++# List of exported symbols for AIX
++Modules/python.exp: $(LIBRARY)
++	$(srcdir)/Modules/makexp_aix $@ "$(EXPORTSFROM)" $?
++
+ # Copy up the gdb python hooks into a position where they can be automatically
+ # loaded by gdb during Lib/test/test_gdb.py
+ #
+@@ -693,7 +701,7 @@ Makefile Modules/config.c: Makefile.pre \
+ 	@echo "The Makefile was updated, you may need to re-run make."
+ 
+ 
+-Programs/_testembed: Programs/_testembed.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
++Programs/_testembed: Programs/_testembed.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY) $(EXPORTSYMS)
+ 	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/_testembed.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS)
+ 
+ ############################################################################
+diff --git a/configure b/configure
+index 96dcd0dcd5fec..7baac39deaa1d 100755
+--- a/configure
++++ b/configure
+@@ -697,6 +697,8 @@ ARFLAGS
+ ac_ct_AR
+ AR
+ GNULD
++EXPORTSFROM
++EXPORTSYMS
+ LINKCC
+ LDVERSION
+ RUNSHARED
+@@ -5771,8 +5773,6 @@ LDVERSION="$VERSION"
+ # If CXX is set, and if it is needed to link a main function that was
+ # compiled with CXX, LINKCC is CXX instead. Always using CXX is undesirable:
+ # python might then depend on the C++ runtime
+-# This is altered for AIX in order to build the export list before
+-# linking.
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking LINKCC" >&5
+ $as_echo_n "checking LINKCC... " >&6; }
+@@ -5780,13 +5780,6 @@ if test -z "$LINKCC"
+ then
+ 	LINKCC='$(PURIFY) $(MAINCC)'
+ 	case $ac_sys_system in
+-	AIX*)
+-	   exp_extra="\"\""
+-	   if test $ac_sys_release -ge 5 -o \
+-		   $ac_sys_release -eq 4 -a `uname -r` -ge 2 ; then
+-	       exp_extra="."
+-	   fi
+-	   LINKCC="\$(srcdir)/Modules/makexp_aix Modules/python.exp $exp_extra \$(LIBRARY); $LINKCC";;
+ 	QNX*)
+ 	   # qcc must be used because the other compilers do not
+ 	   # support -N.
+@@ -5796,6 +5789,26 @@ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LINKCC" >&5
+ $as_echo "$LINKCC" >&6; }
+ 
++# EXPORTSYMS holds the list of exported symbols for AIX.
++# EXPORTSFROM holds the module name exporting symbols on AIX.
++EXPORTSYMS=
++EXPORTSFROM=
++
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking EXPORTSYMS" >&5
++$as_echo_n "checking EXPORTSYMS... " >&6; }
++case $ac_sys_system in
++AIX*)
++	EXPORTSYMS="Modules/python.exp"
++	if test $ac_sys_release -ge 5 -o \
++		$ac_sys_release -eq 4 -a `uname -r` -ge 2 ; then
++	    EXPORTSFROM=. # the main executable
++	fi
++	;;
++esac
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $EXPORTSYMS" >&5
++$as_echo "$EXPORTSYMS" >&6; }
++
+ # GNULD is set to "yes" if the GNU linker is used.  If this goes wrong
+ # make sure we default having it set to "no": this is used by
+ # distutils.unixccompiler to know if it should add --enable-new-dtags
+diff --git a/configure.ac b/configure.ac
+index 18a044629a785..0d68e4ada0d8d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1012,21 +1012,12 @@ LDVERSION="$VERSION"
+ # If CXX is set, and if it is needed to link a main function that was
+ # compiled with CXX, LINKCC is CXX instead. Always using CXX is undesirable:
+ # python might then depend on the C++ runtime
+-# This is altered for AIX in order to build the export list before
+-# linking.
+ AC_SUBST(LINKCC)
+ AC_MSG_CHECKING(LINKCC)
+ if test -z "$LINKCC"
+ then
+ 	LINKCC='$(PURIFY) $(MAINCC)'
+ 	case $ac_sys_system in
+-	AIX*)
+-	   exp_extra="\"\""
+-	   if test $ac_sys_release -ge 5 -o \
+-		   $ac_sys_release -eq 4 -a `uname -r` -ge 2 ; then
+-	       exp_extra="."
+-	   fi
+-	   LINKCC="\$(srcdir)/Modules/makexp_aix Modules/python.exp $exp_extra \$(LIBRARY); $LINKCC";;
+ 	QNX*)
+ 	   # qcc must be used because the other compilers do not
+ 	   # support -N.
+@@ -1035,6 +1026,24 @@ then
+ fi
+ AC_MSG_RESULT($LINKCC)
+ 
++# EXPORTSYMS holds the list of exported symbols for AIX.
++# EXPORTSFROM holds the module name exporting symbols on AIX.
++EXPORTSYMS=
++EXPORTSFROM=
++AC_SUBST(EXPORTSYMS)
++AC_SUBST(EXPORTSFROM)
++AC_MSG_CHECKING(EXPORTSYMS)
++case $ac_sys_system in
++AIX*)
++	EXPORTSYMS="Modules/python.exp"
++	if test $ac_sys_release -ge 5 -o \
++		$ac_sys_release -eq 4 -a `uname -r` -ge 2 ; then
++	    EXPORTSFROM=. # the main executable
++	fi
++	;;
++esac
++AC_MSG_RESULT($EXPORTSYMS)
++
+ # GNULD is set to "yes" if the GNU linker is used.  If this goes wrong
+ # make sure we default having it set to "no": this is used by
+ # distutils.unixccompiler to know if it should add --enable-new-dtags

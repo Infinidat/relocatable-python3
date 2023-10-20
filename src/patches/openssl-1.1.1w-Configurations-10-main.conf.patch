@@ -1,11 +1,11 @@
---- openssl-1.1.1w/Configurations/10-main.conf	2023-10-08 16:08:18.385579743 -0500
-+++ openssl-1.1.1w/Configurations/10-main.conf	2023-10-08 16:09:43.602398736 -0500
+--- openssl-1.1.1w/Configurations/10-main.conf	2023-10-15 17:03:49.983897240 -0500
++++ openssl-1.1.1w/Configurations/10-main.conf	2023-10-15 17:04:48.370698600 -0500
 @@ -1136,7 +1136,7 @@
          template         => 1,
          sys_id           => "AIX",
          lib_cppflags     => "-DB_ENDIAN",
 -        lflags           => "-Wl,-bsvr4",
-+        lflags           => "-Wl,-bsvr4",
++        lflags           => "-Wl,-bsvr4 -Wl,-b64",
          thread_scheme    => "pthreads",
          dso_scheme       => "dlfcn",
          shared_target    => "self",
@@ -19,11 +19,9 @@
      },
      "aix-gcc" => {
          inherit_from     => [ "aix-common", asm("ppc32_asm") ],
-@@ -1170,8 +1167,8 @@
-         ex_libs          => add(threads("-pthread")),
+@@ -1171,7 +1168,6 @@
          bn_ops           => "SIXTY_FOUR_BIT_LONG RC4_CHAR",
          perlasm_scheme   => "aix64",
-+        shared_cflag     => "-fPIC",
          shared_ldflag    => add_before("-shared -static-libgcc"),
 -        shared_extension => "64.so.\$(SHLIB_VERSION_NUMBER)",
          AR               => add("-X64"),

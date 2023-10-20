@@ -2,8 +2,6 @@
 extends = buildout-build.cfg
 parts = zlib ncurses expat libev readline libiconv xz libxml2 libunistring libtasn1 gettext openssl openssh gmp libgpg-error libgcrypt nettle libgnugetopt libgnutls bzip2 sqlite libxslt libffi gdbm cyrus-sasl libevent openldap mpdecimal libsodium zeromq libuv c-ares python
 
-parts = openssl
-
 [environment]
 PATH = ${options:prefix}/bin:/opt/freeware/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/ucb:/usr/bin/X11
 PKG_CONFIG_PATH = ${options:prefix}/lib/pkgconfig
@@ -11,14 +9,14 @@ SHELL = /bin/bash
 CONFIG_SHELL = /bin/bash
 AR = ar -X64
 NM = nm -X64
-CC = gcc -fPIC -maix64 -static-libgcc
-CXX = g++ -fPIC -maix64 -static-libgcc -static-libstdc++
-LDFLAGS = -L${options:prefix}/lib -Wl,-blibpath:/usr/lib -Wl,-b64 -Wl,-brtl
-SHARED_LDFLAGS = ${:LDFLAGS}
+CC = gcc-12 -static-libgcc -fPIC -maix64 -Os
+CXX = g++-12 -static-libgcc -static-libstdc++ -fPIC -maix64 -Os
+LDFLAGS = -L${options:prefix}/lib -Wl,-blibpath:/usr/lib -Wl,-brtl -Wl,-b64
+SHARED_LDFLAGS = -L${options:prefix}/lib -Wl,-blibpath:/usr/lib -Wl,-brtl -Wl,-b64
 LIBPATH = ${options:prefix}/lib
-CFLAGS = -I${options:prefix}/include -fPIC -maix64 -static-libgcc
+CFLAGS = -I${options:prefix}/include -maix64 -Os
 CPPFLAGS = ${:CFLAGS}
-CXXFLAGS = ${:CFLAGS} -static-libstdc++
+CXXFLAGS = ${:CFLAGS}
 # The *_LIBRARY_PATH definitions cause built-in executables that we run to link against our new shared objects which doesn't work
 DYLD_LIBRARY_PATH =
 LD_LIBRARY_PATH =
@@ -60,7 +58,6 @@ post-make-hook = ${options:hooks-dir}/aix.py:python_post_make
 <= environment
 CFLAGS = ${environment:CFLAGS} -I${options:prefix}/include/gnutls -I${options:prefix}/include/graphviz -I${options:prefix}/include/libexslt -I${options:prefix}/include/libxml2 -I${options:prefix}/include/libxslt -I${options:prefix}/include/ncurses -I${options:prefix}/include/openssl -I${options:prefix}/include/readline -I${options:prefix}/include/sasl
 LDFLAGS = ${environment:LDFLAGS} -Wl,-blibpath:.:../lib:/usr/lib
-LDCXXSHARED = ${environment:SHARED_LDFLAGS} -static-libgcc -static-libstdc++
 # OPT = -DNDEBUG -fwrapv -Os -Wall -Wstrict-prototypes
 # RUNSHARED is the env var that is used to run python during make, for example
 # when building the external modules for Python like "_ctypes". The default on

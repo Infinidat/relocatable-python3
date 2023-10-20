@@ -13,7 +13,7 @@ log-level = DEBUG
 [options]
 keep-compile-dir = true
 configure-command = /bin/bash ./configure
-configure-options = --host=powerpc64-ibm-aix7.3.0.0 --prefix=${options:prefix}
+configure-options = --prefix=${options:prefix}
 prefix = ${buildout:directory}/dist
 patches-dir = ${buildout:directory}/src/patches
 patch-options = -p1
@@ -103,7 +103,7 @@ openssldir = /etc/ssl
 configure-command = ./Configure
 configure-options = --prefix=${options:prefix} --openssldir=${:openssldir} --shared --libdir=lib -fPIC -Wl,-rpath,\\\$\$\$\$\\\$\$\$\$ORIGIN/../lib
 make-targets = all install_sw
-make-binary = slibclean && make
+make-binary = slibclean && make && make test
 
 [openssh]
 <= options
@@ -241,7 +241,7 @@ recipe = hexagonit.recipe.cmmi
 name = libffi
 version = 3.4.4
 url = https://github.com/${:name}/${:name}/releases/download/v${:version}/${:name}-${:version}.tar.gz
-configure-options = --prefix=${options:prefix} --disable-static --disable-docs --with-gcc-arch=powerpc64-ibm-aix7.3.0.0
+configure-options = ${options:configure-options} --disable-static --disable-docs
 
 [gdbm]
 <= options
@@ -296,8 +296,7 @@ recipe = hexagonit.recipe.cmmi
 version = 4.1.8
 name = zeromq
 url = https://github.com/zeromq/zeromq4-1/releases/download/v${:version}/${:name}-${:version}.tar.gz
-configure-options = ${options:configure-options} --disable-static --without-documentation --with-libsodium --disable-silent-rules
-pre-make-hook = ${buildout:directory}/src/hooks/autotools.py:libtool
+configure-options = ${options:configure-options} --disable-static --without-documentation --with-libsodium
 
 [graphviz]
 <= options

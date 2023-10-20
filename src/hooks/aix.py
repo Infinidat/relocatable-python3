@@ -8,18 +8,22 @@ prefix = sys.real_prefix if hasattr(sys, 'real_prefix') else sys.prefix  # virtu
 old_prefix = build_time_vars.get("prefix", "_some_path_that_does_not_exist")
 
 for key, value in build_time_vars.items():
-    value = value.replace(old_prefix, prefix) if isinstance(value, str) else value
-    build_time_vars[key] = value.replace("./Modules", prefix + "/lib/python3.8/config") if isinstance(value, str) else value
+    build_time_vars[key] = value.replace(old_prefix, prefix) if isinstance(value, str) else value
 """
 
-def get_sysconfigdata_files(options):
+def get_sysconfigdata_files(environ):
     from glob import glob
     from os import path
-    dist = options["prefix"]
+    dist = path.join(environ.get("PWD"), path.abspath(path.join('.',  # Python-3.8.0
+                                                                path.pardir,  # python__compile__,
+                                                                path.pardir,  # parts,
+                                                                path.pardir,  # python-build
+                                                                "dist")))
     print('dist = {0}'.format(dist))
     print('sysconfig = {0!r}'.format(glob(path.join(dist, "*", "*", "_sysconfigdata.py"))))
     for _sysconfigdata in glob(path.join(dist, "*", "*", "_sysconfigdata.py")):
         yield _sysconfigdata
+
 
 def purge_sysconfigdata(path):
     with open(path, 'a') as fd:
@@ -30,7 +34,7 @@ def create_blibpath_fix(options, buildout, environ):
     os.system("gcc -maix64 -s {}/aix.c -o {}/bin/python3.8".format(options["hooks-dir"], options["prefix"]))
 
 def fix_sysconfigdata(options, buildout, environ):
-    for path in get_sysconfigdata_files(options):
+    for path in get_sysconfigdata_files(environ):
         purge_sysconfigdata(path)
 
 def fix_large_files(options, buildout, environ):
