@@ -1,11 +1,12 @@
 import os
 
 AUTOTOOLS = [
-    'libtoolize --copy',
-    'aclocal -I m4 --install',
-    'autoheader',
-    'autoconf',
-    'automake --foreign --add-missing --force-missing --copy'
+#    'libtoolize --copy',
+#    'aclocal -I m4 --install',
+#    'autoheader',
+#    'autoconf',
+#    'automake --foreign --add-missing --force-missing --copy'
+    'autoreconf --force --install'
 ]
 
 def autogen(options, buildout, version):

@@ -1,13 +1,19 @@
---- a/support/shobj-conf	2023-09-26 15:39:12.868605000 -0500
-+++ a/support/shobj-conf	2023-09-26 15:40:15.122865904 -0500
-@@ -245,8 +245,8 @@
+--- readline-8.2/support/shobj-conf.orig	2023-10-25 12:58:49.589828821 -0500
++++ readline-8.2/support/shobj-conf	2023-10-25 13:01:05.875671115 -0500
+@@ -240,13 +240,13 @@
+ 	;;
+ 
+ aix4.[2-9]*-*gcc*|aix[5-9].*-*gcc*)		# lightly tested by jik@cisco.com
+-	SHOBJ_CFLAGS=-fpic
++	SHOBJ_CFLAGS=-fPIC
+ 	SHOBJ_LD='${CC}'
  	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
  	SHOBJ_XLDFLAGS='-G'
  
 -	SHLIB_XLDFLAGS='-bM:SRE'
 -	SHLIB_LIBS='-lcurses -lc'
 +	SHLIB_XLDFLAGS='-Wl,-bM:SRE'
-+	SHLIB_LIBS='-lncurses -lc'
++	SHLIB_LIBS='$(TERMCAP_LIB)'
  	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)'
  	;;
  

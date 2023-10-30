@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
     char cur_executable_path[MAX_PATH] = { 0 };
     char python_bin_path[MAX_PATH] = { 0 };
     char python_lib_path[MAX_PATH] = { 0 };
+    char terminfo_path[MAX_PATH] = { 0 };
     char * last_sep = NULL;
     if (0 != get_executable_path(argv[0], cur_executable_path)) {
         return WRAPPER_ERROR;
@@ -74,7 +75,9 @@ int main(int argc, char *argv[])
     *last_sep = 0;      /*! make cur_executable_path hold dirname only !*/
     sprintf(python_bin_path, "%s/python3.8.bin", cur_executable_path);
     sprintf(python_lib_path, "%s/../lib", cur_executable_path);
+    sprintf(terminfo_path, "%s/../share/terminfo", cur_executable_path);
     setenv("LIBPATH", python_lib_path, TRUE);
+    setenv("TERMINFO", terminfo_path, TRUE);
     execve(python_bin_path, argv, environ);
     return WRAPPER_ERROR;
 }

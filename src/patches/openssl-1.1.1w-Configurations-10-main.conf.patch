@@ -5,7 +5,7 @@
          sys_id           => "AIX",
          lib_cppflags     => "-DB_ENDIAN",
 -        lflags           => "-Wl,-bsvr4",
-+        lflags           => "-Wl,-bsvr4 -Wl,-b64",
++        lflags           => "-Wl,-bsvr4 -Wl,-b64 -Wl,-brtl",
          thread_scheme    => "pthreads",
          dso_scheme       => "dlfcn",
          shared_target    => "self",

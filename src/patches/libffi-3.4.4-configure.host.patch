@@ -1,0 +1,15 @@
+--- libffi-3.4.4/configure.host.orig	2023-10-24 04:07:18.367508906 -0500
++++ libffi-3.4.4/configure.host	2023-10-24 04:08:03.997520107 -0500
+@@ -210,10 +210,9 @@
+   powerpc-*-darwin* | powerpc64-*-darwin*)
+ 	TARGET=POWERPC_DARWIN; TARGETDIR=powerpc
+ 	;;
+-  powerpc-*-aix* | rs6000-*-aix*)
++  powerpc*-*-aix* | rs6000-*-aix*)
+ 	TARGET=POWERPC_AIX; TARGETDIR=powerpc
+-	# Create AIX-style "FAT" libraries.
+-	tmake_file="t-aix"
++	# HAVE_LONG_DOUBLE_VARIANT=1
+ 	;;
+   powerpc-*-freebsd* | powerpc-*-openbsd* | powerpc-*-netbsd*)
+ 	TARGET=POWERPC_FREEBSD; TARGETDIR=powerpc
