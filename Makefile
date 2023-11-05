@@ -1,10 +1,9 @@
 make:
-	curl -o $(HOME)/ca.crt https://curl.se/ca/cacert.pem
 	pip install zc.buildout distro
 	pip install setuptools==44.1.1 --upgrade -i https://pypi.org/simple
 	buildout bootstrap
 	bin/buildout
-	SSL_CERT_FILE=$(HOME)/ca.crt bin/build
+	bin/build
 
 pack:
 	rm -f dist/lib/*.a dist/lib/*.la
