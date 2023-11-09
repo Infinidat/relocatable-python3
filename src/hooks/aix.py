@@ -1,84 +1,112 @@
+import glob
+import logging
 import os
 import sys
 import subprocess
+
+LOG = logging.getLogger(__name__)
+
+PREFIX = '__PREFIX__'
+PYTHON = 'python'
+MAJOR = 3
+MINOR = 8
 
 TRICK = """
 import sys
 
 PREFIX = '__PREFIX__'
 
-if prefix != PREFIX:
-    for key, value in build_time_vars.items():
-        if isinstance(value, str) and PREFIX in value:
-            build_time_vars[key] = value.replace(PREFIX, sys.prefix)
+for key, value in build_time_vars.items():
+    if isinstance(value, str) and PREFIX in value:
+        build_time_vars[key] = value.replace(PREFIX, sys.prefix)
 """
 
+def create_python_logger(options, buildout, environ):
+    LOG.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler(sys.stderr)
+    fmt = '[%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
+    formatter = logging.Formatter(fmt)
+    handler.setFormatter(formatter)
+    LOG.addHandler(handler)
+
 def run(args):
-    process = subprocess.Popen(args=args,
-                               close_fds=True,
-                               universal_newlines=True,
-                               stdout=subprocess.stdout,
-                               stderr=subprocess.stderr)
+    LOG.debug(args)
+    command = ' '.join(str(arg) for arg in args)
+    try:
+        process = subprocess.Popen(args=args,
+                                   close_fds=True,
+                                   universal_newlines=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+    except Exception as error:
+        message = 'Error running %s: %s' % (command, error)
+        LOG.exception(message)
     stdout, stderr = process.communicate()
     stdout = stdout.splitlines()
     stderr = stderr.splitlines()
-    if process.returncode:
-        command = ' '.join(str(arg) for arg in args)
-        error = ' '.join(stdout.splitlines + stderr.splitlines)
-        raise Exception(error)
+    status = process.returncode
+    if status:
+        output = ' '.join(stdout + stderr)
+        message = 'Error %d running %s: %s' % (status, command, output)
+        LOG.exception(message)
 
-def get_python_name(prefix=False, major=False, minor=False, binary=False):
-    name = 'python'
-    if prefix:
+def get_python_name(prefix=None, suffix=None, major=False, minor=False, ext=None):
+    name = PYTHON
+    if suffix is not None:
+        name = os.path.join(suffix, name)
+    if prefix is not None:
         name = os.path.join(prefix, name)
     if major:
-        name += str(sys.version_info.major)
+        name += str(MAJOR)
         if minor:
-            name += '.' + str(sys.version_info.minor)
-            if binary:
-                name += '.bin'
+            name += '.' + str(MINOR)
+            if ext is not None:
+                name += '.' + ext
     return name
 
 def change_python_maxdata(options, buildout, environ):
     prefix = options.get('prefix')
-    path = get_python_name(prefix=prefix, major=True, minor=True)
-    cmd = ['ldedit', '-b', 'maxdata:0x20000000', path]
+    suffix = 'bin'
+    name = get_python_name(prefix=prefix, suffix=suffix, major=True, minor=True)
+    cmd = ['ldedit', '-b', 'maxdata:0x20000000', name]
     run(cmd)
 
 def create_python_wrapper(options, buildout, environ):
-    compile = environ.get('CC')
+    compiler = environ.get('CC')
     prefix = options.get('prefix')
     hooks = options.get('hooks-dir')
-    src = get_python_name(prefix=prefix, major=True, minor=True)
-    dst = get_python_name(prefix=prefix, major=True, minor=True, binary=True)
-    cmd = '%s -s %s/aix.c -o %s' % (compile, hooks, src)
+    hook = os.path.join(hooks, 'aix.c')
+    suffix = 'bin'
+    src = get_python_name(prefix=prefix, suffix=suffix, major=True, minor=True)
+    dst = get_python_name(prefix=prefix, suffix=suffix, major=True, minor=True, ext=suffix)
+    cmd = compiler.split()
+    opt = ['-s', hook, '-o', src]
+    cmd.extend(opt)
+    LOG.debug('rename %s => %s', src, dst)
     os.rename(src, dst)
     run(cmd)
 
-def get_python_sysconfigdata():
-    abi = sys.abiflags
-    platform = sys.platform
-    multiarch = getattr(sys.implementation, '_multiarch', '')
-    name = '_sysconfigdata_%s_%s_%s.py' % (abi, platform, multiarch)
-    dest = get_python_name(prefix='lib', major=True, minor=True)
-    path = os.path.join(sys.prefix, dest, name)
-    return path
-
 def change_python_sysconfigdata(options, buildout, environ):
     prefix = options.get('prefix')
-    path = get_python_sysconfigdata()
-    with open(path, 'r') as fd:
-        data = fd.read()
-    data = data.replace(prefix, PREFIX)
-    with open(path, 'w') as fd:
-        fd.write(data)
-        fd.write(TRICK)
+    suffix = 'lib'
+    name = get_python_name(prefix=prefix, suffix=suffix, major=True, minor=True)
+    pattern = '_sysconfigdata_*.py'
+    pattern = os.path.join(name, pattern)
+    paths = glob.glob(pattern)
+    for path in paths:
+        with open(path, 'r') as fd:
+            data = fd.read()
+        data = data.replace(prefix, PREFIX)
+        with open(path, 'w') as fd:
+            fd.write(data)
+            fd.write(TRICK)
 
 def change_python_headers(options, buildout, environ):
     # _LARGE_FILES definition causes redefinition errors in external library compilation
     prefix = options.get('prefix')
-    dest = get_python_name(prefix='include', major=True, minor=True)
-    path = os.path.join(prefix, dest, 'pyconfig.h')
+    suffix = 'include'
+    name = get_python_name(prefix=prefix, suffix=suffix, major=True, minor=True)
+    path = os.path.join(name, 'pyconfig.h')
     with open(path, 'r') as fd:
         data = fd.read()
     data = data.replace('#define _LARGE_FILES 1', '')
@@ -87,13 +115,22 @@ def change_python_headers(options, buildout, environ):
 
 def create_python_symlink(options, buildout, environ):
     prefix = options.get('prefix')
+    suffix = 'bin'
     src = get_python_name(major=True)
-    dst = get_python_name(prefix=prefix)
+    dst = get_python_name(prefix=prefix, suffix=suffix)
+    if os.path.exists(dst):
+        if not os.path.islink(dst):
+            message = 'file %s is not a symlink' % dst
+            LOG.exception(message)
+        LOG.debug('unlink existing symlink %s', dst)
+        os.unlink(dst)
+    LOG.debug('create symlink %s => %s', dst, src)
     os.symlink(src, dst)
 
 def python_post_make(options, buildout, environ):
+    create_python_logger(options, buildout, environ)
     change_python_maxdata(options, buildout, environ)
     create_python_wrapper(options, buildout, environ)
     change_python_sysconfigdata(options, buildout, environ)
-    change_python_headers(options, buildout, environ)
+    # change_python_headers(options, buildout, environ)
     create_python_symlink(options, buildout, environ)

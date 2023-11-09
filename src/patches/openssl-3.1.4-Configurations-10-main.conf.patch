@@ -1,0 +1,36 @@
+--- openssl-3.1.4/Configurations/10-main.conf.orig	2023-11-07 09:07:40.702386370 -0600
++++ openssl-3.1.4/Configurations/10-main.conf	2023-11-07 09:08:52.133035083 -0600
+@@ -1275,7 +1275,7 @@
+         template         => 1,
+         sys_id           => "AIX",
+         lib_cppflags     => "-DB_ENDIAN",
+-        lflags           => "-Wl,-bsvr4",
++        lflags           => "-Wl,-bsvr4 -Wl,-b64 -Wl,-brtl",
+         thread_scheme    => "pthreads",
+         dso_scheme       => "dlfcn",
+         shared_target    => "aix",
+@@ -1283,7 +1283,6 @@
+         shared_ldflag    => "-Wl,-G,-bsymbolic,-bnoentry",
+         shared_defflag   => "-Wl,-bE:",
+         shared_fipsflag  => "-Wl,-binitfini:_init:_cleanup",
+-        perl_platform    => 'AIX',
+     },
+     "aix-gcc" => {
+         inherit_from     => [ "aix-common" ],
+@@ -1303,7 +1302,7 @@
+         inherit_from     => [ "aix-common" ],
+         CC               => "gcc",
+         CFLAGS           => picker(debug   => "-O0 -g",
+-                                   release => "-O"),
++                                   release => "-Os"),
+         cflags           => combine("-maix64", threads("-pthread")),
+         ex_libs          => add(threads("-pthread")),
+         bn_ops           => "SIXTY_FOUR_BIT_LONG RC4_CHAR",
+@@ -1310,7 +1309,6 @@
+         asm_arch         => 'ppc64',
+         perlasm_scheme   => "aix64",
+         shared_ldflag    => add_before("-shared -static-libgcc"),
+-        shared_extension => "64.so.\$(SHLIB_VERSION_NUMBER)",
+         AR               => add("-X64"),
+         RANLIB           => add("-X64"),
+     },
