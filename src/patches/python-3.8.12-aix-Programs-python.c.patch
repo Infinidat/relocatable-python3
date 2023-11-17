@@ -1,0 +1,43 @@
+--- Python-3.8.12/Programs/python.c.orig	2023-10-31 05:12:35.377422226 -0500
++++ Python-3.8.12/Programs/python.c	2023-10-31 05:27:04.896587707 -0500
+@@ -10,9 +10,40 @@
+     return Py_Main(argc, argv);
+ }
+ #else
++#include <limits.h>
++#include <stdlib.h>
++#include <libgen.h>
++#include <stdio.h>
++#include <errno.h>
++
+ int
+ main(int argc, char **argv)
+ {
++    char run[PATH_MAX];
++    char lib[PATH_MAX];
++    char terminfo[PATH_MAX];
++    char *bin;
++    char *pre;
++
++    if (realpath(argv[0], run) == NULL)
++        return errno;
++
++    bin = dirname(run);
++
++    if (bin == NULL)
++        return EINVAL;
++
++    pre = dirname(bin);
++
++    if (pre == NULL)
++        return EINVAL;
++
++    sprintf(lib, "%s/lib", pre);
++    sprintf(terminfo, "%s/share/terminfo", pre);
++
++    setenv("LIBPATH", lib, FALSE);
++    setenv("TERMINFO", terminfo, FALSE);
++    
+     return Py_BytesMain(argc, argv);
+ }
+ #endif

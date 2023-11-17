@@ -45,12 +45,12 @@
 -	./bzip2 -d  < sample1.bz2 > sample1.tst
 -	./bzip2 -d  < sample2.bz2 > sample2.tst
 -	./bzip2 -ds < sample3.bz2 > sample3.tst
-+	LIBPATH=. ./bzip2 -1  < sample1.ref > sample1.rb2
-+	LIBPATH=. ./bzip2 -2  < sample2.ref > sample2.rb2
-+	LIBPATH=. ./bzip2 -3  < sample3.ref > sample3.rb2
-+	LIBPATH=. ./bzip2 -d  < sample1.bz2 > sample1.tst
-+	LIBPATH=. ./bzip2 -d  < sample2.bz2 > sample2.tst
-+	LIBPATH=. ./bzip2 -ds < sample3.bz2 > sample3.tst
++	LIBPATH=$(LIBPATH):. ./bzip2 -1  < sample1.ref > sample1.rb2
++	LIBPATH=$(LIBPATH):. ./bzip2 -2  < sample2.ref > sample2.rb2
++	LIBPATH=$(LIBPATH):. ./bzip2 -3  < sample3.ref > sample3.rb2
++	LIBPATH=$(LIBPATH):. ./bzip2 -d  < sample1.bz2 > sample1.tst
++	LIBPATH=$(LIBPATH):. ./bzip2 -d  < sample2.bz2 > sample2.tst
++	LIBPATH=$(LIBPATH):. ./bzip2 -ds < sample3.bz2 > sample3.tst
  	cmp sample1.bz2 sample1.rb2 
  	cmp sample2.bz2 sample2.rb2
  	cmp sample3.bz2 sample3.rb2
