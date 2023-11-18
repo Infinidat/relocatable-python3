@@ -1,13 +1,10 @@
-/*! blibpath doesn't support relative paths, so we must fix LIBPATH and only then execve the original python !*/
-
+#include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <libgen.h>
 #include <limits.h>
-
-#define WRAPPER_ERROR  (133)    /*! some distinctive error code.. !*/
 
 /*! If you want proof that Unix is evil, here you go !*/
 int get_from_path(char * name, char * output) {
@@ -79,46 +76,50 @@ int main(int argc, char *argv[])
     int len = 0;
 
     if (get_run_path(argv[0], run_path) != 0) {
-        return WRAPPER_ERROR;
+        return EXIT_FAILURE;
     }
 
     bin_path = dirname(run_path);
 
     if (bin_path == NULL) {
-        return WRAPPER_ERROR;
+        return EXIT_FAILURE;
     }
 
     len = snprintf(exec_path, sizeof(exec_path),
                    "%s/python3.8.bin", bin_path);
 
     if (len > PATH_MAX) {
-        return WRAPPER_ERROR;
+        return EXIT_FAILURE;
     }
 
     base_path = dirname(bin_path);
 
     if (base_path == NULL) {
-        return WRAPPER_ERROR;
+        return EXIT_FAILURE;
     }
 
     len = snprintf(lib_path, sizeof(lib_path),
                    "%s/lib", base_path);
 
     if (len > PATH_MAX) {
-        return WRAPPER_ERROR;
+        return EXIT_FAILURE;
     }
 
     len = snprintf(term_path, sizeof(term_path),
                    "%s/share/terminfo", base_path);
 
     if (len > PATH_MAX) {
-        return WRAPPER_ERROR;
+        return EXIT_FAILURE;
     }
 
     setenv("LIBPATH", lib_path, TRUE);
     setenv("TERMINFO", term_path, TRUE);
 
-    execve(exec_path, argv, environ);
+    argv[0] = exec_path;
 
-    return WRAPPER_ERROR;
+    if (execve(exec_path, argv, environ) == -1) {
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }

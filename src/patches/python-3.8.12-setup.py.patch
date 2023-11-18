@@ -1,5 +1,14 @@
---- Python-3.8.12/setup.py.orig	2021-08-30 09:26:41.000000000 -0500
-+++ Python-3.8.12/setup.py	2023-10-07 18:31:43.680472390 -0500
+--- Python-3.8.12/setup.py	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/setup.py	2023-11-18 15:28:39.784505945 -0600
+@@ -771,7 +771,7 @@
+         # _queue module
+         self.add(Extension("_queue", ["_queuemodule.c"]))
+         # _statistics module
+-        self.add(Extension("_statistics", ["_statisticsmodule.c"]))
++        self.add(Extension("_statistics", ["_statisticsmodule.c"], libraries=['m']))
+ 
+         # Modules with some UNIX dependencies -- on by default:
+         # (If you have a really backward UNIX, select and socket may not be
 @@ -899,10 +899,6 @@
              curses_library = readline_termcap_library
          elif self.compiler.find_library_file(self.lib_dirs, 'ncursesw'):
