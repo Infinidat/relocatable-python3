@@ -129,8 +129,8 @@ def create_python_symlink(options, buildout, environ):
 
 def python_post_make(options, buildout, environ):
     create_python_logger(options, buildout, environ)
-    change_python_maxdata(options, buildout, environ)
+    # change_python_maxdata(options, buildout, environ)
     create_python_wrapper(options, buildout, environ)
     change_python_sysconfigdata(options, buildout, environ)
-    change_python_headers(options, buildout, environ)
+    # change_python_headers(options, buildout, environ)
     create_python_symlink(options, buildout, environ)
