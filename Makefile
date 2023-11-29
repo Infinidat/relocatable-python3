@@ -1,6 +1,6 @@
 make:
+	curl -L -o /var/ssl-rpm/cert.pem https://curl.se/ca/cacert.pem
 	pip install zc.buildout distro
-	pip install setuptools==44.1.1 --upgrade -i https://pypi.org/simple
 	buildout bootstrap
 	bin/buildout
 	bin/build

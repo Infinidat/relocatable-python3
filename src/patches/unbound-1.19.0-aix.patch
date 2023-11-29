@@ -1,0 +1,91 @@
+diff -ur unbound-1.19.0/configure unbound-1.19.0.new//configure
+--- unbound-1.19.0/configure	2023-11-08 03:04:06.000000000 -0600
++++ unbound-1.19.0/configure	2023-11-28 14:29:15.447261086 -0600
+@@ -20896,7 +20896,7 @@
+ esac
+ 
+ 			;;
+-			*solaris*|*sunos*|SunOS)
++			*solaris*|*sunos*|SunOS|*AIX*|*aix*)
+ 				case " $LIBOBJS " in
+   *" getentropy_solaris.$ac_objext "* ) ;;
+   *) LIBOBJS="$LIBOBJS getentropy_solaris.$ac_objext"
+diff -ur unbound-1.19.0/compat/getentropy_solaris.c unbound-1.19.0.new//compat/getentropy_solaris.c
+--- unbound-1.19.0/compat/getentropy_solaris.c	2023-11-08 03:03:55.000000000 -0600
++++ unbound-1.19.0/compat/getentropy_solaris.c	2023-11-28 14:47:10.689058030 -0600
+@@ -22,10 +22,8 @@
+ #include <sys/param.h>
+ #include <sys/ioctl.h>
+ #include <sys/resource.h>
+-#include <sys/syscall.h>
+ #include <sys/statvfs.h>
+ #include <sys/socket.h>
+-#include <sys/mount.h>
+ #include <sys/mman.h>
+ #include <sys/stat.h>
+ #include <sys/time.h>
+@@ -52,7 +50,6 @@
+ 
+ #include <sys/vfs.h>
+ #include <sys/statfs.h>
+-#include <sys/loadavg.h>
+ 
+ #define REPEAT 5
+ #define min(a, b) (((a) < (b)) ? (a) : (b))
+@@ -89,30 +86,6 @@
+ 		return -1;
+ 	}
+ 
+-	/*
+-	 * Try to get entropy with /dev/urandom
+-	 *
+-	 * Solaris provides /dev/urandom as a symbolic link to
+-	 * /devices/pseudo/random@0:urandom which is provided by
+-	 * a devfs filesystem.  Best practice is to use O_NOFOLLOW,
+-	 * so we must try the unpublished name directly.
+-	 *
+-	 * This can fail if the process is inside a chroot which lacks
+-	 * the devfs mount, or if file descriptors are exhausted.
+-	 */
+-	ret = getentropy_urandom(buf, len,
+-	    "/devices/pseudo/random@0:urandom", 1);
+-	if (ret != -1)
+-		return (ret);
+-
+-	/*
+-	 * Unfortunately, chroot spaces on Solaris are sometimes setup
+-	 * with direct device node of the well-known /dev/urandom name
+-	 * (perhaps to avoid dragging all of devfs into the space).
+-	 *
+-	 * This can fail if the process is inside a chroot or if file
+-	 * descriptors are exhausted.
+-	 */
+ 	ret = getentropy_urandom(buf, len, "/dev/urandom", 0);
+ 	if (ret != -1)
+ 		return (ret);
+@@ -197,8 +170,7 @@
+ #endif
+ 
+ 	/* Lightly verify that the device node looks sane */
+-	if (fstat(fd, &st) == -1 || !S_ISCHR(st.st_mode) ||
+-	    (devfscheck && (strcmp(st.st_fstype, "devfs") != 0))) {
++	if (fstat(fd, &st) == -1 || !S_ISCHR(st.st_mode)) {
+ 		close(fd);
+ 		goto nodevrandom;
+ 	}
+@@ -257,7 +229,6 @@
+ 	static int cnt;
+ 	struct timespec ts;
+ 	struct timeval tv;
+-	double loadavg[3];
+ 	struct rusage ru;
+ 	sigset_t sigset;
+ 	struct stat st;
+@@ -294,7 +265,6 @@
+ 			HX((pid = getppid()) == -1, pid);
+ 			HX((pid = getpgid(0)) == -1, pid);
+ 			HX((e = getpriority(0, 0)) == -1, e);
+-			HX((getloadavg(loadavg, 3) == -1), loadavg);
+ 
+ 			if (!faster) {
+ 				ts.tv_sec = 0;

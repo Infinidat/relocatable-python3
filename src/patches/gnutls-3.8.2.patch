@@ -1,0 +1,1096 @@
+diff -ur gnutls-3.8.2/src/gl/tests/test-stat-time.c gnutls-3.8.2/src/gl/tests/test-stat-time.c
+--- gnutls-3.8.2/src/gl/tests/test-stat-time.c	2023-11-15 03:15:53.000000000 -0600
++++ gnutls-3.8.2/src/gl/tests/test-stat-time.c	2023-11-27 11:27:32.397819995 -0600
+@@ -138,25 +138,15 @@
+ 
+   /* Use the struct stat fields directly. */
+   /* mtime(stamp1) < mtime(stamp2) */
+-  ASSERT (statinfo[0].st_mtime < statinfo[2].st_mtime
+-          || (statinfo[0].st_mtime == statinfo[2].st_mtime
+-              && (get_stat_mtime_ns (&statinfo[0])
+-                  < get_stat_mtime_ns (&statinfo[2]))));
++  ASSERT (statinfo[0].st_mtime <= statinfo[2].st_mtime && get_stat_mtime_ns(&statinfo[0]) <= get_stat_mtime_ns(&statinfo[2]));
+   /* mtime(stamp2) < mtime(stamp3) */
+-  ASSERT (statinfo[2].st_mtime < statinfo[3].st_mtime
+-          || (statinfo[2].st_mtime == statinfo[3].st_mtime
+-              && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_mtime_ns (&statinfo[3]))));
++  ASSERT (statinfo[2].st_mtime <= statinfo[3].st_mtime && get_stat_mtime_ns(&statinfo[2]) <= get_stat_mtime_ns(&statinfo[3]));
+ 
+   /* Now check the result of the access functions. */
+   /* mtime(stamp1) < mtime(stamp2) */
+-  ASSERT (modtimes[0].tv_sec < modtimes[2].tv_sec
+-          || (modtimes[0].tv_sec == modtimes[2].tv_sec
+-              && modtimes[0].tv_nsec < modtimes[2].tv_nsec));
++  ASSERT (modtimes[0].tv_sec <= modtimes[2].tv_sec && modtimes[0].tv_nsec <= modtimes[2].tv_nsec);
+   /* mtime(stamp2) < mtime(stamp3) */
+-  ASSERT (modtimes[2].tv_sec < modtimes[3].tv_sec
+-          || (modtimes[2].tv_sec == modtimes[3].tv_sec
+-              && modtimes[2].tv_nsec < modtimes[3].tv_nsec));
++  ASSERT (modtimes[2].tv_sec <= modtimes[3].tv_sec && modtimes[2].tv_nsec <= modtimes[3].tv_nsec);
+ 
+   /* verify equivalence */
+   for (i = 0; i < NFILES; ++i)
+@@ -183,10 +173,7 @@
+     return;
+ 
+   /* mtime(stamp2) < ctime(testfile) */
+-  ASSERT (statinfo[2].st_mtime < statinfo[1].st_ctime
+-          || (statinfo[2].st_mtime == statinfo[1].st_ctime
+-              && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_ctime_ns (&statinfo[1]))));
++  ASSERT (statinfo[2].st_mtime <= statinfo[1].st_ctime && get_stat_mtime_ns(&statinfo[2]) <= get_stat_ctime_ns(&statinfo[1]));
+ }
+ #endif
+ 
+diff -ur gnutls-3.8.2/tests/alerts.c gnutls-3.8.2/tests/alerts.c
+--- gnutls-3.8.2/tests/alerts.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/alerts.c	2023-11-27 09:25:44.847347967 -0600
+@@ -152,6 +152,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/alpn-server-prec.c gnutls-3.8.2/tests/alpn-server-prec.c
+--- gnutls-3.8.2/tests/alpn-server-prec.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/alpn-server-prec.c	2023-11-27 09:25:44.847347968 -0600
+@@ -160,6 +160,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/client-fastopen.c gnutls-3.8.2/tests/client-fastopen.c
+--- gnutls-3.8.2/tests/client-fastopen.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/client-fastopen.c	2023-11-27 09:25:44.857366490 -0600
+@@ -154,6 +154,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/custom-urls-override.c gnutls-3.8.2/tests/custom-urls-override.c
+--- gnutls-3.8.2/tests/custom-urls-override.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/custom-urls-override.c	2023-11-27 09:25:44.857366490 -0600
+@@ -143,6 +143,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -255,6 +256,7 @@
+ 		/* parent */
+ 		close(fd[0]);
+ 		client(fd[1]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[1]);
+diff -ur gnutls-3.8.2/tests/custom-urls.c gnutls-3.8.2/tests/custom-urls.c
+--- gnutls-3.8.2/tests/custom-urls.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/custom-urls.c	2023-11-27 09:25:44.863964455 -0600
+@@ -140,6 +140,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -254,6 +255,7 @@
+ 		/* parent */
+ 		close(fd[0]);
+ 		client(fd[1]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[1]);
+diff -ur gnutls-3.8.2/tests/dtls-client-with-seccomp.c gnutls-3.8.2/tests/dtls-client-with-seccomp.c
+--- gnutls-3.8.2/tests/dtls-client-with-seccomp.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-client-with-seccomp.c	2023-11-27 09:25:44.867382759 -0600
+@@ -164,6 +164,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/dtls-etm.c gnutls-3.8.2/tests/dtls-etm.c
+--- gnutls-3.8.2/tests/dtls-etm.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-etm.c	2023-11-27 09:25:44.867382759 -0600
+@@ -178,6 +178,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -309,6 +310,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], prio, etm);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/dtls-rehandshake-anon.c gnutls-3.8.2/tests/dtls-rehandshake-anon.c
+--- gnutls-3.8.2/tests/dtls-rehandshake-anon.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-rehandshake-anon.c	2023-11-27 09:25:44.877396910 -0600
+@@ -192,6 +192,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/dtls-rehandshake-cert-2.c gnutls-3.8.2/tests/dtls-rehandshake-cert-2.c
+--- gnutls-3.8.2/tests/dtls-rehandshake-cert-2.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-rehandshake-cert-2.c	2023-11-27 09:25:44.877396911 -0600
+@@ -197,6 +197,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/dtls-rehandshake-cert-3.c gnutls-3.8.2/tests/dtls-rehandshake-cert-3.c
+--- gnutls-3.8.2/tests/dtls-rehandshake-cert-3.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-rehandshake-cert-3.c	2023-11-27 09:25:44.883957403 -0600
+@@ -206,6 +206,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/dtls-rehandshake-cert.c gnutls-3.8.2/tests/dtls-rehandshake-cert.c
+--- gnutls-3.8.2/tests/dtls-rehandshake-cert.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-rehandshake-cert.c	2023-11-27 09:25:44.887413650 -0600
+@@ -189,6 +189,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/dtls-with-seccomp.c gnutls-3.8.2/tests/dtls-with-seccomp.c
+--- gnutls-3.8.2/tests/dtls-with-seccomp.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/dtls-with-seccomp.c	2023-11-27 09:25:44.887413650 -0600
+@@ -157,6 +157,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/fallback-scsv.c gnutls-3.8.2/tests/fallback-scsv.c
+--- gnutls-3.8.2/tests/fallback-scsv.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/fallback-scsv.c	2023-11-27 09:25:44.897430195 -0600
+@@ -157,6 +157,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/gnutls_ktls.c gnutls-3.8.2/tests/gnutls_ktls.c
+--- gnutls-3.8.2/tests/gnutls_ktls.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/gnutls_ktls.c	2023-11-27 09:25:44.903959342 -0600
+@@ -156,6 +156,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/key-material-dtls.c gnutls-3.8.2/tests/key-material-dtls.c
+--- gnutls-3.8.2/tests/key-material-dtls.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/key-material-dtls.c	2023-11-27 09:25:44.903959344 -0600
+@@ -83,6 +83,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/key-material-set-dtls.c gnutls-3.8.2/tests/key-material-set-dtls.c
+--- gnutls-3.8.2/tests/key-material-set-dtls.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/key-material-set-dtls.c	2023-11-27 09:25:44.907448645 -0600
+@@ -71,6 +71,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/keylog-func.c gnutls-3.8.2/tests/keylog-func.c
+--- gnutls-3.8.2/tests/keylog-func.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/keylog-func.c	2023-11-27 09:25:44.923955731 -0600
+@@ -293,6 +293,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/ktls_keyupdate.c gnutls-3.8.2/tests/ktls_keyupdate.c
+--- gnutls-3.8.2/tests/ktls_keyupdate.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/ktls_keyupdate.c	2023-11-27 09:25:44.923955733 -0600
+@@ -201,6 +201,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/long-session-id.c gnutls-3.8.2/tests/long-session-id.c
+--- gnutls-3.8.2/tests/long-session-id.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/long-session-id.c	2023-11-27 09:25:44.927481531 -0600
+@@ -220,6 +220,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], prio);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/mini-alpn.c gnutls-3.8.2/tests/mini-alpn.c
+--- gnutls-3.8.2/tests/mini-alpn.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-alpn.c	2023-11-27 09:25:44.927481531 -0600
+@@ -162,6 +162,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-discard.c gnutls-3.8.2/tests/mini-dtls-discard.c
+--- gnutls-3.8.2/tests/mini-dtls-discard.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-discard.c	2023-11-27 09:25:44.933957580 -0600
+@@ -167,6 +167,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-fork.c gnutls-3.8.2/tests/mini-dtls-fork.c
+--- gnutls-3.8.2/tests/mini-dtls-fork.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-fork.c	2023-11-27 09:25:44.947512943 -0600
+@@ -56,6 +56,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-heartbeat.c gnutls-3.8.2/tests/mini-dtls-heartbeat.c
+--- gnutls-3.8.2/tests/mini-dtls-heartbeat.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-heartbeat.c	2023-11-27 09:25:44.947512943 -0600
+@@ -197,6 +197,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-hello-verify.c gnutls-3.8.2/tests/mini-dtls-hello-verify.c
+--- gnutls-3.8.2/tests/mini-dtls-hello-verify.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-hello-verify.c	2023-11-27 09:25:44.947512943 -0600
+@@ -164,6 +164,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-large.c gnutls-3.8.2/tests/mini-dtls-large.c
+--- gnutls-3.8.2/tests/mini-dtls-large.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-large.c	2023-11-27 09:25:44.953959029 -0600
+@@ -147,6 +147,7 @@
+ {
+ 	int status;
+ 
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ }
+diff -ur gnutls-3.8.2/tests/mini-dtls-lowmtu.c gnutls-3.8.2/tests/mini-dtls-lowmtu.c
+--- gnutls-3.8.2/tests/mini-dtls-lowmtu.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-lowmtu.c	2023-11-27 09:25:44.957532653 -0600
+@@ -191,6 +191,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -298,6 +299,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], prio);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/mini-dtls-mtu.c gnutls-3.8.2/tests/mini-dtls-mtu.c
+--- gnutls-3.8.2/tests/mini-dtls-mtu.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-mtu.c	2023-11-27 09:25:44.963955234 -0600
+@@ -199,6 +199,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-record-asym.c gnutls-3.8.2/tests/mini-dtls-record-asym.c
+--- gnutls-3.8.2/tests/mini-dtls-record-asym.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-record-asym.c	2023-11-27 09:25:44.967551414 -0600
+@@ -237,6 +237,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-record.c gnutls-3.8.2/tests/mini-dtls-record.c
+--- gnutls-3.8.2/tests/mini-dtls-record.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-record.c	2023-11-27 09:25:44.967551415 -0600
+@@ -267,6 +267,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls-srtp.c gnutls-3.8.2/tests/mini-dtls-srtp.c
+--- gnutls-3.8.2/tests/mini-dtls-srtp.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls-srtp.c	2023-11-27 09:25:44.967551414 -0600
+@@ -177,6 +177,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-dtls0-9.c gnutls-3.8.2/tests/mini-dtls0-9.c
+--- gnutls-3.8.2/tests/mini-dtls0-9.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-dtls0-9.c	2023-11-27 09:25:44.973956709 -0600
+@@ -176,6 +176,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/mini-key-material.c gnutls-3.8.2/tests/mini-key-material.c
+--- gnutls-3.8.2/tests/mini-key-material.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-key-material.c	2023-11-27 09:25:44.974843686 -0600
+@@ -82,6 +82,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/mini-loss-time.c gnutls-3.8.2/tests/mini-loss-time.c
+--- gnutls-3.8.2/tests/mini-loss-time.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-loss-time.c	2023-11-27 09:25:44.977567225 -0600
+@@ -268,6 +268,7 @@
+ 		else
+ 			client(fd[1], 30);
+ 		close(fd[1]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[1]);
+diff -ur gnutls-3.8.2/tests/mini-overhead.c gnutls-3.8.2/tests/mini-overhead.c
+--- gnutls-3.8.2/tests/mini-overhead.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-overhead.c	2023-11-27 09:25:44.987584322 -0600
+@@ -208,6 +208,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/mini-record-2.c gnutls-3.8.2/tests/mini-record-2.c
+--- gnutls-3.8.2/tests/mini-record-2.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-record-2.c	2023-11-27 09:25:44.987584324 -0600
+@@ -241,6 +241,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/mini-record-failure.c gnutls-3.8.2/tests/mini-record-failure.c
+--- gnutls-3.8.2/tests/mini-record-failure.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-record-failure.c	2023-11-27 09:25:44.987584323 -0600
+@@ -179,6 +179,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/mini-record-range.c gnutls-3.8.2/tests/mini-record-range.c
+--- gnutls-3.8.2/tests/mini-record-range.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-record-range.c	2023-11-27 09:25:44.997586093 -0600
+@@ -170,6 +170,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -301,6 +302,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], prio);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/mini-record.c gnutls-3.8.2/tests/mini-record.c
+--- gnutls-3.8.2/tests/mini-record.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-record.c	2023-11-27 09:25:44.997586094 -0600
+@@ -210,6 +210,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/mini-server-name.c gnutls-3.8.2/tests/mini-server-name.c
+--- gnutls-3.8.2/tests/mini-server-name.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-server-name.c	2023-11-27 09:25:45.395743600 -0600
+@@ -151,6 +151,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -293,6 +294,7 @@
+ 		close(fd[1]);
+ 		server(test_name, prio, fd[0], server_exp, server_exp_len,
+ 		       server_error);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/mini-termination.c gnutls-3.8.2/tests/mini-termination.c
+--- gnutls-3.8.2/tests/mini-termination.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-termination.c	2023-11-27 09:25:45.760185900 -0600
+@@ -192,6 +192,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/mini-tls-nonblock.c gnutls-3.8.2/tests/mini-tls-nonblock.c
+--- gnutls-3.8.2/tests/mini-tls-nonblock.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/mini-tls-nonblock.c	2023-11-27 09:25:45.760186000 -0600
+@@ -208,6 +208,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/no-signal.c gnutls-3.8.2/tests/no-signal.c
+--- gnutls-3.8.2/tests/no-signal.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/no-signal.c	2023-11-27 09:25:45.760185900 -0600
+@@ -214,6 +214,7 @@
+ 		close(fd[0]);
+ 		server(fd[1]);
+ 		close(fd[1]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[1]);
+diff -ur gnutls-3.8.2/tests/pkgconfig.sh gnutls-3.8.2/tests/pkgconfig.sh
+--- gnutls-3.8.2/tests/pkgconfig.sh	2023-08-04 01:20:32.000000000 -0500
++++ gnutls-3.8.2/tests/pkgconfig.sh	2023-11-27 09:25:45.167841286 -0600
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2017 Nikos Mavrogiannopoulos
+ #
+@@ -39,7 +39,7 @@
+ 
+ for lib in libidn2 p11-kit-1
+ do
+-	OTHER=$(${PKG_CONFIG} --libs --static $lib)
++	OTHER=$(${PKG_CONFIG} --libs $lib)
+ 	if test -n "${OTHER}" && test "${OTHER#*-R}" != "$OTHER";then
+ 		echo "Found invalid string in $lib flags: ${OTHER}"
+ 		exit 77
+@@ -74,9 +74,9 @@
+ ${CC} ${TMPFILE} -o ${TMPFILE_O} $(${PKG_CONFIG} --libs gnutls) $(${PKG_CONFIG} --cflags gnutls) ${COMMON} ${CFLAGS}
+ 
+ echo ""
+-echo "Trying static linking with $(${PKG_CONFIG} --libs --static gnutls)"
+-echo cc ${TMPFILE} -o ${TMPFILE_O} $(${PKG_CONFIG} --static --libs gnutls) $(${PKG_CONFIG} --cflags gnutls) ${COMMON} ${CFLAGS}
+-${CC} ${TMPFILE} -o ${TMPFILE_O} $(${PKG_CONFIG} --static --libs gnutls) $(${PKG_CONFIG} --cflags gnutls) ${COMMON} ${CFLAGS}
++echo "Trying linking with $(${PKG_CONFIG} --libs gnutls)"
++echo cc ${TMPFILE} -o ${TMPFILE_O} $(${PKG_CONFIG} --libs gnutls) $(${PKG_CONFIG} --cflags gnutls) ${COMMON} ${CFLAGS}
++${CC} ${TMPFILE} -o ${TMPFILE_O} $(${PKG_CONFIG} --libs gnutls) $(${PKG_CONFIG} --cflags gnutls) ${COMMON} ${CFLAGS}
+ 
+ rm -f ${TMPFILE} ${TMPFILE_O}
+ 
+diff -ur gnutls-3.8.2/tests/prf.c gnutls-3.8.2/tests/prf.c
+--- gnutls-3.8.2/tests/prf.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/prf.c	2023-11-27 09:25:45.139576930 -0600
+@@ -367,6 +367,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/record-pad.c gnutls-3.8.2/tests/record-pad.c
+--- gnutls-3.8.2/tests/record-pad.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/record-pad.c	2023-11-27 09:25:45.176247520 -0600
+@@ -175,6 +175,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -304,6 +305,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], test);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/record-retvals.c gnutls-3.8.2/tests/record-retvals.c
+--- gnutls-3.8.2/tests/record-retvals.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/record-retvals.c	2023-11-27 09:25:45.339565620 -0600
+@@ -251,6 +251,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/recv-data-before-handshake.c gnutls-3.8.2/tests/recv-data-before-handshake.c
+--- gnutls-3.8.2/tests/recv-data-before-handshake.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/recv-data-before-handshake.c	2023-11-27 09:25:45.339565620 -0600
+@@ -184,6 +184,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/resume-dtls.c gnutls-3.8.2/tests/resume-dtls.c
+--- gnutls-3.8.2/tests/resume-dtls.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/resume-dtls.c	2023-11-27 09:25:45.376424940 -0600
+@@ -315,6 +315,7 @@
+ 		if (ret < 0) {
+ 			close(sd);
+ 			gnutls_deinit(session);
++			sleep(10);
+ 			kill(child, SIGTERM);
+ 			fail("server: Handshake has failed (%s)\n\n",
+ 			     gnutls_strerror(ret));
+@@ -335,6 +336,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Received corrupted data(%d). Closing...\n",
+ 				     ret);
+diff -ur gnutls-3.8.2/tests/resume-with-record-size-limit.c gnutls-3.8.2/tests/resume-with-record-size-limit.c
+--- gnutls-3.8.2/tests/resume-with-record-size-limit.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/resume-with-record-size-limit.c	2023-11-27 09:25:45.376424930 -0600
+@@ -317,6 +317,7 @@
+ 		if (ret < 0) {
+ 			close(sd);
+ 			gnutls_deinit(session);
++			sleep(10);
+ 			kill(child, SIGTERM);
+ 			fail("server: Handshake has failed (%s)\n\n",
+ 			     gnutls_strerror(ret));
+@@ -345,6 +346,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Received corrupted data(%d). Closing...\n",
+ 				     ret);
+diff -ur gnutls-3.8.2/tests/resume.c gnutls-3.8.2/tests/resume.c
+--- gnutls-3.8.2/tests/resume.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/resume.c	2023-11-27 09:25:45.439586530 -0600
+@@ -897,6 +897,7 @@
+ 		if (ret < 0) {
+ 			close(sd);
+ 			gnutls_deinit(session);
++			sleep(10);
+ 			kill(child, SIGTERM);
+ 			fail("server: Handshake has failed (%s)\n\n",
+ 			     gnutls_strerror(ret));
+@@ -931,6 +932,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Received corrupted data(%d). Closing...\n",
+ 				     ret);
+diff -ur gnutls-3.8.2/tests/session-tickets-ok.c gnutls-3.8.2/tests/session-tickets-ok.c
+--- gnutls-3.8.2/tests/session-tickets-ok.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/session-tickets-ok.c	2023-11-27 09:25:45.476587270 -0600
+@@ -139,6 +139,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/srp.c gnutls-3.8.2/tests/srp.c
+--- gnutls-3.8.2/tests/srp.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/srp.c	2023-11-27 09:25:45.539578750 -0600
+@@ -182,6 +182,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+@@ -293,6 +294,7 @@
+ 		close(fd[0]);
+ 		client(fd[1], prio, user, pass, exp_err);
+ 		if (exp_err < 0) {
++			sleep(10);
+ 			kill(child, SIGTERM);
+ 			wait(&status);
+ 		} else {
+diff -ur gnutls-3.8.2/tests/tls-client-with-seccomp.c gnutls-3.8.2/tests/tls-client-with-seccomp.c
+--- gnutls-3.8.2/tests/tls-client-with-seccomp.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls-client-with-seccomp.c	2023-11-27 09:25:45.539578730 -0600
+@@ -154,6 +154,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/tls-etm.c gnutls-3.8.2/tests/tls-etm.c
+--- gnutls-3.8.2/tests/tls-etm.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls-etm.c	2023-11-27 09:25:45.639556740 -0600
+@@ -178,6 +178,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+@@ -309,6 +310,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], prio, etm);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls-ext-not-in-dtls.c gnutls-3.8.2/tests/tls-ext-not-in-dtls.c
+--- gnutls-3.8.2/tests/tls-ext-not-in-dtls.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls-ext-not-in-dtls.c	2023-11-27 09:25:45.639556750 -0600
+@@ -294,6 +294,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], type);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls-with-seccomp.c gnutls-3.8.2/tests/tls-with-seccomp.c
+--- gnutls-3.8.2/tests/tls-with-seccomp.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls-with-seccomp.c	2023-11-27 09:25:45.676986410 -0600
+@@ -148,6 +148,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/tls12-rehandshake-cert-2.c gnutls-3.8.2/tests/tls12-rehandshake-cert-2.c
+--- gnutls-3.8.2/tests/tls12-rehandshake-cert-2.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls12-rehandshake-cert-2.c	2023-11-27 09:25:45.676986430 -0600
+@@ -199,6 +199,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/tls12-rehandshake-cert-3.c gnutls-3.8.2/tests/tls12-rehandshake-cert-3.c
+--- gnutls-3.8.2/tests/tls12-rehandshake-cert-3.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls12-rehandshake-cert-3.c	2023-11-27 09:25:45.739571680 -0600
+@@ -163,6 +163,7 @@
+ static void terminate(void)
+ {
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	exit(1);
+ }
+diff -ur gnutls-3.8.2/tests/tls13-early-data-neg.c gnutls-3.8.2/tests/tls13-early-data-neg.c
+--- gnutls-3.8.2/tests/tls13-early-data-neg.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13-early-data-neg.c	2023-11-27 09:25:45.748640360 -0600
+@@ -420,6 +420,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Received corrupted data(%d). Closing...\n",
+ 				     ret);
+diff -ur gnutls-3.8.2/tests/tls13-early-data-neg2.c gnutls-3.8.2/tests/tls13-early-data-neg2.c
+--- gnutls-3.8.2/tests/tls13-early-data-neg2.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13-early-data-neg2.c	2023-11-27 09:25:45.777151330 -0600
+@@ -306,6 +306,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Received corrupted data(%d). Closing...\n",
+ 				     ret);
+diff -ur gnutls-3.8.2/tests/tls13-early-data.c gnutls-3.8.2/tests/tls13-early-data.c
+--- gnutls-3.8.2/tests/tls13-early-data.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13-early-data.c	2023-11-27 09:25:45.777151360 -0600
+@@ -782,6 +782,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Error: %s\n",
+ 				     gnutls_strerror(ret));
+@@ -849,6 +850,7 @@
+ 		for (i = 0; i < SESSIONS; i++)
+ 			close(client_sds[i]);
+ 		server(server_sds, fixture);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		for (i = 0; i < SESSIONS; i++)
+diff -ur gnutls-3.8.2/tests/tlsext-decoding.c gnutls-3.8.2/tests/tlsext-decoding.c
+--- gnutls-3.8.2/tests/tlsext-decoding.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tlsext-decoding.c	2023-11-27 09:25:45.777151320 -0600
+@@ -173,6 +173,7 @@
+ {
+ 	int status;
+ 	assert(child);
++	sleep(10);
+ 	kill(child, SIGTERM);
+ 	wait(&status);
+ 	exit(1);
+diff -ur gnutls-3.8.2/tests/pkcs11/tls-neg-pkcs11-no-key.c gnutls-3.8.2/tests/pkcs11/tls-neg-pkcs11-no-key.c
+--- gnutls-3.8.2/tests/pkcs11/tls-neg-pkcs11-no-key.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/pkcs11/tls-neg-pkcs11-no-key.c	2023-11-27 09:25:45.877313580 -0600
+@@ -364,6 +364,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 		check_wait_status(status);
+diff -ur gnutls-3.8.2/tests/scripts/common.sh gnutls-3.8.2/tests/scripts/common.sh
+--- gnutls-3.8.2/tests/scripts/common.sh	2023-08-04 01:20:32.000000000 -0500
++++ gnutls-3.8.2/tests/scripts/common.sh	2023-11-27 09:25:45.877313570 -0600
+@@ -79,7 +79,12 @@
+ check_if_port_listening() {
+ 	local PORT=$1
+ 	have_port_finder
+-	$PFCMD -anl|grep "[\:\.]$PORT"|grep LISTEN >/dev/null 2>&1
++	if test `uname` = AIX; then
++		x=A
++	else
++		x=l
++	fi
++	$PFCMD -an$x|grep "[\:\.]$PORT"|grep LISTEN >/dev/null 2>&1
+ }
+ 
+ # Find a port number not currently in use.
+diff -ur gnutls-3.8.2/tests/tls13/change_cipher_spec.c gnutls-3.8.2/tests/tls13/change_cipher_spec.c
+--- gnutls-3.8.2/tests/tls13/change_cipher_spec.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/change_cipher_spec.c	2023-11-27 09:25:45.939584890 -0600
+@@ -349,6 +349,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], ccs_check);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/compress-cert-neg.c gnutls-3.8.2/tests/tls13/compress-cert-neg.c
+--- gnutls-3.8.2/tests/tls13/compress-cert-neg.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/compress-cert-neg.c	2023-11-27 09:25:45.939584880 -0600
+@@ -59,6 +59,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/tls13/compress-cert-neg2.c gnutls-3.8.2/tests/tls13/compress-cert-neg2.c
+--- gnutls-3.8.2/tests/tls13/compress-cert-neg2.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/compress-cert-neg2.c	2023-11-27 09:25:45.977506280 -0600
+@@ -56,6 +56,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/tls13/compress-cert.c gnutls-3.8.2/tests/tls13/compress-cert.c
+--- gnutls-3.8.2/tests/tls13/compress-cert.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/compress-cert.c	2023-11-27 09:25:45.103959382 -0600
+@@ -58,6 +58,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/tls13/hello_retry_request.c gnutls-3.8.2/tests/tls13/hello_retry_request.c
+--- gnutls-3.8.2/tests/tls13/hello_retry_request.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/hello_retry_request.c	2023-11-27 09:25:45.107752369 -0600
+@@ -252,6 +252,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		client(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/hello_retry_request_resume.c gnutls-3.8.2/tests/tls13/hello_retry_request_resume.c
+--- gnutls-3.8.2/tests/tls13/hello_retry_request_resume.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/hello_retry_request_resume.c	2023-11-27 09:25:45.107752369 -0600
+@@ -314,6 +314,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/no-auto-send-ticket.c gnutls-3.8.2/tests/tls13/no-auto-send-ticket.c
+--- gnutls-3.8.2/tests/tls13/no-auto-send-ticket.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/no-auto-send-ticket.c	2023-11-27 09:25:45.113958455 -0600
+@@ -298,6 +298,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], flags, tickets_sent, tickets_expected);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/no-psk-exts.c gnutls-3.8.2/tests/tls13/no-psk-exts.c
+--- gnutls-3.8.2/tests/tls13/no-psk-exts.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/no-psk-exts.c	2023-11-27 09:25:45.117768959 -0600
+@@ -250,6 +250,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/post-handshake-with-cert-auto.c gnutls-3.8.2/tests/tls13/post-handshake-with-cert-auto.c
+--- gnutls-3.8.2/tests/tls13/post-handshake-with-cert-auto.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/post-handshake-with-cert-auto.c	2023-11-27 09:25:45.117768961 -0600
+@@ -356,6 +356,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], err, type, max_auths);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 		check_wait_status(status);
+diff -ur gnutls-3.8.2/tests/tls13/post-handshake-with-cert-pkcs11.c gnutls-3.8.2/tests/tls13/post-handshake-with-cert-pkcs11.c
+--- gnutls-3.8.2/tests/tls13/post-handshake-with-cert-pkcs11.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/post-handshake-with-cert-pkcs11.c	2023-11-27 09:25:45.123942057 -0600
+@@ -428,6 +428,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], err, type);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 		check_wait_status(status);
+diff -ur gnutls-3.8.2/tests/tls13/post-handshake-with-cert-ticket.c gnutls-3.8.2/tests/tls13/post-handshake-with-cert-ticket.c
+--- gnutls-3.8.2/tests/tls13/post-handshake-with-cert-ticket.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/post-handshake-with-cert-ticket.c	2023-11-27 09:25:45.123942057 -0600
+@@ -375,6 +375,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], tickets);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/post-handshake-with-psk.c gnutls-3.8.2/tests/tls13/post-handshake-with-psk.c
+--- gnutls-3.8.2/tests/tls13/post-handshake-with-psk.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/post-handshake-with-psk.c	2023-11-27 09:25:45.127787067 -0600
+@@ -357,6 +357,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0], err, type, max_auths);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/post-handshake-without-cert.c gnutls-3.8.2/tests/tls13/post-handshake-without-cert.c
+--- gnutls-3.8.2/tests/tls13/post-handshake-without-cert.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/post-handshake-without-cert.c	2023-11-27 09:25:45.133954705 -0600
+@@ -257,6 +257,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/prf-early.c gnutls-3.8.2/tests/tls13/prf-early.c
+--- gnutls-3.8.2/tests/tls13/prf-early.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/prf-early.c	2023-11-27 09:25:45.137789129 -0600
+@@ -299,6 +299,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+@@ -404,6 +405,7 @@
+ 					success("server: Peer has closed the GnuTLS connection\n");
+ 				break;
+ 			} else if (ret < 0) {
++				sleep(10);
+ 				kill(child, SIGTERM);
+ 				fail("server: Received corrupted data(%d). Closing...\n",
+ 				     ret);
+diff -ur gnutls-3.8.2/tests/tls13/prf.c gnutls-3.8.2/tests/tls13/prf.c
+--- gnutls-3.8.2/tests/tls13/prf.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/prf.c	2023-11-27 09:25:45.137789128 -0600
+@@ -281,6 +281,7 @@
+ 	int status = 0;
+ 
+ 	if (child) {
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 		wait(&status);
+ 	}
+diff -ur gnutls-3.8.2/tests/tls13/rnd-check-rollback-val.c gnutls-3.8.2/tests/tls13/rnd-check-rollback-val.c
+--- gnutls-3.8.2/tests/tls13/rnd-check-rollback-val.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/rnd-check-rollback-val.c	2023-11-27 09:25:45.147804080 -0600
+@@ -292,6 +292,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		client(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/rnd-rollback-detection.c gnutls-3.8.2/tests/tls13/rnd-rollback-detection.c
+--- gnutls-3.8.2/tests/tls13/rnd-rollback-detection.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/rnd-rollback-detection.c	2023-11-27 09:25:45.163955368 -0600
+@@ -224,6 +224,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		client(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/supported_versions.c gnutls-3.8.2/tests/tls13/supported_versions.c
+--- gnutls-3.8.2/tests/tls13/supported_versions.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/supported_versions.c	2023-11-27 09:25:45.167841288 -0600
+@@ -363,6 +363,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);
+diff -ur gnutls-3.8.2/tests/tls13/tls12-no-tls13-exts.c gnutls-3.8.2/tests/tls13/tls12-no-tls13-exts.c
+--- gnutls-3.8.2/tests/tls13/tls12-no-tls13-exts.c	2023-10-20 06:20:59.000000000 -0500
++++ gnutls-3.8.2/tests/tls13/tls12-no-tls13-exts.c	2023-11-27 09:25:45.167841287 -0600
+@@ -228,6 +228,7 @@
+ 		/* parent */
+ 		close(fd[1]);
+ 		server(fd[0]);
++		sleep(10);
+ 		kill(child, SIGTERM);
+ 	} else {
+ 		close(fd[0]);

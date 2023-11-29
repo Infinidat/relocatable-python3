@@ -1,13 +1,25 @@
+diff -ur zstd-1.5.5/lib/Makefile zstd-1.5.5/lib/Makefile
+--- zstd-1.5.5/lib/Makefile	2023-04-04 15:13:52.000000000 -0500
++++ zstd-1.5.5/lib/Makefile	2023-11-28 17:15:19.938388050 -0600
+@@ -308,7 +308,7 @@
+ 	        $< >$@
+ 
+ .PHONY: install
+-install: install-pc install-static install-shared install-includes
++install: install-pc install-shared install-includes
+ 	@echo zstd static and shared library installed
+ 
+ .PHONY: install-pc
 diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
---- zstd-1.5.5/tests/playTests.sh	2023-11-23 06:14:24.589076505 -0600
-+++ zstd-1.5.5/tests/playTests.sh	2023-11-23 06:18:04.130293007 -0600
+--- zstd-1.5.5/tests/playTests.sh	2023-04-04 15:13:52.000000000 -0500
++++ zstd-1.5.5/tests/playTests.sh	2023-11-28 16:44:58.477238596 -0600
 @@ -1,4 +1,4 @@
 -#!/bin/sh
 +#!/bin/bash
  
- unset ZSTD_CLEVEL
- unset ZSTD_NBTHREADS
-@@ -80,6 +80,14 @@
+ set -e
+ 
+@@ -82,6 +82,14 @@
      printf '%b\n' "${*}"
  }
  
@@ -22,7 +34,7 @@ diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
  if [ -z "${size}" ]; then
      size=
  else
-@@ -117,6 +125,7 @@
+@@ -119,6 +127,7 @@
    FreeBSD) MD5SUM="gmd5sum" ;;
    NetBSD) MD5SUM="md5 -n" ;;
    OpenBSD) MD5SUM="md5" ;;
@@ -30,7 +42,7 @@ diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
    *) MD5SUM="md5sum" ;;
  esac
  
-@@ -123,6 +132,7 @@
+@@ -125,6 +134,7 @@
  MTIME="stat -c %Y"
  case "$UNAME" in
      Darwin | FreeBSD | OpenBSD | NetBSD) MTIME="stat -f %m" ;;
@@ -38,7 +50,7 @@ diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
  esac
  
  assertSameMTime() {
-@@ -135,6 +145,7 @@
+@@ -137,6 +147,7 @@
  GET_PERMS="stat -c %a"
  case "$UNAME" in
      Darwin | FreeBSD | OpenBSD | NetBSD) GET_PERMS="stat -f %Lp" ;;
@@ -48,7 +60,7 @@ diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
  assertFilePermissions() {
 diff -ur zstd-1.5.5/tests/cli-tests/common/mtime.sh zstd-1.5.5/tests/cli-tests/common/mtime.sh
 --- zstd-1.5.5/tests/cli-tests/common/mtime.sh	2023-04-04 15:13:52.000000000 -0500
-+++ zstd-1.5.5/tests/cli-tests/common/mtime.sh	2023-11-23 06:19:15.585222265 -0600
++++ zstd-1.5.5/tests/cli-tests/common/mtime.sh	2023-11-28 16:44:58.483400983 -0600
 @@ -1,8 +1,13 @@
  . "$COMMON/platform.sh"
  
@@ -65,7 +77,7 @@ diff -ur zstd-1.5.5/tests/cli-tests/common/mtime.sh zstd-1.5.5/tests/cli-tests/c
  assertSameMTime() {
 diff -ur zstd-1.5.5/tests/cli-tests/common/permissions.sh zstd-1.5.5/tests/cli-tests/common/permissions.sh
 --- zstd-1.5.5/tests/cli-tests/common/permissions.sh	2023-04-04 15:13:52.000000000 -0500
-+++ zstd-1.5.5/tests/cli-tests/common/permissions.sh	2023-11-23 06:19:59.307762916 -0600
++++ zstd-1.5.5/tests/cli-tests/common/permissions.sh	2023-11-28 16:44:58.483400983 -0600
 @@ -1,8 +1,13 @@
  . "$COMMON/platform.sh"
  

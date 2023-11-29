@@ -1,0 +1,68 @@
+diff -ur openssl-1.1.1w/Configurations/10-main.conf openssl-1.1.1w/Configurations/10-main.conf
+--- openssl-1.1.1w/Configurations/10-main.conf	2023-09-11 09:08:11.000000000 -0500
++++ openssl-1.1.1w/Configurations/10-main.conf	2023-11-27 16:12:59.503973787 -0600
+@@ -1136,7 +1136,7 @@
+         template         => 1,
+         sys_id           => "AIX",
+         lib_cppflags     => "-DB_ENDIAN",
+-        lflags           => "-Wl,-bsvr4",
++        lflags           => "-Wl,-bsvr4 -Wl,-b64 -Wl,-brtl",
+         thread_scheme    => "pthreads",
+         dso_scheme       => "dlfcn",
+         shared_target    => "self",
+@@ -1144,9 +1144,6 @@
+         shared_ldflag    => "-Wl,-G,-bsymbolic,-bnoentry",
+         shared_defflag   => "-Wl,-bE:",
+         shared_extension => ".so.\$(SHLIB_VERSION_NUMBER)",
+-        dso_extension    => ".so",
+-        lib_extension    => shared("_a.a"),
+-        shared_extension_simple => shared(".a"),
+     },
+     "aix-gcc" => {
+         inherit_from     => [ "aix-common", asm("ppc32_asm") ],
+@@ -1170,8 +1167,7 @@
+         ex_libs          => add(threads("-pthread")),
+         bn_ops           => "SIXTY_FOUR_BIT_LONG RC4_CHAR",
+         perlasm_scheme   => "aix64",
+-        shared_ldflag    => add_before("-shared -static-libgcc"),
+-        shared_extension => "64.so.\$(SHLIB_VERSION_NUMBER)",
++        shared_ldflag    => add_before("-shared"),
+         AR               => add("-X64"),
+         RANLIB           => add("-X64"),
+     },
+diff -ur openssl-1.1.1w/Configurations/unix-Makefile.tmpl openssl-1.1.1w/Configurations/unix-Makefile.tmpl
+--- openssl-1.1.1w/Configurations/unix-Makefile.tmpl	2023-09-11 09:08:11.000000000 -0500
++++ openssl-1.1.1w/Configurations/unix-Makefile.tmpl	2023-11-28 07:28:03.363373455 -0600
+@@ -38,7 +38,7 @@
+ 
+      # Shared AIX support is special. We put libcrypto[64].so.ver into
+      # libcrypto.a and use libcrypto_a.a as static one.
+-     sub sharedaix  { !$disabled{shared} && $config{target} =~ /^aix/ }
++     sub sharedaix  { !$disabled{shared} && $config{target} =~ /^aix-cc/ }
+ 
+      our $sover_dirname = $config{shlib_version_number};
+      $sover_dirname =~ s|\.|_|g
+@@ -134,7 +134,6 @@
+ GENERATED={- # common0.tmpl provides @generated
+              join(" ", @generated ) -}
+ 
+-INSTALL_LIBS={- join(" ", map { lib($_) } @{$unified_info{install}->{libraries}}) -}
+ INSTALL_SHLIBS={- join(" ", map { shlib($_) } @{$unified_info{install}->{libraries}}) -}
+ INSTALL_SHLIB_INFO={- join(" ", map { "\"".shlib($_).";".shlib_simple($_)."\"" } @{$unified_info{install}->{libraries}}) -}
+ INSTALL_ENGINES={- join(" ", map { dso($_) } @{$unified_info{install}->{engines}}) -}
+@@ -610,15 +609,6 @@
+ 		chmod 644 "$(DESTDIR)$(INSTALLTOP)/include/openssl/$$fn"; \
+ 	done
+ 	@$(PERL) $(SRCDIR)/util/mkdir-p.pl "$(DESTDIR)$(libdir)"
+-	@set -e; for l in $(INSTALL_LIBS); do \
+-		fn=`basename $$l`; \
+-		$(ECHO) "install $$l -> $(DESTDIR)$(libdir)/$$fn"; \
+-		cp $$l "$(DESTDIR)$(libdir)/$$fn.new"; \
+-		$(RANLIB) "$(DESTDIR)$(libdir)/$$fn.new"; \
+-		chmod 644 "$(DESTDIR)$(libdir)/$$fn.new"; \
+-		mv -f "$(DESTDIR)$(libdir)/$$fn.new" \
+-		      "$(DESTDIR)$(libdir)/$$fn"; \
+-	done
+ 	@ : {- output_off() if $disabled{shared}; "" -}
+ 	@set -e; for s in $(INSTALL_SHLIB_INFO); do \
+ 		s1=`echo "$$s" | cut -f1 -d";"`; \
