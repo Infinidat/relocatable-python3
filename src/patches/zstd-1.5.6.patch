@@ -1,0 +1,83 @@
+diff -ur zstd-1.5.6/Makefile zstd-1.5.6/Makefile
+--- zstd-1.5.6/Makefile	2024-03-21 18:05:51.000000000 -0400
++++ zstd-1.5.6/Makefile	2024-04-29 10:03:45.101042100 -0400
+@@ -151,7 +151,7 @@
+ #------------------------------------------------------------------------------
+ # make install is validated only for Linux, macOS, Hurd and some BSD targets
+ #------------------------------------------------------------------------------
+-ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU OpenBSD FreeBSD DragonFly NetBSD MSYS_NT CYGWIN_NT Haiku AIX))
++ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU OpenBSD FreeBSD DragonFly NetBSD MSYS_NT CYGWIN_NT Haiku SunOS AIX))
+ 
+ HOST_OS = POSIX
+ 
+diff -ur zstd-1.5.6/lib/Makefile zstd-1.5.6/lib/Makefile
+--- zstd-1.5.6/lib/Makefile	2024-03-21 18:05:51.000000000 -0400
++++ zstd-1.5.6/lib/Makefile	2024-04-29 10:00:32.927131965 -0400
+@@ -320,7 +320,7 @@
+ 	        $< >$@
+ 
+ .PHONY: install
+-install: install-pc install-static install-shared install-includes
++install: install-pc install-shared install-includes
+ 	@echo zstd static and shared library installed
+ 
+ .PHONY: install-pc
+diff -ur zstd-1.5.6/lib/common/mem.h zstd-1.5.6/lib/common/mem.h
+--- zstd-1.5.6/lib/common/mem.h	2024-03-21 18:05:51.000000000 -0400
++++ zstd-1.5.6/lib/common/mem.h	2024-04-29 10:00:32.923131925 -0400
+@@ -133,7 +133,9 @@
+  */
+ #ifndef MEM_FORCE_MEMORY_ACCESS   /* can be defined externally, on command line for example */
+ #  ifdef __GNUC__
+-#    define MEM_FORCE_MEMORY_ACCESS 1
++#    ifndef __sparc__
++#      define MEM_FORCE_MEMORY_ACCESS 1
++#    endif
+ #  endif
+ #endif
+ 
+diff -ur zstd-1.5.6/programs/platform.h zstd-1.5.6/programs/platform.h
+--- zstd-1.5.6/programs/platform.h	2024-03-21 18:05:51.000000000 -0400
++++ zstd-1.5.6/programs/platform.h	2024-04-29 10:00:32.927131965 -0400
+@@ -59,8 +59,8 @@
+ #  if !defined(_LARGEFILE_SOURCE)                  /* obsolete macro, replaced with _FILE_OFFSET_BITS */
+ #    define _LARGEFILE_SOURCE 1                    /* Large File Support extension (LFS) - fseeko, ftello */
+ #  endif
+-#  if defined(_AIX) || defined(__hpux)
+-#    define _LARGE_FILES                           /* Large file support on 32-bits AIX and HP-UX */
++#  if defined(__hpux)
++#    define _LARGE_FILES                           /* Large file support on 32-bits HP-UX */
+ #  endif
+ #endif
+ 
+diff -ur zstd-1.5.6/tests/playTests.sh zstd-1.5.6/tests/playTests.sh
+--- zstd-1.5.6/tests/playTests.sh	2024-03-21 18:05:51.000000000 -0400
++++ zstd-1.5.6/tests/playTests.sh	2024-04-29 10:01:53.595933772 -0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ set -e # exit immediately on error
+ # set -x # print commands before execution (debug)
+@@ -94,11 +94,7 @@
+ TESTDIR="$SCRIPT_DIR/../tests"
+ UNAME=${UNAME:-$(uname)}
+ GREP=${GREP:-grep}
+-
+-case "$UNAME" in
+-  SunOS) DIFF=${DIFF:-gdiff} ;;
+-  *) DIFF=${DIFF:-diff} ;;
+-esac
++DIFF=${DIFF:-diff}
+ 
+ detectedTerminal=false
+ if [ -t 0 ] && [ -t 1 ]
+@@ -330,7 +326,7 @@
+ zstd -d -f tmp_corrupt.zst --check --no-check # final flag overrides
+ zstd -d -f tmp.zst --no-check
+ 
+-if [ "$isWindows" = false ] && [ "$UNAME" != "AIX" ]; then
++if [ "$isWindows" = false ] && [ "$UNAME" != "AIX" ] && [ "$UNAME" != "SunOS" ]; then
+   if [ -n "$(which readelf)" ]; then
+     println "test: check if binary has executable stack (#2963)"
+     readelf -lW "$ZSTD_BIN" | $GREP 'GNU_STACK .* RW ' || die "zstd binary has executable stack!"

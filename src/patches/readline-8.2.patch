@@ -1,6 +1,6 @@
 diff -ur readline-8.2/bind.c readline-8.2/bind.c
---- readline-8.2/bind.c	2022-02-09 16:02:22.000000000 +0000
-+++ readline-8.2/bind.c	2024-03-29 12:41:23.119718072 +0000
+--- readline-8.2/bind.c	2022-02-09 10:02:22.000000000 -0600
++++ readline-8.2/bind.c	2024-04-30 14:04:54.593785344 -0500
 @@ -1167,9 +1167,7 @@
  /* **************************************************************** */
  
@@ -13,8 +13,8 @@ diff -ur readline-8.2/bind.c readline-8.2/bind.c
    int i, peekc, op;
  
 diff -ur readline-8.2/callback.c readline-8.2/callback.c
---- readline-8.2/callback.c	2022-04-29 16:02:56.000000000 +0000
-+++ readline-8.2/callback.c	2024-03-29 12:41:23.123718072 +0000
+--- readline-8.2/callback.c	2022-04-29 11:02:56.000000000 -0500
++++ readline-8.2/callback.c	2024-04-30 14:04:54.593785327 -0500
 @@ -115,7 +115,10 @@
  #define CALLBACK_READ_RETURN() \
    do { \
@@ -28,8 +28,8 @@ diff -ur readline-8.2/callback.c readline-8.2/callback.c
    } while (0)
  #else
 diff -ur readline-8.2/colors.c readline-8.2/colors.c
---- readline-8.2/colors.c	2021-12-08 16:38:25.000000000 +0000
-+++ readline-8.2/colors.c	2024-03-29 12:41:23.123718072 +0000
+--- readline-8.2/colors.c	2021-12-08 10:38:25.000000000 -0600
++++ readline-8.2/colors.c	2024-04-30 14:04:54.603804317 -0500
 @@ -73,7 +73,7 @@
  static bool is_colored (enum indicator_no type);
  static void restore_default_color (void);
@@ -40,8 +40,8 @@ diff -ur readline-8.2/colors.c readline-8.2/colors.c
  COLOR_EXT_TYPE *_rl_color_ext_list = 0;
  
 diff -ur readline-8.2/complete.c readline-8.2/complete.c
---- readline-8.2/complete.c	2022-04-05 14:47:06.000000000 +0000
-+++ readline-8.2/complete.c	2024-03-29 12:41:23.123718072 +0000
+--- readline-8.2/complete.c	2022-04-05 09:47:06.000000000 -0500
++++ readline-8.2/complete.c	2024-04-30 14:04:54.603804337 -0500
 @@ -2031,9 +2031,25 @@
  
    text = rl_copy_text (start, end);
@@ -100,8 +100,8 @@ diff -ur readline-8.2/complete.c readline-8.2/complete.c
        directory = opendir (dirname);
  
 diff -ur readline-8.2/display.c readline-8.2/display.c
---- readline-8.2/display.c	2022-04-05 14:47:31.000000000 +0000
-+++ readline-8.2/display.c	2024-03-29 12:41:23.127718072 +0000
+--- readline-8.2/display.c	2022-04-05 09:47:31.000000000 -0500
++++ readline-8.2/display.c	2024-04-30 14:04:54.603804343 -0500
 @@ -2683,11 +2683,8 @@
    register char *temp;
  
@@ -129,8 +129,8 @@ diff -ur readline-8.2/display.c readline-8.2/display.c
    rl_display_fixed++;
  }
 diff -ur readline-8.2/input.c readline-8.2/input.c
---- readline-8.2/input.c	2022-04-08 19:43:24.000000000 +0000
-+++ readline-8.2/input.c	2024-03-29 12:41:23.131718072 +0000
+--- readline-8.2/input.c	2022-04-08 14:43:24.000000000 -0500
++++ readline-8.2/input.c	2024-04-30 14:04:54.603804321 -0500
 @@ -151,7 +151,9 @@
  
  int _rl_timeout_init (void);
@@ -215,8 +215,8 @@ diff -ur readline-8.2/input.c readline-8.2/input.c
  }
  
 diff -ur readline-8.2/nls.c readline-8.2/nls.c
---- readline-8.2/nls.c	2022-08-15 13:38:51.000000000 +0000
-+++ readline-8.2/nls.c	2024-03-29 12:41:23.131718072 +0000
+--- readline-8.2/nls.c	2022-08-15 08:38:51.000000000 -0500
++++ readline-8.2/nls.c	2024-04-30 14:04:54.613821307 -0500
 @@ -141,6 +141,10 @@
    if (lspec == 0)
      lspec = "";
@@ -229,16 +229,28 @@ diff -ur readline-8.2/nls.c readline-8.2/nls.c
    ret = (lspec == 0 || *lspec == 0) ? RL_DEFAULT_LOCALE : lspec;
  #endif
 diff -ur readline-8.2/patchlevel readline-8.2/patchlevel
---- readline-8.2/patchlevel	2020-05-21 18:22:40.000000000 +0000
-+++ readline-8.2/patchlevel	2024-03-29 12:41:23.131718072 +0000
+--- readline-8.2/patchlevel	2020-05-21 13:22:40.000000000 -0500
++++ readline-8.2/patchlevel	2024-04-30 14:04:54.613821305 -0500
 @@ -1,3 +1,3 @@
  # Do not edit -- exists only for use by patch
  
 -0
 +10
+diff -ur readline-8.2/rlconf.h readline-8.2/rlconf.h
+--- readline-8.2/rlconf.h	2017-02-21 09:25:30.000000000 -0600
++++ readline-8.2/rlconf.h	2024-04-30 14:04:54.613821305 -0500
+@@ -43,7 +43,7 @@
+ #define DEFAULT_INPUTRC "~/.inputrc"
+ 
+ /* The ultimate last-ditch filename for an init file -- system-wide. */
+-#define SYS_INPUTRC "/etc/inputrc"
++#define SYS_INPUTRC "~/.inputrc"
+ 
+ /* If defined, expand tabs to spaces. */
+ #define DISPLAY_TABS
 diff -ur readline-8.2/rltty.c readline-8.2/rltty.c
---- readline-8.2/rltty.c	2022-02-18 16:14:22.000000000 +0000
-+++ readline-8.2/rltty.c	2024-03-29 12:41:23.131718072 +0000
+--- readline-8.2/rltty.c	2022-02-18 10:14:22.000000000 -0600
++++ readline-8.2/rltty.c	2024-04-30 14:04:54.613821310 -0500
 @@ -80,8 +80,7 @@
  /* Dummy call to force a backgrounded readline to stop before it tries
     to get the tty settings. */
@@ -250,8 +262,8 @@ diff -ur readline-8.2/rltty.c readline-8.2/rltty.c
  #if defined (TIOCGWINSZ)
    struct winsize w;
 diff -ur readline-8.2/support/shobj-conf readline-8.2/support/shobj-conf
---- readline-8.2/support/shobj-conf	2021-12-03 15:54:46.000000000 +0000
-+++ readline-8.2/support/shobj-conf	2024-03-29 22:32:10.124869639 +0000
+--- readline-8.2/support/shobj-conf	2021-12-03 09:54:46.000000000 -0600
++++ readline-8.2/support/shobj-conf	2024-04-30 14:05:45.953625091 -0500
 @@ -128,7 +128,8 @@
  	SHOBJ_LD='${CC}'
  	SHOBJ_LDFLAGS='-shared -Wl,-soname,$@'
@@ -269,7 +281,8 @@ diff -ur readline-8.2/support/shobj-conf readline-8.2/support/shobj-conf
 -	SHOBJ_CFLAGS=-fpic
 +	SHOBJ_CFLAGS=-fPIC
  	SHOBJ_LD='${CC}'
- 	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
+-	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
++	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bexpfull -Wl,-bnoentry -Wl,-G'
  	SHOBJ_XLDFLAGS='-G'
  
 -	SHLIB_XLDFLAGS='-bM:SRE'
@@ -280,8 +293,8 @@ diff -ur readline-8.2/support/shobj-conf readline-8.2/support/shobj-conf
  	;;
  
 diff -ur readline-8.2/text.c readline-8.2/text.c
---- readline-8.2/text.c	2021-10-27 15:03:59.000000000 +0000
-+++ readline-8.2/text.c	2024-03-29 12:41:23.135718072 +0000
+--- readline-8.2/text.c	2021-10-27 10:03:59.000000000 -0500
++++ readline-8.2/text.c	2024-04-30 14:04:54.613821315 -0500
 @@ -1764,8 +1764,7 @@
  
  #if defined (READLINE_CALLBACKS)
