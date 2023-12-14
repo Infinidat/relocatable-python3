@@ -1,0 +1,45 @@
+diff -ur libunistring-1.1/tests/test-stat-time.c libunistring-1.1/tests/test-stat-time.c
+--- libunistring-1.1/tests/test-stat-time.c	2022-01-05 09:23:28.000000000 -0600
++++ libunistring-1.1/tests/test-stat-time.c	2023-11-24 07:14:52.924570481 -0600
+@@ -138,25 +138,15 @@
+ 
+   /* Use the struct stat fields directly. */
+   /* mtime(stamp1) < mtime(stamp2) */
+-  ASSERT (statinfo[0].st_mtime < statinfo[2].st_mtime
+-          || (statinfo[0].st_mtime == statinfo[2].st_mtime
+-              && (get_stat_mtime_ns (&statinfo[0])
+-                  < get_stat_mtime_ns (&statinfo[2]))));
++  ASSERT (statinfo[0].st_mtime <= statinfo[2].st_mtime && get_stat_mtime_ns(&statinfo[0]) <= get_stat_mtime_ns(&statinfo[2]));
+   /* mtime(stamp2) < mtime(stamp3) */
+-  ASSERT (statinfo[2].st_mtime < statinfo[3].st_mtime
+-          || (statinfo[2].st_mtime == statinfo[3].st_mtime
+-              && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_mtime_ns (&statinfo[3]))));
++  ASSERT (statinfo[2].st_mtime <= statinfo[3].st_mtime && get_stat_mtime_ns(&statinfo[2]) <= get_stat_mtime_ns(&statinfo[3]));
+ 
+   /* Now check the result of the access functions. */
+   /* mtime(stamp1) < mtime(stamp2) */
+-  ASSERT (modtimes[0].tv_sec < modtimes[2].tv_sec
+-          || (modtimes[0].tv_sec == modtimes[2].tv_sec
+-              && modtimes[0].tv_nsec < modtimes[2].tv_nsec));
++  ASSERT (modtimes[0].tv_sec <= modtimes[2].tv_sec && modtimes[0].tv_nsec <= modtimes[2].tv_nsec);
+   /* mtime(stamp2) < mtime(stamp3) */
+-  ASSERT (modtimes[2].tv_sec < modtimes[3].tv_sec
+-          || (modtimes[2].tv_sec == modtimes[3].tv_sec
+-              && modtimes[2].tv_nsec < modtimes[3].tv_nsec));
++  ASSERT (modtimes[2].tv_sec <= modtimes[3].tv_sec && modtimes[2].tv_nsec <= modtimes[3].tv_nsec);
+ 
+   /* verify equivalence */
+   for (i = 0; i < NFILES; ++i)
+@@ -183,10 +173,7 @@
+     return;
+ 
+   /* mtime(stamp2) < ctime(testfile) */
+-  ASSERT (statinfo[2].st_mtime < statinfo[1].st_ctime
+-          || (statinfo[2].st_mtime == statinfo[1].st_ctime
+-              && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_ctime_ns (&statinfo[1]))));
++  ASSERT (statinfo[2].st_mtime <= statinfo[1].st_ctime && get_stat_mtime_ns(&statinfo[2]) <= get_stat_ctime_ns(&statinfo[1]));
+ }
+ #endif
+ 

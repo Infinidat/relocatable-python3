@@ -1,13 +1,13 @@
 from __future__ import print_function
 __import__("pkg_resources").declare_namespace(__name__)
-from subprocess import Popen
-from platform import system
+import distro
+import platform
+import subprocess
 from infi.execute import execute_assert_success
 
 
 def test():
     from logging import basicConfig, getLogger, DEBUG
-    from subprocess import Popen
     from os import path, name
     from glob import glob
     basicConfig(level=DEBUG)
@@ -15,7 +15,7 @@ def test():
     getLogger(__name__).info("testing %s" % python)
     test_files = glob(path.join("tests", "test_*.py"))
     for test_file in test_files:
-        assert Popen([python, test_file]).wait() == 0
+        assert subprocess.Popen([python, test_file]).wait() == 0
 
 
 def execte_buildout(buildout_file, env=None):
@@ -23,7 +23,7 @@ def execte_buildout(buildout_file, env=None):
     argv = ' '.join(sys.argv[1:])
     command = "./bin/buildout -c {0} {1}".format(buildout_file, argv)
     print('executing "%s"' % command)
-    process = Popen(command.split(), env=env)
+    process = subprocess.Popen(command.split(), env=env)
     stdout, stderr = process.communicate()
     sys.exit(process.returncode)
 
@@ -32,36 +32,19 @@ def build():
     from sys import maxsize
     from os import environ
     from platform import version
-    environ = environ.copy()
-    buildout_file = 'buildout-build.cfg'
-    if system() == 'Linux':
-        from distro import linux_distribution
-        dist_name, version, distid = linux_distribution(full_distribution_name=False)
-        dist_name = dist_name.replace('rhel', 'redhat').replace('sles', 'suse').replace('enterpriseenterpriseserver', 'oracle')
-        if dist_name == 'ubuntu':
-            if version >= '16.04':
-                if version == '22.04':
-                    buildout_file = 'buildout-build-ubuntu-22.04.cfg'
-                else:
-                    buildout_file = 'buildout-build-ubuntu-16.04.cfg'
-            else:
-                buildout_file = 'buildout-build-ubuntu.cfg'
-        if dist_name in ['redhat', 'centos', 'oracle', 'suse']:
-            arch = execute_assert_success(["uname", "-i"]).get_stdout().lower()
-            if 'ppc64le' in arch:
-                buildout_file = 'buildout-build-redhat-ppc64le.cfg'
-            elif 'ppc64' in arch:
-                buildout_file = 'buildout-build-redhat-ppc64.cfg'
-            elif 'i386' in arch:
-                buildout_file = 'buildout-build-redhat-32bit.cfg'
-            else:
-                if version.startswith('8') or version.startswith('15'):
-                    buildout_file = 'buildout-build-redhat-8-64bit.cfg'
-                else:
-                    buildout_file = 'buildout-build-redhat-64bit.cfg'
-    elif system() == 'Darwin':
+    system = platform.system()
+    env = environ.copy()
+    name = distro.id()
+    if system == 'Linux':
+        if distro.id() == 'ubuntu':
+            version = distro.codename()
+        else:
+            version = distro.major_version()
+    elif system == 'AIX':
+        version = '%s.%s' % (platform.version(), platform.release())
+    elif system == 'Darwin':
         from platform import mac_ver
-        environ["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
+        env["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout().decode()
         if 'version 5.' in gcc_version:
             buildout_file = 'buildout-build-osx-xcode-5.cfg'
@@ -83,12 +66,12 @@ def build():
             buildout_file = 'buildout-build-osx-xcode-13.cfg'
         else:
             buildout_file = 'buildout-build-osx.cfg'
-    elif system() == 'Windows':
+    elif system == 'Windows':
         if maxsize > 2**32:
             buildout_file = 'buildout-build-windows-64bit.cfg'
         else:
             buildout_file = 'buildout-build-windows.cfg'
-    elif system() == "SunOS":
+    elif system == "SunOS":
         if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
             buildout_file = 'buildout-build-solaris-sparc.cfg'
             if '11.4' in version():
@@ -97,21 +80,15 @@ def build():
             buildout_file = 'buildout-build-solaris-64bit.cfg'
             if '11.4' in version():
                 buildout_file = 'buildout-build-solaris-11.4-64bit.cfg'
-        else:
-            pass  # TODO support 32 bit
-    elif system() == "AIX":
-        from platform import release
-        if version() == '7' and release() == '3':
-            buildout_file = 'buildout-build-aix-7.3.cfg'
-        else:
-            buildout_file = 'buildout-build-aix.cfg'
-    execte_buildout(buildout_file, environ)
+    buildout_file = 'buildout-build-%s-%s.cfg' % (name, version)
+    execte_buildout(buildout_file, env)
 
 def pack():
     buildout_file = 'buildout-pack.cfg'
-    if system() == 'Windows':
+    system = platform.system()
+    if system == 'Windows':
         buildout_file = 'buildout-pack-windows.cfg'
-    elif system() == "AIX":
+    elif system == "AIX":
         buildout_file = 'buildout-pack-aix.cfg'
     execte_buildout(buildout_file)
 

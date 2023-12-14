@@ -1,0 +1,10 @@
+--- Python-3.11.8/Lib/test/test_importlib/test_threaded_import.py	2024-02-06 15:21:21.000000000 -0600
++++ Python-3.11.8/Lib/test/test_importlib/test_threaded_import.py	2024-04-05 23:06:28.171937324 -0500
+@@ -254,6 +254,7 @@
+                           'partial', 'cfimport.py')
+         script_helper.assert_python_ok(fn)
+ 
++    @unittest.skipIf(sys.platform == 'aix', 'https://bugs.python.org/issue43665')
+     def test_multiprocessing_pool_circular_import(self):
+         # Regression test for bpo-41567
+         fn = os.path.join(os.path.dirname(__file__),

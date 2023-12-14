@@ -1,0 +1,294 @@
+diff -ur readline-8.2/bind.c readline-8.2/bind.c
+--- readline-8.2/bind.c	2022-02-09 16:02:22.000000000 +0000
++++ readline-8.2/bind.c	2024-03-29 12:41:23.119718072 +0000
+@@ -1167,9 +1167,7 @@
+ /* **************************************************************** */
+ 
+ static int
+-parse_comparison_op (s, indp)
+-     const char *s;
+-     int *indp;
++parse_comparison_op (const char *s, int *indp)
+ {
+   int i, peekc, op;
+ 
+diff -ur readline-8.2/callback.c readline-8.2/callback.c
+--- readline-8.2/callback.c	2022-04-29 16:02:56.000000000 +0000
++++ readline-8.2/callback.c	2024-03-29 12:41:23.123718072 +0000
+@@ -115,7 +115,10 @@
+ #define CALLBACK_READ_RETURN() \
+   do { \
+     if (rl_persistent_signal_handlers == 0) \
+-      rl_clear_signals (); \
++      { \
++        rl_clear_signals (); \
++        if (_rl_caught_signal) _rl_signal_handler (_rl_caught_signal); \
++      } \
+     return; \
+   } while (0)
+ #else
+diff -ur readline-8.2/colors.c readline-8.2/colors.c
+--- readline-8.2/colors.c	2021-12-08 16:38:25.000000000 +0000
++++ readline-8.2/colors.c	2024-03-29 12:41:23.123718072 +0000
+@@ -73,7 +73,7 @@
+ static bool is_colored (enum indicator_no type);
+ static void restore_default_color (void);
+ 
+-#define RL_COLOR_PREFIX_EXTENSION	"readline-colored-completion-prefix"
++#define RL_COLOR_PREFIX_EXTENSION	".readline-colored-completion-prefix"
+ 
+ COLOR_EXT_TYPE *_rl_color_ext_list = 0;
+ 
+diff -ur readline-8.2/complete.c readline-8.2/complete.c
+--- readline-8.2/complete.c	2022-04-05 14:47:06.000000000 +0000
++++ readline-8.2/complete.c	2024-03-29 12:41:23.123718072 +0000
+@@ -2031,9 +2031,25 @@
+ 
+   text = rl_copy_text (start, end);
+   matches = gen_completion_matches (text, start, end, our_func, found_quote, quote_char);
++  /* If TEXT contains quote characters, it will be dequoted as part of
++     generating the matches, and the matches will not contain any quote
++     characters. We need to dequote TEXT before performing the comparison.
++     Since compare_match performs the dequoting, and we only want to do it
++     once, we don't call compare_matches after dequoting TEXT; we call
++     strcmp directly. */
+   /* nontrivial_lcd is set if the common prefix adds something to the word
+      being completed. */
+-  nontrivial_lcd = matches && compare_match (text, matches[0]) != 0;
++  if (rl_filename_completion_desired && rl_filename_quoting_desired &&
++      rl_completion_found_quote && rl_filename_dequoting_function)
++    {
++      char *t;
++      t = (*rl_filename_dequoting_function) (text, rl_completion_quote_character);
++      xfree (text);
++      text = t;
++      nontrivial_lcd = matches && strcmp (text, matches[0]) != 0;
++    }
++  else
++    nontrivial_lcd = matches && strcmp (text, matches[0]) != 0;
+   if (what_to_do == '!' || what_to_do == '@')
+     tlen = strlen (text);
+   xfree (text);
+@@ -2526,7 +2542,8 @@
+ 	  temp = tilde_expand (dirname);
+ 	  xfree (dirname);
+ 	  dirname = temp;
+-	  tilde_dirname = 1;
++	  if (*dirname != '~')
++	    tilde_dirname = 1;	/* indicate successful tilde expansion */
+ 	}
+ 
+       /* We have saved the possibly-dequoted version of the directory name
+@@ -2545,11 +2562,16 @@
+ 	  xfree (users_dirname);
+ 	  users_dirname = savestring (dirname);
+ 	}
+-      else if (tilde_dirname == 0 && rl_completion_found_quote && rl_filename_dequoting_function)
++      else if (rl_completion_found_quote && rl_filename_dequoting_function)
+ 	{
+-	  /* delete single and double quotes */
++	  /* We already ran users_dirname through the dequoting function.
++	     If tilde_dirname == 1, we successfully performed tilde expansion
++	     on dirname. Now we need to reconcile those results. We either
++	     just copy the already-dequoted users_dirname or tilde expand it
++	     if we tilde-expanded dirname. */
++	  temp = tilde_dirname ? tilde_expand (users_dirname) : savestring (users_dirname);
+ 	  xfree (dirname);
+-	  dirname = savestring (users_dirname);
++	  dirname = temp;
+ 	}
+       directory = opendir (dirname);
+ 
+diff -ur readline-8.2/display.c readline-8.2/display.c
+--- readline-8.2/display.c	2022-04-05 14:47:31.000000000 +0000
++++ readline-8.2/display.c	2024-03-29 12:41:23.127718072 +0000
+@@ -2683,11 +2683,8 @@
+   register char *temp;
+ 
+   if (visible_line)
+-    {
+-      temp = visible_line;
+-      while (*temp)
+-	*temp++ = '\0';
+-    }
++    memset (visible_line, 0, line_size);
++
+   rl_on_new_line ();
+   forced_display++;
+   (*rl_redisplay_function) ();
+@@ -3341,9 +3338,9 @@
+       puts_face (&last_line[_rl_screenwidth - 1 + woff],
+ 		 &last_face[_rl_screenwidth - 1 + woff], 1);
+     }
+-  _rl_vis_botlin = 0;
+-  if (botline_length > 0 || _rl_last_c_pos > 0)
++  if ((_rl_vis_botlin == 0 && botline_length == 0) || botline_length > 0 || _rl_last_c_pos > 0)
+     rl_crlf ();
++  _rl_vis_botlin = 0;
+   fflush (rl_outstream);
+   rl_display_fixed++;
+ }
+diff -ur readline-8.2/input.c readline-8.2/input.c
+--- readline-8.2/input.c	2022-04-08 19:43:24.000000000 +0000
++++ readline-8.2/input.c	2024-03-29 12:41:23.131718072 +0000
+@@ -151,7 +151,9 @@
+ 
+ int _rl_timeout_init (void);
+ int _rl_timeout_sigalrm_handler (void);
++#if defined (RL_TIMEOUT_USE_SELECT)
+ int _rl_timeout_select (int, fd_set *, fd_set *, fd_set *, const struct timeval *, const sigset_t *);
++#endif
+ 
+ static void _rl_timeout_handle (void);
+ #if defined (RL_TIMEOUT_USE_SIGALRM)
+@@ -248,7 +250,7 @@
+   register int tem, result;
+   int chars_avail, k;
+   char input;
+-#if defined(HAVE_SELECT)
++#if defined (HAVE_PSELECT) || defined (HAVE_SELECT)
+   fd_set readfds, exceptfds;
+   struct timeval timeout;
+ #endif
+@@ -802,10 +804,10 @@
+ int
+ rl_getc (FILE *stream)
+ {
+-  int result;
++  int result, ostate, osig;
+   unsigned char c;
+   int fd;
+-#if defined (HAVE_PSELECT)
++#if defined (HAVE_PSELECT) || defined (HAVE_SELECT)
+   sigset_t empty_set;
+   fd_set readfds;
+ #endif
+@@ -813,8 +815,22 @@
+   fd = fileno (stream);
+   while (1)
+     {
++      osig = _rl_caught_signal;
++      ostate = rl_readline_state;
++
+       RL_CHECK_SIGNALS ();
+ 
++#if defined (READLINE_CALLBACKS)
++      /* Do signal handling post-processing here, but just in callback mode
++	 for right now because the signal cleanup can change some of the
++	 callback state, and we need to either let the application have a
++	 chance to react or abort some current operation that gets cleaned
++	 up by rl_callback_sigcleanup(). If not, we'll just run through the
++	 loop again. */
++      if (osig != 0 && (ostate & RL_STATE_CALLBACK))
++	goto postproc_signal;
++#endif
++
+       /* We know at this point that _rl_caught_signal == 0 */
+ 
+ #if defined (__MINGW32__)
+@@ -878,6 +894,9 @@
+ /* fprintf(stderr, "rl_getc: result = %d errno = %d\n", result, errno); */
+ 
+ handle_error:
++      osig = _rl_caught_signal;
++      ostate = rl_readline_state;
++
+       /* If the error that we received was EINTR, then try again,
+ 	 this is simply an interrupted system call to read ().  We allow
+ 	 the read to be interrupted if we caught SIGHUP, SIGTERM, or any
+@@ -918,8 +937,17 @@
+         RL_CHECK_SIGNALS ();
+ #endif  /* SIGALRM */
+ 
++postproc_signal:
++      /* POSIX says read(2)/pselect(2)/select(2) don't return EINTR for any
++	 reason other than being interrupted by a signal, so we can safely
++	 call the application's signal event hook. */
+       if (rl_signal_event_hook)
+ 	(*rl_signal_event_hook) ();
++#if defined (READLINE_CALLBACKS)
++      else if (osig == SIGINT && (ostate & RL_STATE_CALLBACK) && (ostate & (RL_STATE_ISEARCH|RL_STATE_NSEARCH|RL_STATE_NUMERICARG)))
++        /* just these cases for now */
++        _rl_abort_internal ();
++#endif
+     }
+ }
+ 
+diff -ur readline-8.2/nls.c readline-8.2/nls.c
+--- readline-8.2/nls.c	2022-08-15 13:38:51.000000000 +0000
++++ readline-8.2/nls.c	2024-03-29 12:41:23.131718072 +0000
+@@ -141,6 +141,10 @@
+   if (lspec == 0)
+     lspec = "";
+   ret = setlocale (LC_CTYPE, lspec);	/* ok, since it does not change locale */
++  if (ret == 0 || *ret == 0)
++    ret = setlocale (LC_CTYPE, (char *)NULL);
++  if (ret == 0 || *ret == 0)
++    ret = RL_DEFAULT_LOCALE;
+ #else
+   ret = (lspec == 0 || *lspec == 0) ? RL_DEFAULT_LOCALE : lspec;
+ #endif
+diff -ur readline-8.2/patchlevel readline-8.2/patchlevel
+--- readline-8.2/patchlevel	2020-05-21 18:22:40.000000000 +0000
++++ readline-8.2/patchlevel	2024-03-29 12:41:23.131718072 +0000
+@@ -1,3 +1,3 @@
+ # Do not edit -- exists only for use by patch
+ 
+-0
++10
+diff -ur readline-8.2/rltty.c readline-8.2/rltty.c
+--- readline-8.2/rltty.c	2022-02-18 16:14:22.000000000 +0000
++++ readline-8.2/rltty.c	2024-03-29 12:41:23.131718072 +0000
+@@ -80,8 +80,7 @@
+ /* Dummy call to force a backgrounded readline to stop before it tries
+    to get the tty settings. */
+ static void
+-set_winsize (tty)
+-     int tty;
++set_winsize (int tty)
+ {
+ #if defined (TIOCGWINSZ)
+   struct winsize w;
+diff -ur readline-8.2/support/shobj-conf readline-8.2/support/shobj-conf
+--- readline-8.2/support/shobj-conf	2021-12-03 15:54:46.000000000 +0000
++++ readline-8.2/support/shobj-conf	2024-03-29 22:32:10.124869639 +0000
+@@ -128,7 +128,8 @@
+ 	SHOBJ_LD='${CC}'
+ 	SHOBJ_LDFLAGS='-shared -Wl,-soname,$@'
+ 
+-	SHLIB_XLDFLAGS='-Wl,-rpath,$(libdir) -Wl,-soname,`basename $@ $(SHLIB_MINOR)`'
++	SHLIB_LIBS='$(TERMCAP_LIB)'
++	SHLIB_XLDFLAGS='-Wl,-soname,`basename $@ $(SHLIB_MINOR)`'
+ 	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)$(SHLIB_MINOR)'
+ 	;;
+ 
+@@ -240,13 +241,13 @@
+ 	;;
+ 
+ aix4.[2-9]*-*gcc*|aix[5-9].*-*gcc*)		# lightly tested by jik@cisco.com
+-	SHOBJ_CFLAGS=-fpic
++	SHOBJ_CFLAGS=-fPIC
+ 	SHOBJ_LD='${CC}'
+ 	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
+ 	SHOBJ_XLDFLAGS='-G'
+ 
+-	SHLIB_XLDFLAGS='-bM:SRE'
+-	SHLIB_LIBS='-lcurses -lc'
++	SHLIB_XLDFLAGS='-Wl,-bM:SRE'
++	SHLIB_LIBS='$(TERMCAP_LIB)'
+ 	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)'
+ 	;;
+ 
+diff -ur readline-8.2/text.c readline-8.2/text.c
+--- readline-8.2/text.c	2021-10-27 15:03:59.000000000 +0000
++++ readline-8.2/text.c	2024-03-29 12:41:23.135718072 +0000
+@@ -1764,8 +1764,7 @@
+ 
+ #if defined (READLINE_CALLBACKS)
+ static int
+-_rl_char_search_callback (data)
+-     _rl_callback_generic_arg *data;
++_rl_char_search_callback (_rl_callback_generic_arg *data)
+ {
+   _rl_callback_func = 0;
+   _rl_want_redisplay = 1;

@@ -1,3 +1,70 @@
+diff -ur zstd-1.5.5/Makefile zstd-1.5.5/Makefile
+--- zstd-1.5.5/Makefile	Tue Apr  4 23:13:52 2023
++++ zstd-1.5.5/Makefile	Wed Dec 27 19:18:59 2023
+@@ -151,7 +151,7 @@
+ #------------------------------------------------------------------------------
+ # make install is validated only for Linux, macOS, Hurd and some BSD targets
+ #------------------------------------------------------------------------------
+-ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU OpenBSD FreeBSD DragonFly NetBSD MSYS_NT Haiku AIX))
++ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU OpenBSD FreeBSD DragonFly NetBSD MSYS_NT SunOS Haiku AIX))
+ 
+ HOST_OS = POSIX
+ 
+diff -ur zstd-1.5.5/lib/common/mem.h zstd-1.5.5/lib/common/mem.h
+--- zstd-1.5.5/lib/common/mem.h	Tue Apr  4 23:13:52 2023
++++ zstd-1.5.5/lib/common/mem.h	Wed Dec 27 19:18:59 2023
+@@ -142,7 +142,9 @@
+  */
+ #ifndef MEM_FORCE_MEMORY_ACCESS   /* can be defined externally, on command line for example */
+ #  ifdef __GNUC__
+-#    define MEM_FORCE_MEMORY_ACCESS 1
++#    ifndef __sparc__
++#      define MEM_FORCE_MEMORY_ACCESS 1
++#    endif
+ #  endif
+ #endif
+ 
+diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
+--- zstd-1.5.5/tests/playTests.sh	Tue Apr  4 23:13:52 2023
++++ zstd-1.5.5/tests/playTests.sh	Wed Dec 27 20:01:12 2023
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ set -e
+ 
+@@ -153,7 +153,7 @@
+ 
+ DIFF="diff"
+ case "$UNAME" in
+-  SunOS) DIFF="gdiff" ;;
++  SunOS) DIFF="diff" ;;
+ esac
+ 
+ 
+@@ -317,7 +317,7 @@
+ zstd -d -f tmp_corrupt.zst --check --no-check # final flag overrides
+ zstd -d -f tmp.zst --no-check
+ 
+-if [ "$isWindows" = false ] && [ "$UNAME" != "AIX" ]; then
++if [ "$isWindows" = false ] && [ "$UNAME" != "AIX" ] && [ "$UNAME" != "SunOS" ]; then
+   if [ -n "$(which readelf)" ]; then
+     println "test: check if binary has executable stack (#2963)"
+     readelf -lW "$ZSTD_BIN" | grep 'GNU_STACK .* RW ' || die "zstd binary has executable stack!"
+diff -ur zstd-1.5.5/programs/platform.h zstd-1.5.5/programs/platform.h
+--- zstd-1.5.5/programs/platform.h	2023-04-04 15:13:52.000000000 -0500
++++ zstd-1.5.5/programs/platform.h	2024-01-08 11:20:32.350232721 -0600
+@@ -59,8 +59,8 @@
+ #  if !defined(_LARGEFILE_SOURCE)                  /* obsolete macro, replaced with _FILE_OFFSET_BITS */
+ #    define _LARGEFILE_SOURCE 1                    /* Large File Support extension (LFS) - fseeko, ftello */
+ #  endif
+-#  if defined(_AIX) || defined(__hpux)
+-#    define _LARGE_FILES                           /* Large file support on 32-bits AIX and HP-UX */
++#  if defined(__hpux)
++#    define _LARGE_FILES                           /* Large file support on 32-bits HP-UX */
+ #  endif
+ #endif
+ 
 diff -ur zstd-1.5.5/lib/Makefile zstd-1.5.5/lib/Makefile
 --- zstd-1.5.5/lib/Makefile	2023-04-04 15:13:52.000000000 -0500
 +++ zstd-1.5.5/lib/Makefile	2023-11-28 17:15:19.938388050 -0600
@@ -10,85 +77,3 @@ diff -ur zstd-1.5.5/lib/Makefile zstd-1.5.5/lib/Makefile
  	@echo zstd static and shared library installed
  
  .PHONY: install-pc
-diff -ur zstd-1.5.5/tests/playTests.sh zstd-1.5.5/tests/playTests.sh
---- zstd-1.5.5/tests/playTests.sh	2023-04-04 15:13:52.000000000 -0500
-+++ zstd-1.5.5/tests/playTests.sh	2023-11-28 16:44:58.477238596 -0600
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- 
- set -e
- 
-@@ -82,6 +82,14 @@
-     printf '%b\n' "${*}"
- }
- 
-+get_mtime() {
-+    python3 -c 'import os, sys; print(int(os.stat(sys.argv[1]).st_mtime))' "$1"
-+}
-+
-+get_perms() {
-+    python3 -c 'import os, stat, sys; print("%o" % stat.S_IMODE(os.stat(sys.argv[1]).st_mode))' "$1"
-+}
-+
- if [ -z "${size}" ]; then
-     size=
- else
-@@ -119,6 +127,7 @@
-   FreeBSD) MD5SUM="gmd5sum" ;;
-   NetBSD) MD5SUM="md5 -n" ;;
-   OpenBSD) MD5SUM="md5" ;;
-+  AIX) MD5SUM="openssl md5" ;;
-   *) MD5SUM="md5sum" ;;
- esac
- 
-@@ -125,6 +134,7 @@
- MTIME="stat -c %Y"
- case "$UNAME" in
-     Darwin | FreeBSD | OpenBSD | NetBSD) MTIME="stat -f %m" ;;
-+    AIX) MTIME=get_mtime ;;
- esac
- 
- assertSameMTime() {
-@@ -137,6 +147,7 @@
- GET_PERMS="stat -c %a"
- case "$UNAME" in
-     Darwin | FreeBSD | OpenBSD | NetBSD) GET_PERMS="stat -f %Lp" ;;
-+    AIX) GET_PERMS=get_perms ;;
- esac
- 
- assertFilePermissions() {
-diff -ur zstd-1.5.5/tests/cli-tests/common/mtime.sh zstd-1.5.5/tests/cli-tests/common/mtime.sh
---- zstd-1.5.5/tests/cli-tests/common/mtime.sh	2023-04-04 15:13:52.000000000 -0500
-+++ zstd-1.5.5/tests/cli-tests/common/mtime.sh	2023-11-28 16:44:58.483400983 -0600
-@@ -1,8 +1,13 @@
- . "$COMMON/platform.sh"
- 
-+get_mtime() {
-+    python3 -c 'import os, sys; print(int(os.stat(sys.argv[1]).st_mtime))' "$1"
-+}
-+
- MTIME="stat -c %Y"
- case "$UNAME" in
-     Darwin | FreeBSD | OpenBSD | NetBSD) MTIME="stat -f %m" ;;
-+    AIX) MTIME=get_mtime ;;
- esac
- 
- assertSameMTime() {
-diff -ur zstd-1.5.5/tests/cli-tests/common/permissions.sh zstd-1.5.5/tests/cli-tests/common/permissions.sh
---- zstd-1.5.5/tests/cli-tests/common/permissions.sh	2023-04-04 15:13:52.000000000 -0500
-+++ zstd-1.5.5/tests/cli-tests/common/permissions.sh	2023-11-28 16:44:58.483400983 -0600
-@@ -1,8 +1,13 @@
- . "$COMMON/platform.sh"
- 
-+get_perms() {
-+    python3 -c 'import os, stat, sys; print("%o" % stat.S_IMODE(os.stat(sys.argv[1]).st_mode))' "$1"
-+}
-+
- GET_PERMS="stat -c %a"
- case "$UNAME" in
-     Darwin | FreeBSD | OpenBSD | NetBSD) GET_PERMS="stat -f %Lp" ;;
-+    AIX) GET_PERMS=get_perms ;;
- esac
- 
- assertFilePermissions() {

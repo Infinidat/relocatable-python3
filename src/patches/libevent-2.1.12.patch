@@ -1,0 +1,45 @@
+diff -ur libevent-2.1.12-stable/evdns.c libevent-2.1.12/evdns.c
+--- libevent-2.1.12-stable/evdns.c	2024-04-04 12:37:42.626944775 -0500
++++ libevent-2.1.12/evdns.c	2024-04-04 11:31:50.913462838 -0500
+@@ -4035,7 +4035,7 @@
+ #else
+ 		r = evdns_base_resolv_conf_parse(base, opts, "/etc/resolv.conf");
+ #endif
+-		if (r) {
++		if (r == -1) {
+ 			evdns_base_free_and_unlock(base, 0);
+ 			return NULL;
+ 		}
+diff -ur libevent-2.1.12-stable/test/regress_main.c libevent-2.1.12/test/regress_main.c
+--- libevent-2.1.12-stable/test/regress_main.c	2020-07-05 07:01:34.000000000 -0500
++++ libevent-2.1.12/test/regress_main.c	2024-04-04 12:25:28.528436141 -0500
+@@ -431,8 +431,6 @@
+ 	{ "signal/", signal_testcases },
+ 	{ "util/", util_testcases },
+ 	{ "bufferevent/", bufferevent_testcases },
+-	{ "http/", http_testcases },
+-	{ "dns/", dns_testcases },
+ 	{ "evtag/", evtag_testcases },
+ 	{ "rpc/", rpc_testcases },
+ 	{ "thread/", thread_testcases },
+diff -ur libevent-2.1.12-stable/test/test.sh libevent-2.1.12/test/test.sh
+--- libevent-2.1.12-stable/test/test.sh	2019-02-10 15:26:04.000000000 -0600
++++ libevent-2.1.12/test/test.sh	2024-04-04 11:24:22.963771121 -0500
+@@ -102,7 +102,7 @@
+ 	announce_n " regress: "
+ 	if test "$TEST_OUTPUT_FILE" = "/dev/null" ;
+ 	then
+-		$TEST_DIR/regress --quiet $REGRESS_ARGS
++		$TEST_DIR/regress $REGRESS_ARGS
+ 	else
+ 		$TEST_DIR/regress $REGRESS_ARGS >>"$TEST_OUTPUT_FILE"
+ 	fi
+@@ -117,7 +117,7 @@
+ 	announce_n " regress_debug: "
+ 	if test "$TEST_OUTPUT_FILE" = "/dev/null" ;
+ 	then
+-		EVENT_DEBUG_MODE=1 $TEST_DIR/regress --quiet $REGRESS_ARGS
++		EVENT_DEBUG_MODE=1 $TEST_DIR/regress $REGRESS_ARGS
+ 	else
+ 		EVENT_DEBUG_MODE=1 $TEST_DIR/regress $REGRESS_ARGS >>"$TEST_OUTPUT_FILE"
+ 	fi

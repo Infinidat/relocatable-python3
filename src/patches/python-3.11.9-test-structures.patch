@@ -1,0 +1,10 @@
+--- Python-3.11.8/Lib/ctypes/test/test_structures.py	2024-04-05 19:21:08.869818368 -0500
++++ Python-3.11.8/Lib/ctypes/test/test_structures.py	2024-04-05 19:24:52.364978952 -0500
+@@ -543,6 +543,7 @@
+             _fields_ = [('x', c_double)]
+         self._test_issue18060(Vector)
+ 
++    @unittest.skipIf(sys.platform == 'aix', 'https://bugs.python.org/issue38628')
+     def test_array_in_struct(self):
+         # See bpo-22273
+ 

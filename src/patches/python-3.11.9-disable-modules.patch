@@ -1,0 +1,10 @@
+--- Python-3.11.8/Modules/Setup	2024-04-03 09:09:27.169339354 +0000
++++ Python-3.11.8/Modules/Setup	2024-04-03 09:09:18.197339063 +0000
+@@ -300,3 +300,7 @@
+ #
+ # _sqlite3 _tkinter _curses pyexpat
+ # _codecs_jp _codecs_kr _codecs_tw unicodedata
++*disabled*
++_dbm
++_tkinter
++nis
