@@ -1,7 +1,7 @@
 from __future__ import print_function
 __import__("pkg_resources").declare_namespace(__name__)
 from subprocess import Popen
-from platform import system
+from platform import system, release
 from infi.execute import execute_assert_success
 
 
@@ -100,7 +100,10 @@ def build():
         else:
             pass  # TODO support 32 bit
     elif system() == "AIX":
-        buildout_file = 'buildout-build-aix.cfg'
+        if version() == '7' and release() == '3':
+            buildout_file = 'buildout-build-aix-7.3.cfg'
+        else:
+            buildout_file = 'buildout-build-aix.cfg'
     execte_buildout(buildout_file, environ)
 
 def pack():
