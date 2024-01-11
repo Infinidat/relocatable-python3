@@ -1,0 +1,31 @@
+--- Python-3.8.12/setup.py	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/setup.py	2023-11-18 15:28:39.784505945 -0600
+@@ -771,7 +771,7 @@
+         # _queue module
+         self.add(Extension("_queue", ["_queuemodule.c"]))
+         # _statistics module
+-        self.add(Extension("_statistics", ["_statisticsmodule.c"]))
++        self.add(Extension("_statistics", ["_statisticsmodule.c"], libraries=['m']))
+ 
+         # Modules with some UNIX dependencies -- on by default:
+         # (If you have a really backward UNIX, select and socket may not be
+@@ -899,10 +899,6 @@
+             curses_library = readline_termcap_library
+         elif self.compiler.find_library_file(self.lib_dirs, 'ncursesw'):
+             curses_library = 'ncursesw'
+-        # Issue 36210: OSS provided ncurses does not link on AIX
+-        # Use IBM supplied 'curses' for successful build of _curses
+-        elif AIX and self.compiler.find_library_file(self.lib_dirs, 'curses'):
+-            curses_library = 'curses'
+         elif self.compiler.find_library_file(self.lib_dirs, 'ncurses'):
+             curses_library = 'ncurses'
+         elif self.compiler.find_library_file(self.lib_dirs, 'curses'):
+@@ -2053,7 +2049,7 @@
+         undef_macros = []
+         if '--with-system-libmpdec' in sysconfig.get_config_var("CONFIG_ARGS"):
+             include_dirs = []
+-            libraries = [':libmpdec.so.2']
++            libraries = ['mpdec']
+             sources = ['_decimal/_decimal.c']
+             depends = ['_decimal/docstrings.h']
+         else:

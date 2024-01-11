@@ -1,0 +1,119 @@
+--- Python-3.8.12/Makefile.pre.in	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/Makefile.pre.in	2023-11-09 12:53:02.463620313 -0600
+@@ -1602,21 +1602,6 @@
+ 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
+ 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
+ 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
+-	@if [ -s Modules/python.exp -a \
+-		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
+-		echo; echo "Installing support files for building shared extension modules on AIX:"; \
+-		$(INSTALL_DATA) Modules/python.exp		\
+-				$(DESTDIR)$(LIBPL)/python.exp;		\
+-		echo; echo "$(LIBPL)/python.exp";		\
+-		$(INSTALL_SCRIPT) $(srcdir)/Modules/makexp_aix	\
+-				$(DESTDIR)$(LIBPL)/makexp_aix;		\
+-		echo "$(LIBPL)/makexp_aix";			\
+-		$(INSTALL_SCRIPT) Modules/ld_so_aix	\
+-				$(DESTDIR)$(LIBPL)/ld_so_aix;		\
+-		echo "$(LIBPL)/ld_so_aix";			\
+-		echo; echo "See Misc/AIX-NOTES for details.";	\
+-	else true; \
+-	fi
+ 
+ # Install the dynamically loadable modules
+ # This goes into $(exec_prefix)
+@@ -1814,7 +1799,7 @@
+ 	    if test "$$file" != "$(srcdir)/Lib/test/data/README"; then rm "$$file"; fi; \
+ 	done
+ 	-rm -f core Makefile Makefile.pre config.status Modules/Setup.local \
+-		Modules/ld_so_aix Modules/python.exp Misc/python.pc \
++		Modules/python.exp Misc/python.pc \
+ 		Misc/python-embed.pc Misc/python-config.sh
+ 	-rm -f python*-gdb.py
+ 	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
+--- Python-3.8.12/Lib/sysconfig.py	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/Lib/sysconfig.py	2023-11-09 12:50:53.960546812 -0600
+@@ -385,11 +385,6 @@
+         if hasattr(e, "strerror"):
+             msg = msg + " (%s)" % e.strerror
+         raise OSError(msg)
+-    # On AIX, there are wrong paths to the linker scripts in the Makefile
+-    # -- these paths are relative to the Python source, but when installed
+-    # the scripts are in another directory.
+-    if _PYTHON_BUILD:
+-        vars['BLDSHARED'] = vars['LDSHARED']
+ 
+     # There's a chicken-and-egg situation on OS X with regards to the
+     # _sysconfigdata module after the changes introduced by #15298:
+--- Python-3.8.12/configure	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/configure	2023-11-13 10:52:24.894860575 -0600
+@@ -5764,8 +5764,6 @@
+ # If CXX is set, and if it is needed to link a main function that was
+ # compiled with CXX, LINKCC is CXX instead. Always using CXX is undesirable:
+ # python might then depend on the C++ runtime
+-# This is altered for AIX in order to build the export list before
+-# linking.
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking LINKCC" >&5
+ $as_echo_n "checking LINKCC... " >&6; }
+@@ -5773,13 +5771,6 @@
+ then
+ 	LINKCC='$(PURIFY) $(MAINCC)'
+ 	case $ac_sys_system in
+-	AIX*)
+-	   exp_extra="\"\""
+-	   if test $ac_sys_release -ge 5 -o \
+-		   $ac_sys_release -eq 4 -a `uname -r` -ge 2 ; then
+-	       exp_extra="."
+-	   fi
+-	   LINKCC="\$(srcdir)/Modules/makexp_aix Modules/python.exp $exp_extra \$(LIBRARY); $LINKCC";;
+ 	QNX*)
+ 	   # qcc must be used because the other compilers do not
+ 	   # support -N.
+@@ -9377,8 +9368,8 @@
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
+-		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/python.exp"
++		LDSHARED='$(CC) -shared -Wl,-G'
++		LDCXXSHARED='$(CXX) -shared -Wl,-G'
+ 		;;
+ 	SunOS/5*)
+ 		if test "$GCC" = "yes" ; then
+@@ -9549,7 +9540,7 @@
+ if test -z "$LINKFORSHARED"
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+-	AIX*)	LINKFORSHARED='-Wl,-bE:Modules/python.exp -lld';;
++	AIX*)   LINKFORSHARED='-lld -lm';;
+ 	hp*|HP*)
+ 	    LINKFORSHARED="-Wl,-E -Wl,+s";;
+ #	    LINKFORSHARED="-Wl,-E -Wl,+s -Wl,+b\$(BINLIBDEST)/lib-dynload";;
+@@ -17444,7 +17435,6 @@
+ # generate output files
+ ac_config_files="$ac_config_files Makefile.pre Misc/python.pc Misc/python-embed.pc Misc/python-config.sh"
+ 
+-ac_config_files="$ac_config_files Modules/ld_so_aix"
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+@@ -18147,7 +18137,6 @@
+     "Misc/python.pc") CONFIG_FILES="$CONFIG_FILES Misc/python.pc" ;;
+     "Misc/python-embed.pc") CONFIG_FILES="$CONFIG_FILES Misc/python-embed.pc" ;;
+     "Misc/python-config.sh") CONFIG_FILES="$CONFIG_FILES Misc/python-config.sh" ;;
+-    "Modules/ld_so_aix") CONFIG_FILES="$CONFIG_FILES Modules/ld_so_aix" ;;
+ 
+   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+   esac
+@@ -18705,10 +18694,6 @@
+   esac
+ 
+ 
+-  case $ac_file$ac_mode in
+-    "Modules/ld_so_aix":F) chmod +x Modules/ld_so_aix ;;
+-
+-  esac
+ done # for ac_tag
+ 
+ 

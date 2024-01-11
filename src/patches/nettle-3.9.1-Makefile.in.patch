@@ -1,0 +1,11 @@
+--- nettle-3.9.1/Makefile.in	2023-10-04 15:39:38.479802689 -0500
++++ nettle-3.9.1/Makefile.in	2023-10-04 15:42:05.896248874 -0500
+@@ -492,7 +492,7 @@
+ 
+ install-static: $(LIBTARGETS)
+ 	$(MKDIR_P) $(DESTDIR)$(libdir)
+-	for f in $(LIBTARGETS); do \
++	test -z "$(LIBTARGETS)" || for f in "$(LIBTARGETS)"; do \
+ 	  $(INSTALL_DATA) $$f $(DESTDIR)$(libdir) ; \
+ 	done
+ 

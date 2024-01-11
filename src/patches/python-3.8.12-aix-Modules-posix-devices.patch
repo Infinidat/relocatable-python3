@@ -1,0 +1,293 @@
+diff -ur Python-3.8.12/Modules/posixmodule.c Python-3.8.12/Modules/posixmodule.c
+--- Python-3.8.12/Modules/posixmodule.c	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/Modules/posixmodule.c	2023-11-17 14:54:34.357830240 -0600
+@@ -738,20 +738,48 @@
+ }
+ #endif /* MS_WINDOWS */
+ 
++static PyObject *
++_PyLong_FromDev(dev_t dev)
++{
++#ifdef NODEVICE
++    if (dev == NODEVICE) {
++        return PyLong_FromLongLong((long long)dev);
++    }
++#endif
++    return PyLong_FromUnsignedLongLong((unsigned long long)dev);
++}
+ 
+-#define _PyLong_FromDev PyLong_FromLongLong
+-
+-
+-#if defined(HAVE_MKNOD) && defined(HAVE_MAKEDEV)
++#if (defined(HAVE_MKNOD) && defined(HAVE_MAKEDEV)) || defined(HAVE_DEVICE_MACROS)
+ static int
+ _Py_Dev_Converter(PyObject *obj, void *p)
+ {
+-    *((dev_t *)p) = PyLong_AsUnsignedLongLong(obj);
+-    if (PyErr_Occurred())
++#ifdef NODEVICE
++    if (PyLong_Check(obj) && Py_SIZE(obj) < 0) {
++        int overflow;
++        long long result = PyLong_AsLongLongAndOverflow(obj, &overflow);
++        if (result == -1 && PyErr_Occurred()) {
++            return 0;
++        }
++        if (!overflow && result == (long long)NODEVICE) {
++            *((dev_t *)p) = NODEVICE;
++            return 1;
++        }
++    }
++#endif
++
++    unsigned long long result = PyLong_AsUnsignedLongLong(obj);
++    if (result == (unsigned long long)-1 && PyErr_Occurred()) {
+         return 0;
++    }
++    if ((unsigned long long)(dev_t)result != result) {
++        PyErr_SetString(PyExc_OverflowError,
++                        "Python int too large to convert to C dev_t");
++        return 0;
++    }
++    *((dev_t *)p) = (dev_t)result;
+     return 1;
+ }
+-#endif /* HAVE_MKNOD && HAVE_MAKEDEV */
++#endif /* (HAVE_MKNOD && HAVE_MAKEDEV) || HAVE_DEVICE_MACROS */
+ 
+ 
+ #ifdef AT_FDCWD
+@@ -9929,55 +9957,55 @@
+ 
+ 
+ #ifdef HAVE_DEVICE_MACROS
+-/*[clinic input]
+-os.major -> unsigned_int
+-
+-    device: dev_t
+-    /
+-
+-Extracts a device major number from a raw device number.
+-[clinic start generated code]*/
+-
+-static unsigned int
++static PyObject *
+ os_major_impl(PyObject *module, dev_t device)
+-/*[clinic end generated code: output=5b3b2589bafb498e input=1e16a4d30c4d4462]*/
+ {
+-    return major(device);
++#if defined(_AIX) && defined(__64BIT__)
++    unsigned int result = major64(device);
++#else
++    unsigned int result = major(device);
++#endif
++    if (result == (unsigned int)NODEVICE) {
++        return PyLong_FromLong((int)NODEVICE);
++    }
++    if (result == (0x3FFFFFFF00000000 >> 32)) {
++        return PyLong_FromLong((int)NODEVICE);
++    }
++    return PyLong_FromUnsignedLong(result);
+ }
+ 
+-
+-/*[clinic input]
+-os.minor -> unsigned_int
+-
+-    device: dev_t
+-    /
+-
+-Extracts a device minor number from a raw device number.
+-[clinic start generated code]*/
+-
+-static unsigned int
++static PyObject *
+ os_minor_impl(PyObject *module, dev_t device)
+-/*[clinic end generated code: output=5e1a25e630b0157d input=0842c6d23f24c65e]*/
+ {
+-    return minor(device);
++#if defined(_AIX) && defined(__64BIT__)
++    unsigned int result = minor64(device);
++#else
++    unsigned int result = minor(device);
++#endif
++    if (result == (unsigned int)NODEVICE) {
++        return PyLong_FromLong((int)NODEVICE);
++    }
++    if (result == (0x3FFFFFFF00000000 >> 32)) {
++        return PyLong_FromLong((int)NODEVICE);
++    }
++    return PyLong_FromUnsignedLong(result);
+ }
+ 
+-
+-/*[clinic input]
+-os.makedev -> dev_t
+-
+-    major: int
+-    minor: int
+-    /
+-
+-Composes a raw device number from the major and minor device numbers.
+-[clinic start generated code]*/
+-
+ static dev_t
+-os_makedev_impl(PyObject *module, int major, int minor)
+-/*[clinic end generated code: output=881aaa4aba6f6a52 input=4b9fd8fc73cbe48f]*/
++os_makedev_impl(PyObject *module, dev_t major, dev_t minor)
+ {
++    if ((major != NODEVICE && (dev_t)(unsigned int)major != major) ||
++        (minor != NODEVICE && (dev_t)(unsigned int)minor != minor))
++    {
++        PyErr_SetString(PyExc_OverflowError,
++                        "Python int too large to convert to C unsigned int");
++        return (dev_t)-1;
++    }
++#if defined(_AIX) && defined(__64BIT__)
++    return makedev64(major, minor);
++#else
+     return makedev(major, minor);
++#endif
+ }
+ #endif /* HAVE_DEVICE_MACROS */
+ 
+diff -ur Python-3.8.12/Modules/clinic/posixmodule.c.h Python-3.8.12/Modules/clinic/posixmodule.c.h
+--- Python-3.8.12/Modules/clinic/posixmodule.c.h	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/Modules/clinic/posixmodule.c.h	2023-11-17 13:32:37.354738531 -0600
+@@ -5702,7 +5702,7 @@
+ #define OS_MAJOR_METHODDEF    \
+     {"major", (PyCFunction)os_major, METH_O, os_major__doc__},
+ 
+-static unsigned int
++static PyObject *
+ os_major_impl(PyObject *module, dev_t device);
+ 
+ static PyObject *
+@@ -5710,16 +5710,11 @@
+ {
+     PyObject *return_value = NULL;
+     dev_t device;
+-    unsigned int _return_value;
+ 
+     if (!_Py_Dev_Converter(arg, &device)) {
+         goto exit;
+     }
+-    _return_value = os_major_impl(module, device);
+-    if ((_return_value == (unsigned int)-1) && PyErr_Occurred()) {
+-        goto exit;
+-    }
+-    return_value = PyLong_FromUnsignedLong((unsigned long)_return_value);
++    return_value = os_major_impl(module, device);
+ 
+ exit:
+     return return_value;
+@@ -5738,7 +5733,7 @@
+ #define OS_MINOR_METHODDEF    \
+     {"minor", (PyCFunction)os_minor, METH_O, os_minor__doc__},
+ 
+-static unsigned int
++static PyObject *
+ os_minor_impl(PyObject *module, dev_t device);
+ 
+ static PyObject *
+@@ -5746,16 +5741,11 @@
+ {
+     PyObject *return_value = NULL;
+     dev_t device;
+-    unsigned int _return_value;
+ 
+     if (!_Py_Dev_Converter(arg, &device)) {
+         goto exit;
+     }
+-    _return_value = os_minor_impl(module, device);
+-    if ((_return_value == (unsigned int)-1) && PyErr_Occurred()) {
+-        goto exit;
+-    }
+-    return_value = PyLong_FromUnsignedLong((unsigned long)_return_value);
++    return_value = os_minor_impl(module, device);
+ 
+ exit:
+     return return_value;
+@@ -5775,35 +5765,23 @@
+     {"makedev", (PyCFunction)(void(*)(void))os_makedev, METH_FASTCALL, os_makedev__doc__},
+ 
+ static dev_t
+-os_makedev_impl(PyObject *module, int major, int minor);
++os_makedev_impl(PyObject *module, dev_t major, dev_t minor);
+ 
+ static PyObject *
+ os_makedev(PyObject *module, PyObject *const *args, Py_ssize_t nargs)
+ {
+     PyObject *return_value = NULL;
+-    int major;
+-    int minor;
++    dev_t major;
++    dev_t minor;
+     dev_t _return_value;
+ 
+     if (!_PyArg_CheckPositional("makedev", nargs, 2, 2)) {
+         goto exit;
+     }
+-    if (PyFloat_Check(args[0])) {
+-        PyErr_SetString(PyExc_TypeError,
+-                        "integer argument expected, got float" );
++    if (!_Py_Dev_Converter(args[0], &major)) {
+         goto exit;
+     }
+-    major = _PyLong_AsInt(args[0]);
+-    if (major == -1 && PyErr_Occurred()) {
+-        goto exit;
+-    }
+-    if (PyFloat_Check(args[1])) {
+-        PyErr_SetString(PyExc_TypeError,
+-                        "integer argument expected, got float" );
+-        goto exit;
+-    }
+-    minor = _PyLong_AsInt(args[1]);
+-    if (minor == -1 && PyErr_Occurred()) {
++    if (!_Py_Dev_Converter(args[1], &minor)) {
+         goto exit;
+     }
+     _return_value = os_makedev_impl(module, major, minor);
+--- Python-3.8.12/Lib/test/test_posix.py	2021-08-30 09:26:41.000000000 -0500
++++ Python-3.8.12/Lib/test/test_posix.py	2023-11-17 07:48:02.416737132 -0600
+@@ -668,6 +668,7 @@
+ 
+     @unittest.skipUnless(hasattr(posix, 'makedev'), 'test needs posix.makedev()')
+     def test_makedev(self):
++        NODEVICE = -1
+         st = posix.stat(support.TESTFN)
+         dev = st.st_dev
+         self.assertIsInstance(dev, int)
+@@ -679,7 +680,9 @@
+         self.assertEqual(posix.major(dev), major)
+         self.assertRaises(TypeError, posix.major, float(dev))
+         self.assertRaises(TypeError, posix.major)
+-        self.assertRaises((ValueError, OverflowError), posix.major, -1)
++        for x in -2, 2**64, -2**63-1:
++            self.assertRaises((ValueError, OverflowError), posix.major, x)
++        self.assertEqual(posix.major(NODEVICE), NODEVICE)
+ 
+         minor = posix.minor(dev)
+         self.assertIsInstance(minor, int)
+@@ -687,7 +690,9 @@
+         self.assertEqual(posix.minor(dev), minor)
+         self.assertRaises(TypeError, posix.minor, float(dev))
+         self.assertRaises(TypeError, posix.minor)
+-        self.assertRaises((ValueError, OverflowError), posix.minor, -1)
++        for x in -2, 2**64, -2**63-1:
++            self.assertRaises((ValueError, OverflowError), posix.minor, x)
++        self.assertEqual(posix.minor(NODEVICE), NODEVICE)
+ 
+         self.assertEqual(posix.makedev(major, minor), dev)
+         self.assertRaises(TypeError, posix.makedev, float(major), minor)
+@@ -694,6 +699,9 @@
+         self.assertRaises(TypeError, posix.makedev, major, float(minor))
+         self.assertRaises(TypeError, posix.makedev, major)
+         self.assertRaises(TypeError, posix.makedev)
++        for x in -2, 2**32, 2**64, -2**63-1:
++            self.assertRaises((ValueError, OverflowError), posix.makedev, x, minor)
++            self.assertRaises((ValueError, OverflowError), posix.makedev, major, x)
+ 
+     def _test_all_chown_common(self, chown_func, first_param, stat_func):
+         """Common code for chown, fchown and lchown tests."""

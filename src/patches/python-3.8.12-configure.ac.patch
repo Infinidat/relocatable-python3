@@ -1,0 +1,28 @@
+--- Python-3.8.12/configure.ac.orig	2023-10-26 18:23:45.499521293 -0500
++++ Python-3.8.12/configure.ac	2023-10-26 18:32:31.930163365 -0500
+@@ -4811,17 +4811,15 @@
+   [readline/readline.h],
+   AC_DEFINE(HAVE_RL_COMPLETION_SUPPRESS_APPEND, 1,
+   [Define if you have rl_completion_suppress_append]), )
++  AC_EGREP_HEADER([rl_pre_input_hook],
++  [readline/readline.h],
++  AC_DEFINE(HAVE_RL_PRE_INPUT_HOOK, 1,
++  [Define if you have rl_pre_input_hook.]), )
++  AC_EGREP_HEADER([rl_completion_display_matches_hook],
++  [readline/readline.h],
++  AC_DEFINE(HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK, 1,
++  [Define if you have rl_completion_display_matches_hook.]), )
+ fi
+-
+-# check for readline 4.0
+-AC_CHECK_LIB(readline, rl_pre_input_hook,
+-	AC_DEFINE(HAVE_RL_PRE_INPUT_HOOK, 1,
+-        [Define if you have readline 4.0]), ,$READLINE_LIBS)
+-
+-# also in 4.0
+-AC_CHECK_LIB(readline, rl_completion_display_matches_hook,
+-	AC_DEFINE(HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK, 1,
+-        [Define if you have readline 4.0]), ,$READLINE_LIBS)
+ 
+ # also in 4.0, but not in editline
+ AC_CHECK_LIB(readline, rl_resize_terminal,
