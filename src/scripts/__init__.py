@@ -32,17 +32,11 @@ def build():
     from sys import maxsize
     from os import environ
     from platform import version
+    from infi.os_info import get_platform_string
     system = platform.system()
     env = environ.copy()
-    name = distro.id()
-    if system == 'Linux':
-        if distro.id() == 'ubuntu':
-            version = distro.codename()
-        else:
-            version = distro.major_version()
-    elif system == 'AIX':
-        version = '%s.%s' % (platform.version(), platform.release())
-    elif system == 'Darwin':
+    info = get_platform_string()
+    if system == 'Darwin':
         from platform import mac_ver
         env["MACOSX_DEPLOYMENT_TARGET"] = '.'.join(mac_ver()[0].split('.', 2)[:2])
         gcc_version = execute_assert_success(["gcc", "--version"]).get_stdout().decode()
@@ -66,21 +60,8 @@ def build():
             buildout_file = 'buildout-build-osx-xcode-13.cfg'
         else:
             buildout_file = 'buildout-build-osx.cfg'
-    elif system == 'Windows':
-        if maxsize > 2**32:
-            buildout_file = 'buildout-build-windows-64bit.cfg'
-        else:
-            buildout_file = 'buildout-build-windows.cfg'
-    elif system == "SunOS":
-        if 'sparc' in execute_assert_success(["isainfo"]).get_stdout().lower():
-            buildout_file = 'buildout-build-solaris-sparc.cfg'
-            if '11.4' in version():
-                buildout_file = 'buildout-build-solaris-11.4-sparc.cfg'
-        elif '64' in execute_assert_success(["isainfo", "-b"]).get_stdout():
-            buildout_file = 'buildout-build-solaris-64bit.cfg'
-            if '11.4' in version():
-                buildout_file = 'buildout-build-solaris-11.4-64bit.cfg'
-    buildout_file = 'buildout-build-%s-%s.cfg' % (name, version)
+    else:
+        buildout_file = 'buildout-build-%s.cfg' % info
     execte_buildout(buildout_file, env)
 
 def pack():
