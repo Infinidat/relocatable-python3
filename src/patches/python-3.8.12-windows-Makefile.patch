@@ -339,7 +339,7 @@ index 8884c0a..0286cbc 100644
 -    <zlibDir>$(ExternalsDir)\zlib-1.2.11\</zlibDir>
 -    
 +    <opensslIncludeDir>$(prefixDir)include</opensslIncludeDir>
-+    <zlibDir>$(partsDir)/zlib__compile__/zlib-1.2.8/\</zlibDir>
++    <zlibDir>$(partsDir)/zlib__compile__/zlib-1.3.1/\</zlibDir>
 +
      <!-- Suffix for all binaries when building for debug -->
      <PyDebugExt Condition="'$(PyDebugExt)' == '' and $(Configuration) == 'Debug'">_d</PyDebugExt>
