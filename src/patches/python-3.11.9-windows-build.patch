@@ -1,6 +1,6 @@
 diff -ur Python-3.11.9/PCbuild/_bz2.vcxproj Python-3.11.9/PCbuild/_bz2.vcxproj
 --- Python-3.11.9/PCbuild/_bz2.vcxproj	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/_bz2.vcxproj	2024-05-29 00:26:01
++++ Python-3.11.9/PCbuild/_bz2.vcxproj	2024-05-29 01:49:12
 @@ -94,7 +94,7 @@
    </PropertyGroup>
    <ItemDefinitionGroup>
@@ -19,7 +19,7 @@ diff -ur Python-3.11.9/PCbuild/_bz2.vcxproj Python-3.11.9/PCbuild/_bz2.vcxproj
 +</Project>
 diff -ur Python-3.11.9/PCbuild/_lzma.vcxproj Python-3.11.9/PCbuild/_lzma.vcxproj
 --- Python-3.11.9/PCbuild/_lzma.vcxproj	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/_lzma.vcxproj	2024-05-29 00:28:19
++++ Python-3.11.9/PCbuild/_lzma.vcxproj	2024-05-29 01:49:12
 @@ -93,11 +93,11 @@
    </PropertyGroup>
    <ItemDefinitionGroup>
@@ -47,7 +47,7 @@ diff -ur Python-3.11.9/PCbuild/_lzma.vcxproj Python-3.11.9/PCbuild/_lzma.vcxproj
    </ItemGroup>
 diff -ur Python-3.11.9/PCbuild/_ssl.vcxproj Python-3.11.9/PCbuild/_ssl.vcxproj
 --- Python-3.11.9/PCbuild/_ssl.vcxproj	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/_ssl.vcxproj	2024-05-29 00:29:12
++++ Python-3.11.9/PCbuild/_ssl.vcxproj	2024-05-29 01:49:12
 @@ -99,7 +99,7 @@
    </ItemDefinitionGroup>
    <ItemGroup>
@@ -66,7 +66,7 @@ diff -ur Python-3.11.9/PCbuild/_ssl.vcxproj Python-3.11.9/PCbuild/_ssl.vcxproj
 +</Project>
 diff -ur Python-3.11.9/PCbuild/_ssl.vcxproj.filters Python-3.11.9/PCbuild/_ssl.vcxproj.filters
 --- Python-3.11.9/PCbuild/_ssl.vcxproj.filters	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/_ssl.vcxproj.filters	2024-05-29 00:29:42
++++ Python-3.11.9/PCbuild/_ssl.vcxproj.filters	2024-05-29 01:49:12
 @@ -12,7 +12,7 @@
      <ClCompile Include="..\Modules\_ssl.c">
        <Filter>Source Files</Filter>
@@ -85,7 +85,7 @@ diff -ur Python-3.11.9/PCbuild/_ssl.vcxproj.filters Python-3.11.9/PCbuild/_ssl.v
 +</Project>
 diff -ur Python-3.11.9/PCbuild/_tkinter.vcxproj Python-3.11.9/PCbuild/_tkinter.vcxproj
 --- Python-3.11.9/PCbuild/_tkinter.vcxproj	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/_tkinter.vcxproj	2024-05-29 00:31:47
++++ Python-3.11.9/PCbuild/_tkinter.vcxproj	2024-05-29 01:49:12
 @@ -93,12 +93,12 @@
    </PropertyGroup>
    <ItemDefinitionGroup>
@@ -123,7 +123,7 @@ diff -ur Python-3.11.9/PCbuild/_tkinter.vcxproj Python-3.11.9/PCbuild/_tkinter.v
 +</Project>
 diff -ur Python-3.11.9/PCbuild/openssl.props Python-3.11.9/PCbuild/openssl.props
 --- Python-3.11.9/PCbuild/openssl.props	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/openssl.props	2024-05-29 00:34:04
++++ Python-3.11.9/PCbuild/openssl.props	2024-05-29 01:49:12
 @@ -2,33 +2,11 @@
  <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
    <ItemDefinitionGroup>
@@ -163,9 +163,21 @@ diff -ur Python-3.11.9/PCbuild/openssl.props Python-3.11.9/PCbuild/openssl.props
 -</Project>
 \ No newline at end of file
 +</Project>
+diff -ur Python-3.11.9/PCbuild/pcbuild.sln Python-3.11.9/PCbuild/pcbuild.sln
+--- Python-3.11.9/PCbuild/pcbuild.sln	2024-04-02 12:25:04
++++ Python-3.11.9/PCbuild/pcbuild.sln	2024-05-29 01:59:36
+@@ -96,8 +96,6 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_queue", "_queue.vcxproj", "{78D80A15-BD8C-44E2-B49E-1F05B0A0A687}"
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "liblzma", "liblzma.vcxproj", "{12728250-16EC-4DC6-94D7-E21DD88947F8}"
+-EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "python_uwp", "python_uwp.vcxproj", "{9DE9E23D-C8D4-4817-92A9-920A8B1FE5FF}"
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "venvlauncher", "venvlauncher.vcxproj", "{494BAC80-A60C-43A9-99E7-ACB691CE2C4D}"
 diff -ur Python-3.11.9/PCbuild/pyproject.props Python-3.11.9/PCbuild/pyproject.props
 --- Python-3.11.9/PCbuild/pyproject.props	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/pyproject.props	2024-05-29 00:57:57
++++ Python-3.11.9/PCbuild/pyproject.props	2024-05-29 01:49:12
 @@ -5,7 +5,7 @@
      <__PyProject_Props_Imported>true</__PyProject_Props_Imported>
      <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
@@ -191,7 +203,7 @@ diff -ur Python-3.11.9/PCbuild/pyproject.props Python-3.11.9/PCbuild/pyproject.p
      <Copy SourceFiles="@(_CopyFiles)"
 diff -ur Python-3.11.9/PCbuild/python.props Python-3.11.9/PCbuild/python.props
 --- Python-3.11.9/PCbuild/python.props	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/python.props	2024-05-29 01:13:01
++++ Python-3.11.9/PCbuild/python.props	2024-05-29 01:49:12
 @@ -68,17 +68,18 @@
    <Import Project="$(ExternalProps)" Condition="$(ExternalProps) != '' and Exists('$(ExternalProps)')" />
  
@@ -234,7 +246,7 @@ diff -ur Python-3.11.9/PCbuild/python.props Python-3.11.9/PCbuild/python.props
    <Target Name="_CheckWindowsSDKFound" BeforeTargets="_CheckWindowsSDKInstalled" Condition="$(_RegistryVersion) == ''">
 diff -ur Python-3.11.9/PCbuild/sqlite3.vcxproj Python-3.11.9/PCbuild/sqlite3.vcxproj
 --- Python-3.11.9/PCbuild/sqlite3.vcxproj	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/sqlite3.vcxproj	2024-05-29 01:14:01
++++ Python-3.11.9/PCbuild/sqlite3.vcxproj	2024-05-29 01:49:12
 @@ -88,12 +88,11 @@
    <PropertyGroup Label="UserMacros" />
    <PropertyGroup>
@@ -255,7 +267,7 @@ diff -ur Python-3.11.9/PCbuild/sqlite3.vcxproj Python-3.11.9/PCbuild/sqlite3.vcx
      <ClCompile>
 diff -ur Python-3.11.9/PCbuild/tcltk.props Python-3.11.9/PCbuild/tcltk.props
 --- Python-3.11.9/PCbuild/tcltk.props	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/tcltk.props	2024-05-29 01:19:23
++++ Python-3.11.9/PCbuild/tcltk.props	2024-05-29 01:49:12
 @@ -32,7 +32,7 @@
      <tkLibName>tk$(TkMajorVersion)$(TkMinorVersion)t$(TclDebugExt).lib</tkLibName>
      <tixDLLName>tix$(TixMajorVersion)$(TixMinorVersion)$(TclDebugExt).dll</tixDLLName>
