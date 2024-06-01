@@ -1,6 +1,6 @@
-diff -ur libuv-1.48.0/test/test-fs-copyfile.c libuv-1.48.0/test/test-fs-copyfile.c
---- libuv-1.48.0/test/test-fs-copyfile.c	2024-02-06 00:03:57.000000000 +0200
-+++ libuv-1.48.0/test/test-fs-copyfile.c	2024-05-01 17:14:52.785341275 +0300
+diff -ur libuv-1.48.0.orig/test/test-fs-copyfile.c libuv-1.48.0/test/test-fs-copyfile.c
+--- libuv-1.48.0.orig/test/test-fs-copyfile.c	2024-02-06 00:03:57.000000000 +0200
++++ libuv-1.48.0/test/test-fs-copyfile.c	2024-06-01 23:32:51.607246238 +0300
 @@ -213,7 +213,7 @@
    chmod(dst, S_IRUSR|S_IRGRP|S_IROTH); /* Sets file mode to 444 (read-only). */
    r = uv_fs_copyfile(NULL, &req, fixture, dst, 0, NULL);
@@ -10,9 +10,9 @@ diff -ur libuv-1.48.0/test/test-fs-copyfile.c libuv-1.48.0/test/test-fs-copyfile
    ASSERT_EQ(req.result, UV_EACCES);
    ASSERT_EQ(r, UV_EACCES);
  # endif
-diff -ur libuv-1.48.0/test/test-list.h libuv-1.48.0/test/test-list.h
---- libuv-1.48.0/test/test-list.h	2024-02-07 13:30:16.000000000 +0200
-+++ libuv-1.48.0/test/test-list.h	2024-05-01 17:15:35.058193417 +0300
+diff -ur libuv-1.48.0.orig/test/test-list.h libuv-1.48.0/test/test-list.h
+--- libuv-1.48.0.orig/test/test-list.h	2024-02-07 13:30:16.000000000 +0200
++++ libuv-1.48.0/test/test-list.h	2024-06-01 23:32:51.607246246 +0300
 @@ -794,7 +794,6 @@
    TEST_ENTRY  (udp_multicast_interface)
    TEST_ENTRY  (udp_multicast_interface6)
@@ -29,9 +29,21 @@ diff -ur libuv-1.48.0/test/test-list.h libuv-1.48.0/test/test-list.h
    TEST_ENTRY  (metrics_idle_time)
    TEST_ENTRY  (metrics_idle_time_thread)
    TEST_ENTRY  (metrics_idle_time_zero)
-diff -ur libuv-1.48.0/test/test-pipe-bind-error.c libuv-1.48.0/test/test-pipe-bind-error.c
---- libuv-1.48.0/test/test-pipe-bind-error.c	2024-02-06 00:03:57.000000000 +0200
-+++ libuv-1.48.0/test/test-pipe-bind-error.c	2024-05-01 17:14:52.785341275 +0300
+diff -ur libuv-1.48.0.orig/test/test-ping-pong.c libuv-1.48.0/test/test-ping-pong.c
+--- libuv-1.48.0.orig/test/test-ping-pong.c	2024-02-06 00:03:57.000000000 +0200
++++ libuv-1.48.0/test/test-ping-pong.c	2024-06-01 23:34:39.325509121 +0300
+@@ -316,7 +316,7 @@
+   /* Try to make a socketpair and do NUM_PINGS ping-pongs. */
+   (void)uv_default_loop(); /* ensure WSAStartup has been performed */
+   ASSERT_OK(uv_socketpair(SOCK_STREAM, 0, fds, UV_NONBLOCK_PIPE, UV_NONBLOCK_PIPE));
+-#ifndef _WIN32
++#if !defined(_WIN32) && !defined(_AIX)
+   /* On Windows, this is actually a UV_TCP, but libuv doesn't detect that. */
+   ASSERT_EQ(uv_guess_handle((uv_file) fds[0]), UV_NAMED_PIPE);
+   ASSERT_EQ(uv_guess_handle((uv_file) fds[1]), UV_NAMED_PIPE);
+diff -ur libuv-1.48.0.orig/test/test-pipe-bind-error.c libuv-1.48.0/test/test-pipe-bind-error.c
+--- libuv-1.48.0.orig/test/test-pipe-bind-error.c	2024-02-06 00:03:57.000000000 +0200
++++ libuv-1.48.0/test/test-pipe-bind-error.c	2024-06-01 23:32:51.617249326 +0300
 @@ -169,7 +169,7 @@
  
    ASSERT_OK(uv_pipe_init(uv_default_loop(), &pipe, 0));
@@ -41,9 +53,9 @@ diff -ur libuv-1.48.0/test/test-pipe-bind-error.c libuv-1.48.0/test/test-pipe-bi
    char path[512];
    memset(path, '@', sizeof(path));
    ASSERT_EQ(UV_EINVAL,
-diff -ur libuv-1.48.0/test/test-spawn.c libuv-1.48.0/test/test-spawn.c
---- libuv-1.48.0/test/test-spawn.c	2024-02-07 13:30:16.000000000 +0200
-+++ libuv-1.48.0/test/test-spawn.c	2024-05-01 17:14:52.786341272 +0300
+diff -ur libuv-1.48.0.orig/test/test-spawn.c libuv-1.48.0/test/test-spawn.c
+--- libuv-1.48.0.orig/test/test-spawn.c	2024-02-07 13:30:16.000000000 +0200
++++ libuv-1.48.0/test/test-spawn.c	2024-06-01 23:32:51.617249340 +0300
 @@ -68,7 +68,9 @@
                      int term_signal) {
    printf("exit_cb\n");

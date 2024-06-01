@@ -1,6 +1,6 @@
-diff -ur zstd-1.5.6/Makefile zstd-1.5.6/Makefile
---- zstd-1.5.6/Makefile	2024-03-21 18:05:51.000000000 -0400
-+++ zstd-1.5.6/Makefile	2024-04-29 10:03:45.101042100 -0400
+diff -ur zstd-1.5.6/Makefile zstd-1.5.6.new/Makefile
+--- zstd-1.5.6/Makefile	2024-03-21 17:05:51.000000000 -0500
++++ zstd-1.5.6.new/Makefile	2024-06-01 16:01:02.312054834 -0500
 @@ -151,7 +151,7 @@
  #------------------------------------------------------------------------------
  # make install is validated only for Linux, macOS, Hurd and some BSD targets
@@ -10,9 +10,27 @@ diff -ur zstd-1.5.6/Makefile zstd-1.5.6/Makefile
  
  HOST_OS = POSIX
  
-diff -ur zstd-1.5.6/lib/Makefile zstd-1.5.6/lib/Makefile
---- zstd-1.5.6/lib/Makefile	2024-03-21 18:05:51.000000000 -0400
-+++ zstd-1.5.6/lib/Makefile	2024-04-29 10:00:32.927131965 -0400
+diff -ur zstd-1.5.6/lib/Makefile zstd-1.5.6.new/lib/Makefile
+--- zstd-1.5.6/lib/Makefile	2024-03-21 17:05:51.000000000 -0500
++++ zstd-1.5.6.new/lib/Makefile	2024-06-01 16:01:54.352404788 -0500
+@@ -140,7 +140,7 @@
+ LIBZSTD = libzstd.$(SHARED_EXT_VER)
+ .PHONY: $(LIBZSTD)  # must be run every time
+ $(LIBZSTD): CPPFLAGS += $(CPPFLAGS_DYNLIB)
+-$(LIBZSTD): CFLAGS   += -fPIC -fvisibility=hidden
++$(LIBZSTD): CFLAGS   += -fPIC
+ $(LIBZSTD): LDFLAGS  += -shared $(LDFLAGS_DYNLIB)
+ 
+ ifndef BUILD_DIR
+@@ -239,7 +239,7 @@
+ # but they will correctly behave single-threaded.
+ ZSTDMT_FILES = zstdmt_compress.c
+ ZSTD_NOMT_FILES = $(filter-out $(ZSTDMT_FILES),$(notdir $(ZSTD_FILES)))
+-libzstd-nomt: CFLAGS += -fPIC -fvisibility=hidden
++libzstd-nomt: CFLAGS += -fPIC
+ libzstd-nomt: LDFLAGS += -shared
+ libzstd-nomt: $(ZSTD_NOMT_FILES)
+ 	@echo compiling single-thread dynamic library $(LIBVER)
 @@ -320,7 +320,7 @@
  	        $< >$@
  
@@ -22,9 +40,9 @@ diff -ur zstd-1.5.6/lib/Makefile zstd-1.5.6/lib/Makefile
  	@echo zstd static and shared library installed
  
  .PHONY: install-pc
-diff -ur zstd-1.5.6/lib/common/mem.h zstd-1.5.6/lib/common/mem.h
---- zstd-1.5.6/lib/common/mem.h	2024-03-21 18:05:51.000000000 -0400
-+++ zstd-1.5.6/lib/common/mem.h	2024-04-29 10:00:32.923131925 -0400
+diff -ur zstd-1.5.6/lib/common/mem.h zstd-1.5.6.new/lib/common/mem.h
+--- zstd-1.5.6/lib/common/mem.h	2024-03-21 17:05:51.000000000 -0500
++++ zstd-1.5.6.new/lib/common/mem.h	2024-06-01 16:01:02.322070994 -0500
 @@ -133,7 +133,9 @@
   */
  #ifndef MEM_FORCE_MEMORY_ACCESS   /* can be defined externally, on command line for example */
@@ -36,9 +54,9 @@ diff -ur zstd-1.5.6/lib/common/mem.h zstd-1.5.6/lib/common/mem.h
  #  endif
  #endif
  
-diff -ur zstd-1.5.6/programs/platform.h zstd-1.5.6/programs/platform.h
---- zstd-1.5.6/programs/platform.h	2024-03-21 18:05:51.000000000 -0400
-+++ zstd-1.5.6/programs/platform.h	2024-04-29 10:00:32.927131965 -0400
+diff -ur zstd-1.5.6/programs/platform.h zstd-1.5.6.new/programs/platform.h
+--- zstd-1.5.6/programs/platform.h	2024-03-21 17:05:51.000000000 -0500
++++ zstd-1.5.6.new/programs/platform.h	2024-06-01 16:01:02.322070993 -0500
 @@ -59,8 +59,8 @@
  #  if !defined(_LARGEFILE_SOURCE)                  /* obsolete macro, replaced with _FILE_OFFSET_BITS */
  #    define _LARGEFILE_SOURCE 1                    /* Large File Support extension (LFS) - fseeko, ftello */
@@ -50,9 +68,9 @@ diff -ur zstd-1.5.6/programs/platform.h zstd-1.5.6/programs/platform.h
  #  endif
  #endif
  
-diff -ur zstd-1.5.6/tests/playTests.sh zstd-1.5.6/tests/playTests.sh
---- zstd-1.5.6/tests/playTests.sh	2024-03-21 18:05:51.000000000 -0400
-+++ zstd-1.5.6/tests/playTests.sh	2024-04-29 10:01:53.595933772 -0400
+diff -ur zstd-1.5.6/tests/playTests.sh zstd-1.5.6.new/tests/playTests.sh
+--- zstd-1.5.6/tests/playTests.sh	2024-03-21 17:05:51.000000000 -0500
++++ zstd-1.5.6.new/tests/playTests.sh	2024-06-01 16:01:02.322071008 -0500
 @@ -1,4 +1,4 @@
 -#!/bin/sh
 +#!/bin/bash
