@@ -1,6 +1,6 @@
-diff -ur Python-3.11.9/PCbuild/get_externals.bat Python-3.11.9/PCbuild/get_externals.bat
---- Python-3.11.9/PCbuild/get_externals.bat	2024-04-02 11:25:04.000000000 +0300
-+++ Python-3.11.9/PCbuild/get_externals.bat	2024-06-06 14:21:02.182924900 +0300
+diff -ur Python-3.11.9.orig/PCbuild/get_externals.bat Python-3.11.9/PCbuild/get_externals.bat
+--- Python-3.11.9.orig/PCbuild/get_externals.bat	2024-04-02 11:25:04.000000000 +0300
++++ Python-3.11.9/PCbuild/get_externals.bat	2024-06-06 17:25:25.468543900 +0300
 @@ -53,7 +53,7 @@
  set libraries=
  set libraries=%libraries%                                       bzip2-1.0.8
@@ -19,9 +19,9 @@ diff -ur Python-3.11.9/PCbuild/get_externals.bat Python-3.11.9/PCbuild/get_exter
  if NOT "%IncludeTkinter%"=="false" set binaries=%binaries% tcltk-8.6.12.1
  if NOT "%IncludeSSLSrc%"=="false"  set binaries=%binaries% nasm-2.11.06
  
-diff -ur Python-3.11.9/PCbuild/openssl.props Python-3.11.9/PCbuild/openssl.props
---- Python-3.11.9/PCbuild/openssl.props	2024-04-02 11:25:04.000000000 +0300
-+++ Python-3.11.9/PCbuild/openssl.props	2024-06-06 14:37:57.505902100 +0300
+diff -ur Python-3.11.9.orig/PCbuild/openssl.props Python-3.11.9/PCbuild/openssl.props
+--- Python-3.11.9.orig/PCbuild/openssl.props	2024-04-02 11:25:04.000000000 +0300
++++ Python-3.11.9/PCbuild/openssl.props	2024-06-06 17:26:11.909999900 +0300
 @@ -10,7 +10,7 @@
      </Link>
    </ItemDefinitionGroup>
@@ -38,9 +38,9 @@ diff -ur Python-3.11.9/PCbuild/openssl.props Python-3.11.9/PCbuild/openssl.props
 -</Project>
 \ No newline at end of file
 +</Project>
-diff -ur Python-3.11.9/PCbuild/python.props Python-3.11.9/PCbuild/python.props
---- Python-3.11.9/PCbuild/python.props	2024-04-02 11:25:04.000000000 +0300
-+++ Python-3.11.9/PCbuild/python.props	2024-06-06 14:21:58.966100300 +0300
+diff -ur Python-3.11.9.orig/PCbuild/python.props Python-3.11.9/PCbuild/python.props
+--- Python-3.11.9.orig/PCbuild/python.props	2024-04-02 11:25:04.000000000 +0300
++++ Python-3.11.9/PCbuild/python.props	2024-06-06 17:26:50.918383000 +0300
 @@ -74,8 +74,8 @@
      <libffiDir Condition="$(libffiDir) == ''">$(ExternalsDir)libffi-3.4.4\</libffiDir>
      <libffiOutDir Condition="$(libffiOutDir) == ''">$(libffiDir)$(ArchName)\</libffiOutDir>
