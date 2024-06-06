@@ -33,10 +33,10 @@ def libiconv_post_make(options, buildout, environ):
 def _libffi_post_make(platform_name, prefix):
     import os
     # libffi-python runs from Python source
-    python_source_path = path.abspath(path.join(os.curdir, path.pardir))
-    os.system('cp -fvr %s/externals/libffi/%s/include/*h %s/include' % (python_source_path, platform_name, prefix))
-    os.system('cp -fvr %s/externals/libffi/%s/*lib %s/lib' % (python_source_path, platform_name, prefix))
-    os.system('cp -fvr %s/externals/libffi/%s/*dll %s/lib' % (python_source_path, platform_name, prefix))
+    python_source_path = path.abspath(path.join(os.curdir, path.pardir)).replace(os.path.sep, '/')
+    os.system('cp -fvr %s/externals/libffi/%s/include/*.h %s/include' % (python_source_path, platform_name, prefix))
+    os.system('cp -fvr %s/externals/libffi/%s/*.lib %s/lib' % (python_source_path, platform_name, prefix))
+    os.system('cp -fvr %s/externals/libffi/%s/*.dll %s/lib' % (python_source_path, platform_name, prefix))
 
 def libffi_post_make(options, buildout, environ):
     prefix = environ['PREFIX'].replace(os.path.sep, '/')
