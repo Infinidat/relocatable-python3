@@ -11,14 +11,13 @@ index a731c0c..d374ba4 100644
  WFLAGS  = -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
  ASFLAGS = -coff -Zi
  LDFLAGS = -nologo -debug -incremental:no -opt:ref
-@@ -137,3 +137,11 @@ clean:
+@@ -137,3 +137,10 @@ clean:
  	-del *.pdb
  	-del *.manifest
  	-del foo.gz
 +
 +install:
 +    -cp zlib.h $(PREFIX)\include
-+    -cp zlibdefs.h $(PREFIX)\include
 +    -cp zconf.h $(PREFIX)\include
 +    -cp *.lib $(PREFIX)\lib
 +    -cp *.dll $(PREFIX)\lib

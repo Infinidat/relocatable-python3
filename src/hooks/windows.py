@@ -49,13 +49,17 @@ def tcl_post_make(options, buildout, environ):
 
 class PythonPostMake(object):
     def __init__(self, environ):
+        self.arch = 'amd64'
         self.python_source_path = path.abspath(os.curdir)
-        self.pcbuild_path = path.join(self.python_source_path, 'PCbuild', 'amd64')
+        self.externals = path.join(self.python_source_path, 'externals')
+        self.pcbuild_path = path.join(self.python_source_path, 'PCbuild', self.arch)
         self.prefix = environ['PREFIX']
         self.environ = environ
         print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
+        self.copy_libffi()
+        self.copy_openssl()
         self.move_libs()
         self.make_pyd()
         self.make_exe()
@@ -66,6 +70,21 @@ class PythonPostMake(object):
         self.make_libraries()
         self.move_dlls()
         self.copy_crt_assemblies()
+
+    def copy_libffi(self):
+        name = 'libffi-3.4.4'
+        base = path.join(self.externals, name, self.arch)
+        os.system('cp -rv %s/include/*.h %s/include' % (base, self.prefix))
+        os.system('cp -rv %s/*.lib %s/lib' % (base, self.prefix))
+        os.system('cp -rv %s/*.dll %s/DLLs' % (base, self.prefix))
+
+    def copy_openssl(self):
+        name = 'openssl-bin-1.1.1w'
+        base = path.join(self.externals, name, self.arch)
+        os.system('cp -rv %s/include/openssl %s/include' % (base, self.prefix))
+        os.system('cp -rv %s/*.lib %s/lib' % (base, self.prefix))
+        os.system('cp -rv %s/*.pdb %s/lib' % (base, self.prefix))
+        os.system('cp -rv %s/*.dll %s/DLLs' % (base, self.prefix))
 
     def move_dlls(self):
         dst = path.join(self.prefix, 'DLLs')
