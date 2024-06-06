@@ -49,8 +49,8 @@ def tcl_post_make(options, buildout, environ):
 
 class PythonPostMake(object):
     def __init__(self, environ):
-        self.python_source_path = path.abspath(path.join(os.curdir, path.pardir))
-        self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
+        self.python_source_path = path.abspath(os.curdir)
+        self.pcbuild_path = path.join(self.python_source_path, 'PCbuild', 'amd64')
         self.prefix = environ['PREFIX']
         self.environ = environ
         print(self.python_source_path, self.pcbuild_path, self.prefix)
@@ -72,8 +72,9 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
         _mk_path(dst)
         for item in src:
-            if 'python38.dll' in item:
+            if 'python311.dll' in item:
                 continue
+            print('move_dlls: %s => %s' % (item, dst))
             cmd = 'mv %s %s' % (item, dst)
             _system(cmd)
 
@@ -82,32 +83,38 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
         _mk_path(dst)
         for item in src:
+            print('move_libs: %s => %s' % (item, dst))
             cmd = 'mv %s %s' % (item, dst)
             _system(cmd)
 
     def make_pyd(self):
         dst = path.join(self.prefix, 'DLLs')
         src = glob.glob(path.join(self.pcbuild_path, '*.pyd'))
+        print('make_pyd: %s => %s' % (src, dst))
         _copy_files(src, dst)
 
     def make_exe(self):
         dst = path.join(self.prefix, 'bin')
         src = glob.glob(path.join(self.pcbuild_path, '*.exe'))
+        print('make_exe: %s => %s' % (src, dst))
         _copy_files(src, dst)
 
     def make_dll(self):
         dst = path.join(self.prefix, 'bin')
         src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
+        print('make_dll: %s => %s' % (src, dst))
         _copy_files(src, dst)
 
     def make_lib(self):
         dst = path.join(self.prefix, 'libs')
         src = glob.glob(path.join(self.pcbuild_path, '*.lib'))
+        print('make_lib: %s => %s' % (src, dst))
         _copy_files(src, dst)
 
     def make_ico(self):
         dst = path.join(self.prefix, 'bin')
         src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
+        print('make_ico: %s => %s' % (src, dst))
         _copy_files(src, dst)
 
     def make_includes(self):
@@ -122,6 +129,7 @@ class PythonPostMake(object):
         dst = path.join(self.prefix,)
         src = path.join(self.python_source_path, 'lib')
         _mk_path(dst)
+        print('make_libraries: %s => %s' % (src, dst))
         cmd = "cp -fr %s %s" % (src, dst)
         _system(cmd)
 
