@@ -95,6 +95,11 @@ class PythonPostMake(object):
         mkdir(dst)
         for item in items:
             _system('mv -fv %s %s' % (item, dst))
+        items = glob.glob(path.join(self.python_source_path, 'lib', '*'))
+        dst = path.join(self.prefix, 'lib')
+        mkdir(dst)
+        for item in items:
+            _system('mv -fv %s %s' % (item, dst))
 
     def move_libffi(self):
         name = 'libffi-3.4.4'
