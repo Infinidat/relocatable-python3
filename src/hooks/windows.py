@@ -58,23 +58,14 @@ class PythonPostMake(object):
         print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
-        self.move_bins()
         self.move_dlls()
+        self.move_bins()
         self.move_libs()
         self.move_libffi()
         self.move_openssl()
+        self.move_headers()
         return
-        self.make_includes()
         self.copy_crt_assemblies()
-
-    def move_bins(self):
-        items = glob.glob(path.join(self.pcbuild_path, '*.dll'))
-        items += glob.glob(path.join(self.pcbuild_path, '*.exe'))
-        items += glob.glob(path.join(self.pcbuild_path, '*.ico'))
-        dst = path.join(self.prefix, 'bin')
-        mkdir(dst)
-        for item in items:
-            _system('mv -fv %s %s' % (item, dst))
 
     def move_dlls(self):
         items = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
@@ -85,6 +76,15 @@ class PythonPostMake(object):
         for item in items:
             if 'python311.dll' in item:
                 continue
+            _system('mv -fv %s %s' % (item, dst))
+
+    def move_bins(self):
+        items = glob.glob(path.join(self.pcbuild_path, '*.dll'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.exe'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.ico'))
+        dst = path.join(self.prefix, 'bin')
+        mkdir(dst)
+        for item in items:
             _system('mv -fv %s %s' % (item, dst))
 
     def move_libs(self):
@@ -99,25 +99,28 @@ class PythonPostMake(object):
     def move_libffi(self):
         name = 'libffi-3.4.4'
         base = path.join(self.externals, name, self.arch)
-        _system('mv -fv %s %s' % (path.join(base, 'include'), self.prefix))
-        _system('mv -fv %s %s' % (path.join(base, '*.lib'), path.join(self.prefix, 'libs')))
-        _system('mv -fv %s %s' % (path.join(base, '*.dll'), path.join(self.prefix, 'DLLs')))
+        _system('mv -fv %s %s' % (path.join(base, 'include', '*'),
+                                  path.join(self.prefix, 'include')))
+        _system('mv -fv %s %s' % (path.join(base, '*.lib'),
+                                  path.join(self.prefix, 'libs')))
+        _system('mv -fv %s %s' % (path.join(base, '*.dll'),
+                                  path.join(self.prefix, 'DLLs')))
 
     def move_openssl(self):
         name = 'openssl-bin-1.1.1w'
         base = path.join(self.externals, name, self.arch)
-        _system('mv -fv %s %s' % (path.join(base, 'include'), self.prefix))
-        _system('mv -fv %s %s' % (path.join(base, '*.lib'), path.join(self.prefix, 'libs')))
-        _system('mv -fv %s %s' % (path.join(base, '*.dll'), path.join(self.prefix, 'DLLs')))
+        _system('mv -fv %s %s' % (path.join(base, 'include', '*'),
+                                  path.join(self.prefix, 'include')))
+        _system('mv -fv %s %s' % (path.join(base, '*.lib'),
+                                  path.join(self.prefix, 'libs')))
+        _system('mv -fv %s %s' % (path.join(base, '*.dll'),
+                                  path.join(self.prefix, 'DLLs')))
 
-
-    def make_includes(self):
-        import shutil
-        cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
-                                path.join(self.prefix))
-        _system(cmd)
-        shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
-                     path.join(self.prefix, 'Include'))
+    def move_headers(self):
+        _system('mv -fv %s %s' % (path.join(self.python_source_path, 'Include', '*'),
+                                  path.join(self.prefix, 'include')))
+        _system('mv -fv %s %s' % (path.join(self.python_source_path, 'PC', 'pyconfig.h'),
+                                  path.join(self.prefix, 'include')))
 
     def copy_crt_assemblies(self):
         dst = path.join(self.prefix, 'bin')
