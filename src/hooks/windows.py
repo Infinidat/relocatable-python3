@@ -58,83 +58,58 @@ class PythonPostMake(object):
         print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
-        self.copy_libffi()
-        self.copy_openssl()
-        self.move_libs()
-        self.make_pyd()
-        self.make_exe()
-        self.make_dll()
-        self.make_lib()
-        self.make_ico()
-        self.make_includes()
-        self.make_libraries()
+        self.move_bins()
         self.move_dlls()
+        self.move_libs()
+        self.move_libffi()
+        self.move_openssl()
+        return
+        self.make_includes()
         self.copy_crt_assemblies()
 
-    def copy_libffi(self):
-        name = 'libffi-3.4.4'
-        base = path.join(self.externals, name, self.arch)
-        os.system('cp -rv %s/include/*.h %s/include' % (base, self.prefix))
-        os.system('cp -rv %s/*.lib %s/lib' % (base, self.prefix))
-        os.system('cp -rv %s/*.dll %s/DLLs' % (base, self.prefix))
-
-    def copy_openssl(self):
-        name = 'openssl-bin-1.1.1w'
-        base = path.join(self.externals, name, self.arch)
-        os.system('cp -rv %s/include/openssl %s/include' % (base, self.prefix))
-        os.system('cp -rv %s/*.lib %s/lib' % (base, self.prefix))
-        os.system('cp -rv %s/*.pdb %s/lib' % (base, self.prefix))
-        os.system('cp -rv %s/*.dll %s/DLLs' % (base, self.prefix))
+    def move_bins(self):
+        items = glob.glob(path.join(self.pcbuild_path, '*.dll'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.exe'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.ico'))
+        dst = path.join(self.prefix, 'bin')
+        mkdir(dst)
+        for item in items:
+            _system('mv -fv %s %s' % (item, dst))
 
     def move_dlls(self):
+        items = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
+        items += glob.glob(path.join(self.prefix, 'lib', '*.pdb'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.pyd'))
         dst = path.join(self.prefix, 'DLLs')
-        src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
-        _mk_path(dst)
-        for item in src:
+        mkdir(dst)
+        for item in items:
             if 'python311.dll' in item:
                 continue
-            print('move_dlls: %s => %s' % (item, dst))
-            cmd = 'mv %s %s' % (item, dst)
-            _system(cmd)
+            _system('mv -fv %s %s' % (item, dst))
 
     def move_libs(self):
+        items = glob.glob(path.join(self.prefix, 'lib', '*.a'))
+        items += glob.glob(path.join(self.prefix, 'lib', '*.lib'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.lib'))
         dst = path.join(self.prefix, 'libs')
-        src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
-        _mk_path(dst)
-        for item in src:
-            print('move_libs: %s => %s' % (item, dst))
-            cmd = 'mv %s %s' % (item, dst)
-            _system(cmd)
+        mkdir(dst)
+        for item in items:
+            _system('mv -fv %s %s' % (item, dst))
 
-    def make_pyd(self):
-        dst = path.join(self.prefix, 'DLLs')
-        src = glob.glob(path.join(self.pcbuild_path, '*.pyd'))
-        print('make_pyd: %s => %s' % (src, dst))
-        _copy_files(src, dst)
+    def move_libffi(self):
+        name = 'libffi-3.4.4'
+        base = path.join(self.externals, name, self.arch)
+        _system('mv -fv %s %s' % (path.join(base, 'include'), self.prefix))
+        _system('mv -fv %s %s' % (path.join(base, '*.lib'), path.join(self.prefix, 'libs')))
+        _system('mv -fv %s %s' % (path.join(base, '*.dll'), path.join(self.prefix, 'DLLs')))
 
-    def make_exe(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.pcbuild_path, '*.exe'))
-        print('make_exe: %s => %s' % (src, dst))
-        _copy_files(src, dst)
+    def move_openssl(self):
+        name = 'openssl-bin-1.1.1w'
+        base = path.join(self.externals, name, self.arch)
+        _system('mv -fv %s %s' % (path.join(base, 'include'), self.prefix))
+        _system('mv -fv %s %s' % (path.join(base, '*.lib'), path.join(self.prefix, 'libs')))
+        _system('mv -fv %s %s' % (path.join(base, '*.dll'), path.join(self.prefix, 'DLLs')))
 
-    def make_dll(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
-        print('make_dll: %s => %s' % (src, dst))
-        _copy_files(src, dst)
-
-    def make_lib(self):
-        dst = path.join(self.prefix, 'libs')
-        src = glob.glob(path.join(self.pcbuild_path, '*.lib'))
-        print('make_lib: %s => %s' % (src, dst))
-        _copy_files(src, dst)
-
-    def make_ico(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
-        print('make_ico: %s => %s' % (src, dst))
-        _copy_files(src, dst)
 
     def make_includes(self):
         import shutil
@@ -144,35 +119,28 @@ class PythonPostMake(object):
         shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                      path.join(self.prefix, 'Include'))
 
-    def make_libraries(self):
-        dst = path.join(self.prefix,)
-        src = path.join(self.python_source_path, 'lib')
-        _mk_path(dst)
-        print('make_libraries: %s => %s' % (src, dst))
-        cmd = "cp -fr %s %s" % (src, dst)
-        _system(cmd)
-
     def copy_crt_assemblies(self):
         dst = path.join(self.prefix, 'bin')
         src = glob.glob(path.join(self.environ["WindowsSdkDir"], "Redist", self.environ["XSDKVer"], "ucrt/DLLs/x64/*.dll"))
-        _copy_files(src, dst)
+        copy_files(src, dst)
         src = glob.glob(path.join(self.environ["VCRoot"], "Redist/MSVC/14.16.27012/x64/Microsoft.VC141.CRT/*.dll"))
-        _copy_files(src, dst)
+        copy_files(src, dst)
 
-def _mk_path(path):
+def mkdir(path):
     if os.path.exists(path):
         return
     os.makedirs(path)
 
-def _copy_files(src_glob, dst):
-    _mk_path(dst)
-    for item in src_glob:
-        print('cp %s %s' % (item, dst))
+def copy_files(items, dst):
+    mkdir(dst)
+    for item in items:
+        print('copy %s => %s' % (item, dst))
         shutil.copy(item, dst)
 
 def _system(cmd):
+    cmd = cmd.replace(os.path.sep, '/')
     print(cmd)
-    os.system(cmd.replace(os.path.sep, '/'))
+    os.system(cmd)
 
 def libevent_post_make(options, buildout, environ):
     import os
