@@ -64,8 +64,7 @@ class PythonPostMake(object):
         self.move_libffi()
         self.move_openssl()
         self.move_headers()
-        return
-        self.copy_crt_assemblies()
+        self.copy_crt()
 
     def move_dlls(self):
         items = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
@@ -127,23 +126,22 @@ class PythonPostMake(object):
         _system('mv -fv %s %s' % (path.join(self.python_source_path, 'PC', 'pyconfig.h'),
                                   path.join(self.prefix, 'include')))
 
-    def copy_crt_assemblies(self):
+    def copy_crt(self):
+        items = glob.glob(path.join(self.environ['WindowsSdkDir'],
+                                    'Redist', self.environ['XSDKVer'],
+                                    'ucrt', 'DLLs', 'x64', '*.dll'))
+        items += glob.glob(path.join(self.environ['VCRoot'],
+                                     'Redist', 'MSVC', '14.16.27012',
+                                     'x64', 'Microsoft.VC141.CRT', '*.dll'))
         dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.environ["WindowsSdkDir"], "Redist", self.environ["XSDKVer"], "ucrt/DLLs/x64/*.dll"))
-        copy_files(src, dst)
-        src = glob.glob(path.join(self.environ["VCRoot"], "Redist/MSVC/14.16.27012/x64/Microsoft.VC141.CRT/*.dll"))
-        copy_files(src, dst)
+        mkdir(dst)
+        for item in items:
+            _system('cp -fv %s %s' % (item, dst))
 
 def mkdir(path):
     if os.path.exists(path):
         return
     os.makedirs(path)
-
-def copy_files(items, dst):
-    mkdir(dst)
-    for item in items:
-        print('copy %s => %s' % (item, dst))
-        shutil.copy(item, dst)
 
 def _system(cmd):
     cmd = cmd.replace(os.path.sep, '/')
