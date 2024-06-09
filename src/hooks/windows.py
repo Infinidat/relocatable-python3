@@ -79,7 +79,7 @@ class PythonPostMake(object):
             _system('mv -fv %s %s' % (item, dst))
 
     def move_bins(self):
-        items += glob.glob(path.join(self.pcbuild_path, '*.exe'))
+        items = glob.glob(path.join(self.pcbuild_path, '*.exe'))
         items += glob.glob(path.join(self.pcbuild_path, '*.ico'))
         dst = path.join(self.prefix, 'bin')
         mkdir(dst)
@@ -145,7 +145,7 @@ def mkdir(path):
 
 def _system(cmd):
     cmd = cmd.replace(os.path.sep, '/')
-    print(cmd)
+    print('==> run SHELL command:', cmd)
     os.system(cmd)
 
 def libevent_post_make(options, buildout, environ):
