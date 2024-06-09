@@ -68,6 +68,7 @@ class PythonPostMake(object):
 
     def move_dlls(self):
         items = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
+        items += glob.glob(path.join(self.pcbuild_path, '*.dll'))
         items += glob.glob(path.join(self.prefix, 'lib', '*.pdb'))
         items += glob.glob(path.join(self.pcbuild_path, '*.pyd'))
         dst = path.join(self.prefix, 'DLLs')
@@ -78,7 +79,6 @@ class PythonPostMake(object):
             _system('mv -fv %s %s' % (item, dst))
 
     def move_bins(self):
-        items = glob.glob(path.join(self.pcbuild_path, '*.dll'))
         items += glob.glob(path.join(self.pcbuild_path, '*.exe'))
         items += glob.glob(path.join(self.pcbuild_path, '*.ico'))
         dst = path.join(self.prefix, 'bin')
@@ -136,7 +136,7 @@ class PythonPostMake(object):
         dst = path.join(self.prefix, 'bin')
         mkdir(dst)
         for item in items:
-            _system('cp -fv %s %s' % (item, dst))
+            _system('cp -fv "%s" "%s"' % (item, dst))
 
 def mkdir(path):
     if os.path.exists(path):
