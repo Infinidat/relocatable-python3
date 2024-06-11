@@ -17,10 +17,15 @@ def _system(cmd):
 def _mkdir(path):
     _system('install -v -d "%s"' % path)
 
-def _copy(items, dst):
-    _mkdir(dst)
-    for item in items:
+def _copy(src, dst):
+    if isinstance(src, str):
         _system('cp -f -r -v "%s" "%s"' % (item, dst))
+    elif isinstance(src, (list, tuple)):
+        _mkdir(dst)
+        for item in items:
+            _system('cp -f -r -v "%s" "%s"' % (item, dst))
+    else:
+        raise Exception('Unexpected source type %s' % type(src))
 
 def xz_post_make(options, buildout, environ):
     prefix = environ['PREFIX']
@@ -43,7 +48,7 @@ def libiconv_post_make(options, buildout, environ):
           os.path.join(prefix, 'bin'))
     _copy(glob.glob(os.path.join(suffix, '*.lib')),
           os.path.join(prefix, 'lib'))
-    _copy([os.path.join(suffix, 'libiconv.lib')],
+    _copy(os.path.join(suffix, 'libiconv.lib'),
           os.path.join(prefix, 'lib', 'iconv.lib'))
     _copy(glob.glob(os.path.join(suffix, '*.exe')),
           os.path.join(prefix, 'bin'))
