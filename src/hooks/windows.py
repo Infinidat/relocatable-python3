@@ -88,6 +88,7 @@ class PythonPostMake(object):
         self.copy_crt()
         self.move_dlls()
         self.move_libs()
+        self.chmod_dist()
 
     def copy_dlls(self):
         src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
@@ -168,6 +169,11 @@ class PythonPostMake(object):
                                    'x64', 'Microsoft.VC141.CRT', '*.dll'))
         dst = path.join(self.prefix, 'bin')
         _copy(src, dst)
+
+    def chmod_dist(self):
+        _system('find "%s" -type d -exec chmod 0755 {} ";"' % self.prefix)
+        _system('find "%s" -type f -exec chmod 0644 {} ";"' % self.prefix)
+        _system('find "%s/bin" -type f -iname "*.exe" -exec chmod 0755 {} ";"' % self.prefix)
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ)
