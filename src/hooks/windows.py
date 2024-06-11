@@ -48,7 +48,7 @@ def libiconv_post_make(options, buildout, environ):
     _copy(glob.glob(os.path.join('include', '*.h')),
           os.path.join(prefix, 'include'))
     _copy(glob.glob(os.path.join(suffix, '*.dll')),
-          os.path.join(prefix, 'bin'))
+          os.path.join(prefix, 'lib'))
     _copy(glob.glob(os.path.join(suffix, '*.lib')),
           os.path.join(prefix, 'lib'))
     _copy(os.path.join(suffix, 'libiconv.lib'),
@@ -97,10 +97,10 @@ class PythonPostMake(object):
         _copy(src, dst)
 
     def move_dlls(self):
-        src = glob.glob(os.path.join(self.prefix, 'bin', '*.dll'))
-        src += glob.glob(os.path.join(self.prefix, 'lib', '*.dll'))
-        src += glob.glob(os.path.join(self.prefix, 'lib', '*.pdb'))
-        src = [dll for dll in src if 'python' not in dll]
+        #src = glob.glob(os.path.join(self.prefix, 'bin', '*.dll'))
+        #src = glob.glob(os.path.join(self.prefix, 'lib', '*.dll'))
+        src = glob.glob(os.path.join(self.prefix, 'lib', '*.pdb'))
+        #src = [dll for dll in src if 'python' not in dll]
         dst = os.path.join(self.prefix, 'DLLs')
         _move(src, dst)
 
