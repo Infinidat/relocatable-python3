@@ -19,10 +19,10 @@ def _mkdir(path):
 
 def _copy(src, dst):
     if isinstance(src, str):
-        _system('cp -f -r -v "%s" "%s"' % (item, dst))
+        _system('cp -f -r -v "%s" "%s"' % (src, dst))
     elif isinstance(src, (list, tuple)):
         _mkdir(dst)
-        for item in items:
+        for item in src:
             _system('cp -f -r -v "%s" "%s"' % (item, dst))
     else:
         raise Exception('Unexpected source type %s' % type(src))
