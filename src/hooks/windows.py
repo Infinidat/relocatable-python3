@@ -43,7 +43,7 @@ def libiconv_post_make(options, buildout, environ):
           os.path.join(prefix, 'bin'))
     _copy(glob.glob(os.path.join(suffix, '*.lib')),
           os.path.join(prefix, 'lib'))
-    _copy([os.path.join(suffix, 'libiconv.lib'))],
+    _copy([os.path.join(suffix, 'libiconv.lib')],
           os.path.join(prefix, 'lib', 'iconv.lib'))
     _copy(glob.glob(os.path.join(suffix, '*.exe')),
           os.path.join(prefix, 'bin'))
