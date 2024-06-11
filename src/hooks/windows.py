@@ -102,6 +102,7 @@ class PythonPostMake(object):
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
         src += glob.glob(path.join(self.prefix, 'lib', '*.dll'))
         src += glob.glob(path.join(self.prefix, 'lib', '*.pdb'))
+        src = [dll for dll in src if 'python' not in dll]
         dst = path.join(self.prefix, 'DLLs')
         _move(src, dst)
 
