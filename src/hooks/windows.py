@@ -60,10 +60,14 @@ def libiconv_post_make(options, buildout, environ):
           os.path.join(prefix, 'bin'))
 
 def libevent_post_make(options, buildout, environ):
-    0/0
     prefix = environ['PREFIX']
-
-    os.system('cp -fvr *lib %s/lib' % prefix)
+    src = glob.glob('*.h')
+    src = [h for h in src if 'internal' not in h]
+    dst = os.path.join(prefix, 'include')
+    _copy(src, dst)
+    src = glob.glob('*.lib')
+    dst = os.path.join(prefix, 'lib')
+    _copy(src, dst)
 
 class PythonPostMake(object):
     def __init__(self, environ):
@@ -73,74 +77,83 @@ class PythonPostMake(object):
         self.pcbuild_path = path.join(self.python_source_path, 'PCbuild', self.arch)
         self.prefix = environ['PREFIX']
         self.environ = environ
-        print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
+        self.copy_dlls()
         self.move_dlls()
-        self.move_bins()
+        self.copy_bins()
+        self.copy_libs()
         self.move_libs()
-        self.move_libffi()
-        self.move_openssl()
-        self.move_headers()
+        self.copy_libffi()
+        self.copy_openssl()
+        self.copy_headers()
         self.copy_crt()
+
+    def copy_dlls(self):
+        src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
+        src += glob.glob(path.join(self.pcbuild_path, '*.pyd'))
+        dst = path.join(self.prefix, 'DLLs')
+        _copy(src, dst)
 
     def move_dlls(self):
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
         src = [dll for dll in src if 'python' not in dll]
-        src += glob.glob(path.join(self.pcbuild_path, '*.dll'))
         src += glob.glob(path.join(self.prefix, 'lib', '*.pdb'))
-        src += glob.glob(path.join(self.pcbuild_path, '*.pyd'))
         dst = path.join(self.prefix, 'DLLs')
         _move(src, dst)
 
-    def move_bins(self):
+    def copy_bins(self):
         src = glob.glob(path.join(self.pcbuild_path, '*.exe'))
         src += glob.glob(path.join(self.pcbuild_path, '*.ico'))
         dst = path.join(self.prefix, 'bin')
-        _move(src, dst)
+        _copy(src, dst)
+
+    def copy_libs(self):
+        src = glob.glob(path.join(self.pcbuild_path, '*.lib'))
+        dst = path.join(self.prefix, 'libs')
+        _copy(src, dst)
+        src = glob.glob(path.join(self.python_source_path, 'lib', '*'))
+        dst = path.join(self.prefix, 'lib')
+        _copy(src, dst)
 
     def move_libs(self):
         src = glob.glob(path.join(self.prefix, 'lib', '*.a'))
         src += glob.glob(path.join(self.prefix, 'lib', '*.lib'))
-        src += glob.glob(path.join(self.pcbuild_path, '*.lib'))
         dst = path.join(self.prefix, 'libs')
         _move(src, dst)
-        src = glob.glob(path.join(self.python_source_path, 'lib', '*'))
-        dst = path.join(self.prefix, 'lib')
-        _move(src, dst)
 
-    def move_libffi(self):
+    def copy_libffi(self):
         name = 'libffi-3.4.4'
         base = path.join(self.externals, name, self.arch)
         src = glob.glob(path.join(base, 'include', '*.h'))
         dst = path.join(self.prefix, 'include')
-        _move(src, dst)
+        _copy(src, dst)
         src = glob.glob(path.join(base, '*.lib'))
         dst = path.join(self.prefix, 'libs')
-        _move(src, dst)
+        _copy(src, dst)
         src = glob.glob(path.join(base, '*.dll'))
         dst = path.join(self.prefix, 'DLLs')
-        _move(src, dst)
+        _copy(src, dst)
 
-    def move_openssl(self):
+    def copy_openssl(self):
         name = 'openssl-bin-1.1.1w'
         base = path.join(self.externals, name, self.arch)
         src = glob.glob(path.join(base, 'include', 'openssl', '*.h'))
         dst = path.join(self.prefix, 'include')
-        _move(src, dst)
+        _copy(src, dst)
         src = glob.glob(path.join(base, '*.lib'))
         dst = path.join(self.prefix, 'libs')
-        _move(src, dst)
+        _copy(src, dst)
         src = glob.glob(path.join(base, '*.dll'))
         dst = path.join(self.prefix, 'DLLs')
-        _move(src, dst)
+        _copy(src, dst)
 
-    def move_headers(self):
+    def copy_headers(self):
         src = glob.glob(path.join(self.python_source_path, 'Include', '*.h'))
         dst = path.join(self.prefix, 'include')
-        _move(src, dst)
+        _copy(src, dst)
         src = path.join(self.python_source_path, 'PC', 'pyconfig.h')
-        _move(src, dst)
+        _copy(src, dst)
 
     def copy_crt(self):
         src = glob.glob(path.join(self.environ['WindowsSdkDir'],
