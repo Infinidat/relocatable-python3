@@ -15,7 +15,7 @@ def _system(cmd):
     os.system(cmd)
 
 def _mkdir(path):
-    _system('mkdir -p -v "%s"' % path)
+    _system('install -v -d "%s"' % path)
 
 def _copy(items, dst):
     _mkdir(dst)
@@ -33,23 +33,25 @@ def xz_post_make(options, buildout, environ):
           os.path.join(prefix, 'lib'))
     _copy(glob.glob(os.path.join(suffix, '*.dll')),
           os.path.join(prefix, 'bin'))
-    0/0
-
-def _libiconv_post_make(platform_name, prefix):
-    import os
-    os.system('cp -fvr include/*h %s/include' % prefix)
-    os.system('cp -fvr build-VS2017/%s/Release/*lib %s/lib' % (platform_name, prefix))
-    os.system('cp -fvr build-VS2017/%s/Release/*dll %s/lib' % (platform_name, prefix))
-    os.system('cp -fvr build-VS2017/%s/Release/*exe %s/bin' % (platform_name, prefix))
-    os.system('cp -fvr %s/lib/libiconv.lib %s/lib/iconv.lib' % (prefix, prefix))
 
 def libiconv_post_make(options, buildout, environ):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    _libiconv_post_make('x64', prefix)
+    prefix = environ['PREFIX']
+    suffix = os.path.join('build-VS2017', 'x64', 'Release')
+    _copy(glob.glob(os.path.join('include', '*.h')),
+          os.path.join(prefix, 'include'))
+    _copy(glob.glob(os.path.join(suffix, '*.dll')),
+          os.path.join(prefix, 'bin'))
+    _copy(glob.glob(os.path.join(suffix, '*.lib')),
+          os.path.join(prefix, 'lib'))
+    _copy([os.path.join(suffix, 'libiconv.lib'))],
+          os.path.join(prefix, 'lib', 'iconv.lib'))
+    _copy(glob.glob(os.path.join(suffix, '*.exe')),
+          os.path.join(prefix, 'bin'))
 
 def _libffi_post_make(platform_name, prefix):
-    import os
-    # libffi-python runs from Python source
+    prefix = environ['PREFIX']
+    0/0
+    suffix = os.path.join()
     python_source_path = path.abspath(path.join(os.curdir, path.pardir)).replace(os.path.sep, '/')
     os.system('cp -fvr %s/externals/libffi/%s/include/*.h %s/include' % (python_source_path, platform_name, prefix))
     os.system('cp -fvr %s/externals/libffi/%s/*.lib %s/lib' % (python_source_path, platform_name, prefix))
