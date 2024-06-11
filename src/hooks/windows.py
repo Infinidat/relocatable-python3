@@ -1,22 +1,39 @@
 from __future__ import print_function
 import os
+import posixpath
 import subprocess
 from os import path
 import glob
 import shutil
 
-def _execute(cmd, env):
-    process = subprocess.Popen(cmd.split(), env=env)
-    return process.wait()
+def _convert(text):
+    return text.replace(os.path.sep, posixpath.sep)
 
-def _xz_post_make(environ, platform):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    os.system('cp -fvr include/* %s/include' % prefix)
-    os.system('cp -fvr bin_%s/*a %s/lib' % (platform, prefix))
-    os.system('cp -fvr bin_%s/*dll %s/bin' % (platform, prefix))
+def _system(cmd):
+    cmd = _convert(cmd)
+    print('==>', cmd)
+    os.system(cmd)
+
+def _mkdir(path):
+    _system('mkdir -p -v "%s"' % path)
+
+def _copy(items, dst):
+    _mkdir(dst)
+    for item in items:
+        _system('cp -f -r -v "%s" "%s"' % (item, dst))
 
 def xz_post_make(options, buildout, environ):
-    _xz_post_make(environ, "x86-64")
+    prefix = environ['PREFIX']
+    suffix = 'bin_x86-64'
+    _copy(glob.glob(os.path.join('include', '*.h')),
+          os.path.join(prefix, 'include'))
+    _copy(glob.glob(os.path.join('include', 'lzma', '*.h')),
+          os.path.join(prefix, 'include', 'lzma'))
+    _copy(glob.glob(os.path.join(suffix, '*.a')),
+          os.path.join(prefix, 'lib'))
+    _copy(glob.glob(os.path.join(suffix, '*.dll')),
+          os.path.join(prefix, 'bin'))
+    0/0
 
 def _libiconv_post_make(platform_name, prefix):
     import os
@@ -137,16 +154,6 @@ class PythonPostMake(object):
         mkdir(dst)
         for item in items:
             _system('cp -fv "%s" "%s"' % (item, dst))
-
-def mkdir(path):
-    if os.path.exists(path):
-        return
-    os.makedirs(path)
-
-def _system(cmd):
-    cmd = cmd.replace(os.path.sep, '/')
-    print('==> run SHELL command:', cmd)
-    os.system(cmd)
 
 def libevent_post_make(options, buildout, environ):
     import os
