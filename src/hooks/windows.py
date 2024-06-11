@@ -80,24 +80,27 @@ class PythonPostMake(object):
 
     def make_install(self):
         self.copy_dlls()
-        self.move_dlls()
         self.copy_bins()
         self.copy_libs()
-        self.move_libs()
         self.copy_libffi()
         self.copy_openssl()
         self.copy_headers()
         self.copy_crt()
+        self.move_dlls()
+        self.move_libs()
 
     def copy_dlls(self):
         src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
         src += glob.glob(path.join(self.pcbuild_path, '*.pyd'))
         dst = path.join(self.prefix, 'DLLs')
         _copy(src, dst)
+        src = glob.glob(path.join(self.pcbuild_path, 'python*.dll'))
+        dst = path.join(self.prefix, 'bin')
+        _copy(src, dst)
 
     def move_dlls(self):
         src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
-        src = [dll for dll in src if 'python' not in dll]
+        src += glob.glob(path.join(self.prefix, 'lib', '*.dll'))
         src += glob.glob(path.join(self.prefix, 'lib', '*.pdb'))
         dst = path.join(self.prefix, 'DLLs')
         _move(src, dst)
