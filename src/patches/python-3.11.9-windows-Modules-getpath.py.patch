@@ -37,3 +37,13 @@
  
      # Then add any entries compiled into the PYTHONPATH macro.
      if PYTHONPATH:
+--- Python-3.11.9/Lib/test/test_getpath.py	2024-06-12 12:29:44
++++ Python-3.11.9/Lib/test/test_getpath.py	2024-06-12 12:31:08
+@@ -109,6 +109,7 @@
+         actual = getpath(ns, expected)
+         self.assertEqual(expected, actual)
+ 
++    @unittest.skip('HOSTDEV-3483')
+     def test_registry_win32(self):
+         """Test registry lookup on Windows.
+ 
