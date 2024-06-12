@@ -154,6 +154,12 @@ class PythonPostMake(object):
         src = glob.glob(os.path.join(self.python_source_path, 'Include', '*.h'))
         dst = os.path.join(self.prefix, 'include')
         _copy(src, dst)
+        src = glob.glob(os.path.join(self.python_source_path, 'Include', 'cpython', '*.h'))
+        dst = os.path.join(self.prefix, 'include', 'cpython')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(self.python_source_path, 'Include', 'internal', '*.h'))
+        dst = os.path.join(self.prefix, 'include', 'internal')
+        _copy(src, dst)
         src = os.path.join(self.python_source_path, 'PC', 'pyconfig.h')
         _copy(src, dst)
 
