@@ -76,16 +76,30 @@ class PythonPostMake(object):
         self.environ = environ
 
     def make_install(self):
+        self.move_dlls()
+        self.move_libs()
         self.copy_dlls()
-        self.copy_bins()
         self.copy_libs()
+        self.copy_bins()
         self.copy_libffi()
         self.copy_openssl()
         self.copy_headers()
         self.copy_crt()
-        self.move_dlls()
-        self.move_libs()
         self.chmod_dist()
+
+    def move_dlls(self):
+        src = glob.glob(os.path.join(self.prefix, 'bin', '*.dll'))
+        src += glob.glob(os.path.join(self.prefix, 'lib', '*.dll'))
+        src += glob.glob(os.path.join(self.prefix, 'lib', '*.pdb'))
+        src = [dll for dll in src if 'python' not in dll]
+        dst = os.path.join(self.prefix, 'DLLs')
+        _move(src, dst)
+
+    def move_libs(self):
+        src = glob.glob(os.path.join(self.prefix, 'lib', '*.a'))
+        src += glob.glob(os.path.join(self.prefix, 'lib', '*.lib'))
+        dst = os.path.join(self.prefix, 'libs')
+        _move(src, dst)
 
     def copy_dlls(self):
         src = glob.glob(os.path.join(self.pcbuild_path, '*.dll'))
@@ -95,14 +109,6 @@ class PythonPostMake(object):
         src = glob.glob(os.path.join(self.pcbuild_path, 'python*.dll'))
         dst = os.path.join(self.prefix, 'bin')
         _copy(src, dst)
-
-    def move_dlls(self):
-        #src = glob.glob(os.path.join(self.prefix, 'bin', '*.dll'))
-        #src = glob.glob(os.path.join(self.prefix, 'lib', '*.dll'))
-        src = glob.glob(os.path.join(self.prefix, 'lib', '*.pdb'))
-        #src = [dll for dll in src if 'python' not in dll]
-        dst = os.path.join(self.prefix, 'DLLs')
-        _move(src, dst)
 
     def copy_bins(self):
         src = glob.glob(os.path.join(self.pcbuild_path, '*.exe'))
@@ -117,12 +123,6 @@ class PythonPostMake(object):
         src = glob.glob(os.path.join(self.python_source_path, 'lib', '*'))
         dst = os.path.join(self.prefix, 'lib')
         _copy(src, dst)
-
-    def move_libs(self):
-        src = glob.glob(os.path.join(self.prefix, 'lib', '*.a'))
-        src += glob.glob(os.path.join(self.prefix, 'lib', '*.lib'))
-        dst = os.path.join(self.prefix, 'libs')
-        _move(src, dst)
 
     def copy_libffi(self):
         name = 'libffi-3.4.4'
@@ -141,7 +141,7 @@ class PythonPostMake(object):
         name = 'openssl-bin-1.1.1w'
         base = os.path.join(self.externals, name, self.arch)
         src = glob.glob(os.path.join(base, 'include', 'openssl', '*.h'))
-        dst = os.path.join(self.prefix, 'include')
+        dst = os.path.join(self.prefix, 'include', 'openssl')
         _copy(src, dst)
         src = glob.glob(os.path.join(base, '*.lib'))
         dst = os.path.join(self.prefix, 'libs')
