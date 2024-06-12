@@ -83,6 +83,7 @@ class PythonPostMake(object):
         self.copy_bins()
         self.copy_libffi()
         self.copy_openssl()
+        self.copy_sqlite3()
         self.copy_headers()
         self.copy_crt()
         self.chmod_dist()
@@ -148,6 +149,13 @@ class PythonPostMake(object):
         _copy(src, dst)
         src = glob.glob(os.path.join(base, '*.dll'))
         dst = os.path.join(self.prefix, 'DLLs')
+        _copy(src, dst)
+
+    def copy_sqlite3(self):
+        name = 'sqlite-3.45.1.0'
+        base = os.path.join(self.externals, name)
+        src = glob.glob(os.path.join(base, '*.h'))
+        dst = os.path.join(self.prefix, 'include')
         _copy(src, dst)
 
     def copy_headers(self):
