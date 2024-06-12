@@ -1,0 +1,10 @@
+--- Python-3.11.9/Lib/test/test_smtpnet.py	2024-06-12 12:34:47
++++ Python-3.11.9/Lib/test/test_smtpnet.py	2024-06-12 12:35:36
+@@ -25,6 +25,7 @@
+     testServer = 'smtp.gmail.com'
+     remotePort = 587
+ 
++    @unittest.skip('Local network is restricted')
+     def test_connect_starttls(self):
+         support.get_attribute(smtplib, 'SMTP_SSL')
+         context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
