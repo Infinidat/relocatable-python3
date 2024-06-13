@@ -1,318 +1,146 @@
-diff --git a/PCbuild/_bz2.vcxproj b/PCbuild/_bz2.vcxproj
-index 3fe95fbf83..38b49e0fad 100644
---- a/PCbuild/_bz2.vcxproj
-+++ b/PCbuild/_bz2.vcxproj
-@@ -94,7 +94,7 @@
-   </PropertyGroup>
-   <ItemDefinitionGroup>
-     <ClCompile>
--      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-       <DisableSpecificWarnings>4244;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-     </ClCompile>
-@@ -125,4 +125,4 @@
-   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-   <ImportGroup Label="ExtensionTargets">
-   </ImportGroup>
--</Project>
-\ No newline at end of file
-+</Project>
-diff --git a/PCbuild/_lzma.vcxproj b/PCbuild/_lzma.vcxproj
-index fe076a6fc5..a43687acbf 100644
---- a/PCbuild/_lzma.vcxproj
-+++ b/PCbuild/_lzma.vcxproj
-@@ -93,11 +93,11 @@
-   </PropertyGroup>
-   <ItemDefinitionGroup>
-     <ClCompile>
--      <AdditionalIncludeDirectories>$(lzmaDir)src/liblzma/api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-     </ClCompile>
-     <Link>
--      <AdditionalDependencies>$(OutDir)liblzma$(PyDebugExt).lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>$(prefixDir)\lib\liblzma.a;%(AdditionalDependencies)</AdditionalDependencies>
+diff -ur Python-3.11.9.orig/Lib/distutils/_msvccompiler.py Python-3.11.9/Lib/distutils/_msvccompiler.py
+--- Python-3.11.9.orig/Lib/distutils/_msvccompiler.py	2024-04-02 12:25:04
++++ Python-3.11.9/Lib/distutils/_msvccompiler.py	2024-06-12 16:31:22
+@@ -243,20 +243,22 @@
+         # bpo-38597: Always compile with dynamic linking
+         # Future releases of Python 3.x will include all past
+         # versions of vcruntime*.dll for compatibility.
++        # we always want to link statically to runtime so we use /MT[d] and
++        # link against libucrt[d].lib and not ucrt[d].lib
+         self.compile_options = [
+-            '/nologo', '/Ox', '/W3', '/GL', '/DNDEBUG', '/MD'
++            '/nologo', '/Ox', '/W3', '/GL', '/DNDEBUG', '/MT'
+         ]
+ 
+         self.compile_options_debug = [
+-            '/nologo', '/Od', '/MDd', '/Zi', '/W3', '/D_DEBUG'
++            '/nologo', '/Od', '/MTd', '/Zi', '/W3', '/D_DEBUG'
+         ]
+ 
+         ldflags = [
+-            '/nologo', '/INCREMENTAL:NO', '/LTCG'
++            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/nodefaultlib:ucrt.lib', 'libucrt.lib',
+         ]
+ 
+         ldflags_debug = [
+-            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/DEBUG:FULL'
++            '/nologo', '/INCREMENTAL:NO', '/LTCG', '/DEBUG:FULL', '/nodefaultlib:ucrtd.lib', 'libucrtd.lib',
+         ]
+ 
+         self.ldflags_exe = [*ldflags, '/MANIFEST:EMBED,ID=1']
+diff -ur Python-3.11.9.orig/Lib/test/test_getpath.py Python-3.11.9/Lib/test/test_getpath.py
+--- Python-3.11.9.orig/Lib/test/test_getpath.py	2024-04-02 12:25:04
++++ Python-3.11.9/Lib/test/test_getpath.py	2024-06-12 16:31:31
+@@ -109,6 +109,7 @@
+         actual = getpath(ns, expected)
+         self.assertEqual(expected, actual)
+ 
++    @unittest.skip('HOSTDEV-3483')
+     def test_registry_win32(self):
+         """Test registry lookup on Windows.
+ 
+diff -ur Python-3.11.9.orig/Lib/test/test_smtpnet.py Python-3.11.9/Lib/test/test_smtpnet.py
+--- Python-3.11.9.orig/Lib/test/test_smtpnet.py	2024-04-02 12:25:04
++++ Python-3.11.9/Lib/test/test_smtpnet.py	2024-06-12 16:33:08
+@@ -25,6 +25,7 @@
+     testServer = 'smtp.gmail.com'
+     remotePort = 587
+ 
++    @unittest.skip('HOSTDEV-3483')
+     def test_connect_starttls(self):
+         support.get_attribute(smtplib, 'SMTP_SSL')
+         context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+diff -ur Python-3.11.9.orig/Modules/getpath.py Python-3.11.9/Modules/getpath.py
+--- Python-3.11.9.orig/Modules/getpath.py	2024-04-02 12:25:04
++++ Python-3.11.9/Modules/getpath.py	2024-06-12 16:31:31
+@@ -673,36 +673,6 @@
+     else:
+         pythonpath.append(joinpath(prefix, ZIP_LANDMARK))
+ 
+-    if os_name == 'nt' and use_environment and winreg:
+-        # QUIRK: Windows also lists paths in the registry. Paths are stored
+-        # as the default value of each subkey of
+-        # {HKCU,HKLM}\Software\Python\PythonCore\{winver}\PythonPath
+-        # where winver is sys.winver (typically '3.x' or '3.x-32')
+-        for hk in (winreg.HKEY_CURRENT_USER, winreg.HKEY_LOCAL_MACHINE):
+-            try:
+-                key = winreg.OpenKeyEx(hk, WINREG_KEY)
+-                try:
+-                    i = 0
+-                    while True:
+-                        try:
+-                            v = winreg.QueryValue(key, winreg.EnumKey(key, i))
+-                        except OSError:
+-                            break
+-                        if isinstance(v, str):
+-                            pythonpath.extend(v.split(DELIM))
+-                        i += 1
+-                    # Paths from the core key get appended last, but only
+-                    # when home was not set and we haven't found our stdlib
+-                    # some other way.
+-                    if not home and not stdlib_dir:
+-                        v = winreg.QueryValue(key, None)
+-                        if isinstance(v, str):
+-                            pythonpath.extend(v.split(DELIM))
+-                finally:
+-                    winreg.CloseKey(key)
+-            except OSError:
+-                pass
+-
+     # Then add any entries compiled into the PYTHONPATH macro.
+     if PYTHONPATH:
+         for p in PYTHONPATH.split(DELIM):
+diff -ur Python-3.11.9.orig/PCbuild/get_externals.bat Python-3.11.9/PCbuild/get_externals.bat
+--- Python-3.11.9.orig/PCbuild/get_externals.bat	2024-04-02 12:25:04
++++ Python-3.11.9/PCbuild/get_externals.bat	2024-06-12 16:31:13
+@@ -53,7 +53,7 @@
+ set libraries=
+ set libraries=%libraries%                                       bzip2-1.0.8
+ if NOT "%IncludeLibffiSrc%"=="false" set libraries=%libraries%  libffi-3.4.4
+-if NOT "%IncludeSSLSrc%"=="false" set libraries=%libraries%     openssl-3.0.13
++if NOT "%IncludeSSLSrc%"=="false" set libraries=%libraries%     openssl-1.1.1w
+ set libraries=%libraries%                                       sqlite-3.45.1.0
+ if NOT "%IncludeTkinterSrc%"=="false" set libraries=%libraries% tcl-core-8.6.12.1
+ if NOT "%IncludeTkinterSrc%"=="false" set libraries=%libraries% tk-8.6.12.1
+@@ -77,7 +77,7 @@
+ 
+ set binaries=
+ if NOT "%IncludeLibffi%"=="false"  set binaries=%binaries% libffi-3.4.4
+-if NOT "%IncludeSSL%"=="false"     set binaries=%binaries% openssl-bin-3.0.13
++if NOT "%IncludeSSL%"=="false"     set binaries=%binaries% openssl-bin-1.1.1w
+ if NOT "%IncludeTkinter%"=="false" set binaries=%binaries% tcltk-8.6.12.1
+ if NOT "%IncludeSSLSrc%"=="false"  set binaries=%binaries% nasm-2.11.06
+ 
+diff -ur Python-3.11.9.orig/PCbuild/openssl.props Python-3.11.9/PCbuild/openssl.props
+--- Python-3.11.9.orig/PCbuild/openssl.props	2024-04-02 12:25:04
++++ Python-3.11.9/PCbuild/openssl.props	2024-06-12 16:31:13
+@@ -10,7 +10,7 @@
      </Link>
    </ItemDefinitionGroup>
-   <ItemGroup>
-@@ -111,10 +111,6 @@
-       <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
-       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-     </ProjectReference>
--    <ProjectReference Include="liblzma.vcxproj">
--      <Project>{12728250-16eC-4dc6-94d7-e21dd88947f8}</Project>
--      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
--    </ProjectReference>
-   </ItemGroup>
-   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-   <ImportGroup Label="ExtensionTargets">
-diff --git a/PCbuild/_ssl.vcxproj b/PCbuild/_ssl.vcxproj
-index 226ff506f8..da70cda35c 100644
---- a/PCbuild/_ssl.vcxproj
-+++ b/PCbuild/_ssl.vcxproj
-@@ -99,7 +99,7 @@
-   </ItemDefinitionGroup>
-   <ItemGroup>
-     <ClCompile Include="..\Modules\_ssl.c" />
--    <ClCompile Include="$(opensslIncludeDir)\applink.c">
-+    <ClCompile Include="$(opensslDir)\ms\applink.c">
-       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;$(PreprocessorDefinitions)</PreprocessorDefinitions>
-     </ClCompile>
-   </ItemGroup>
-diff --git a/PCbuild/_ssl.vcxproj.filters b/PCbuild/_ssl.vcxproj.filters
-index 716a69a41a..a7db707e71 100644
---- a/PCbuild/_ssl.vcxproj.filters
-+++ b/PCbuild/_ssl.vcxproj.filters
-@@ -12,7 +12,7 @@
-     <ClCompile Include="..\Modules\_ssl.c">
-       <Filter>Source Files</Filter>
-     </ClCompile>
--    <ClCompile Include="$(opensslIncludeDir)\applink.c">
-+    <ClCompile Include="$(opensslDir)\ms\applink.c">
-       <Filter>Source Files</Filter>
-     </ClCompile>
-   </ItemGroup>
-@@ -21,4 +21,4 @@
-       <Filter>Resource Files</Filter>
-     </ResourceCompile>
-   </ItemGroup>
--</Project>
-\ No newline at end of file
-+</Project>
-diff --git a/PCbuild/_tkinter.vcxproj b/PCbuild/_tkinter.vcxproj
-index 30cedcbb43..c46d022b1e 100644
---- a/PCbuild/_tkinter.vcxproj
-+++ b/PCbuild/_tkinter.vcxproj
-@@ -93,12 +93,12 @@
-   </PropertyGroup>
-   <ItemDefinitionGroup>
-     <ClCompile>
--      <AdditionalIncludeDirectories>$(tcltkDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
--      <PreprocessorDefinitions>WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-+      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <PreprocessorDefinitions>TCL_USE_STATIC_PACKAGES;STATIC_BUILD;WITH_APPINIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-       <PreprocessorDefinitions Condition="'$(BuildForRelease)' != 'true'">Py_TCLTK_DIR="$(tcltkDir.TrimEnd('\').Replace('\', '\\'))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-     </ClCompile>
-     <Link>
--      <AdditionalDependencies>$(tcltkLib);%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>$(tcltkLib);netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-     </Link>
-   </ItemDefinitionGroup>
-   <ItemGroup>
-@@ -122,16 +122,10 @@
-   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-   <ImportGroup Label="ExtensionTargets">
-   </ImportGroup>
--  <Target Name="_CopyTclTkDLL" Inputs="@(_TclTkDLL)" Outputs="@(_TclTkDLL->'$(OutDir)%(Filename)%(Extension)')" AfterTargets="Build">
--    <Copy SourceFiles="@(_TclTkDLL)" DestinationFolder="$(OutDir)" UseHardlinksIfPossible="true" />
--  </Target>
--  <Target Name="_CleanTclTkDLL" BeforeTargets="Clean">
--    <Delete Files="@(_TclTkDLL->'$(OutDir)%(Filename)%(Extension)')" />
--  </Target>
-   <Target Name="_WriteTCL_LIBRARY" Outputs="$(OutDir)TCL_LIBRARY.env" AfterTargets="Build">
-     <WriteLinesToFile File="$(OutDir)TCL_LIBRARY.env" Lines="$(tcltkdir)\lib\tcl$(TclMajorVersion).$(TclMinorVersion)" Encoding="utf-8" Overwrite="true" />
-   </Target>
-   <Target Name="_CleanTCL_LIBRARY" BeforeTargets="Clean">
-     <Delete Files="$(OutDir)TCL_LIBRARY.env" />
-   </Target>
--</Project>
-\ No newline at end of file
-+</Project>
-diff --git a/PCbuild/openssl.props b/PCbuild/openssl.props
-index 5fd708b211..15c496480f 100644
---- a/PCbuild/openssl.props
-+++ b/PCbuild/openssl.props
-@@ -2,33 +2,11 @@
- <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-   <ItemDefinitionGroup>
-     <ClCompile>
--      <AdditionalIncludeDirectories>$(opensslIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-+      <AdditionalIncludeDirectories>$(prefixDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-     </ClCompile>
-     <Link>
--      <AdditionalLibraryDirectories>$(opensslOutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
--      <AdditionalDependencies>ws2_32.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalLibraryDirectories>$(prefixDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-+      <AdditionalDependencies>ws2_32.lib;crypt32.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-     </Link>
-   </ItemDefinitionGroup>
--  <PropertyGroup>
+   <PropertyGroup>
 -    <_DLLSuffix>-3</_DLLSuffix>
--    <_DLLSuffix Condition="$(Platform) == 'ARM'">$(_DLLSuffix)-arm</_DLLSuffix>
--    <_DLLSuffix Condition="$(Platform) == 'ARM64'">$(_DLLSuffix)-arm64</_DLLSuffix>
--    <OpenSSLDLLSuffix Condition="$(OpenSSLDLLSuffix) == ''">$(_DLLSuffix)</OpenSSLDLLSuffix>
--  </PropertyGroup>
--  <ItemGroup>
--    <_SSLDLL Include="$(opensslOutDir)\libcrypto$(_DLLSuffix).dll" />
--    <_SSLDLL Include="$(opensslOutDir)\libcrypto$(_DLLSuffix).pdb" />
--    <_SSLDLL Include="$(opensslOutDir)\libssl$(_DLLSuffix).dll" />
--    <_SSLDLL Include="$(opensslOutDir)\libssl$(_DLLSuffix).pdb" />
--  </ItemGroup>
--  <Target Name="_CopySSLDLL"
--          Inputs="@(_SSLDLL)"
--          Outputs="@(_SSLDLL->'$(OutDir)%(Filename)%(Extension)')"
--          Condition="$(SkipCopySSLDLL) == ''"
--          AfterTargets="Build">
--    <Copy SourceFiles="@(_SSLDLL)" DestinationFolder="$(OutDir)" />
--  </Target>
--  <Target Name="_CleanSSLDLL" Condition="$(SkipCopySSLDLL) == ''" BeforeTargets="Clean">
--    <Delete Files="@(_SSLDLL->'$(OutDir)%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
--  </Target>
- </Project>
-diff --git a/PCbuild/pyproject.props b/PCbuild/pyproject.props
-index 056ab2b3b6..f78a285448 100644
---- a/PCbuild/pyproject.props
-+++ b/PCbuild/pyproject.props
-@@ -5,7 +5,7 @@
-     <__PyProject_Props_Imported>true</__PyProject_Props_Imported>
-     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
--    <OutDir>$(BuildPath)</OutDir>
-+    <OutDir>$(SolutionDir)</OutDir>
-     <OutDir Condition="!HasTrailingSlash($(OutDir))">$(OutDir)\</OutDir>
-     <Py_IntDir Condition="'$(Py_IntDir)' == ''">$(MSBuildThisFileDirectory)obj\</Py_IntDir>
-     <IntDir>$(Py_IntDir)\$(MajorVersionNumber)$(MinorVersionNumber)$(ArchName)_$(Configuration)\$(ProjectName)\</IntDir>
-@@ -172,11 +172,10 @@ public override bool Execute() {
- 
-   <Target Name="CopyPGCFiles" BeforeTargets="PrepareForBuild" Condition="$(Configuration) == 'PGUpdate'">
-     <ItemGroup>
--      <_PGCFiles Include="$(OutDir)instrumented\$(TargetName)!*.pgc" />
--      <_PGDFile Include="$(OutDir)instrumented\$(TargetName).pgd" />
-+      <_PGCFiles Include="$(OutDir)$(TargetName)!*.pgc" />
-+      <_PGDFile Include="$(OutDir)$(TargetName).pgd" />
-       <_CopyFiles Include="@(_PGCFiles);@(_PGDFile)" Condition="Exists(%(FullPath))" />
-     </ItemGroup>
--    <Delete Files="@(_CopyFiles->'$(OutDir)%(Filename)%(Extension)')" />
-     <Error Text="PGO run did not succeed (no $(TargetName)!*.pgc files) and there is no data to merge"
-            Condition="$(RequirePGCFiles) == 'true' and @(_PGCFiles) == ''" />
-     <Copy SourceFiles="@(_CopyFiles)"
-diff --git a/PCbuild/python.props b/PCbuild/python.props
-index 496bc3dd4c..d26f03ce51 100644
---- a/PCbuild/python.props
-+++ b/PCbuild/python.props
-@@ -31,11 +31,11 @@
-     <ArchName Condition="'$(ArchName)' == '' and $(Platform) == 'ARM'">arm32</ArchName>
-     <ArchName Condition="'$(ArchName)' == '' and $(Platform) == 'ARM64'">arm64</ArchName>
-     <ArchName Condition="'$(ArchName)' == ''">win32</ArchName>
--    
-+
-     <!-- Root directory of the repository -->
-     <PySourcePath Condition="'$(PySourcePath)' == ''">$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)\..\))</PySourcePath>
-     <PySourcePath Condition="!HasTrailingSlash($(PySourcePath))">$(PySourcePath)\</PySourcePath>
--    
-+
-     <!-- Directory where build outputs are put -->
-     <BuildPath32 Condition="'$(Py_OutDir)' == ''">$(PySourcePath)PCbuild\win32\</BuildPath32>
-     <BuildPath32 Condition="'$(Py_OutDir)' != ''">$(Py_OutDir)\win32\</BuildPath32>
-@@ -68,17 +68,17 @@
-   <Import Project="$(ExternalProps)" Condition="$(ExternalProps) != '' and Exists('$(ExternalProps)')" />
- 
-   <PropertyGroup>
--    <sqlite3Dir Condition="$(sqlite3Dir) == ''">$(ExternalsDir)sqlite-3.43.1.0\</sqlite3Dir>
--    <bz2Dir Condition="$(bz2Dir) == ''">$(ExternalsDir)bzip2-1.0.8\</bz2Dir>
--    <lzmaDir Condition="$(lzmaDir) == ''">$(ExternalsDir)xz-5.2.5\</lzmaDir>
--    <libffiDir Condition="$(libffiDir) == ''">$(ExternalsDir)libffi-3.4.4\</libffiDir>
--    <libffiOutDir Condition="$(libffiOutDir) == ''">$(libffiDir)$(ArchName)\</libffiOutDir>
--    <libffiIncludeDir Condition="$(libffiIncludeDir) == ''">$(libffiOutDir)include</libffiIncludeDir>
--    <opensslDir Condition="$(opensslDir) == ''">$(ExternalsDir)openssl-3.0.11\</opensslDir>
--    <opensslOutDir Condition="$(opensslOutDir) == ''">$(ExternalsDir)openssl-bin-3.0.11\$(ArchName)\</opensslOutDir>
--    <opensslIncludeDir Condition="$(opensslIncludeDir) == ''">$(opensslOutDir)include</opensslIncludeDir>
--    <nasmDir Condition="$(nasmDir) == ''">$(ExternalsDir)\nasm-2.11.06\</nasmDir>
--    <zlibDir Condition="$(zlibDir) == ''">$(ExternalsDir)\zlib-1.2.13\</zlibDir>
-+    <prefixDir>..\..\..\..\dist</prefixDir>
-+    <partsDir>..\..\..</partsDir>
-+    <sqlite3Dir>$(partsDir)\sqlite3__compile__\sqlite-autoconf-3380500</sqlite3Dir>
-+    <bz2Dir>$(partsDir)\bzip2__compile__\bzip2-1.0.6</bz2Dir>
-+    <lzmaDir>$(prefixDir)</lzmaDir>
-+    <libffiDir>$(partsDir)\libffi__compile__\libffi</libffiDir>
-+    <libffiOutDir>$(prefixDir)\lib</libffiOutDir>
-+    <libffiIncludeDir>$(prefixDir)\include</libffiIncludeDir>
-+    <opensslDir>$(partsDir)\openssl__compile__\openssl-1.1.1l</opensslDir>
-+    <opensslIncludeDir>$(prefixDir)\include</opensslIncludeDir>
-+    <zlibDir>$(partsDir)/zlib__compile__/zlib-1.2.8</zlibDir>
-   </PropertyGroup>
- 
-   <PropertyGroup>
-@@ -121,7 +121,7 @@
-     <_RegistryVersion Condition="$(_RegistryVersion) != '' and !$(_RegistryVersion.EndsWith('.0'))">$(_RegistryVersion).0</_RegistryVersion>
- 
-     <!-- The minimum allowed SDK version to use for building -->
--    <DefaultWindowsSDKVersion>10.0.10586.0</DefaultWindowsSDKVersion>
-+    <DefaultWindowsSDKVersion>10.0.17763.0</DefaultWindowsSDKVersion>
-     <DefaultWindowsSDKVersion Condition="$(_RegistryVersion) != '' and $([System.Version]::Parse($(_RegistryVersion))) > $([System.Version]::Parse($(DefaultWindowsSDKVersion)))">$(_RegistryVersion)</DefaultWindowsSDKVersion>
-   </PropertyGroup>
- 
-@@ -141,7 +141,7 @@
-   <PropertyGroup Condition="'$(OverrideVersion)' == ''">
-     <!--
-     Read version information from Include\patchlevel.h. The following properties are set:
--    
-+
-         MajorVersionNumber  -   the '3' in '3.5.2a1'
-         MinorVersionNumber  -   the '5' in '3.5.2a1'
-         MicroVersionNumber  -   the '2' in '3.5.2a1'
-@@ -167,22 +167,22 @@
-     <ReleaseLevelName Condition="$(_ReleaseLevel) == 'BETA'">b$(ReleaseSerial)</ReleaseLevelName>
-     <ReleaseLevelName Condition="$(_ReleaseLevel) == 'GAMMA'">rc$(ReleaseSerial)</ReleaseLevelName>
-   </PropertyGroup>
--  
-+
-   <PropertyGroup Condition="'$(OverrideVersion)' != ''">
-     <!--
-     Override the version number when building by specifying OverrideVersion.
-     For example:
--    
-+
-         PCbuild\build.bat "/p:OverrideVersion=3.5.2a1"
--    
-+
-     Use the -V option to check your version is valid:
--    
-+
-         PCbuild\build.bat -V "/p:OverrideVersion=3.5.2a1"
-           PythonVersionNumber: 3.5.2
-           PythonVersion:       3.5.2a1
-           PythonVersionHex:    0x030502A1
-           Field3Value:         2101
--    
-+
-     Note that this only affects the version numbers embedded in resources and
-     installers, but not sys.version.
-     -->
-@@ -234,11 +234,11 @@
-     <PydTag Condition="$(ArchName) == 'arm32'">.cp$(MajorVersionNumber)$(MinorVersionNumber)-win_arm32</PydTag>
-     <PydTag Condition="$(ArchName) == 'arm64'">.cp$(MajorVersionNumber)$(MinorVersionNumber)-win_arm64</PydTag>
-     <PydTag Condition="$(ArchName) == 'amd64'">.cp$(MajorVersionNumber)$(MinorVersionNumber)-win_amd64</PydTag>
--    
-+
-     <!-- The version number for sys.winver -->
-     <SysWinVer>$(MajorVersionNumber).$(MinorVersionNumber)$(PyArchExt)$(PyTestExt)</SysWinVer>
-   </PropertyGroup>
--  
-+
-   <!-- Displays the calculated version info -->
-   <Target Name="ShowVersionInfo">
-     <Message Importance="high" Text="PythonVersionNumber: $(PythonVersionNumber)" />
-diff --git a/PCbuild/sqlite3.vcxproj b/PCbuild/sqlite3.vcxproj
-index c502d51833..405b4f02a4 100644
---- a/PCbuild/sqlite3.vcxproj
-+++ b/PCbuild/sqlite3.vcxproj
-@@ -88,12 +88,11 @@
-   <PropertyGroup Label="UserMacros" />
-   <PropertyGroup>
-     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
--    <_SqliteVersion>$([System.Text.RegularExpressions.Regex]::Match(`$(sqlite3Dir)`, `((\d+)\.(\d+)\.(\d+)\.(\d+))\\?$`).Groups)</_SqliteVersion>
--    <SqliteVersion>$(_SqliteVersion.Split(`;`)[1])</SqliteVersion>
--    <SqliteMajorVersion>$(_SqliteVersion.Split(`;`)[2])</SqliteMajorVersion>
--    <SqliteMinorVersion>$(_SqliteVersion.Split(`;`)[3])</SqliteMinorVersion>
--    <SqliteMicroVersion>$(_SqliteVersion.Split(`;`)[4])</SqliteMicroVersion>
--    <SqlitePatchVersion>$(_SqliteVersion.Split(`;`)[5])</SqlitePatchVersion>
-+    <SqliteVersion>3.7.6.2</SqliteVersion>
-+    <SqliteMajorVersion>3</SqliteMajorVersion>
-+    <SqliteMinorVersion>7</SqliteMinorVersion>
-+    <SqliteMicroVersion>6</SqliteMicroVersion>
-+    <SqlitePatchVersion>2</SqlitePatchVersion>
-   </PropertyGroup>
-   <ItemDefinitionGroup>
-     <ClCompile>
++    <_DLLSuffix>-1_1</_DLLSuffix>
+     <_DLLSuffix Condition="$(Platform) == 'ARM'">$(_DLLSuffix)-arm</_DLLSuffix>
+     <_DLLSuffix Condition="$(Platform) == 'ARM64'">$(_DLLSuffix)-arm64</_DLLSuffix>
+     <OpenSSLDLLSuffix Condition="$(OpenSSLDLLSuffix) == ''">$(_DLLSuffix)</OpenSSLDLLSuffix>
+@@ -31,4 +31,4 @@
+   <Target Name="_CleanSSLDLL" Condition="$(SkipCopySSLDLL) == ''" BeforeTargets="Clean">
+     <Delete Files="@(_SSLDLL->'$(OutDir)%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
+   </Target>
+-</Project>
+\ No newline at end of file
++</Project>
+diff -ur Python-3.11.9.orig/PCbuild/python.props Python-3.11.9/PCbuild/python.props
+--- Python-3.11.9.orig/PCbuild/python.props	2024-04-02 12:25:04
++++ Python-3.11.9/PCbuild/python.props	2024-06-12 16:31:13
+@@ -74,8 +74,8 @@
+     <libffiDir Condition="$(libffiDir) == ''">$(ExternalsDir)libffi-3.4.4\</libffiDir>
+     <libffiOutDir Condition="$(libffiOutDir) == ''">$(libffiDir)$(ArchName)\</libffiOutDir>
+     <libffiIncludeDir Condition="$(libffiIncludeDir) == ''">$(libffiOutDir)include</libffiIncludeDir>
+-    <opensslDir Condition="$(opensslDir) == ''">$(ExternalsDir)openssl-3.0.13\</opensslDir>
+-    <opensslOutDir Condition="$(opensslOutDir) == ''">$(ExternalsDir)openssl-bin-3.0.13\$(ArchName)\</opensslOutDir>
++    <opensslDir Condition="$(opensslDir) == ''">$(ExternalsDir)openssl-1.1.1w\</opensslDir>
++    <opensslOutDir Condition="$(opensslOutDir) == ''">$(ExternalsDir)openssl-bin-1.1.1w\$(ArchName)\</opensslOutDir>
+     <opensslIncludeDir Condition="$(opensslIncludeDir) == ''">$(opensslOutDir)include</opensslIncludeDir>
+     <nasmDir Condition="$(nasmDir) == ''">$(ExternalsDir)\nasm-2.11.06\</nasmDir>
+     <zlibDir Condition="$(zlibDir) == ''">$(ExternalsDir)\zlib-1.3.1\</zlibDir>
