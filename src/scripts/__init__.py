@@ -5,7 +5,6 @@ import platform
 import subprocess
 from infi.execute import execute_assert_success
 
-
 def test():
     from logging import basicConfig, getLogger, DEBUG
     from os import path, name
