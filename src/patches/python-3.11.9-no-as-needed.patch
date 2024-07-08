@@ -1,0 +1,11 @@
+--- Python-3.11.9/configure
++++ Python-3.11.9/configure
+@@ -6310,7 +6310,7 @@ if ${ac_cv_wl_no_as_needed+:} false; then :
+ else
+ 
+   save_LDFLAGS="$LDFLAGS"
+-  as_fn_append LDFLAGS -Wl,--no-as-needed
++  as_fn_append LDFLAGS " -Wl,--no-as-needed"
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 

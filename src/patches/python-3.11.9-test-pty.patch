@@ -1,0 +1,18 @@
+--- Python-3.11.9/Lib/test/test_pty.py	2024-04-06 21:17:23.525103762 -0500
++++ Python-3.11.9/Lib/test/test_pty.py	2024-04-06 21:19:26.674630655 -0500
+@@ -191,6 +191,7 @@
+         s2 = _readline(master_fd)
+         self.assertEqual(b'For my pet fish, Eric.\n', normalize_output(s2))
+ 
++    @unittest.skipIf(sys.platform == 'aix', 'https://bugs.python.org/issue45200')
+     def test_fork(self):
+         debug("calling pty.fork()")
+         pid, master_fd = pty.fork()
+@@ -292,6 +293,7 @@
+ 
+         self.assertEqual(data, b"")
+ 
++    @unittest.skipIf(sys.platform == 'aix', 'https://bugs.python.org/issue45223')
+     def test_spawn_doesnt_hang(self):
+         self.addCleanup(unlink, TESTFN)
+         with open(TESTFN, 'wb') as f:

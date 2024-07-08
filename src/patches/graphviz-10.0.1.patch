@@ -1,0 +1,11 @@
+--- graphviz-10.0.1/lib/cgraph/alloc.h	2024-06-15 02:00:56.401564777 +0300
++++ graphviz-10.0.1/lib/cgraph/alloc.h	2024-06-15 02:02:15.835583642 +0300
+@@ -115,7 +115,7 @@
+   char *copy;
+ 
+ // non-Cygwin Windows environments do not provide strndup
+-#if defined(_MSC_VER) || defined(__MINGW32__)
++#if defined(_MSC_VER) || defined(__MINGW32__) || defined(sun) || defined(__sun)
+ 
+   // does the string end before the given length?
+   {

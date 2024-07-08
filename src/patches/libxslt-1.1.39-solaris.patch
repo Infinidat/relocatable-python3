@@ -1,0 +1,11 @@
+--- libxslt-1.1.39/configure	2024-06-15 01:14:37.935597747 +0300
++++ libxslt-1.1.39/configure	2024-06-15 01:16:02.661558872 +0300
+@@ -14602,7 +14602,7 @@
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $VERSION_SCRIPT_FLAGS" >&5
+ printf "%s\n" "$VERSION_SCRIPT_FLAGS" >&6; }
+ 
+- if test "$VERSION_SCRIPT_FLAGS" != none; then
++ if test -n "$VERSION_SCRIPT_PATH" && test "$VERSION_SCRIPT_FLAGS" != none; then
+   USE_VERSION_SCRIPT_TRUE=
+   USE_VERSION_SCRIPT_FALSE='#'
+ else

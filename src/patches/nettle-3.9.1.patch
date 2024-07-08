@@ -1,0 +1,33 @@
+--- nettle-3.9.1/configure	2024-04-04 10:37:18.259450946 -0500
++++ nettle-3.9.1/configure	2024-04-04 10:43:20.985190297 -0500
+@@ -7178,6 +7178,19 @@
+     LIBHOGWEED_LINK='$(CC) $(CFLAGS) $(LDFLAGS) --shared -h $(LIBHOGWEED_SONAME)'
+     LIBHOGWEED_LIBS='libnettle.so $(LIBS)'
+     ;;
++  aix*)
++    LIBNETTLE_FORLINK=libnettle.so
++    LIBNETTLE_SONAME='$(LIBNETTLE_FORLINK).$(LIBNETTLE_MAJOR)'
++    LIBNETTLE_FILE='$(LIBNETTLE_SONAME).$(LIBNETTLE_MINOR)'
++    LIBNETTLE_LINK='$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-G'
++    LIBNETTLE_LIBS=''
++
++    LIBHOGWEED_FORLINK=libhogweed.so
++    LIBHOGWEED_SONAME='$(LIBHOGWEED_FORLINK).$(LIBHOGWEED_MAJOR)'
++    LIBHOGWEED_FILE='$(LIBHOGWEED_SONAME).$(LIBHOGWEED_MINOR)'
++    LIBHOGWEED_LINK='$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-G'
++    LIBHOGWEED_LIBS='libnettle.so $(LIBS)'
++    ;;
+   *)
+     LIBNETTLE_FORLINK=libnettle.so
+     LIBNETTLE_SONAME='$(LIBNETTLE_FORLINK).$(LIBNETTLE_MAJOR)'
+--- nettle-3.9.1/Makefile.in	2023-10-04 15:39:38.479802689 -0500
++++ nettle-3.9.1/Makefile.in	2023-10-04 15:42:05.896248874 -0500
+@@ -492,7 +492,7 @@
+ 
+ install-static: $(LIBTARGETS)
+ 	$(MKDIR_P) $(DESTDIR)$(libdir)
+-	for f in $(LIBTARGETS); do \
++	test -z "$(LIBTARGETS)" || for f in "$(LIBTARGETS)"; do \
+ 	  $(INSTALL_DATA) $$f $(DESTDIR)$(libdir) ; \
+ 	done
+ 

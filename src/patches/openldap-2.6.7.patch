@@ -1,0 +1,22 @@
+--- openldap-2.6.7/build/top.mk	2023-10-07 06:51:21.629931921 -0500
++++ openldap-2.6.7/build/top.mk	2023-10-07 06:51:34.211116923 -0500
+@@ -20,7 +20,7 @@
+ RELEASEDATE= @OPENLDAP_RELEASE_DATE@
+ 
+ @SET_MAKE@
+-SHELL = /bin/sh
++SHELL = /bin/bash
+ 
+ top_builddir = @top_builddir@
+ 
+--- openldap-2.6.7/configure	2024-01-14 20:45:58.926270258 -0600
++++ openldap-2.6.7/configure	2024-01-14 20:46:16.662704230 -0600
+@@ -27200,7 +27200,7 @@
+ # ### BEGIN LIBTOOL CONFIG
+ 
+ # Whether or not to build static libraries.
+-build_old_libs=$enable_static
++build_old_libs=no
+ 
+ # Whether or not to build shared libraries.
+ build_libtool_libs=$enable_shared

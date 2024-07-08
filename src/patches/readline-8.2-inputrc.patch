@@ -1,0 +1,11 @@
+--- readline-8.2/rlconf.h	2017-02-21 09:25:30.000000000 -0600
++++ readline-8.2/rlconf.h	2024-04-30 14:04:54.613821305 -0500
+@@ -43,7 +43,7 @@
+ #define DEFAULT_INPUTRC "~/.inputrc"
+ 
+ /* The ultimate last-ditch filename for an init file -- system-wide. */
+-#define SYS_INPUTRC "/etc/inputrc"
++#define SYS_INPUTRC "~/.inputrc"
+ 
+ /* If defined, expand tabs to spaces. */
+ #define DISPLAY_TABS

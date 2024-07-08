@@ -1,23 +1,18 @@
-make:
-	pip install zc.buildout distro
-	pip install setuptools==49.2.1 --upgrade -i https://pypi.org/simple
+PREFIX  = /opt/infinidat
+TOOLKIT = $(PREFIX)/toolkit
+
+export PATH = $(TOOLKIT)/bin:/bin:/usr/bin:/sbin:/usr/sbin
+export SSL_CERT_FILE = $(TOOLKIT)/etc/ssl/certs/ca-bundle.crt
+
+all: build pack
+
+build:
+	uname -a
+	echo PATH=$(PATH)
+	python --version
 	buildout bootstrap
 	bin/buildout
 	bin/build
 
 pack:
 	bin/pack
-
-test:
-ifneq ("$(wildcard dist/bin/python.exe)","")
-	dist/bin/python.exe tests/test_ssl.py
-	dist/bin/python.exe tests/test_dynload_imports.py
-	dist/bin/python.exe tests/test_readline.py
-	dist/bin/python.exe tests/test_subprocess.py
-else
-	dist/bin/python3 tests/test_ssl.py
-	dist/bin/python3 tests/test_dynload_imports.py
-	dist/bin/python3 tests/test_readline.py
-	dist/bin/python3 tests/test_subprocess.py
-endif
-

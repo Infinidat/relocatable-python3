@@ -1,156 +1,190 @@
 from __future__ import print_function
-import os
-import subprocess
-from os import path
 import glob
-import shutil
+import os
+import posixpath
 
-def _execute(cmd, env):
-    process = subprocess.Popen(cmd.split(), env=env)
-    return process.wait()
+def _convert(text):
+    return text.replace(os.path.sep, posixpath.sep)
 
-def _xz_post_make(environ, platform):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    os.system('cp -fvr include/* %s/include' % prefix)
-    os.system('cp -fvr bin_%s/*a %s/lib' % (platform, prefix))
-    os.system('cp -fvr bin_%s/*dll %s/bin' % (platform, prefix))
+def _system(cmd):
+    cmd = _convert(cmd)
+    print('==>', cmd)
+    os.system(cmd)
+
+def _mkdir(path):
+    _system('install -v -d "%s"' % path)
+
+def _todo(act, src, dst):
+    if isinstance(src, str):
+        _system('%s "%s" "%s"' % (act, src, dst))
+    elif isinstance(src, (list, tuple)):
+        _mkdir(dst)
+        for item in src:
+            _system('%s "%s" "%s"' % (act, item, dst))
+    else:
+        raise Exception('Unexpected source type %s' % type(src))
+
+def _copy(src, dst):
+    _todo('cp -f -r -v', src, dst)
+
+def _move(src, dst):
+    _todo('mv -f -v', src, dst)
 
 def xz_post_make(options, buildout, environ):
-    _xz_post_make(environ, "x86-64")
-
-def _libiconv_post_make(platform_name, prefix):
-    import os
-    os.system('cp -fvr include/*h %s/include' % prefix)
-    os.system('cp -fvr build-VS2017/%s/Release/*lib %s/lib' % (platform_name, prefix))
-    os.system('cp -fvr build-VS2017/%s/Release/*dll %s/lib' % (platform_name, prefix))
-    os.system('cp -fvr build-VS2017/%s/Release/*exe %s/bin' % (platform_name, prefix))
-    os.system('cp -fvr %s/lib/libiconv.lib %s/lib/iconv.lib' % (prefix, prefix))
+    prefix = environ['PREFIX']
+    suffix = 'bin_x86-64'
+    _copy(glob.glob(os.path.join('include', '*.h')),
+          os.path.join(prefix, 'include'))
+    _copy(glob.glob(os.path.join('include', 'lzma', '*.h')),
+          os.path.join(prefix, 'include', 'lzma'))
+    _copy(glob.glob(os.path.join(suffix, '*.a')),
+          os.path.join(prefix, 'lib'))
+    _copy(glob.glob(os.path.join(suffix, '*.dll')),
+          os.path.join(prefix, 'bin'))
 
 def libiconv_post_make(options, buildout, environ):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    _libiconv_post_make('x64', prefix)
+    prefix = environ['PREFIX']
+    suffix = os.path.join('build-VS2017', 'x64', 'Release')
+    _copy(glob.glob(os.path.join('include', '*.h')),
+          os.path.join(prefix, 'include'))
+    _copy(glob.glob(os.path.join(suffix, '*.dll')),
+          os.path.join(prefix, 'lib'))
+    _copy(glob.glob(os.path.join(suffix, '*.lib')),
+          os.path.join(prefix, 'lib'))
+    _copy(os.path.join(suffix, 'libiconv.lib'),
+          os.path.join(prefix, 'lib', 'iconv.lib'))
+    _copy(glob.glob(os.path.join(suffix, '*.exe')),
+          os.path.join(prefix, 'bin'))
 
-def _libffi_post_make(platform_name, prefix):
-    import os
-    # libffi-python runs from Python source
-    python_source_path = path.abspath(path.join(os.curdir, path.pardir))
-    os.system('cp -fvr %s/externals/libffi/%s/include/*h %s/include' % (python_source_path, platform_name, prefix))
-    os.system('cp -fvr %s/externals/libffi/%s/*lib %s/lib' % (python_source_path, platform_name, prefix))
-    os.system('cp -fvr %s/externals/libffi/%s/*dll %s/lib' % (python_source_path, platform_name, prefix))
-
-def libffi_post_make(options, buildout, environ):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    _libffi_post_make('amd64', prefix)
-
-def tcl_post_make(options, buildout, environ):
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    os.system('chmod -R 744 %s/lib/tcl8.6/tzdata' % prefix)
-    os.system('chmod -R 744 %s/lib/tcl8.6/msgs' % prefix)
+def libevent_post_make(options, buildout, environ):
+    prefix = environ['PREFIX']
+    src = glob.glob('*.h')
+    src = [h for h in src if 'internal' not in h]
+    dst = os.path.join(prefix, 'include')
+    _copy(src, dst)
+    src = glob.glob('*.lib')
+    dst = os.path.join(prefix, 'lib')
+    _copy(src, dst)
 
 class PythonPostMake(object):
     def __init__(self, environ):
-        self.python_source_path = path.abspath(path.join(os.curdir, path.pardir))
-        self.pcbuild_path = path.join(self.python_source_path, 'PCbuild')
+        self.arch = 'amd64'
+        self.python_source_path = os.path.abspath(os.curdir)
+        self.externals = os.path.join(self.python_source_path, 'externals')
+        self.pcbuild_path = os.path.join(self.python_source_path, 'PCbuild', self.arch)
         self.prefix = environ['PREFIX']
         self.environ = environ
-        print(self.python_source_path, self.pcbuild_path, self.prefix)
 
     def make_install(self):
-        self.move_libs()
-        self.make_pyd()
-        self.make_exe()
-        self.make_dll()
-        self.make_lib()
-        self.make_ico()
-        self.make_includes()
-        self.make_libraries()
         self.move_dlls()
-        self.copy_crt_assemblies()
+        self.move_libs()
+        self.copy_dlls()
+        self.copy_libs()
+        self.copy_bins()
+        self.copy_libffi()
+        self.copy_openssl()
+        self.copy_sqlite3()
+        self.copy_headers()
+        self.copy_crt()
+        self.chmod_dist()
 
     def move_dlls(self):
-        dst = path.join(self.prefix, 'DLLs')
-        src = glob.glob(path.join(self.prefix, 'bin', '*.dll'))
-        _mk_path(dst)
-        for item in src:
-            if 'python38.dll' in item:
-                continue
-            cmd = 'mv %s %s' % (item, dst)
-            _system(cmd)
+        src = glob.glob(os.path.join(self.prefix, 'bin', '*.dll'))
+        src += glob.glob(os.path.join(self.prefix, 'lib', '*.dll'))
+        src += glob.glob(os.path.join(self.prefix, 'lib', '*.pdb'))
+        src = [dll for dll in src if 'python' not in dll]
+        dst = os.path.join(self.prefix, 'DLLs')
+        _move(src, dst)
 
     def move_libs(self):
-        dst = path.join(self.prefix, 'libs')
-        src = glob.glob(path.join(self.prefix, 'lib', '*.lib'))
-        _mk_path(dst)
-        for item in src:
-            cmd = 'mv %s %s' % (item, dst)
-            _system(cmd)
+        src = glob.glob(os.path.join(self.prefix, 'lib', '*.a'))
+        src += glob.glob(os.path.join(self.prefix, 'lib', '*.lib'))
+        dst = os.path.join(self.prefix, 'libs')
+        _move(src, dst)
 
-    def make_pyd(self):
-        dst = path.join(self.prefix, 'DLLs')
-        src = glob.glob(path.join(self.pcbuild_path, '*.pyd'))
-        _copy_files(src, dst)
+    def copy_dlls(self):
+        src = glob.glob(os.path.join(self.pcbuild_path, '*.dll'))
+        src += glob.glob(os.path.join(self.pcbuild_path, '*.pyd'))
+        dst = os.path.join(self.prefix, 'DLLs')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(self.pcbuild_path, 'python*.dll'))
+        dst = os.path.join(self.prefix, 'bin')
+        _copy(src, dst)
 
-    def make_exe(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.pcbuild_path, '*.exe'))
-        _copy_files(src, dst)
+    def copy_bins(self):
+        src = glob.glob(os.path.join(self.pcbuild_path, '*.exe'))
+        src += glob.glob(os.path.join(self.pcbuild_path, '*.ico'))
+        dst = os.path.join(self.prefix, 'bin')
+        _copy(src, dst)
 
-    def make_dll(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.pcbuild_path, '*.dll'))
-        _copy_files(src, dst)
+    def copy_libs(self):
+        src = glob.glob(os.path.join(self.pcbuild_path, '*.lib'))
+        dst = os.path.join(self.prefix, 'libs')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(self.python_source_path, 'lib', '*'))
+        dst = os.path.join(self.prefix, 'lib')
+        _copy(src, dst)
 
-    def make_lib(self):
-        dst = path.join(self.prefix, 'libs')
-        src = glob.glob(path.join(self.pcbuild_path, '*.lib'))
-        _copy_files(src, dst)
+    def copy_libffi(self):
+        name = 'libffi-3.4.4'
+        base = os.path.join(self.externals, name, self.arch)
+        src = glob.glob(os.path.join(base, 'include', '*.h'))
+        dst = os.path.join(self.prefix, 'include')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(base, '*.lib'))
+        dst = os.path.join(self.prefix, 'libs')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(base, '*.dll'))
+        dst = os.path.join(self.prefix, 'DLLs')
+        _copy(src, dst)
 
-    def make_ico(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.pcbuild_path, '*.ico'))
-        _copy_files(src, dst)
+    def copy_openssl(self):
+        name = 'openssl-bin-1.1.1w'
+        base = os.path.join(self.externals, name, self.arch)
+        src = glob.glob(os.path.join(base, 'include', 'openssl', '*.h'))
+        dst = os.path.join(self.prefix, 'include', 'openssl')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(base, '*.lib'))
+        dst = os.path.join(self.prefix, 'libs')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(base, '*.dll'))
+        dst = os.path.join(self.prefix, 'DLLs')
+        _copy(src, dst)
 
-    def make_includes(self):
-        import shutil
-        cmd = "cp -fr %s %s" % (path.join(self.python_source_path, 'Include'),
-                                path.join(self.prefix))
-        _system(cmd)
-        shutil.copy(path.join(self.python_source_path, 'PC', 'pyconfig.h'),
-                     path.join(self.prefix, 'Include'))
+    def copy_sqlite3(self):
+        name = 'sqlite-3.45.1.0'
+        base = os.path.join(self.externals, name)
+        src = glob.glob(os.path.join(base, '*.h'))
+        dst = os.path.join(self.prefix, 'include')
+        _copy(src, dst)
 
-    def make_libraries(self):
-        dst = path.join(self.prefix,)
-        src = path.join(self.python_source_path, 'lib')
-        _mk_path(dst)
-        cmd = "cp -fr %s %s" % (src, dst)
-        _system(cmd)
+    def copy_headers(self):
+        src = glob.glob(os.path.join(self.python_source_path, 'Include', '*.h'))
+        dst = os.path.join(self.prefix, 'include')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(self.python_source_path, 'Include', 'cpython', '*.h'))
+        dst = os.path.join(self.prefix, 'include', 'cpython')
+        _copy(src, dst)
+        src = glob.glob(os.path.join(self.python_source_path, 'Include', 'internal', '*.h'))
+        dst = os.path.join(self.prefix, 'include', 'internal')
+        _copy(src, dst)
+        src = os.path.join(self.python_source_path, 'PC', 'pyconfig.h')
+        _copy(src, dst)
 
-    def copy_crt_assemblies(self):
-        dst = path.join(self.prefix, 'bin')
-        src = glob.glob(path.join(self.environ["WindowsSdkDir"], "Redist", self.environ["XSDKVer"], "ucrt/DLLs/x64/*.dll"))
-        _copy_files(src, dst)
-        src = glob.glob(path.join(self.environ["VCRoot"], "Redist/MSVC/14.16.27012/x64/Microsoft.VC141.CRT/*.dll"))
-        _copy_files(src, dst)
+    def copy_crt(self):
+        src = glob.glob(os.path.join(self.environ['WindowsSdkDir'],
+                                     'Redist', self.environ['XSDKVer'],
+                                     'ucrt', 'DLLs', 'x64', '*.dll'))
+        src += glob.glob(os.path.join(self.environ['VCRoot'],
+                                      'Redist', 'MSVC', '14.16.27012',
+                                      'x64', 'Microsoft.VC141.CRT', '*.dll'))
+        dst = os.path.join(self.prefix, 'bin')
+        _copy(src, dst)
 
-def _mk_path(path):
-    if os.path.exists(path):
-        return
-    os.makedirs(path)
-
-def _copy_files(src_glob, dst):
-    _mk_path(dst)
-    for item in src_glob:
-        print('cp %s %s' % (item, dst))
-        shutil.copy(item, dst)
-
-def _system(cmd):
-    print(cmd)
-    os.system(cmd.replace(os.path.sep, '/'))
-
-def libevent_post_make(options, buildout, environ):
-    import os
-    prefix = environ['PREFIX'].replace(os.path.sep, '/')
-    os.system('cp -fvr *lib %s/lib' % prefix)
+    def chmod_dist(self):
+        _system('find "%s" -type d -exec chmod 0755 {} ";"' % self.prefix)
+        _system('find "%s" -type f -exec chmod 0644 {} ";"' % self.prefix)
+        _system('find "%s" -type f -iname "*.exe" -exec chmod 0755 {} ";"' % os.path.join(self.prefix, 'bin'))
 
 def python_post_make(options, buildout, environ):
     instance = PythonPostMake(environ)

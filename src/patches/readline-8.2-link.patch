@@ -1,0 +1,30 @@
+--- readline-8.2/support/shobj-conf	2021-12-03 09:54:46.000000000 -0600
++++ readline-8.2/support/shobj-conf	2024-04-30 14:05:45.953625091 -0500
+@@ -128,7 +128,8 @@
+ 	SHOBJ_LD='${CC}'
+ 	SHOBJ_LDFLAGS='-shared -Wl,-soname,$@'
+ 
+-	SHLIB_XLDFLAGS='-Wl,-rpath,$(libdir) -Wl,-soname,`basename $@ $(SHLIB_MINOR)`'
++	SHLIB_LIBS='$(TERMCAP_LIB)'
++	SHLIB_XLDFLAGS='-Wl,-soname,`basename $@ $(SHLIB_MINOR)`'
+ 	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)$(SHLIB_MINOR)'
+ 	;;
+ 
+@@ -240,13 +241,13 @@
+ 	;;
+ 
+ aix4.[2-9]*-*gcc*|aix[5-9].*-*gcc*)		# lightly tested by jik@cisco.com
+-	SHOBJ_CFLAGS=-fpic
++	SHOBJ_CFLAGS=-fPIC
+ 	SHOBJ_LD='${CC}'
+-	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
++	SHOBJ_LDFLAGS='-Wl,-bdynamic -Wl,-bnoentry -Wl,-bexpall'
+ 	SHOBJ_XLDFLAGS='-G'
+ 
+-	SHLIB_XLDFLAGS='-bM:SRE'
+-	SHLIB_LIBS='-lcurses -lc'
++	SHLIB_XLDFLAGS='-Wl,-G'
++	SHLIB_LIBS='$(TERMCAP_LIB)'
+ 	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)'
+ 	;;
+ 

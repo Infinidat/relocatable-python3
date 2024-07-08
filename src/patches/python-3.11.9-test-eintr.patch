@@ -1,0 +1,12 @@
+--- Python-3.11.9/Lib/test/_test_eintr.py	2024-04-05 18:39:08.836470608 -0500
++++ Python-3.11.9/Lib/test/_test_eintr.py	2024-04-05 18:39:40.625756215 -0500
+@@ -531,6 +531,9 @@
+     def test_lockf(self):
+         self._lock(fcntl.lockf, "lockf")
+ 
++    # Issue 35633: See https://bugs.python.org/issue35633#msg333662
++    # skip test rather than accept PermissionError from all platforms
++    @unittest.skipIf(platform.system() == "AIX", "AIX returns PermissionError")
+     def test_flock(self):
+         self._lock(fcntl.flock, "flock")
+ 
