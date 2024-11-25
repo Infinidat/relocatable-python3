@@ -1,0 +1,142 @@
+diff --git a/Lib/distutils/tests/test_dist.py b/Lib/distutils/tests/test_dist.py
+index 8ab24516e70..68301bea276 100644
+--- a/Lib/distutils/tests/test_dist.py
++++ b/Lib/distutils/tests/test_dist.py
+@@ -444,8 +444,8 @@ def test_custom_pydistutils(self):
+         else:
+             user_filename = "pydistutils.cfg"
+ 
+-        temp_dir = self.mkdtemp()
+-        user_filename = os.path.join(temp_dir, user_filename)
++        user_home = self.mkdtemp()
++        user_filename = os.path.join(user_home, user_filename)
+         f = open(user_filename, 'w')
+         try:
+             f.write('.')
+@@ -457,14 +457,16 @@ def test_custom_pydistutils(self):
+ 
+             # linux-style
+             if sys.platform in ('linux', 'darwin'):
+-                os.environ['HOME'] = temp_dir
++                os.environ['HOME'] = user_home
+                 files = dist.find_config_files()
+                 self.assertIn(user_filename, files)
+ 
+             # win32-style
+             if sys.platform == 'win32':
+-                # home drive should be found
+-                os.environ['USERPROFILE'] = temp_dir
++                # home directory should be found
++                user_profile = self.mkdtemp()
++                os.environ['HOME'] = user_home
++                os.environ['USERPROFILE'] = user_profile
+                 files = dist.find_config_files()
+                 self.assertIn(user_filename, files,
+                               '%r not found in %r' % (user_filename, files))
+diff --git a/Lib/ntpath.py b/Lib/ntpath.py
+index 0246419485d..07e82c33d3b 100644
+--- a/Lib/ntpath.py
++++ b/Lib/ntpath.py
+@@ -331,7 +331,9 @@ def expanduser(path):
+     while i < n and path[i] not in _get_bothseps(path):
+         i += 1
+ 
+-    if 'USERPROFILE' in os.environ:
++    if 'HOME' in os.environ:
++        userhome = os.environ['HOME']
++    elif 'USERPROFILE' in os.environ:
+         userhome = os.environ['USERPROFILE']
+     elif not 'HOMEPATH' in os.environ:
+         return path
+diff --git a/Lib/test/test_ntpath.py b/Lib/test/test_ntpath.py
+index 88660fc05a1..88014749376 100644
+--- a/Lib/test/test_ntpath.py
++++ b/Lib/test/test_ntpath.py
+@@ -628,45 +628,48 @@ def test_expanduser(self):
+             env.clear()
+             tester('ntpath.expanduser("~test")', '~test')
+ 
++            env['HOME'] = 'E:\\Home\\eric'
+             env['HOMEDRIVE'] = 'C:\\'
+             env['HOMEPATH'] = 'Users\\eric'
+             env['USERNAME'] = 'eric'
+-            tester('ntpath.expanduser("~test")', 'C:\\Users\\test')
+-            tester('ntpath.expanduser("~")', 'C:\\Users\\eric')
++            tester('ntpath.expanduser("~test")', 'E:\\Home\\test')
++            tester('ntpath.expanduser("~")', 'E:\\Home\\eric')
+ 
+             del env['HOMEDRIVE']
+-            tester('ntpath.expanduser("~test")', 'Users\\test')
+-            tester('ntpath.expanduser("~")', 'Users\\eric')
++            tester('ntpath.expanduser("~test")', 'E:\\Home\\test')
++            tester('ntpath.expanduser("~")', 'E:\\Home\\eric')
+ 
+             env.clear()
++            env['HOME'] = 'F:\\Home\\eric'
+             env['USERPROFILE'] = 'C:\\Users\\eric'
+             env['USERNAME'] = 'eric'
+-            tester('ntpath.expanduser("~test")', 'C:\\Users\\test')
+-            tester('ntpath.expanduser("~")', 'C:\\Users\\eric')
++            tester('ntpath.expanduser("~test")', 'F:\\Home\\test')
++            tester('ntpath.expanduser("~")', 'F:\\Home\\eric')
+             tester('ntpath.expanduser("~test\\foo\\bar")',
+-                   'C:\\Users\\test\\foo\\bar')
++                   'F:\\Home\\test\\foo\\bar')
+             tester('ntpath.expanduser("~test/foo/bar")',
+-                   'C:\\Users\\test/foo/bar')
++                   'F:\\Home\\test/foo/bar')
+             tester('ntpath.expanduser("~\\foo\\bar")',
+-                   'C:\\Users\\eric\\foo\\bar')
++                   'F:\\Home\\eric\\foo\\bar')
+             tester('ntpath.expanduser("~/foo/bar")',
+-                   'C:\\Users\\eric/foo/bar')
++                   'F:\\Home\\eric/foo/bar')
+ 
+-            # bpo-36264: ignore `HOME` when set on windows
++            # bpo-36264: do not ignore `HOME` when set on windows
+             env.clear()
+-            env['HOME'] = 'F:\\'
++            env['HOME'] = 'F:\\Home\\eric'
+             env['USERPROFILE'] = 'C:\\Users\\eric'
+             env['USERNAME'] = 'eric'
+-            tester('ntpath.expanduser("~test")', 'C:\\Users\\test')
+-            tester('ntpath.expanduser("~")', 'C:\\Users\\eric')
++            tester('ntpath.expanduser("~test")', 'F:\\Home\\test')
++            tester('ntpath.expanduser("~")', 'F:\\Home\\eric')
+ 
+             # bpo-39899: don't guess another user's home directory if
+             # `%USERNAME% != basename(%USERPROFILE%)`
+             env.clear()
++            env['HOME'] = 'E:\\Home\\eric'
+             env['USERPROFILE'] = 'C:\\Users\\eric'
+             env['USERNAME'] = 'idle'
+             tester('ntpath.expanduser("~test")', '~test')
+-            tester('ntpath.expanduser("~")', 'C:\\Users\\eric')
++            tester('ntpath.expanduser("~")', 'E:\\Home\\eric')
+ 
+ 
+ 
+diff --git a/Lib/test/test_pathlib.py b/Lib/test/test_pathlib.py
+index aaa2adea462..268fce1d4a1 100644
+--- a/Lib/test/test_pathlib.py
++++ b/Lib/test/test_pathlib.py
+@@ -1506,9 +1506,6 @@ def test_home(self):
+             env['USERPROFILE'] = os.path.join(BASE, 'userprofile')
+             self._test_home(self.cls.home())
+ 
+-            # bpo-38883: ignore `HOME` when set on windows
+-            env['HOME'] = os.path.join(BASE, 'home')
+-            self._test_home(self.cls.home())
+ 
+     def test_samefile(self):
+         fileA_path = os.path.join(BASE, 'fileA')
+@@ -2808,9 +2805,6 @@ def check():
+             env['USERPROFILE'] = 'C:\\Users\\alice'
+             check()
+ 
+-            # bpo-38883: ignore `HOME` when set on windows
+-            env['HOME'] = 'C:\\Users\\eve'
+-            check()
+ 
+ 
+ class CompatiblePathTest(unittest.TestCase):
