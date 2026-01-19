@@ -96,11 +96,8 @@ tcl8.6.12-src.tar.gz                    https://sourceforge.net/projects/tcl/fil
 tk8.6.10-src.tar.gz                     http://prdownloads.sourceforge.net/tcl/tk8.6.10-src.tar.gz
 tk8.6.12-src.tar.gz                     https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tk8.6.12-src.tar.gz
 util-linux-2.40.tar.gz                  https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.tar.gz
-xz-5.2.4-windows.zip                    http://tukaani.org/xz/xz-5.2.4-windows.zip
-xz-5.2.9-windows.zip                    https://tukaani.org/xz/xz-5.2.9-windows.zip
-xz-5.2.4.tar.gz                         http://tukaani.org/xz/xz-5.2.4.tar.gz
-xz-5.4.5.tar.gz                         https://tukaani.org/xz/xz-5.4.5.tar.gz
-xz-5.4.6.tar.gz                         https://yer.dl.sourceforge.net/project/lzmautils/xz-5.4.6.tar.gz
+xz-5.8.2-windows.zip                    https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2-windows.zip
+xz-5.8.2.tar.gz                         https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.gz
 zeromq-3.2.3.tar.gz                     http://download.zeromq.org/zeromq-3.2.3.tar.gz
 zeromq-4.1.5.tar.gz                     https://github.com/zeromq/zeromq4-1/releases/download/v4.1.5/zeromq-4.1.5.tar.gz
 zeromq-4.1.8.tar.gz                     https://github.com/zeromq/zeromq4-1/releases/download/v4.1.8/zeromq-4.1.8.tar.gz
