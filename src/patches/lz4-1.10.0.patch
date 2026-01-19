@@ -1,0 +1,77 @@
+--- lz4-1.10.0/tests/Makefile	2025-12-27 11:01:53.254178506 -0600
++++ lz4-1.10.0/tests/Makefile	2025-12-27 11:05:31.988382670 -0600
+@@ -208,7 +208,7 @@
+ 	$(CAT) $^ > $@
+ 
+ test-install: lz4 lib liblz4.pc
+-	lz4_root=.. ./test_install.sh
++	lz4_root=.. $(SHELL) test_install.sh
+ 
+ test-compile-with-lz4-memory-usage:
+ 	$(MAKE) clean; CFLAGS=-O0 CPPFLAGS=-D'LZ4_MEMORY_USAGE=LZ4_MEMORY_USAGE_MIN' $(MAKE) all
+@@ -223,53 +223,53 @@
+ # and only their test files : do not employ sweeping statements such `rm tmp*` or `rm *.lz4`
+ test-lz4-sparse: lz4 datagen
+ 	@echo "\n ---- test sparse file support ----"
+-	./test-lz4-sparse.sh
++	$(SHELL) test-lz4-sparse.sh
+ 
+ test-lz4-contentSize: lz4 datagen
+ 	@echo "\n ---- test original size support ----"
+-	./test-lz4-contentSize.sh
++	$(SHELL) test-lz4-contentSize.sh
+ 
+ test-lz4-frame-concatenation: lz4 datagen
+ 	@echo "\n ---- test frame concatenation ----"
+-	./test-lz4-frame-concatenation.sh
++	$(SHELL) test-lz4-frame-concatenation.sh
+ 
+ test-lz4-multiple: lz4 datagen
+ 	@echo "\n ---- test multiple files ----"
+-	./test-lz4-multiple.sh
++	$(SHELL) test-lz4-multiple.sh
+ 
+ test-lz4-multiple-legacy: lz4 datagen
+ 	@echo "\n ---- test multiple files (Legacy format) ----"
+-	./test-lz4-multiple-legacy.sh
++	$(SHELL) test-lz4-multiple-legacy.sh
+ 
+ test-lz4-skippable: lz4
+ 	@echo "\n ---- test lz4 with skippable frames ----"
+-	./test-lz4-skippable.sh
++	$(SHELL) test-lz4-skippable.sh
+ 
+ test-lz4-basic: lz4 datagen unlz4 lz4cat
+ 	@echo "\n ---- test lz4 basic compression/decompression ----"
+-	./test-lz4-basic.sh
++	$(SHELL) test-lz4-basic.sh
+ 
+ test-lz4-dict: lz4 datagen
+ 	@echo "\n ---- test lz4 compression/decompression with dictionary ----"
+-	./test-lz4-dict.sh
++	$(SHELL) test-lz4-dict.sh
+ 
+ test-lz4hc-hugefile: lz4 datagen
+ 	@echo "\n ---- test HC compression/decompression of huge files ----"
+-	./test-lz4hc-hugefile.sh
++	$(SHELL) test-lz4hc-hugefile.sh
+ 
+ test-lz4-fast-hugefile: lz4 datagen
+ 	@echo "\n ---- test huge files compression/decompression ----"
+-	./test-lz4-fast-hugefile.sh
++	$(SHELL) test-lz4-fast-hugefile.sh
+ 
+ test-lz4-hugefile: test-lz4-fast-hugefile test-lz4hc-hugefile
+ 
+ test-lz4-testmode: lz4 datagen
+ 	@echo "\n ---- bench mode ----"
+-	./test-lz4-testmode.sh
++	$(SHELL) test-lz4-testmode.sh
+ 
+ test-lz4-opt-parser: lz4 datagen
+ 	@echo "\n ---- test opt-parser ----"
+-	./test-lz4-opt-parser.sh
++	$(SHELL) test-lz4-opt-parser.sh
+ 
+ test-lz4-essentials : lz4 datagen test-lz4-basic test-lz4-multiple test-lz4-multiple-legacy \
+                       test-lz4-frame-concatenation test-lz4-testmode \
