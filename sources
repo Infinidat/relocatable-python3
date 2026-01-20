@@ -78,10 +78,7 @@ openldap-2.6.7.tgz                      https://www.openldap.org/software/downlo
 openssh-7.9p1.tar.gz                    http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.9p1.tar.gz
 openssh-9.5p1.tar.gz                    https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.5p1.tar.gz
 openssh-9.7p1.tar.gz                    https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.7p1.tar.gz
-openssl-1.0.8q.tar.gz                   https://www.openssl.org/source/openssl-1.0.8q.tar.gz
-openssl-1.1.1d.tar.gz                   https://www.openssl.org/source/openssl-1.1.1d.tar.gz
-openssl-1.1.1j.tar.gz                   https://www.openssl.org/source/openssl-1.1.1j.tar.gz
-openssl-1.1.1w.tar.gz                   https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+openssl-1.1.1zd.tar.gz                  https://github.com/kzalewski/openssl-1.1.1/archive/refs/tags/1.1.1zd.tar.gz
 pcre2-10.47.tar.gz                      https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47.tar.gz
 pkg-config-0.29.2.tar.gz                https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
 readline-7.0.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
