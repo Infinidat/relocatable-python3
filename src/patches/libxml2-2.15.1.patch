@@ -1,0 +1,14 @@
+--- libxml2-2.15.1/xmlreader.c	2026-01-21 21:03:00.507345645 -0200
++++ libxml2-2.15.1/xmlreader.c	2026-01-21 21:05:10.502007865 -0200
+@@ -2086,6 +2086,11 @@
+     xmlParserInputBufferPtr input;
+     xmlTextReaderPtr ret;
+ 
++    if (URI == NULL) {
++        xmlTextReaderErr(XML_ERR_ARGUMENT, "failed to open <NULL>");
++        return NULL;
++    }
++
+     if (xmlParserInputBufferCreateFilenameValue != NULL) {
+         input = xmlParserInputBufferCreateFilenameValue(URI,
+                 XML_CHAR_ENCODING_NONE);
