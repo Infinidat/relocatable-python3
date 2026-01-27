@@ -30,18 +30,6 @@ def _copy(src, dst):
 def _move(src, dst):
     _todo('mv -f -v', src, dst)
 
-def xz_post_make(options, buildout, environ):
-    prefix = environ['PREFIX']
-    suffix = 'bin_x86-64'
-    _copy(glob.glob(os.path.join('include', '*.h')),
-          os.path.join(prefix, 'include'))
-    _copy(glob.glob(os.path.join('include', 'lzma', '*.h')),
-          os.path.join(prefix, 'include', 'lzma'))
-    _copy(glob.glob(os.path.join(suffix, '*.a')),
-          os.path.join(prefix, 'lib'))
-    _copy(glob.glob(os.path.join(suffix, '*.dll')),
-          os.path.join(prefix, 'bin'))
-
 def libiconv_post_make(options, buildout, environ):
     prefix = environ['PREFIX']
     suffix = os.path.join('build-VS2017', 'x64', 'Release')
