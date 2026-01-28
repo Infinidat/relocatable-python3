@@ -1,5 +1,67 @@
+--- libevent-2.1.12-stable/CMakeLists.txt	2020-07-05 15:01:34.000000000 +0300
++++ libevent-2.1.12-stable/CMakeLists.txt	2026-01-27 20:08:23.565314100 +0200
+@@ -19,7 +19,7 @@
+ #       start libevent.sln
+ #
+ 
+-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
++cmake_minimum_required(VERSION 4.0 FATAL_ERROR)
+ 
+ if (POLICY CMP0054)
+     cmake_policy(SET CMP0054 NEW)
+@@ -845,6 +845,8 @@
+ 
+     set(EVENT__HAVE_OPENSSL 1)
+ 
++    list(APPEND OPENSSL_LIBRARIES Crypt32)
++
+     message(STATUS "OpenSSL include: ${OPENSSL_INCLUDE_DIR}")
+     message(STATUS "OpenSSL lib: ${OPENSSL_LIBRARIES}")
+ 
+@@ -1078,16 +1080,34 @@
+     #
+     if (NOT EVENT__DISABLE_REGRESS)
+         # (We require python to generate the regress tests)
+-        find_package(PythonInterp 3)
+ 
+-        if (PYTHONINTERP_FOUND)
++        set(__FOUND_USABLE_PYTHON 0)
++
++        # If caller already provided an interpreter, use it.
++        if (PYTHON_EXECUTABLE)
+             set(__FOUND_USABLE_PYTHON 1)
+         else()
+-            find_package(PythonInterp 2)
+-            if (PYTHONINTERP_FOUND)
+-                set(__FOUND_USABLE_PYTHON 1)
+-            else()
+-                message(ERROR "No suitable Python version found, bailing...")
++            # Prefer modern CMake Python modules (avoids issues with CMP0148 / removed FindPythonInterp).
++            # FindPython3 was introduced in newer CMake; keep a fallback for older ones.
++            if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.12")
++                find_package(Python3 COMPONENTS Interpreter QUIET)
++                if (Python3_FOUND)
++                    set(PYTHON_EXECUTABLE "${Python3_EXECUTABLE}")
++                    set(__FOUND_USABLE_PYTHON 1)
++                endif()
++            endif()
++
++            # Fallback for older CMake versions / environments.
++            if (NOT __FOUND_USABLE_PYTHON)
++                find_package(PythonInterp 3 QUIET)
++                if (PYTHONINTERP_FOUND)
++                    set(__FOUND_USABLE_PYTHON 1)
++                else()
++                    find_package(PythonInterp 2 QUIET)
++                    if (PYTHONINTERP_FOUND)
++                        set(__FOUND_USABLE_PYTHON 1)
++                    endif()
++                endif()
+             endif()
+         endif()
+ 
 --- libevent-2.1.12-stable/evdns.c	2020-07-05 15:01:34.000000000 +0300
-+++ libevent-2.1.12-stable/evdns.c	2024-06-01 23:13:07.747352427 +0300
++++ libevent-2.1.12-stable/evdns.c	2026-01-27 19:57:43.569938200 +0200
 @@ -4035,7 +4035,7 @@
  #else
  		r = evdns_base_resolv_conf_parse(base, opts, "/etc/resolv.conf");
@@ -10,7 +72,7 @@
  			return NULL;
  		}
 --- libevent-2.1.12-stable/test/regress_main.c	2020-07-05 15:01:34.000000000 +0300
-+++ libevent-2.1.12-stable/test/regress_main.c	2024-06-01 23:21:48.451169707 +0300
++++ libevent-2.1.12-stable/test/regress_main.c	2026-01-27 19:57:43.612945400 +0200
 @@ -431,8 +431,6 @@
  	{ "signal/", signal_testcases },
  	{ "util/", util_testcases },
@@ -21,7 +83,7 @@
  	{ "rpc/", rpc_testcases },
  	{ "thread/", thread_testcases },
 --- libevent-2.1.12-stable/test/regress_util.c	2020-07-05 15:01:34.000000000 +0300
-+++ libevent-2.1.12-stable/test/regress_util.c	2024-06-01 23:22:13.022857465 +0300
++++ libevent-2.1.12-stable/test/regress_util.c	2026-01-27 19:57:43.650948600 +0200
 @@ -1672,7 +1672,6 @@
  	{ "monotonic_res_fallback", test_evutil_monotonic_res, TT_OFF_BY_DEFAULT, &basic_setup, (void*)"fallback" },
  	{ "monotonic_prc", test_evutil_monotonic_prc, 0, &basic_setup, (void*)"" },
@@ -31,7 +93,7 @@
  	{ "evutil_v4addr_is_local", test_evutil_v4addr_is_local, 0, NULL, NULL },
  	{ "evutil_v6addr_is_local", test_evutil_v6addr_is_local, 0, NULL, NULL },
 --- libevent-2.1.12-stable/test/test.sh	2019-02-10 23:26:04.000000000 +0200
-+++ libevent-2.1.12-stable/test/test.sh	2024-06-01 23:13:07.757375708 +0300
++++ libevent-2.1.12-stable/test/test.sh	2026-01-27 19:57:43.656949900 +0200
 @@ -102,7 +102,7 @@
  	announce_n " regress: "
  	if test "$TEST_OUTPUT_FILE" = "/dev/null" ;

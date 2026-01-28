@@ -44,16 +44,6 @@ def libiconv_post_make(options, buildout, environ):
     _copy(glob.glob(os.path.join(suffix, '*.exe')),
           os.path.join(prefix, 'bin'))
 
-def libevent_post_make(options, buildout, environ):
-    prefix = environ['PREFIX']
-    src = glob.glob('*.h')
-    src = [h for h in src if 'internal' not in h]
-    dst = os.path.join(prefix, 'include')
-    _copy(src, dst)
-    src = glob.glob('*.lib')
-    dst = os.path.join(prefix, 'lib')
-    _copy(src, dst)
-
 class PythonPostMake(object):
     def __init__(self, environ):
         self.arch = 'amd64'
