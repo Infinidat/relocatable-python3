@@ -1,5 +1,5 @@
---- libiconv-1.17/lib/Makefile.in	2023-10-06 15:19:55.425166045 -0500
-+++ libiconv-1.17/lib/Makefile.in	2023-10-06 15:21:33.466499101 -0500
+--- libiconv-1.18/lib/Makefile.in	2023-10-06 15:19:55.425166045 -0500
++++ libiconv-1.18/lib/Makefile.in	2023-10-06 15:21:33.466499101 -0500
 @@ -104,20 +104,10 @@
  	if [ ! -d $(libdir) ] ; then $(mkinstalldirs) $(libdir) ; fi
  	$(LIBTOOL_INSTALL) $(INSTALL) libiconv.la $(libdir)/libiconv.la
