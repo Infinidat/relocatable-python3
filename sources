@@ -83,10 +83,8 @@ sqlite-autoconf-3380500.tar.gz          http://www.sqlite.org/2022/sqlite-autoco
 sqlite-autoconf-3440000.tar.gz          https://www.sqlite.org/2023/sqlite-autoconf-3440000.tar.gz
 sqlite-autoconf-3450100.tar.gz          https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz
 sqlite-autoconf-3450200.tar.gz          https://www.sqlite.org/2024/sqlite-autoconf-3450200.tar.gz
-tcl8.6.10-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz
-tcl8.6.12-src.tar.gz                    https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tcl8.6.12-src.tar.gz
-tk8.6.10-src.tar.gz                     http://prdownloads.sourceforge.net/tcl/tk8.6.10-src.tar.gz
-tk8.6.12-src.tar.gz                     https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tk8.6.12-src.tar.gz
+tcl8.6.17-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.6.17-src.tar.gz
+tk8.6.17-src.tar.gz                     http://prdownloads.sourceforge.net/tcl/tk8.6.17-src.tar.gz
 util-linux-2.40.tar.gz                  https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.tar.gz
 xz-5.8.2-windows.zip                    https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2-windows.zip
 xz-5.8.2.tar.gz                         https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.gz
