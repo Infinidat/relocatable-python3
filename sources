@@ -79,10 +79,7 @@ pcre2-10.47.tar.gz                      https://github.com/PCRE2Project/pcre2/re
 pkg-config-0.29.2.tar.gz                https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
 readline-7.0.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
 readline-8.2.tar.gz                     https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
-sqlite-autoconf-3380500.tar.gz          http://www.sqlite.org/2022/sqlite-autoconf-3380500.tar.gz
-sqlite-autoconf-3440000.tar.gz          https://www.sqlite.org/2023/sqlite-autoconf-3440000.tar.gz
-sqlite-autoconf-3450100.tar.gz          https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz
-sqlite-autoconf-3450200.tar.gz          https://www.sqlite.org/2024/sqlite-autoconf-3450200.tar.gz
+sqlite-src-3510200.zip                  https://sqlite.org/2026/sqlite-src-3510200.zip
 tcl8.6.17-src.tar.gz                    http://prdownloads.sourceforge.net/tcl/tcl8.6.17-src.tar.gz
 tk8.6.17-src.tar.gz                     http://prdownloads.sourceforge.net/tcl/tk8.6.17-src.tar.gz
 util-linux-2.40.tar.gz                  https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.tar.gz
