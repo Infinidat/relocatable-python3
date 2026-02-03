@@ -51,8 +51,7 @@ libsodium-1.0.19.tar.gz                 https://download.libsodium.org/libsodium
 libtasn1-3.4.tar.gz                     http://ftp.gnu.org/gnu/libtasn1/libtasn1-3.4.tar.gz
 libtasn1-4.19.0.tar.gz                  https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.19.0.tar.gz
 libtool-2.4.7.tar.gz                    https://ftp.gnu.org/gnu/libtool/libtool-2.4.7.tar.gz
-libunistring-1.1.tar.gz                 https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.gz
-libunistring-1.2.tar.gz                 https://ftp.gnu.org/gnu/libunistring/libunistring-1.2.tar.gz
+libunistring-1.4.1.tar.gz               https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.gz
 libunwind-1.8.1.tar.gz                  https://github.com/libunwind/libunwind/releases/download/v1.8.1/libunwind-1.8.1.tar.gz
 libuv-v1.46.0-dist.tar.gz               https://dist.libuv.org/dist/v1.46.0/libuv-v1.46.0-dist.tar.gz
 libuv-v1.48.0-dist.tar.gz               https://dist.libuv.org/dist/v1.48.0/libuv-v1.48.0-dist.tar.gz
