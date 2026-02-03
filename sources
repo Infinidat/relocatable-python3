@@ -62,10 +62,7 @@ lz4-1.10.0.tar.gz                       https://github.com/lz4/lz4/releases/down
 make-4.4.1.tar.gz                       https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz
 mpdecimal-2.5.1.tar.gz                  https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.5.1.tar.gz
 mpdecimal-4.0.0.tar.gz                  https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.0.tar.gz
-ncurses-5.9.tar.gz                      http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
-ncurses-6.0.tar.gz                      http://ftp.gnu.org/gnu/ncurses/ncurses-6.0.tar.gz
-ncurses-6.4.tar.gz                      http://ftp.gnu.org/gnu/ncurses/ncurses-6.4.tar.gz
-ncurses-6.5.tar.gz                      https://invisible-mirror.net/archives/ncurses/ncurses-6.5.tar.gz
+ncurses-6.6.tar.gz                      https://invisible-mirror.net/archives/ncurses/ncurses-6.6.tar.gz
 nettle-2.7.1.tar.gz                     https://ftp.gnu.org/gnu/nettle/nettle-2.7.1.tar.gz
 nettle-3.9.1.tar.gz                     https://ftp.gnu.org/gnu/nettle/nettle-3.9.1.tar.gz
 openldap-2.4.47.tgz                     ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.4.47.tgz
