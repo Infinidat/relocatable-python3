@@ -37,10 +37,7 @@ libgcrypt-1.10.3.tar.bz2                https://gnupg.org/ftp/gcrypt/libgcrypt/l
 libgcrypt-1.5.0.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.5.0.tar.bz2
 libgcrypt-1.5.3.tar.bz2                 ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.5.3.tar.bz2
 libgnugetopt-1.3.tar.bz2                https://distfiles.macports.org/libgnugetopt/libgnugetopt-1.3.tar.bz2
-libgpg-error-1.10.tar.bz2               http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.10.tar.bz2
-libgpg-error-1.43.tar.bz2               http://archive.ubuntu.com/ubuntu/pool/main/libg/libgpg-error/libgpg-error_1.43.orig.tar.bz2
-libgpg-error-1.47.tar.gz                https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.47.tar.gz
-libgpg-error-1.48.tar.gz                https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.48.tar.gz
+libgpg-error-1.58.tar.bz2               https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.58.tar.bz2
 libiconv-1.13.1.tar.gz                  http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.13.1.tar.gz
 libiconv-1.16-win.tar.gz                https://github.com/kiyolee/libiconv-win-build/archive/a4ba12da6e8e01579806d3be7a49db79329e0f43.zip
 libiconv-1.17.tar.gz                    https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz
