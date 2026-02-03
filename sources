@@ -49,8 +49,7 @@ libtasn1-4.21.0.tar.gz                  https://ftp.gnu.org/gnu/libtasn1/libtasn
 libtool-2.4.7.tar.gz                    https://ftp.gnu.org/gnu/libtool/libtool-2.4.7.tar.gz
 libunistring-1.4.1.tar.gz               https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.gz
 libunwind-1.8.1.tar.gz                  https://github.com/libunwind/libunwind/releases/download/v1.8.1/libunwind-1.8.1.tar.gz
-libuv-v1.46.0-dist.tar.gz               https://dist.libuv.org/dist/v1.46.0/libuv-v1.46.0-dist.tar.gz
-libuv-v1.48.0-dist.tar.gz               https://dist.libuv.org/dist/v1.48.0/libuv-v1.48.0-dist.tar.gz
+libuv-v1.51.0-dist.tar.gz               https://dist.libuv.org/dist/v1.51.0/libuv-v1.51.0-dist.tar.gz
 libxml2-2.15.1.tar.xz                   https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.1.tar.xz
 libxslt-v1.1.45.tar.gz                  https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.tar.xz
 lz4-1.10.0.tar.gz                       https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz
