@@ -53,8 +53,7 @@ libxml2-2.15.1.tar.xz                   https://download.gnome.org/sources/libxm
 libxslt-v1.1.45.tar.gz                  https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.tar.xz
 lz4-1.10.0.tar.gz                       https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz
 make-4.4.1.tar.gz                       https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz
-mpdecimal-2.5.1.tar.gz                  https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.5.1.tar.gz
-mpdecimal-4.0.0.tar.gz                  https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.0.tar.gz
+mpdecimal-4.0.1.tar.gz                  https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.1.tar.gz
 ncurses-6.6.tar.gz                      https://invisible-mirror.net/archives/ncurses/ncurses-6.6.tar.gz
 nettle-3.10.2.tar.gz                    https://ftp.gnu.org/gnu/nettle/nettle-3.10.2.tar.gz
 openldap-2.4.47.tgz                     ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.4.47.tgz
