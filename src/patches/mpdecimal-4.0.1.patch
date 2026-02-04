@@ -1,5 +1,5 @@
---- mpdecimal-4.0.0/configure	2024-01-09 18:25:00.000000000 -0600
-+++ mpdecimal-4.0.0/configure	2024-04-04 22:42:00.239004425 -0500
+--- mpdecimal-4.0.1/configure	2024-01-09 18:25:00.000000000 -0600
++++ mpdecimal-4.0.1/configure	2024-04-04 22:42:00.239004425 -0500
 @@ -2846,13 +2846,10 @@
      CONFIGURE_LDFLAGS="-dynamiclib $FPIC -install_name @rpath/$LIBSONAME -compatibility_version 4.0 -current_version 4.0.0"
      ;;
