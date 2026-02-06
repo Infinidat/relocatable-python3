@@ -1,5 +1,5 @@
---- openssl-1.1.1w/Configurations/10-main.conf	2023-09-11 18:08:11
-+++ openssl-1.1.1w/Configurations/10-main.conf	2024-06-13 02:59:16
+--- openssl-1.1.1ze/Configurations/10-main.conf	2023-09-11 17:08:11.000000000 +0300
++++ openssl-1.1.1ze/Configurations/10-main.conf	2026-01-27 19:03:51.813982330 +0200
 @@ -226,13 +226,13 @@
          CC               => "gcc",
          CFLAGS           => add_before(picker(default => "-Wall",
@@ -43,7 +43,14 @@
          cflags           => add(threads("-pthread")),
          lib_cppflags     => add("-DB_ENDIAN -DBN_DIV2W"),
          ex_libs          => add(threads("-pthread")),
-@@ -317,7 +316,6 @@
+@@ -311,13 +310,12 @@
+         # -m32 should be safe to add as long as driver recognizes
+         # -mcpu=ultrasparc
+         inherit_from     => [ "solaris-sparcv7-gcc", asm("sparcv9_asm") ],
+-        cflags           => add_before("-m32 -mcpu=ultrasparc"),
++        cflags           => add_before("-m32"),
+     },
+     "solaris64-sparcv9-gcc" => {
          inherit_from     => [ "solaris-sparcv9-gcc" ],
          cflags           => sub { my $f=join(" ",@_); $f =~ s/\-m32/-m64/; $f; },
          bn_ops           => "BN_LLONG RC4_CHAR",
@@ -80,8 +87,8 @@
          AR               => add("-X64"),
          RANLIB           => add("-X64"),
      },
---- openssl-1.1.1w/Configurations/unix-Makefile.tmpl	2023-09-11 18:08:11
-+++ openssl-1.1.1w/Configurations/unix-Makefile.tmpl	2024-06-13 02:55:28
+--- openssl-1.1.1ze/Configurations/unix-Makefile.tmpl	2023-09-11 17:08:11.000000000 +0300
++++ openssl-1.1.1ze/Configurations/unix-Makefile.tmpl	2026-01-27 19:01:09.499468735 +0200
 @@ -38,7 +38,7 @@
  
       # Shared AIX support is special. We put libcrypto[64].so.ver into
