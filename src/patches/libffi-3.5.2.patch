@@ -1,6 +1,6 @@
---- libffi-3.4.6/configure.host	2023-10-24 04:07:18.367508906 -0500
-+++ libffi-3.4.6/configure.host	2023-10-24 04:08:03.997520107 -0500
-@@ -210,10 +210,9 @@
+--- libffi-3.5.2/configure.host	2025-08-02 10:29:39.000000000 +0400
++++ libffi-3.5.2/configure.host	2026-02-08 23:58:38.252060771 +0400
+@@ -206,10 +206,9 @@
    powerpc-*-darwin* | powerpc64-*-darwin*)
  	TARGET=POWERPC_DARWIN; TARGETDIR=powerpc
  	;;
