@@ -1,7 +1,7 @@
---- mpdecimal-4.0.1/configure	2024-01-09 18:25:00.000000000 -0600
-+++ mpdecimal-4.0.1/configure	2024-04-04 22:42:00.239004425 -0500
-@@ -2846,13 +2846,10 @@
-     CONFIGURE_LDFLAGS="-dynamiclib $FPIC -install_name @rpath/$LIBSONAME -compatibility_version 4.0 -current_version 4.0.0"
+--- mpdecimal-4.0.1/configure	2025-05-05 02:25:00.000000000 +0400
++++ mpdecimal-4.0.1/configure	2026-02-09 11:11:24.841990081 +0400
+@@ -2832,13 +2832,10 @@
+     CONFIGURE_LDFLAGS="-dynamiclib $FPIC -install_name \$(libdir)/$LIBSONAME -compatibility_version 4.0 -current_version 4.0.1"
      ;;
    *-*-aix*)
 -    LIBNAME=
@@ -18,7 +18,7 @@
      ;;
    *-*-mingw*)
      FPIC=
-@@ -2998,16 +2995,6 @@
+@@ -3000,16 +2997,6 @@
    as_fn_error $? "at least one of --enable-static or --enable-shared must be set" "$LINENO" 5
  fi
  
@@ -35,3 +35,21 @@
  # Check whether to install the documentation:
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-doc" >&5
  $as_echo_n "checking for --enable-doc... " >&6; }
+Only in mpdecimal-4.0.1: configure.orig
+--- mpdecimal-4.0.1/tests/Makefile.in	2025-05-05 02:25:00.000000000 +0400
++++ mpdecimal-4.0.1/tests/Makefile.in	2026-02-09 11:17:41.053570208 +0400
+@@ -40,12 +40,12 @@
+ runtest:\
+ Makefile runtest.c test.c $(SRCDIR)/$(LIBSTATIC) $(SRCDIR)/mpdecimal.h \
+ test.h vctest.h
+-	$(CC) -I$(SRCDIR) $(MPD_CFLAGS) -o runtest runtest.c test.c $(LINK_LIBSTATIC) -lm
++	$(CC) -I$(SRCDIR) $(MPD_CFLAGS) -o runtest runtest.c test.c $(LDFLAGS) -lm
+ 
+ runtest_shared:\
+ Makefile runtest.c test.c $(SRCDIR)/$(LIBSHARED) $(SRCDIR)/mpdecimal.h \
+ test.h vctest.h
+-	$(CC) -I$(SRCDIR) $(MPD_CFLAGS_SHARED) -o runtest_shared runtest.c test.c -L$(SRCDIR) -lmpdec -lm
++	$(CC) -I$(SRCDIR) $(MPD_CFLAGS_SHARED) -o runtest_shared runtest.c test.c $(LDFLAGS) -L$(SRCDIR) -lmpdec -lm
+ 
+ 
+ FORCE:
