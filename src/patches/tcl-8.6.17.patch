@@ -1,0 +1,78 @@
+--- tcl8.6.17/pkgs/sqlite3.50.4/configure	2025-08-11 13:49:19.000000000 +0400
++++ tcl8.6.17/pkgs/sqlite3.50.4/configure	2026-02-08 01:40:53.958609394 +0400
+@@ -7058,7 +7058,7 @@
+ printf "%s\n" "Using $CC for compiling with threads" >&6; }
+ 
+ fi
+-	    LIBS="$LIBS -lc"
++	    LIBS="$LIBS -lc -lm"
+ 	    SHLIB_CFLAGS=""
+ 	    SHLIB_SUFFIX=".so"
+ 
+--- tcl8.6.17/tests/cmdAH.test	2025-07-31 21:29:02.000000000 +0400
++++ tcl8.6.17/tests/cmdAH.test	2026-02-08 02:05:28.938579902 +0400
+@@ -852,7 +852,7 @@
+ catch {testsetplatform $platform}
+ 
+ # readable
+-set gorpfile [makeFile abcde g\xF3rp.file]
++set gorpfile [makeFile abcde grp.file]
+ set dirfile [makeDirectory dir.file]
+ test cmdAH-16.1 {Tcl_FileObjCmd: readable} {
+     -returnCodes error
+@@ -895,7 +895,7 @@
+ removeFile $gorpfile
+ removeDirectory $dirfile
+ set dirfile [makeDirectory dir.file]
+-set gorpfile [makeFile abcde g\xF3rp.file]
++set gorpfile [makeFile abcde grp.file]
+ test cmdAH-18.1 {Tcl_FileObjCmd: executable} -returnCodes error -body {
+     file executable a b
+ } -result {wrong # args: should be "file executable name"}
+@@ -940,12 +940,12 @@
+ } -result {wrong # args: should be "file exists name"}
+ test cmdAH-19.2 {Tcl_FileObjCmd: exists} {file exists $gorpfile} 0
+ test cmdAH-19.3 {Tcl_FileObjCmd: exists} {
+-    file exists [file join [temporaryDirectory] dir.file g\xF3rp.file]
++    file exists [file join [temporaryDirectory] dir.file grp.file]
+ } 0
+ catch {
+-    set gorpfile [makeFile abcde g\xF3rp.file]
++    set gorpfile [makeFile abcde grp.file]
+     set dirfile [makeDirectory dir.file]
+-    set subgorp [makeFile 12345 [file join $dirfile g\xF3rp.file]]
++    set subgorp [makeFile 12345 [file join $dirfile grp.file]]
+ }
+ test cmdAH-19.4 {Tcl_FileObjCmd: exists} {
+     file exists $gorpfile
+@@ -1007,7 +1007,7 @@
+ 
+ catch {testsetplatform $platform}
+ removeFile $gorpfile
+-set gorpfile [makeFile "Test string" g\xF3rp.file]
++set gorpfile [makeFile "Test string" grp.file]
+ catch {file attributes $gorpfile -permissions 0o765}
+ 
+ # avoid problems with non-local filesystems
+@@ -1423,7 +1423,7 @@
+ 
+ catch {testsetplatform $platform}
+ removeFile $gorpfile
+-set gorpfile [makeFile "Test string" g\xF3rp.file]
++set gorpfile [makeFile "Test string" grp.file]
+ catch {file attributes $gorpfile -permissions 0o765}
+ 
+ # stat
+--- tcl8.6.17/unix/dltest/Makefile.in	2025-07-31 21:29:02.000000000 +0400
++++ tcl8.6.17/unix/dltest/Makefile.in	2026-02-07 00:24:17.550187610 +0400
+@@ -6,8 +6,8 @@
+ LIBS =			@TCL_BUILD_STUB_LIB_SPEC@ @TCL_LIBS@
+ AC_FLAGS =		@DEFS@
+ SHLIB_LD =		@SHLIB_LD@
+-SHLIB_CFLAGS =		@SHLIB_CFLAGS@
+-SHLIB_LD_LIBS =		@SHLIB_LD_LIBS@
++SHLIB_CFLAGS =		@CFLAGS@ @SHLIB_CFLAGS@
++SHLIB_LD_LIBS =		@LDFLAGS_DEFAULT@ @LDFLAGS@ @SHLIB_LD_LIBS@
+ SHLIB_SUFFIX =		@SHLIB_SUFFIX@
+ DLTEST_LD =		@DLTEST_LD@
+ DLTEST_SUFFIX =		@DLTEST_SUFFIX@

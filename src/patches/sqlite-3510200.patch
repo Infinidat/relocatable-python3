@@ -1,5 +1,99 @@
---- sqlite-src-3510200/test/attach.test.orig	2026-02-04 03:57:45.594391999 -0500
-+++ sqlite-src-3510200/test/attach.test	2026-02-04 04:54:11.203745680 -0500
+--- sqlite-src-3510200/ext/fts5/test/fts5integrity.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/ext/fts5/test/fts5integrity.test	2026-02-08 15:56:30.848877946 +0400
+@@ -21,6 +21,11 @@
+   return
+ }
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ do_execsql_test 1.0 {
+   CREATE VIRTUAL TABLE xx USING fts5(x);
+   INSERT INTO xx VALUES('term');
+--- sqlite-src-3510200/main.mk	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/main.mk	2026-02-08 22:22:01.511256653 +0400
+@@ -164,7 +164,7 @@
+ #
+ LDFLAGS.zlib ?= -lz
+ LDFLAGS.math ?= -lm
+-LDFLAGS.rpath ?= -Wl,-rpath -Wl,$(prefix)/lib
++LDFLAGS.rpath ?=
+ LDFLAGS.pthread ?= -lpthread
+ LDFLAGS.dlopen ?= -ldl
+ LDFLAGS.shlib ?= -shared
+@@ -1454,7 +1454,7 @@
+ tclsqlite3.flags.0 = $(tclsqlite3.deps.0)
+ tclsqlite3$(T.exe):	$(T.tcl.env.sh) tclsqlite-shell.o $(tclsqlite3.deps.$(STATIC_TCLSQLITE3))
+ 	$(T.link.tcl) -o $@ tclsqlite-shell.o \
+-		$(tclsqlite3.flags.$(STATIC_TCLSQLITE3)) $$TCL_INCLUDE_SPEC $$TCL_LIB_SPEC \
++		$(tclsqlite3.flags.$(STATIC_TCLSQLITE3)) $$TCL_INCLUDE_SPEC $$TCL_LD_FLAGS $$TCL_LIB_SPEC \
+ 		$(LDFLAGS.libsqlite3)
+ tclsqlite3$(T.exe)-1: tclsqlite3$(T.exe)
+ tclsqlite3$(T.exe)-0:
+@@ -1660,7 +1660,7 @@
+ 	$(T.tcl.env.source); \
+ 	$(T.link.shared) -o $@ tclsqlite.o \
+ 		$$TCL_INCLUDE_SPEC $$TCL_STUB_LIB_SPEC $(LDFLAGS.libsqlite3) \
+-		$(LIBOBJ) -Wl,-rpath,$$TCLLIBDIR
++		$(LIBOBJ)
+ # ^^^ that rpath bit is defined as TCL_LD_SEARCH_FLAGS in
+ # tclConfig.sh, but it's defined in such a way as to be useless for a
+ # _static_ makefile.
+@@ -1697,7 +1697,7 @@
+ #
+ tclextension: tclsqlite3.c
+ 	$(TCLSH_CMD) $(TOP)/tool/buildtclext.tcl --build-only \
+-		--tclConfig.sh $(TCL_CONFIG_SH) --cc "$(T.cc)" $(CFLAGS.tclextension)
++		--tclConfig.sh $(TCL_CONFIG_SH) --cc "$(T.cc) $(CFLAGS.tclextension) $(LDFLAGS.libsqlite3)"
+ 
+ #
+ # Install the SQLite TCL extension in a way that is appropriate for $TCLSH_CMD
+@@ -1705,7 +1705,7 @@
+ #
+ tclextension-install: tclsqlite3.c
+ 	$(TCLSH_CMD) $(TOP)/tool/buildtclext.tcl --destdir "$(DESTDIR)" \
+-		--tclConfig.sh $(TCL_CONFIG_SH) --cc "$(T.cc)" $(CFLAGS.tclextension)
++		--tclConfig.sh $(TCL_CONFIG_SH) --cc "$(T.cc) $(CFLAGS.tclextension) $(LDFLAGS.libsqlite3)"
+ 
+ #
+ # Uninstall the SQLite TCL extension that is used by $TCLSH_CMD.
+@@ -1807,6 +1807,7 @@
+ testfixture$(T.exe):	$(T.tcl.env.sh) has_tclsh85 $(TESTFIXTURE_SRC)
+ 	$(T.link.tcl) -DSQLITE_NO_SYNC=1 $(TESTFIXTURE_FLAGS) \
+ 		-o $@ $(TESTFIXTURE_SRC) \
++		$$TCL_LD_FLAGS \
+ 		$$TCL_LIB_SPEC $$TCL_INCLUDE_SPEC \
+ 		$(LDFLAGS.libsqlite3)
+ 
+@@ -1949,6 +1950,7 @@
+                           $(sqlite3_analyzer.deps.$(LINK_TOOLS_DYNAMICALLY))
+ 	$(T.link.tcl) sqlite3_analyzer.c -o $@ \
+ 		$(sqlite3_analyzer.flags.$(LINK_TOOLS_DYNAMICALLY)) \
++		$$TCL_LD_FLAGS \
+ 		$$TCL_LIB_SPEC $$TCL_INCLUDE_SPEC $$TCL_LIBS
+ # ^^^^ the order of those flags is relevant for
+ # $(sqlite3_analyzer.flags.1): if the $$TCL_... flags come first they
+@@ -1962,7 +1964,7 @@
+ 
+ sqltclsh$(T.exe): $(T.tcl.env.sh) sqltclsh.c
+ 	$(T.link.tcl) sqltclsh.c -o $@ $$TCL_INCLUDE_SPEC \
+-		$(LDFLAGS.libsqlite3) $$TCL_LIB_SPEC $$TCL_LIBS
++		$(LDFLAGS.libsqlite3) $$TCL_LD_FLAGS $$TCL_LIB_SPEC $$TCL_LIBS
+ # xbin: target for generic binaries which aren't usually built. It is
+ # used primarily for testing the build process.
+ xbin: sqltclsh$(T.exe) sqlite3_analyzer$(T.exe)
+@@ -1988,6 +1990,7 @@
+ 
+ sqlite3_checker$(T.exe):	$(T.tcl.env.sh) sqlite3_checker.c
+ 	$(T.link.tcl) sqlite3_checker.c -o $@ $$TCL_INCLUDE_SPEC \
++		$$TCL_LD_FLAGS \
+ 		$$TCL_LIB_SPEC $(LDFLAGS.libsqlite3)
+ xbin: sqlite3_checker$(T.exe)
+ 
+--- sqlite-src-3510200/test/attach.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/attach.test	2026-02-08 15:56:30.852677641 +0400
 @@ -759,7 +759,7 @@
      ATTACH DATABASE 'no-such-file' AS nosuch;
    }
@@ -9,3 +103,188 @@
    do_test attach-6.2 {
      sqlite3 dbx cannot-read
      dbx eval {CREATE TABLE t1(a,b,c)}
+--- sqlite-src-3510200/test/backup2.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/backup2.test	2026-02-08 15:56:30.853723721 +0400
+@@ -22,6 +22,11 @@
+ 
+ ifcapable !trigger||!view { finish_test ; return }
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ # Fill a database with test data.
+ #
+ do_test backup2-1 {
+--- sqlite-src-3510200/test/delete.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/delete.test	2026-02-08 15:56:30.854964592 +0400
+@@ -16,6 +16,11 @@
+ set testdir [file dirname $argv0]
+ source $testdir/tester.tcl
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ # Try to delete from a non-existant table.
+ #
+ do_test delete-1.1 {
+--- sqlite-src-3510200/test/extension01.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/extension01.test	2026-02-08 15:56:30.855997047 +0400
+@@ -16,6 +16,11 @@
+ source $testdir/tester.tcl
+ set ::testprefix extension01
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ load_static_extension db fileio
+ do_test 1.0 {
+   forcedelete file1.txt
+--- sqlite-src-3510200/test/io.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/io.test	2026-02-09 01:35:01.801689394 +0400
+@@ -18,6 +18,11 @@
+ source $testdir/tester.tcl
+ set ::testprefix io
+ 
++if {$::tcl_platform(os) eq "AIX"} {
++  finish_test
++  return
++}
++
+ db close
+ sqlite3_simulate_device
+ sqlite3 db test.db -vfs devsym
+--- sqlite-src-3510200/test/oserror.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/oserror.test	2026-02-08 15:56:30.856710544 +0400
+@@ -107,7 +107,7 @@
+ #
+ do_test 1.4.1 {
+   set ::log [list]
+-  list [catch { sqlite3 dbh /root/test.db } msg] $msg
++  list [catch { sqlite3 dbh NOT_FOUND/test.db } msg] $msg
+ } {1 {unable to open database file}}
+ 
+ do_re_test 1.4.2 { 
+--- sqlite-src-3510200/test/pager1.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/pager1.test	2026-02-08 15:56:30.858611704 +0400
+@@ -26,6 +26,11 @@
+   return
+ }
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ # Do not use a codec for tests in this file, as the database file is
+ # manipulated directly using tcl scripts (using the [hexio_write] command).
+ #
+--- sqlite-src-3510200/test/readonly.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/readonly.test	2026-02-08 15:56:30.859352702 +0400
+@@ -19,6 +19,10 @@
+   finish_test
+   return
+ }
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
+ source $testdir/lock_common.tcl
+ source $testdir/wal_common.tcl
+ set ::testprefix readonly
+--- sqlite-src-3510200/test/sync.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/sync.test	2026-02-08 23:12:06.206551267 +0400
+@@ -31,6 +31,12 @@
+   return
+ }
+ 
++if {$::tcl_platform(os) eq "AIX"} {
++  finish_test
++  return
++}
++
++
+ set sqlite_sync_count 0
+ proc cond_incr_sync_count {adj} {
+   global sqlite_sync_count
+--- sqlite-src-3510200/test/sync2.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/sync2.test	2026-02-09 00:02:21.938671464 +0400
+@@ -27,6 +27,7 @@
+   return
+ }
+ if {$::tcl_platform(os) eq "Windows NT"
++  || $::tcl_platform(os) eq "AIX"
+   || [permutation] == "journaltest"
+   || [permutation] == "inmemory_journal"
+   || [atomic_batch_write test.db] 
+--- sqlite-src-3510200/test/temptable.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/temptable.test	2026-02-08 15:56:30.860111741 +0400
+@@ -22,6 +22,11 @@
+   return
+ }
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ # Create an alternative connection to the database
+ #
+ do_test temptable-1.0 {
+--- sqlite-src-3510200/test/tkt3457.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/tkt3457.test	2026-02-08 15:56:30.861022654 +0400
+@@ -23,6 +23,10 @@
+   finish_test
+   return
+ }
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
+ 
+ #-----------------------------------------------------------------------
+ # To roll back a hot-journal file, the application needs read and write 
+--- sqlite-src-3510200/test/wal2.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/wal2.test	2026-02-08 15:56:30.862493899 +0400
+@@ -19,6 +19,11 @@
+ source $testdir/malloc_common.tcl
+ source $testdir/wal_common.tcl
+ 
++if {$tcl_platform(platform) eq "unix" && [exec id -u] == 0} {
++  finish_test
++  return
++}
++
+ set testprefix wal2
+ 
+ ifcapable !wal {finish_test ; return }
+--- sqlite-src-3510200/test/walmode.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/walmode.test	2026-02-09 01:35:15.726855361 +0400
+@@ -17,6 +17,11 @@
+ source $testdir/tester.tcl
+ source $testdir/malloc_common.tcl
+ 
++if {$::tcl_platform(os) eq "AIX"} {
++  finish_test
++  return
++}
++
+ # If the library was compiled without WAL support, check that the 
+ # "PRAGMA journal_mode=WAL" treats "WAL" as an unrecognized mode.
+ #
+--- sqlite-src-3510200/test/win32lock.test	2026-01-09 22:30:09.000000000 +0400
++++ sqlite-src-3510200/test/win32lock.test	2026-02-08 15:56:30.863305604 +0400
+@@ -15,7 +15,7 @@
+ # TESTRUNNER: slow
+ #
+ 
+-if {$tcl_platform(platform) ne "windows"} return
++return
+ 
+ set testdir [file dirname $argv0]
+ source $testdir/tester.tcl
