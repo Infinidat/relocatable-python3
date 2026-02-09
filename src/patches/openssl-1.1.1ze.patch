@@ -43,7 +43,14 @@
          cflags           => add(threads("-pthread")),
          lib_cppflags     => add("-DB_ENDIAN -DBN_DIV2W"),
          ex_libs          => add(threads("-pthread")),
-@@ -317,7 +316,6 @@
+@@ -311,13 +310,12 @@
+         # -m32 should be safe to add as long as driver recognizes
+         # -mcpu=ultrasparc
+         inherit_from     => [ "solaris-sparcv7-gcc", asm("sparcv9_asm") ],
+-        cflags           => add_before("-m32 -mcpu=ultrasparc"),
++        cflags           => add_before("-m32"),
+     },
+     "solaris64-sparcv9-gcc" => {
          inherit_from     => [ "solaris-sparcv9-gcc" ],
          cflags           => sub { my $f=join(" ",@_); $f =~ s/\-m32/-m64/; $f; },
          bn_ops           => "BN_LLONG RC4_CHAR",
