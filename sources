@@ -23,10 +23,7 @@ libev-4.33.tar.gz                       http://dist.schmorp.de/libev/libev-4.33.
 libevent-1.4.13-stable.tar.gz           https://github.com/downloads/libevent/libevent/libevent-1.4.13-stable.tar.gz
 libevent-2.0.17-stable.tar.gz           https://github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
 libevent-2.1.12-stable.tar.gz           https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-libffi-3.2.1.tar.gz                     ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
-libffi-3.4.4.tar.gz                     https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz
-libffi-3.4.6.tar.gz                     https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-3.4.6.tar.gz
-libffi-python.tar.gz                    https://github.com/python/cpython-source-deps/archive/libffi.zip
+libffi-3.5.2.tar.gz                     https://github.com/libffi/libffi/releases/download/v3.5.2/libffi-3.5.2.tar.gz
 libgcrypt-1.12.0.tar.bz2                https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.12.0.tar.bz2
 libgnugetopt-1.3.tar.bz2                https://distfiles.macports.org/libgnugetopt/libgnugetopt-1.3.tar.bz2
 libgpg-error-1.58.tar.bz2               https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.58.tar.bz2
