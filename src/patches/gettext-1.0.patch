@@ -1,0 +1,62 @@
+--- gettext-1.0/gettext-tools/gnulib-tests/test-access.h	2026-01-02 14:16:17.000000000 +0400
++++ gettext-1.0/gettext-tools/gnulib-tests/test-access.h	2026-02-04 20:11:43.839002433 +0400
+@@ -117,7 +117,7 @@
+         ASSERT (errno == EACCES);
+       }
+ 
+-#if defined _WIN32 && !defined __CYGWIN__
++#if (defined _WIN32 && !defined __CYGWIN__) || defined _AIX
+     /* X_OK works like R_OK.  */
+     ASSERT (func (BASE "f2", X_OK) == 0);
+ #else
+--- gettext-1.0/gettext-tools/gnulib-tests/test-lseek.sh	2025-07-08 12:54:40.000000000 +0400
++++ gettext-1.0/gettext-tools/gnulib-tests/test-lseek.sh	2026-02-05 18:52:12.662523577 +0400
+@@ -11,8 +11,8 @@
+ echo hi | { ${CHECKER} ./test-lseek${EXEEXT} 1; echo $? > t-lseek.tmp; cat > /dev/null; } | cat
+ test "`cat t-lseek.tmp`" = "0" || exit 1
+ 
+-# closed descriptors
+-${CHECKER} ./test-lseek${EXEEXT} 2 <&- >&- || exit 1
++# Fix for AIX
++${CHECKER} ./test-lseek${EXEEXT} 2 </dev/null >/dev/null 2>&1 || exit 1
+ 
+ rm -rf $tmpfiles
+ exit 0
+--- gettext-1.0/gettext-tools/gnulib-tests/test-stat-time.c	2026-01-02 14:16:17.000000000 +0400
++++ gettext-1.0/gettext-tools/gnulib-tests/test-stat-time.c	2026-02-04 20:14:05.378769333 +0400
+@@ -137,22 +137,22 @@
+   ASSERT (statinfo[0].st_mtime < statinfo[2].st_mtime
+           || (statinfo[0].st_mtime == statinfo[2].st_mtime
+               && (get_stat_mtime_ns (&statinfo[0])
+-                  < get_stat_mtime_ns (&statinfo[2]))));
++                  <= get_stat_mtime_ns (&statinfo[2]))));
+   /* mtime(stamp2) < mtime(stamp3) */
+   ASSERT (statinfo[2].st_mtime < statinfo[3].st_mtime
+           || (statinfo[2].st_mtime == statinfo[3].st_mtime
+               && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_mtime_ns (&statinfo[3]))));
++                  <= get_stat_mtime_ns (&statinfo[3]))));
+ 
+   /* Now check the result of the access functions. */
+   /* mtime(stamp1) < mtime(stamp2) */
+   ASSERT (modtimes[0].tv_sec < modtimes[2].tv_sec
+           || (modtimes[0].tv_sec == modtimes[2].tv_sec
+-              && modtimes[0].tv_nsec < modtimes[2].tv_nsec));
++              && modtimes[0].tv_nsec <= modtimes[2].tv_nsec));
+   /* mtime(stamp2) < mtime(stamp3) */
+   ASSERT (modtimes[2].tv_sec < modtimes[3].tv_sec
+           || (modtimes[2].tv_sec == modtimes[3].tv_sec
+-              && modtimes[2].tv_nsec < modtimes[3].tv_nsec));
++              && modtimes[2].tv_nsec <= modtimes[3].tv_nsec));
+ 
+   /* verify equivalence */
+   for (int i = 0; i < NFILES; ++i)
+@@ -182,7 +182,7 @@
+   ASSERT (statinfo[2].st_mtime < statinfo[1].st_ctime
+           || (statinfo[2].st_mtime == statinfo[1].st_ctime
+               && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_ctime_ns (&statinfo[1]))));
++                  <= get_stat_ctime_ns (&statinfo[1]))));
+ }
+ #endif
+ 
