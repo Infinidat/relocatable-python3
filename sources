@@ -36,7 +36,7 @@ libiconv-1.16-win.tar.gz                https://github.com/kiyolee/libiconv-win-
 libiconv-1.17.tar.gz                    https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz
 libidn2-2.3.8.tar.gz                    https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz
 libmd-1.1.0.tar.xz                      https://archive.hadrons.org/software/libmd/libmd-1.1.0.tar.xz
-libsodium-1.0.19.tar.gz                 https://download.libsodium.org/libsodium/releases/libsodium-1.0.19.tar.gz
+libsodium-1.0.21.tar.gz                 https://download.libsodium.org/libsodium/releases/libsodium-1.0.21.tar.gz
 libtasn1-4.21.0.tar.gz                  https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.21.0.tar.gz
 libtool-2.4.7.tar.gz                    https://ftp.gnu.org/gnu/libtool/libtool-2.4.7.tar.gz
 libunistring-1.4.1.tar.gz               https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.gz
