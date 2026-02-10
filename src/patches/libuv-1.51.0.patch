@@ -1,5 +1,5 @@
 --- libuv-1.51.0/src/unix/linux.c	2025-04-25 13:46:22.000000000 +0400
-+++ libuv-1.51.0/src/unix/linux.c	2026-02-04 18:02:10.739600909 +0400
++++ libuv-1.51.0/src/unix/linux.c	2026-02-10 20:08:06.530152579 +0400
 @@ -124,6 +124,13 @@
  # endif
  #endif /* __NR_getrandom */
@@ -15,7 +15,7 @@
    UV__IORING_SETUP_SQPOLL = 2u,
    UV__IORING_SETUP_NO_SQARRAY = 0x10000u,
 --- libuv-1.51.0/src/unix/tcp.c	2024-09-25 12:37:26.000000000 +0400
-+++ libuv-1.51.0/src/unix/tcp.c	2026-02-06 00:22:34.016342551 +0400
++++ libuv-1.51.0/src/unix/tcp.c	2026-02-10 20:08:06.531475839 +0400
 @@ -31,7 +31,7 @@
  #include <sys/socket.h>
  
@@ -56,7 +56,7 @@
  #else  /* !defined(__sun) */
  
 --- libuv-1.51.0/src/unix/thread.c	2025-03-07 02:32:56.000000000 +0400
-+++ libuv-1.51.0/src/unix/thread.c	2026-02-06 03:06:30.491697832 +0400
++++ libuv-1.51.0/src/unix/thread.c	2026-02-10 20:08:06.532359096 +0400
 @@ -897,7 +897,7 @@
      abort();
  }
@@ -75,7 +75,7 @@
      defined(__MVS__) || \
      defined(__PASE__)
 --- libuv-1.51.0/src/unix/udp.c	2025-04-25 13:46:22.000000000 +0400
-+++ libuv-1.51.0/src/unix/udp.c	2026-02-04 23:19:11.000942190 +0400
++++ libuv-1.51.0/src/unix/udp.c	2026-02-10 20:08:06.533446479 +0400
 @@ -1311,7 +1311,8 @@
    r = 0;
    nsent = 0;
@@ -87,7 +87,7 @@
    if (count > 1) {
      for (i = 0; i < count; /*empty*/) {
 --- libuv-1.51.0/test/task.h	2024-09-27 13:29:22.000000000 +0400
-+++ libuv-1.51.0/test/task.h	2026-02-06 13:10:51.171062928 +0400
++++ libuv-1.51.0/test/task.h	2026-02-10 20:08:06.534135485 +0400
 @@ -358,7 +358,7 @@
    return supported;
  }
@@ -98,7 +98,7 @@
  #endif
  
 --- libuv-1.51.0/test/test-fs-copyfile.c	2024-09-25 12:37:26.000000000 +0400
-+++ libuv-1.51.0/test/test-fs-copyfile.c	2026-02-04 18:52:39.612074693 +0400
++++ libuv-1.51.0/test/test-fs-copyfile.c	2026-02-10 20:08:06.534785781 +0400
 @@ -220,8 +220,13 @@
    r = uv_fs_copyfile(NULL, &req, fixture, dst, 0, NULL);
    /* On IBMi PASE, qsecofr users can overwrite read-only files */
@@ -116,7 +116,7 @@
    uv_fs_req_cleanup(&req);
  #endif
 --- libuv-1.51.0/test/test-ip6-addr.c	2024-09-22 20:15:28.000000000 +0400
-+++ libuv-1.51.0/test/test-ip6-addr.c	2026-02-06 12:59:13.451883503 +0400
++++ libuv-1.51.0/test/test-ip6-addr.c	2026-02-10 20:08:06.535531162 +0400
 @@ -32,6 +32,9 @@
  
  
@@ -128,7 +128,7 @@
    /* FIXME: Does Cygwin support this?  */
    RETURN_SKIP("FIXME: This test needs more investigation on Cygwin");
 --- libuv-1.51.0/test/test-list.h	2025-04-25 13:46:22.000000000 +0400
-+++ libuv-1.51.0/test/test-list.h	2026-02-06 13:38:52.372980307 +0400
++++ libuv-1.51.0/test/test-list.h	2026-02-10 20:10:29.058766733 +0400
 @@ -146,7 +146,7 @@
  TEST_DECLARE   (tcp_create_early_bad_bind)
  TEST_DECLARE   (tcp_create_early_bad_domain)
@@ -197,7 +197,7 @@
  
    TEST_ENTRY  (tcp_read_stop_start)
  
-+#if !defined(_AIX) && !defined(__sun)
++#if !defined(_AIX) && !defined(__sun) && !(defined(__linux__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 13)
    TEST_ENTRY  (tcp_reuseport)
 +#endif
  
@@ -325,7 +325,7 @@
    TEST_ENTRY  (fork_fs_events_child_dir)
    TEST_ENTRY  (fork_fs_events_file_parent_child)
 --- libuv-1.51.0/test/test-platform-output.c	2025-03-07 02:32:56.000000000 +0400
-+++ libuv-1.51.0/test/test-platform-output.c	2026-02-06 12:58:25.927382238 +0400
++++ libuv-1.51.0/test/test-platform-output.c	2026-02-10 20:08:06.537797555 +0400
 @@ -151,6 +151,7 @@
  #endif
    uv_free_cpu_info(cpus, count);
@@ -343,16 +343,19 @@
    err = uv_os_get_passwd(&pwd);
    ASSERT_OK(err);
 --- libuv-1.51.0/test/test-thread-name.c	2025-03-07 02:32:56.000000000 +0400
-+++ libuv-1.51.0/test/test-thread-name.c	2026-02-06 13:36:46.387145130 +0400
-@@ -67,6 +67,7 @@
++++ libuv-1.51.0/test/test-thread-name.c	2026-02-10 20:09:51.546341848 +0400
+@@ -66,7 +66,9 @@
+   char long_thread_name[UV_PTHREAD_MAX_NAMELEN_NP + 1];
    struct semaphores sem;
  
- #if defined(__ANDROID_API__) && __ANDROID_API__ < 26 || \
-+   (defined(__sun) && !defined(SO_FLOW_NAME)) || \
+-#if defined(__ANDROID_API__) && __ANDROID_API__ < 26 || \
++#if (defined(__ANDROID_API__) && __ANDROID_API__ < 26) || \
++    (defined(__linux__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 13) || \
++    (defined(__sun) && !defined(SO_FLOW_NAME)) || \
      defined(_AIX) || \
      defined(__MVS__) || \
      defined(__PASE__)
-@@ -128,6 +129,9 @@
+@@ -128,6 +130,9 @@
    r = uv_thread_getname(threads + 1, tn, sizeof(tn));
    ASSERT_OK(r);
  
@@ -362,7 +365,7 @@
    ASSERT_STR_EQ(tn, "worker-thread");
  
    uv_sem_post(&sem.main);
-@@ -179,7 +183,7 @@
+@@ -179,7 +184,7 @@
  
  TEST_IMPL(thread_name_threadpool) {
  
