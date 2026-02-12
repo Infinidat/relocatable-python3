@@ -1,0 +1,43 @@
+--- gnutls-3.8.11/lib/crau/crau.h
++++ gnutls-3.8.11/lib/crau/crau.h
+@@ -251,9 +251,10 @@ void crau_data(struct crau_context_stack_st *stack, ...)
+ # else
+ 
+ #  ifndef CRAU_MAYBE_UNUSED
+-#   if defined(__has_c_attribute) && \
+-    __has_c_attribute (__maybe_unused__)
+-#    define CRAU_MAYBE_UNUSED [[__maybe_unused__]]
++#   if defined(__has_c_attribute)
++#    if __has_c_attribute (__maybe_unused__)
++#     define CRAU_MAYBE_UNUSED [[__maybe_unused__]]
++#    endif
+ #   elif defined(__GNUC__)
+ #    define CRAU_MAYBE_UNUSED __attribute__((__unused__))
+ #   endif
+
+--- gnutls-3.8.11/tests/scripts/common.sh	2026-02-12 00:51:35.659968724 +0200
++++ gnutls-3.8.11/tests/scripts/common.sh	2026-02-12 00:54:50.050979142 +0200
+@@ -45,8 +45,10 @@
+ 
+ 	# We can't assume netstat --version for portability reasons
+ 	if (type netstat) > /dev/null 2>&1; then
+-		PFCMD=netstat
+-		return
++		if netstat -l > /dev/null 2>&1; then
++			PFCMD=netstat
++			return
++		fi
+ 	fi
+ 
+ 	echo "neither ss nor netstat found" 1>&2
+--- gnutls-3.8.11/tests/mini-x509-cas.c	2026-02-12 02:16:21.536110047 +0200
++++ gnutls-3.8.11/tests/mini-x509-cas.c	2026-02-12 02:17:10.933283585 +0200
+@@ -36,7 +36,7 @@
+ /* Tests whether a very long CA list, that spans over multiple records
+  * is tolerated */
+ 
+-const char *side;
++const char *side = "NONE";
+ 
+ static void tls_log_func(int level, const char *str)
+ {
