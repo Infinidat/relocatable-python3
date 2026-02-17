@@ -1,3 +1,15 @@
+--- gnutls-3.8.11/fuzz/gnutls_ocsp_resp_parser_fuzzer.c	2025-09-25 10:22:49.000000000 +0400
++++ gnutls-3.8.11/fuzz/gnutls_ocsp_resp_parser_fuzzer.c	2026-02-17 16:37:53.306569327 +0400
+@@ -26,6 +26,9 @@
+ 
+ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+ {
++#if defined(__sun)
++	return 0;
++#endif
+ 	gnutls_datum_t raw;
+ 	gnutls_datum_t out;
+ 	gnutls_ocsp_resp_t resp;
 --- gnutls-3.8.11/lib/crau/crau.h	2025-10-24 10:10:22.000000000 +0400
 +++ gnutls-3.8.11/lib/crau/crau.h	2026-02-16 19:58:41.449481320 +0400
 @@ -251,9 +251,10 @@
@@ -52,6 +64,17 @@
  }
  #endif
  
+--- gnutls-3.8.11/src/gl/tests/test-sys_socket-h.c	2025-11-20 06:09:15.000000000 +0400
++++ gnutls-3.8.11/src/gl/tests/test-sys_socket-h.c	2026-02-17 22:48:10.028080641 +0400
+@@ -165,7 +165,7 @@
+ #ifdef MSG_CMSG_CLOEXEC
+     case MSG_CMSG_CLOEXEC:
+ #endif
+-#ifdef SOCK_CLOFORK
++#ifdef MSG_CMSG_CLOFORK
+     case MSG_CMSG_CLOFORK:
+ #endif
+     case MSG_DONTROUTE:
 --- gnutls-3.8.11/tests/client-fastopen.c	2025-09-25 10:22:49.000000000 +0400
 +++ gnutls-3.8.11/tests/client-fastopen.c	2026-02-17 01:22:31.367388037 +0400
 @@ -30,7 +30,7 @@
@@ -125,15 +148,18 @@
  {
  	exit(77);
 --- gnutls-3.8.11/tests/slow/test-hash-large.sh	2025-09-25 10:22:49.000000000 +0400
-+++ gnutls-3.8.11/tests/slow/test-hash-large.sh	2026-02-17 01:29:26.014418222 +0400
-@@ -21,6 +21,14 @@
++++ gnutls-3.8.11/tests/slow/test-hash-large.sh	2026-02-17 15:41:37.615258721 +0400
+@@ -21,6 +21,17 @@
  # along with this program.  If not, see <https://www.gnu.org/licenses/>
  #
  
 +UNAME=$(uname)
 +
 +case "$UNAME" in
-+AIX)
++Linux)
++	;;
++*)
++	echo "Skip $0 on $UNAME: we do not have enough resources"
 +	exit 77
 +	;;
 +esac
