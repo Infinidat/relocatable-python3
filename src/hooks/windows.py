@@ -32,16 +32,14 @@ def _move(src, dst):
 
 def libiconv_post_make(options, buildout, environ):
     prefix = environ['PREFIX']
-    suffix = os.path.join('build-VS2017', 'x64', 'Release')
+    suffix = os.path.join('build-VS2017-MT', 'x64', 'Release')
     _copy(glob.glob(os.path.join('include', '*.h')),
           os.path.join(prefix, 'include'))
     _copy(glob.glob(os.path.join(suffix, '*.dll')),
           os.path.join(prefix, 'lib'))
     _copy(glob.glob(os.path.join(suffix, '*.lib')),
           os.path.join(prefix, 'lib'))
-    _copy(os.path.join(suffix, 'libiconv.lib'),
-          os.path.join(prefix, 'lib', 'iconv.lib'))
-    _copy(glob.glob(os.path.join(suffix, '*.exe')),
+    _copy(glob.glob(os.path.join(suffix, 'static', '*.exe')),
           os.path.join(prefix, 'bin'))
 
 class PythonPostMake(object):
