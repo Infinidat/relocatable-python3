@@ -35,7 +35,6 @@
  # Check whether to install the documentation:
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-doc" >&5
  $as_echo_n "checking for --enable-doc... " >&6; }
-Only in mpdecimal-4.0.1: configure.orig
 --- mpdecimal-4.0.1/tests/Makefile.in	2025-05-05 02:25:00.000000000 +0400
 +++ mpdecimal-4.0.1/tests/Makefile.in	2026-02-09 11:17:41.053570208 +0400
 @@ -40,12 +40,12 @@
@@ -53,3 +52,74 @@ Only in mpdecimal-4.0.1: configure.orig
  
  
  FORCE:
+--- mpdecimal-4.0.1/tests/gettests.sh	2025-05-05 02:25:00.000000000 +0400
++++ mpdecimal-4.0.1/tests/gettests.sh	2026-02-18 23:31:51.991170333 +0400
+@@ -1,23 +1,19 @@
+ #!/bin/sh
+ 
++set -e
++
+ if [ ! -d testdata ]; then
+     mkdir testdata
+ fi
+ 
+ if [ x"$1" != x"--local" -a ! -f testdata/add.decTest ]; then
+     # The official tests are freely downloadable, but copyrighted.
+-    WGET=`which wget`
+-    if [ ! -f "$WGET" ]; then
+-        printf "\n*** gettests.sh: error: could not find wget. In order to run the tests, \n"
+-        printf "    download http://speleotrove.com/decimal/dectest.zip and extract the \n"
+-        printf "    archive into tests/testdata.\n\n"
+-        exit 1
+-    fi
+     printf "\nGetting official tests ... \n\n"
+-    $WGET -nv http://speleotrove.com/decimal/dectest.zip 2>&1 &&
+-    cd testdata &&
+-    unzip -qq ../dectest.zip &&
+-    cd ../
++    curl --insecure --location --remote-name --silent --show-error --fail \
++        http://speleotrove.com/decimal/dectest.zip
++    cd testdata
++    python3 -m zipfile -e ../dectest.zip .
++    cd ..
+ fi
+ 
+ if [ ! -f testdata/baseconv.decTest ]; then
+--- mpdecimal-4.0.1/tests/runshort.sh	2025-05-05 02:25:00.000000000 +0400
++++ mpdecimal-4.0.1/tests/runshort.sh	2026-02-18 22:47:26.160132220 +0400
+@@ -38,19 +38,22 @@
+     printf "# ========================================================================\n\n"
+ 
+     PORTABLE_PWD=`pwd`
+-    LD_LIBRARY_PATH="$PORTABLE_PWD/../libmpdec:$LD_LIBRARY_PATH"
+-    DYLD_LIBRARY_PATH="$PORTABLE_PWD/../libmpdec:$DYLD_LIBRARY_PATH"
+-    LD_64_LIBRARY_PATH="$PORTABLE_PWD/../libmpdec:$LD_64_LIBRARY_PATH"
+-    LD_32_LIBRARY_PATH="$PORTABLE_PWD/../libmpdec:$LD_32_LIBRARY_PATH"
+-    LD_LIBRARY_PATH_64="$PORTABLE_PWD/../libmpdec:$LD_LIBRARY_PATH_64"
+-    LD_LIBRARY_PATH_32="$PORTABLE_PWD/../libmpdec:$LD_LIBRARY_PATH_32"
+-    PATH="$LD_LIBRARY_PATH:$PATH"
+-    export LD_LIBRARY_PATH
+-    export DYLD_LIBRARY_PATH
+-    export LD_64_LIBRARY_PATH
+-    export LD_32_LIBRARY_PATH
+-    export LD_LIBRARY_PATH_64
+-    export LD_LIBRARY_PATH_32
++
++    if [ -n "$LD_LIBRARY_PATH" ]; then
++        LD_LIBRARY_PATH="$PORTABLE_PWD/../libmpdec:$LD_LIBRARY_PATH"
++    else
++        LD_LIBRARY_PATH="$PORTABLE_PWD/../libmpdec"
++    fi
++
++    if [ -n "$LIBPATH" ]; then
++        LIBPATH="$PORTABLE_PWD/../libmpdec:$LIBPATH"
++    else
++        LIBPATH="$PORTABLE_PWD/../libmpdec"
++    fi
++
++    PATH="$PORTABLE_PWD/../libmpdec:$PATH"
++
++    export LD_LIBRARY_PATH LIBPATH PATH
+ 
+     if [ x"$1" != x"--local" ]; then
+         printf "Running official tests ...\n\n"
