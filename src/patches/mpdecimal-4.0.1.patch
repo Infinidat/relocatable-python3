@@ -53,7 +53,7 @@
  
  FORCE:
 --- mpdecimal-4.0.1/tests/gettests.sh	2025-05-05 02:25:00.000000000 +0400
-+++ mpdecimal-4.0.1/tests/gettests.sh	2026-02-18 23:31:51.991170333 +0400
++++ mpdecimal-4.0.1/tests/gettests.sh	2026-02-19 11:18:00.103733912 +0400
 @@ -1,23 +1,19 @@
  #!/bin/sh
  
@@ -78,7 +78,7 @@
 -    unzip -qq ../dectest.zip &&
 -    cd ../
 +    curl --insecure --location --remote-name --silent --show-error --fail \
-+        http://speleotrove.com/decimal/dectest.zip
++        ftp://python.infinidat.com/python/sources/dectest.zip
 +    cd testdata
 +    python3 -m zipfile -e ../dectest.zip .
 +    cd ..

@@ -6,6 +6,7 @@ c-ares-1.34.6.tar.gz                    https://github.com/c-ares/c-ares/release
 coreutils-9.4.tar.gz                    https://ftp.gnu.org/gnu/coreutils/coreutils-9.4.tar.gz
 cyrus-sasl-2.1.27.tar.gz                ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-2.1.27.tar.gz
 cyrus-sasl-2.1.28.tar.gz                https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz
+dectest.zip                             http://speleotrove.com/decimal/dectest.zip
 expat-2.7.3.tar.gz                      https://github.com/libexpat/libexpat/releases/download/R_2_7_3/expat-2.7.3.tar.gz
 gdbm-1.13.tar.gz                        https://ftp.gnu.org/gnu/gdbm/gdbm-1.13.tar.gz
 gdbm-1.23.tar.gz                        https://ftp.gnu.org/gnu/gdbm/gdbm-1.23.tar.gz
