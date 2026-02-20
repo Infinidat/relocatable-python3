@@ -82,7 +82,7 @@
   */
  
 -#if defined(_WIN32)
-+#if defined(_WIN32) || defined(_AIX)
++#if defined(_WIN32) || defined(_AIX) || defined(__sun)
  
  int main(void)
  {
