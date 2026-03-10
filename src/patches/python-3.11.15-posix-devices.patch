@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/test/test_posix.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/test/test_posix.py	2026-03-06 22:22:38.323754186 +0400
+--- Python-3.11.15/Lib/test/test_posix.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_posix.py	2026-03-11 00:09:44.200885277 +0400
 @@ -689,6 +689,7 @@
  
      @unittest.skipUnless(hasattr(posix, 'makedev'), 'test needs posix.makedev()')
@@ -39,8 +39,8 @@
  
      def _test_all_chown_common(self, chown_func, first_param, stat_func):
          """Common code for chown, fchown and lchown tests."""
---- Python-3.11.14/Modules/clinic/posixmodule.c.h	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Modules/clinic/posixmodule.c.h	2026-03-06 22:22:38.328568222 +0400
+--- Python-3.11.15/Modules/clinic/posixmodule.c.h	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Modules/clinic/posixmodule.c.h	2026-03-11 00:09:44.206284398 +0400
 @@ -6066,7 +6066,7 @@
  #define OS_MAJOR_METHODDEF    \
      {"major", (PyCFunction)os_major, METH_O, os_major__doc__},
@@ -128,8 +128,8 @@
          goto exit;
      }
      _return_value = os_makedev_impl(module, major, minor);
---- Python-3.11.14/Modules/posixmodule.c	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Modules/posixmodule.c	2026-03-06 22:22:38.335415973 +0400
+--- Python-3.11.15/Modules/posixmodule.c	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Modules/posixmodule.c	2026-03-11 00:09:44.213950918 +0400
 @@ -209,6 +209,9 @@
  #  define HAVE_MKNODAT_RUNTIME 1
  #endif

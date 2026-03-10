@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/sysconfig.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/sysconfig.py	2026-03-06 22:11:16.409331402 +0400
+--- Python-3.11.15/Lib/sysconfig.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/sysconfig.py	2026-03-11 00:06:55.074681441 +0400
 @@ -484,11 +484,6 @@
          if hasattr(e, "strerror"):
              msg = f"{msg} ({e.strerror})"
@@ -12,8 +12,8 @@
  
      # There's a chicken-and-egg situation on OS X with regards to the
      # _sysconfigdata module after the changes introduced by #15298:
---- Python-3.11.14/Makefile.pre.in	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Makefile.pre.in	2026-03-06 22:11:16.407775500 +0400
+--- Python-3.11.15/Makefile.pre.in	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Makefile.pre.in	2026-03-11 00:06:55.076350552 +0400
 @@ -167,10 +167,6 @@
  LDCXXSHARED=	@LDCXXSHARED@
  DESTSHARED=	$(BINLIBDEST)/lib-dynload
@@ -67,8 +67,8 @@
  		Misc/python-embed.pc Misc/python-config.sh
  	-rm -f python*-gdb.py
  	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
---- Python-3.11.14/configure	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/configure	2026-03-06 22:11:16.419137389 +0400
+--- Python-3.11.15/configure	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/configure	2026-03-11 00:06:55.082742290 +0400
 @@ -894,8 +894,6 @@
  HOSTRUNNER
  STATIC_LIBPYTHON

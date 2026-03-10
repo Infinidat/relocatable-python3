@@ -1,5 +1,5 @@
---- Python-3.11.14/Modules/Setup	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Modules/Setup	2026-03-06 22:21:32.193028142 +0400
+--- Python-3.11.15/Modules/Setup	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Modules/Setup	2026-03-11 00:07:42.873050414 +0400
 @@ -300,3 +300,7 @@
  #
  # _sqlite3 _tkinter _curses pyexpat

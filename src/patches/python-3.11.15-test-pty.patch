@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/test/test_pty.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/test/test_pty.py	2026-03-06 22:23:57.376369671 +0400
+--- Python-3.11.15/Lib/test/test_pty.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_pty.py	2026-03-11 00:11:16.408485692 +0400
 @@ -191,6 +191,7 @@
          s2 = _readline(master_fd)
          self.assertEqual(b'For my pet fish, Eric.\n', normalize_output(s2))

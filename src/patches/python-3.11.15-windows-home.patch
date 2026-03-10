@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/distutils/tests/test_dist.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/distutils/tests/test_dist.py	2026-03-06 22:25:43.902296357 +0400
+--- Python-3.11.15/Lib/distutils/tests/test_dist.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/distutils/tests/test_dist.py	2026-03-11 00:13:28.222182023 +0400
 @@ -444,8 +444,8 @@
          else:
              user_filename = "pydistutils.cfg"
@@ -31,8 +31,8 @@
                  files = dist.find_config_files()
                  self.assertIn(user_filename, files,
                                '%r not found in %r' % (user_filename, files))
---- Python-3.11.14/Lib/ntpath.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/ntpath.py	2026-03-06 22:25:43.903182222 +0400
+--- Python-3.11.15/Lib/ntpath.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/ntpath.py	2026-03-11 00:13:28.223570262 +0400
 @@ -332,7 +332,9 @@
      while i < n and path[i] not in _get_bothseps(path):
          i += 1
@@ -44,9 +44,9 @@
          userhome = os.environ['USERPROFILE']
      elif not 'HOMEPATH' in os.environ:
          return path
---- Python-3.11.14/Lib/test/test_ntpath.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/test/test_ntpath.py	2026-03-06 22:25:43.904646205 +0400
-@@ -827,45 +827,48 @@
+--- Python-3.11.15/Lib/test/test_ntpath.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_ntpath.py	2026-03-11 00:13:28.225550537 +0400
+@@ -840,45 +840,48 @@
              env.clear()
              tester('ntpath.expanduser("~test")', '~test')
  
@@ -110,8 +110,8 @@
  
  
  
---- Python-3.11.14/Lib/test/test_pathlib.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/test/test_pathlib.py	2026-03-06 22:25:43.906404477 +0400
+--- Python-3.11.15/Lib/test/test_pathlib.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_pathlib.py	2026-03-11 00:13:28.228482887 +0400
 @@ -1506,9 +1506,6 @@
              env['USERPROFILE'] = os.path.join(BASE, 'userprofile')
              self._test_home(self.cls.home())
