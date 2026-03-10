@@ -1,6 +1,6 @@
---- Python-3.11.9/configure
-+++ Python-3.11.9/configure
-@@ -6310,7 +6310,7 @@ if ${ac_cv_wl_no_as_needed+:} false; then :
+--- Python-3.11.14/configure	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/configure	2026-03-06 22:22:26.137980238 +0400
+@@ -6310,7 +6310,7 @@
  else
  
    save_LDFLAGS="$LDFLAGS"

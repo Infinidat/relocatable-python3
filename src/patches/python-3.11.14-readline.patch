@@ -1,6 +1,6 @@
---- Python-3.11.9/configure	2024-04-05 11:13:14.325247469 -0500
-+++ Python-3.11.9/configure	2024-04-05 11:14:14.667224175 -0500
-@@ -21045,14 +21045,12 @@
+--- Python-3.11.14/configure	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/configure	2026-03-06 22:22:51.446415275 +0400
+@@ -21069,14 +21069,12 @@
  LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
@@ -20,7 +20,7 @@
  int
  main ()
  {
-@@ -21091,18 +21089,16 @@
+@@ -21115,18 +21113,16 @@
  LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */

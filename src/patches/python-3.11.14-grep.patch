@@ -1,6 +1,6 @@
---- Python-3.11.9/configure
-+++ Python-3.11.9/configure
-@@ -19927,10 +19927,10 @@ _ACEOF
+--- Python-3.11.14/configure	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/configure	2026-03-06 22:21:47.722676148 +0400
+@@ -19928,10 +19928,10 @@
  if ac_fn_c_try_compile "$LINENO"; then :
  
  

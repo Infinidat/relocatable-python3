@@ -1,5 +1,5 @@
---- Python-3.11.9/Lib/test/test_resource.py	2024-04-05 19:52:02.435661227 -0500
-+++ Python-3.11.9/Lib/test/test_resource.py	2024-04-05 19:53:12.324894534 -0500
+--- Python-3.11.14/Lib/test/test_resource.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/test_resource.py	2026-03-06 22:24:08.908385804 +0400
 @@ -26,12 +26,8 @@
          except AttributeError:
              pass

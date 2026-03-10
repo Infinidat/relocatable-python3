@@ -1,5 +1,5 @@
---- Python-3.11.9/Lib/test/_test_eintr.py	2024-04-05 18:39:08.836470608 -0500
-+++ Python-3.11.9/Lib/test/_test_eintr.py	2024-04-05 18:39:40.625756215 -0500
+--- Python-3.11.14/Lib/test/_test_eintr.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/_test_eintr.py	2026-03-06 22:23:42.220026307 +0400
 @@ -531,6 +531,9 @@
      def test_lockf(self):
          self._lock(fcntl.lockf, "lockf")

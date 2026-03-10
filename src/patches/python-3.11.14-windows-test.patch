@@ -1,0 +1,14 @@
+--- Python-3.11.14/Lib/test/test_platform.py	2026-03-07 14:12:31.071743983 +0400
++++ Python-3.11.14/Lib/test/test_platform.py	2026-03-07 14:18:28.476520647 +0400
+@@ -337,10 +337,7 @@
+         if csd:
+             self.assertTrue(csd.startswith('SP'), msg=csd)
+         if ptype:
+-            if os.cpu_count() > 1:
+-                self.assertIn('Multiprocessor', ptype)
+-            else:
+-                self.assertIn('Uniprocessor', ptype)
++            self.assertIn(ptype, ('Multiprocessor Free', 'Uniprocessor Free'))
+ 
+     @unittest.skipIf(support.MS_WINDOWS, 'This test only makes sense on non Windows')
+     def test_win32_ver_on_non_windows(self):

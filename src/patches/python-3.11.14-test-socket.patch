@@ -1,6 +1,6 @@
---- Python-3.11.9/Lib/test/test_socket.py	2025-12-04 21:29:43.410317702 +0000
-+++ Python-3.11.9/Lib/test/test_socket.py	2025-12-04 21:34:22.751037584 +0000
-@@ -168,7 +168,7 @@
+--- Python-3.11.14/Lib/test/test_socket.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/test_socket.py	2026-03-06 22:24:42.010720063 +0400
+@@ -169,7 +169,7 @@
  
  HAVE_SOCKET_VSOCK = _have_socket_vsock()
  

@@ -1,5 +1,5 @@
---- Python-3.8.12/Lib/encodings/aliases.py	2024-06-03 11:19:39.403298027 -0500
-+++ Python-3.8.12/Lib/encodings/aliases.py	2024-06-03 11:22:13.158812791 -0500
+--- Python-3.11.14/Lib/encodings/aliases.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/encodings/aliases.py	2026-03-06 22:21:59.255770073 +0400
 @@ -209,6 +209,11 @@
      'ms932'              : 'cp932',
      'mskanji'            : 'cp932',

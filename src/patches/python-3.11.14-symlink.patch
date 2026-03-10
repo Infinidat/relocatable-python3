@@ -1,6 +1,6 @@
---- Python-3.11.9/Makefile.pre.in
-+++ Python-3.11.9/Makefile.pre.in
-@@ -619,7 +619,7 @@ $(LIBRARY): $(LIBRARY_OBJS)
+--- Python-3.11.14/Makefile.pre.in	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Makefile.pre.in	2026-03-06 22:23:27.629972261 +0400
+@@ -756,7 +756,7 @@
  libpython$(LDVERSION).so: $(LIBRARY_OBJS) $(DTRACE_OBJS)
  	if test $(INSTSONAME) != $(LDLIBRARY); then \
  		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM); \

@@ -1,5 +1,5 @@
---- Python-3.11.9/Lib/distutils/_msvccompiler.py	2024-04-02 12:25:04
-+++ Python-3.11.9/Lib/distutils/_msvccompiler.py	2024-06-12 16:31:22
+--- Python-3.11.14/Lib/distutils/_msvccompiler.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/distutils/_msvccompiler.py	2026-03-06 22:25:28.312845407 +0400
 @@ -243,20 +243,22 @@
          # bpo-38597: Always compile with dynamic linking
          # Future releases of Python 3.x will include all past
@@ -27,8 +27,8 @@
          ]
  
          self.ldflags_exe = [*ldflags, '/MANIFEST:EMBED,ID=1']
---- Python-3.11.9/Lib/test/test_getpath.py	2024-04-02 12:25:04
-+++ Python-3.11.9/Lib/test/test_getpath.py	2024-06-12 16:31:31
+--- Python-3.11.14/Lib/test/test_getpath.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/test_getpath.py	2026-03-06 22:25:28.317953767 +0400
 @@ -109,6 +109,7 @@
          actual = getpath(ns, expected)
          self.assertEqual(expected, actual)
@@ -37,8 +37,8 @@
      def test_registry_win32(self):
          """Test registry lookup on Windows.
  
---- Python-3.11.9/Lib/test/test_smtpnet.py	2024-04-02 12:25:04
-+++ Python-3.11.9/Lib/test/test_smtpnet.py	2024-06-12 16:33:08
+--- Python-3.11.14/Lib/test/test_smtpnet.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/test_smtpnet.py	2026-03-06 22:25:28.320407656 +0400
 @@ -25,6 +25,7 @@
      testServer = 'smtp.gmail.com'
      remotePort = 587
@@ -47,8 +47,8 @@
      def test_connect_starttls(self):
          support.get_attribute(smtplib, 'SMTP_SSL')
          context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
---- Python-3.11.9/Modules/getpath.py	2024-04-02 12:25:04
-+++ Python-3.11.9/Modules/getpath.py	2024-06-12 16:31:31
+--- Python-3.11.14/Modules/getpath.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Modules/getpath.py	2026-03-06 22:25:28.326301548 +0400
 @@ -673,36 +673,6 @@
      else:
          pythonpath.append(joinpath(prefix, ZIP_LANDMARK))
@@ -86,13 +86,13 @@
      # Then add any entries compiled into the PYTHONPATH macro.
      if PYTHONPATH:
          for p in PYTHONPATH.split(DELIM):
---- Python-3.11.9/PCbuild/get_externals.bat	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/get_externals.bat	2024-06-12 16:31:13
+--- Python-3.11.14/PCbuild/get_externals.bat	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/PCbuild/get_externals.bat	2026-03-06 22:25:28.328592064 +0400
 @@ -53,7 +53,7 @@
  set libraries=
  set libraries=%libraries%                                       bzip2-1.0.8
  if NOT "%IncludeLibffiSrc%"=="false" set libraries=%libraries%  libffi-3.4.4
--if NOT "%IncludeSSLSrc%"=="false" set libraries=%libraries%     openssl-3.0.13
+-if NOT "%IncludeSSLSrc%"=="false" set libraries=%libraries%     openssl-3.0.15
 +if NOT "%IncludeSSLSrc%"=="false" set libraries=%libraries%     openssl-1.1.1w
  set libraries=%libraries%                                       sqlite-3.45.1.0
  if NOT "%IncludeTkinterSrc%"=="false" set libraries=%libraries% tcl-core-8.6.12.1
@@ -101,13 +101,13 @@
  
  set binaries=
  if NOT "%IncludeLibffi%"=="false"  set binaries=%binaries% libffi-3.4.4
--if NOT "%IncludeSSL%"=="false"     set binaries=%binaries% openssl-bin-3.0.13
+-if NOT "%IncludeSSL%"=="false"     set binaries=%binaries% openssl-bin-3.0.15
 +if NOT "%IncludeSSL%"=="false"     set binaries=%binaries% openssl-bin-1.1.1w
  if NOT "%IncludeTkinter%"=="false" set binaries=%binaries% tcltk-8.6.12.1
  if NOT "%IncludeSSLSrc%"=="false"  set binaries=%binaries% nasm-2.11.06
  
---- Python-3.11.9/PCbuild/openssl.props	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/openssl.props	2024-06-12 16:31:13
+--- Python-3.11.14/PCbuild/openssl.props	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/PCbuild/openssl.props	2026-03-06 22:25:28.330831372 +0400
 @@ -10,7 +10,7 @@
      </Link>
    </ItemDefinitionGroup>
@@ -124,14 +124,14 @@
 -</Project>
 \ No newline at end of file
 +</Project>
---- Python-3.11.9/PCbuild/python.props	2024-04-02 12:25:04
-+++ Python-3.11.9/PCbuild/python.props	2024-06-12 16:31:13
+--- Python-3.11.14/PCbuild/python.props	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/PCbuild/python.props	2026-03-06 22:25:28.332465646 +0400
 @@ -74,8 +74,8 @@
      <libffiDir Condition="$(libffiDir) == ''">$(ExternalsDir)libffi-3.4.4\</libffiDir>
      <libffiOutDir Condition="$(libffiOutDir) == ''">$(libffiDir)$(ArchName)\</libffiOutDir>
      <libffiIncludeDir Condition="$(libffiIncludeDir) == ''">$(libffiOutDir)include</libffiIncludeDir>
--    <opensslDir Condition="$(opensslDir) == ''">$(ExternalsDir)openssl-3.0.13\</opensslDir>
--    <opensslOutDir Condition="$(opensslOutDir) == ''">$(ExternalsDir)openssl-bin-3.0.13\$(ArchName)\</opensslOutDir>
+-    <opensslDir Condition="$(opensslDir) == ''">$(ExternalsDir)openssl-3.0.15\</opensslDir>
+-    <opensslOutDir Condition="$(opensslOutDir) == ''">$(ExternalsDir)openssl-bin-3.0.15\$(ArchName)\</opensslOutDir>
 +    <opensslDir Condition="$(opensslDir) == ''">$(ExternalsDir)openssl-1.1.1w\</opensslDir>
 +    <opensslOutDir Condition="$(opensslOutDir) == ''">$(ExternalsDir)openssl-bin-1.1.1w\$(ArchName)\</opensslOutDir>
      <opensslIncludeDir Condition="$(opensslIncludeDir) == ''">$(opensslOutDir)include</opensslIncludeDir>

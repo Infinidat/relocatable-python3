@@ -1,5 +1,5 @@
---- Python-3.11.9/Lib/test/test_smtpnet.py	2024-04-02 12:25:04
-+++ Python-3.11.9/Lib/test/test_smtpnet.py	2024-06-12 16:33:08
+--- Python-3.11.14/Lib/test/test_smtpnet.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/test_smtpnet.py	2026-03-06 22:24:20.381235820 +0400
 @@ -25,6 +25,7 @@
      testServer = 'smtp.gmail.com'
      remotePort = 587

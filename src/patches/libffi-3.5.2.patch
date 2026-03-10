@@ -1,6 +1,6 @@
 --- libffi-3.5.2/configure.host	2025-08-02 10:29:39.000000000 +0400
-+++ libffi-3.5.2/configure.host	2026-02-08 23:58:38.252060771 +0400
-@@ -206,10 +206,9 @@
++++ libffi-3.5.2/configure.host	2026-02-23 18:49:22.907424407 +0400
+@@ -206,10 +206,8 @@
    powerpc-*-darwin* | powerpc64-*-darwin*)
  	TARGET=POWERPC_DARWIN; TARGETDIR=powerpc
  	;;
@@ -9,7 +9,17 @@
  	TARGET=POWERPC_AIX; TARGETDIR=powerpc
 -	# Create AIX-style "FAT" libraries.
 -	tmake_file="t-aix"
-+	# HAVE_LONG_DOUBLE_VARIANT=1
  	;;
    powerpc-*-freebsd* | powerpc-*-openbsd* | powerpc-*-netbsd*)
  	TARGET=POWERPC_FREEBSD; TARGETDIR=powerpc
+--- libffi-3.5.2/ltmain.sh	2025-06-09 22:03:52.000000000 +0400
++++ libffi-3.5.2/ltmain.sh	2026-02-23 18:47:46.352112970 +0400
+@@ -3156,7 +3156,7 @@
+   $debug_cmd
+ 
+   # awkward: cmd appends spaces to result
+-  func_convert_core_msys_to_w32_result=`( cmd //c echo "$1" ) 2>/dev/null |
++  func_convert_core_msys_to_w32_result=`( cmd /c echo "$1" ) 2>/dev/null |
+     $SED -e 's/[ ]*$//' -e "$sed_naive_backslashify"`
+ }
+ #end: func_convert_core_msys_to_w32

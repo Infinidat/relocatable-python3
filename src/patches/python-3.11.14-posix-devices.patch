@@ -1,5 +1,5 @@
---- Python-3.11.9/Lib/test/test_posix.py	2024-04-06 21:22:47.000000000 -0500
-+++ Python-3.11.9/Lib/test/test_posix.py	2024-04-06 21:33:42.961626798 -0500
+--- Python-3.11.14/Lib/test/test_posix.py	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Lib/test/test_posix.py	2026-03-06 22:22:38.323754186 +0400
 @@ -689,6 +689,7 @@
  
      @unittest.skipUnless(hasattr(posix, 'makedev'), 'test needs posix.makedev()')
@@ -39,8 +39,8 @@
  
      def _test_all_chown_common(self, chown_func, first_param, stat_func):
          """Common code for chown, fchown and lchown tests."""
---- Python-3.11.9/Modules/clinic/posixmodule.c.h	2024-04-06 21:22:47.000000000 -0500
-+++ Python-3.11./Modules/clinic/posixmodule.c.h	2024-04-06 21:23:31.752455348 -0500
+--- Python-3.11.14/Modules/clinic/posixmodule.c.h	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Modules/clinic/posixmodule.c.h	2026-03-06 22:22:38.328568222 +0400
 @@ -6066,7 +6066,7 @@
  #define OS_MAJOR_METHODDEF    \
      {"major", (PyCFunction)os_major, METH_O, os_major__doc__},
@@ -128,9 +128,9 @@
          goto exit;
      }
      _return_value = os_makedev_impl(module, major, minor);
---- Python-3.11.9/Modules/posixmodule.c	2024-04-06 21:22:47.000000000 -0500
-+++ Python-3.11.9/Modules/posixmodule.c	2024-04-06 21:33:07.590906728 -0500
-@@ -204,6 +204,9 @@
+--- Python-3.11.14/Modules/posixmodule.c	2025-10-09 20:16:55.000000000 +0400
++++ Python-3.11.14/Modules/posixmodule.c	2026-03-06 22:22:38.335415973 +0400
+@@ -209,6 +209,9 @@
  #  define HAVE_MKNODAT_RUNTIME 1
  #endif
  
@@ -140,7 +140,7 @@
  
  #ifdef __cplusplus
  extern "C" {
-@@ -899,17 +902,40 @@
+@@ -904,17 +907,40 @@
  }
  #endif /* MS_WINDOWS */
  
@@ -186,7 +186,7 @@
      return 1;
  }
  #endif /* (HAVE_MKNOD && HAVE_MAKEDEV) || HAVE_DEVICE_MACROS */
-@@ -10841,11 +10867,22 @@
+@@ -10892,11 +10918,22 @@
  Extracts a device major number from a raw device number.
  [clinic start generated code]*/
  
@@ -211,7 +211,7 @@
  }
  
  
-@@ -10858,11 +10895,22 @@
+@@ -10909,11 +10946,22 @@
  Extracts a device minor number from a raw device number.
  [clinic start generated code]*/
  
@@ -236,7 +236,7 @@
  }
  
  
-@@ -10877,10 +10925,21 @@
+@@ -10928,10 +10976,21 @@
  [clinic start generated code]*/
  
  static dev_t
