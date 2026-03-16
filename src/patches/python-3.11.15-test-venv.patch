@@ -1,0 +1,10 @@
+--- Python-3.11.15/Lib/test/test_venv.py	2026-03-14 14:47:32.612788808 +0400
++++ Python-3.11.15/Lib/test/test_venv.py	2026-03-14 14:49:30.076786473 +0400
+@@ -478,6 +478,7 @@
+         self.assertEndsWith(lines[1], env_name.encode())
+ 
+     # gh-124651: test quoted strings
++    @unittest.skipIf(sys.platform == 'aix', 'contains invalid characters on AIX')
+     @unittest.skipIf(os.name == 'nt', 'contains invalid characters on Windows')
+     def test_special_chars_csh(self):
+         """

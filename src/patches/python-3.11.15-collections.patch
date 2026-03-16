@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/collections/__init__.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/collections/__init__.py	2026-03-06 22:21:06.344620697 +0400
+--- Python-3.11.15/Lib/collections/__init__.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/collections/__init__.py	2026-03-11 00:07:29.005443557 +0400
 @@ -50,6 +50,14 @@
  except ImportError:
      pass

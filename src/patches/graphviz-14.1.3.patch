@@ -1,0 +1,11 @@
+--- graphviz-14.1.3/configure	2026-03-15 00:58:38.699449675 +0200
++++ graphviz-14.1.3/configure	2026-03-15 01:04:29.425900634 +0200
+@@ -11761,7 +11761,7 @@
+ fi
+ 
+         hardcode_libdir_flag_spec='$wl-blibpath:$libdir:'"$aix_libpath"
+-        archive_expsym_cmds='$CC -o $output_objdir/$soname $libobjs $deplibs $wl'$no_entry_flag' $compiler_flags `if test -n "$allow_undefined_flag"; then func_echo_all "$wl$allow_undefined_flag"; else :; fi` $wl'$exp_sym_flag:\$export_symbols' '$shared_flag
++        archive_expsym_cmds='$CC -o $output_objdir/$soname $libobjs $deplibs $wl'$no_entry_flag' $compiler_flags '$shared_flag
+       else
+ 	if test ia64 = "$host_cpu"; then
+ 	  hardcode_libdir_flag_spec='$wl-R $libdir:/usr/lib:/lib'

@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/_aix_support.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/_aix_support.py	2026-03-06 22:17:47.903042060 +0400
+--- Python-3.11.15/Lib/_aix_support.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/_aix_support.py	2026-03-11 21:49:30.735106726 +0400
 @@ -1,15 +1,9 @@
  """Shared AIX support functions."""
  
@@ -34,8 +34,17 @@
  
  
  def aix_platform():
---- Python-3.11.14/setup.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/setup.py	2026-03-06 22:17:47.901732781 +0400
+--- Python-3.11.15/setup.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/setup.py	2026-03-11 21:49:30.736894044 +0400
+@@ -1309,7 +1309,7 @@
+         #
+         # More information on Expat can be found at www.libexpat.org.
+         #
+-        self.addext(Extension('pyexpat', sources=['pyexpat.c']))
++        self.addext(Extension('pyexpat', libraries=['m'], sources=['pyexpat.c']))
+ 
+         # Fredrik Lundh's cElementTree module.  Note that this also
+         # uses expat (via the CAPI hook in pyexpat).
 @@ -1476,6 +1476,7 @@
              Extension(
                  '_decimal',

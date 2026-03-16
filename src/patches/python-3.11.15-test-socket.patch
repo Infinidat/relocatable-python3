@@ -1,0 +1,27 @@
+--- Python-3.11.15/Lib/test/test_socket.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_socket.py	2026-03-11 00:11:56.685048995 +0400
+@@ -169,7 +169,7 @@
+ 
+ HAVE_SOCKET_VSOCK = _have_socket_vsock()
+ 
+-HAVE_SOCKET_UDPLITE = hasattr(socket, "IPPROTO_UDPLITE")
++HAVE_SOCKET_UDPLITE = hasattr(socket, "IPPROTO_UDPLITE") and not (platform.system() == 'Linux' and 'el6' in platform.release())
+ 
+ HAVE_SOCKET_BLUETOOTH = _have_socket_bluetooth()
+ 
+@@ -255,6 +255,7 @@
+                            self.interface)
+ 
+ 
++@unittest.skip('https://github.com/python/cpython/issues/136110')
+ class SocketRDSTest(unittest.TestCase):
+ 
+     """To be able to run this test, the `rds` kernel module must be loaded:
+@@ -446,6 +447,7 @@
+         self.cli = None
+         ThreadableTest.clientTearDown(self)
+ 
++@unittest.skip('https://github.com/python/cpython/issues/136110')
+ class ThreadedRDSSocketTest(SocketRDSTest, ThreadableTest):
+ 
+     def __init__(self, methodName='runTest'):

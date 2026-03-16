@@ -1,5 +1,5 @@
---- Python-3.11.14/Lib/test/test_importlib/test_threaded_import.py	2025-10-09 20:16:55.000000000 +0400
-+++ Python-3.11.14/Lib/test/test_importlib/test_threaded_import.py	2026-03-06 22:25:12.526912512 +0400
+--- Python-3.11.15/Lib/test/test_importlib/test_threaded_import.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_importlib/test_threaded_import.py	2026-03-11 00:12:46.103630273 +0400
 @@ -254,6 +254,7 @@
                            'partial', 'cfimport.py')
          script_helper.assert_python_ok(fn)
