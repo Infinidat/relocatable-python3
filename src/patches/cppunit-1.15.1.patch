@@ -1,0 +1,111 @@
+--- cppunit-1.15.1/autogen.sh	2019-11-28 19:35:43.000000000 +0000
++++ cppunit-1.15.1/autogen.sh	2026-08-04 18:38:43.852128501 +0000
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+-TESTLIBTOOLIZE="glibtoolize libtoolize"
++TESTLIBTOOLIZE="libtoolize"
+ 
+ LIBTOOLIZEFOUND="0"
+ 
+--- cppunit-1.15.1/configure.ac	2019-12-20 18:56:13.000000000 +0000
++++ cppunit-1.15.1/configure.ac	2026-08-04 18:38:29.881125298 +0000
+@@ -19,6 +19,7 @@
+ AC_CONFIG_MACRO_DIR([m4])
+ AM_INIT_AUTOMAKE([1.11 foreign dist-xz dist-bzip2])
+ AM_SILENT_RULES([yes])
++AC_CANONICAL_HOST
+ AC_LANG([C++])
+ 
+ # ===========================
+@@ -33,6 +34,15 @@
+ AC_LIBTOOL_WIN32_DLL
+ 
+ # ======================================
++# Platform-specific linker workarounds
++# ======================================
++AS_CASE([$host_os],
++  [aix*], [aix_keep_eh_csects=yes],
++  [aix_keep_eh_csects=no])
++AM_CONDITIONAL([AIX_KEEP_EH_CSECTS],
++  [test "x$aix_keep_eh_csects" = "xyes"])
++
++# ======================================
+ # Check for various headers and settings
+ # ======================================
+ AC_HEADER_STDC
+--- cppunit-1.15.1/examples/cppunittest/Makefile.am	2019-12-24 16:48:06.000000000 +0000
++++ cppunit-1.15.1/examples/cppunittest/Makefile.am	2026-08-04 18:38:29.881125297 +0000
+@@ -75,6 +75,10 @@
+ 	XmlUniformiserTest.h \
+ 	XmlUniformiserTest.cpp
+ 
++if AIX_KEEP_EH_CSECTS
++cppunittestmain_LDFLAGS = $(foreach object,$(cppunittestmain_OBJECTS),-Wl,-bkeepfile:$(object))
++endif
++
+ cppunittestmain_LDADD= \
+   $(top_builddir)/src/cppunit/libcppunit.la \
+   $(LIBADD_DL)
+--- cppunit-1.15.1/examples/hierarchy/Makefile.am	2019-12-24 16:48:06.000000000 +0000
++++ cppunit-1.15.1/examples/hierarchy/Makefile.am	2026-08-04 18:38:29.891128995 +0000
+@@ -15,6 +15,10 @@
+                    BoardGameTest.h \
+                    ChessTest.h
+ 
++if AIX_KEEP_EH_CSECTS
++hierarchy_LDFLAGS = $(foreach object,$(hierarchy_OBJECTS),-Wl,-bkeepfile:$(object))
++endif
++
+ hierarchy_LDADD = \
+   $(top_builddir)/src/cppunit/libcppunit.la \
+   $(LIBADD_DL)
+--- cppunit-1.15.1/examples/money/Makefile.am	2019-12-24 16:48:06.000000000 +0000
++++ cppunit-1.15.1/examples/money/Makefile.am	2026-08-04 18:38:29.891128995 +0000
+@@ -9,6 +9,10 @@
+ MoneyApp_SOURCES = Money.h MoneyTest.h MoneyTest.cpp MoneyApp.cpp StdAfx.h
+ MoneyApp_CXXFLAGS = $(CPPUNIT_CFLAGS)
+ 
++if AIX_KEEP_EH_CSECTS
++MoneyApp_LDFLAGS = $(foreach object,$(MoneyApp_OBJECTS),-Wl,-bkeepfile:$(object))
++endif
++
+ # MoneyApp_LDADD = $(CPPUNIT_LIBS)
+ # USE THIS in your projects, not the line bellow
+ 
+--- cppunit-1.15.1/examples/simple/Makefile.am	2019-12-24 16:48:06.000000000 +0000
++++ cppunit-1.15.1/examples/simple/Makefile.am	2026-08-04 18:38:29.901144648 +0000
+@@ -4,6 +4,10 @@
+ 
+ noinst_PROGRAMS = simple
+ 
++if AIX_KEEP_EH_CSECTS
++simple_LDFLAGS = $(foreach object,$(simple_OBJECTS),-Wl,-bkeepfile:$(object))
++endif
++
+ simple_SOURCES = ExampleTestCase.cpp Main.cpp  ExampleTestCase.h
+ 
+ simple_LDADD = \
+--- cppunit-1.15.1/src/DllPlugInTester/Makefile.am	2019-11-28 19:35:43.000000000 +0000
++++ cppunit-1.15.1/src/DllPlugInTester/Makefile.am	2026-08-04 18:38:29.881125297 +0000
+@@ -11,6 +11,10 @@
+ 	CommandLineParser.h \
+ 	CommandLineParser.cpp
+ 
++if AIX_KEEP_EH_CSECTS
++DllPlugInTester_LDFLAGS = $(foreach object,$(DllPlugInTester_OBJECTS),-Wl,-bkeepfile:$(object))
++endif
++
+ DllPlugInTester_LDADD= \
+   $(top_builddir)/src/cppunit/libcppunit.la \
+   $(LIBADD_DL)
+@@ -21,6 +25,10 @@
+ 	CommandLineParserTest.cpp \
+ 	CommandLineParserTest.h
+ 
++if AIX_KEEP_EH_CSECTS
++DllPlugInTesterTest_LDFLAGS = $(foreach object,$(DllPlugInTesterTest_OBJECTS),-Wl,-bkeepfile:$(object))
++endif
++
+ DllPlugInTesterTest_LDADD= \
+   $(top_builddir)/src/cppunit/libcppunit.la \
+   $(LIBADD_DL)

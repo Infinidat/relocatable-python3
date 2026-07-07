@@ -13,7 +13,9 @@ PYTHON = 'python'
 MAJOR = 3
 MINOR = 11
 
+BASH = 'bash'
 LIBTOOL = 'libtool'
+AUTOGEN = [BASH, '-exu', 'autogen.sh']
 AUTORECONF = ['autoreconf', '--force', '--install', '--verbose']
 
 TRICK = """
@@ -59,6 +61,9 @@ def run(args, verbose=True):
     return stdout
 
 def autogen(options, buildout, environ):
+    run(AUTOGEN)
+
+def autoreconf(options, buildout, environ):
     run(AUTORECONF)
 
 def pre_make_hook(options, buildout, environ):
