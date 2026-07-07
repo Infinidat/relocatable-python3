@@ -1,0 +1,50 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -131,7 +131,6 @@ default_softhsm2_conf="`eval echo ${full_sysconfdir} | sed s,NONE,$ac_default_pr
+ softhsmtokendir=${full_localstatedir}/lib/softhsm/tokens/
+ 
+ # Install the library in a sub-directory
+-full_libdir="$full_libdir/softhsm"
+ libdir=$full_libdir
+ default_softhsm2_lib="$full_libdir/libsofthsm2.so"
+ 
+--- a/src/lib/test/Makefile.am
++++ b/src/lib/test/Makefile.am
+@@ -28,6 +28,7 @@ p11test_SOURCES =		p11test.cpp \
+ 				TestsNoPINInitBase.cpp \
+ 				ForkTests.cpp \
+ 				../common/log.cpp \
++				../common/MutexFactory.cpp \
+ 				../common/osmutex.cpp
+ 
+ p11test_LDADD =			../libsofthsm2.la
+--- a/src/lib/test/p11test.cpp
++++ b/src/lib/test/p11test.cpp
+@@ -45,7 +45,9 @@
+ #include <fstream>
+ #include <stdlib.h>
+ #include <iostream>
++#include <memory>
+ #include "config.h"
++#include "MutexFactory.h"
+ #ifdef _WIN32
+ #include "setenv.h"
+ #endif
+@@ -56,6 +58,17 @@
+ #endif
+ #endif
+ 
++// Initialise the one-and-only instance
++#ifdef HAVE_CXX11
++
++std::unique_ptr<MutexFactory> MutexFactory::instance(nullptr);
++
++#else
++
++std::auto_ptr<MutexFactory> MutexFactory::instance(NULL);
++
++#endif
++
+ class MyListener : public CPPUNIT_NS::TestListener {
+ 	virtual void startTest( CPPUNIT_NS::Test* pTest ) {
+ 		std::cout << std::endl << pTest->getName() << ' ' << pTest->countTestCases() << std::endl << std::endl;
