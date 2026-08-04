@@ -1,5 +1,5 @@
---- openssl-1.1.1ze/Configurations/10-main.conf	2023-09-11 18:08:11
-+++ openssl-1.1.1ze/Configurations/10-main.conf	2024-06-13 02:59:16
+--- openssl-1.1.1zh/Configurations/10-main.conf	2023-09-11 18:08:11
++++ openssl-1.1.1zh/Configurations/10-main.conf	2024-06-13 02:59:16
 @@ -226,13 +226,13 @@
          CC               => "gcc",
          CFLAGS           => add_before(picker(default => "-Wall",
@@ -87,8 +87,8 @@
          AR               => add("-X64"),
          RANLIB           => add("-X64"),
      },
---- openssl-1.1.1ze/Configurations/unix-Makefile.tmpl	2023-09-11 18:08:11
-+++ openssl-1.1.1ze/Configurations/unix-Makefile.tmpl	2024-06-13 02:55:28
+--- openssl-1.1.1zh/Configurations/unix-Makefile.tmpl	2023-09-11 18:08:11
++++ openssl-1.1.1zh/Configurations/unix-Makefile.tmpl	2024-06-13 02:55:28
 @@ -38,7 +38,7 @@
  
       # Shared AIX support is special. We put libcrypto[64].so.ver into
