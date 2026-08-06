@@ -1,5 +1,5 @@
---- openssl-1.1.1zh/Configurations/10-main.conf	2023-09-11 18:08:11
-+++ openssl-1.1.1zh/Configurations/10-main.conf	2024-06-13 02:59:16
+--- openssl-1.1.1zh/Configurations/10-main.conf	2026-06-16 09:33:01.000000000 +0400
++++ openssl-1.1.1zh/Configurations/10-main.conf	2026-08-15 16:14:45.308281637 +0400
 @@ -226,13 +226,13 @@
          CC               => "gcc",
          CFLAGS           => add_before(picker(default => "-Wall",
@@ -87,8 +87,8 @@
          AR               => add("-X64"),
          RANLIB           => add("-X64"),
      },
---- openssl-1.1.1zh/Configurations/unix-Makefile.tmpl	2023-09-11 18:08:11
-+++ openssl-1.1.1zh/Configurations/unix-Makefile.tmpl	2024-06-13 02:55:28
+--- openssl-1.1.1zh/Configurations/unix-Makefile.tmpl	2026-06-16 09:33:01.000000000 +0400
++++ openssl-1.1.1zh/Configurations/unix-Makefile.tmpl	2026-08-15 16:14:45.310157191 +0400
 @@ -38,7 +38,7 @@
  
       # Shared AIX support is special. We put libcrypto[64].so.ver into
@@ -106,6 +106,24 @@
  INSTALL_SHLIBS={- join(" ", map { shlib($_) } @{$unified_info{install}->{libraries}}) -}
  INSTALL_SHLIB_INFO={- join(" ", map { "\"".shlib($_).";".shlib_simple($_)."\"" } @{$unified_info{install}->{libraries}}) -}
  INSTALL_ENGINES={- join(" ", map { dso($_) } @{$unified_info{install}->{engines}}) -}
+@@ -191,7 +190,7 @@
+ # $(libdir) is chosen to be compatible with the GNU coding standards
+ libdir={- file_name_is_absolute($libdir)
+           ? $libdir : '$(INSTALLTOP)/$(LIBDIR)' -}
+-ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}
++ENGINESDIR=$(libdir)/engines
+ 
+ # Convenience variable for those who want to set the rpath in shared
+ # libraries and applications
+@@ -245,7 +244,7 @@
+ ENGINESDIR_dev={- use File::Spec::Win32;
+                   our $enginesdir =
+                       File::Spec::Win32->catdir($prefix,$libdir,
+-                                                "engines-$sover_dirname");
++                                                "engines");
+                   our ($enginesdir_dev, $enginesdir_dir, $enginesdir_file) =
+                       File::Spec::Win32->splitpath($enginesdir, 1);
+                   $enginesdir =~ s|\\|/|g;
 @@ -610,15 +609,6 @@
  		chmod 644 "$(DESTDIR)$(INSTALLTOP)/include/openssl/$$fn"; \
  	done
@@ -122,3 +140,66 @@
  	@ : {- output_off() if $disabled{shared}; "" -}
  	@set -e; for s in $(INSTALL_SHLIB_INFO); do \
  		s1=`echo "$$s" | cut -f1 -d";"`; \
+@@ -959,7 +949,7 @@
+ 	        echo 'libdir=$(libdir)'; \
+ 	    fi; \
+ 	    echo 'includedir=$${prefix}/include'; \
+-	    echo 'enginesdir=$${libdir}/engines-{- $sover_dirname -}'; \
++	    echo 'enginesdir=$${libdir}/engines'; \
+ 	    echo ''; \
+ 	    echo 'Name: OpenSSL-libcrypto'; \
+ 	    echo 'Description: OpenSSL cryptography library'; \
+--- openssl-1.1.1zh/Configurations/windows-makefile.tmpl	2026-06-16 09:33:01.000000000 +0400
++++ openssl-1.1.1zh/Configurations/windows-makefile.tmpl	2026-08-15 16:14:45.310879945 +0400
+@@ -144,7 +144,7 @@
+ LIBDIR={- our $libdir = $config{libdir} || "lib";
+           file_name_is_absolute($libdir) ? "" : $libdir -}
+ ENGINESDIR_dev={- use File::Spec::Functions qw(:DEFAULT splitpath);
+-                  our $enginesdir = catdir($prefix,$libdir,"engines-$sover_dirname");
++                  our $enginesdir = catdir($prefix,$libdir,"engines");
+                   our ($enginesdir_dev, $enginesdir_dir, $enginesdir_file) =
+                       splitpath($enginesdir, 1);
+                   $enginesdir_dev -}
+@@ -251,7 +251,7 @@
+                 join(' ', $lib_cppflags,
+                           (map { '-D'.quotify1($_) }
+                                "OPENSSLDIR=\"$openssldir\"",
+-                               "ENGINESDIR=\"$enginesdir\""),
++                               "ENGINESDIR=\"$openssldir\""),
+                           '$(CNF_CPPFLAGS)', '$(CPPFLAGS)') -}
+ LIB_CFLAGS={- join(' ', $target{lib_cflags} || (),
+                         $target{shared_cflag} || (),
+--- openssl-1.1.1zh/build.info	2026-06-16 09:33:01.000000000 +0400
++++ openssl-1.1.1zh/build.info	2026-08-15 16:14:45.311212072 +0400
+@@ -86,8 +86,8 @@
+  SHARED_NAME[libcrypto]=libcrypto-{- $sover_filename -}{- $config{target} eq "mingw64" ? "-x64" : "" -}
+  SHARED_NAME[libssl]=libssl-{- $sover_filename -}{- $config{target} eq "mingw64" ? "-x64" : "" -}
+ ELSIF[{- $config{target} =~ /^VC-/ -}]
+- SHARED_NAME[libcrypto]=libcrypto-{- $sover_filename -}{- $target{multilib} -}
+- SHARED_NAME[libssl]=libssl-{- $sover_filename -}{- $target{multilib} -}
++ SHARED_NAME[libcrypto]=crypto
++ SHARED_NAME[libssl]=ssl
+ ENDIF
+ 
+ # VMS has a cultural standard where all libraries are prefixed.
+--- openssl-1.1.1zh/ms/uplink.c	2026-06-16 09:33:01.000000000 +0400
++++ openssl-1.1.1zh/ms/uplink.c	2026-08-15 16:29:22.382178811 +0400
+@@ -60,10 +60,14 @@
+         _tcscpy(msg + len, _T("unimplemented function"));
+ 
+         if ((h = apphandle) == NULL) {
+-            if ((h = GetModuleHandle(NULL)) == NULL) {
+-                apphandle = (HMODULE) - 1;
+-                _tcscpy(msg + len, _T("no host application"));
+-                break;
++            if ((h = GetModuleHandleA("_ssl.pyd")) == NULL) {
++                if ((h = GetModuleHandleA("_ssl_d.pyd")) == NULL) {
++                    if ((h = GetModuleHandle(NULL)) == NULL) {
++                        apphandle = (HMODULE) - 1;
++                        _tcscpy(msg + len, _T("no host application"));
++                        break;
++                    }
++                }
+             }
+             apphandle = h;
+         }

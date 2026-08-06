@@ -1,0 +1,40 @@
+--- Python-3.11.15/Lib/test/test_posix.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_posix.py	2026-08-11 17:32:33.270716307 +0400
+@@ -760,7 +760,12 @@
+             # This part of the test only runs when run as root.
+             # Only scary people run their tests as root.
+ 
+-            big_value = (2**31 if sys.platform != "vxworks" else 2**15)
++            if sys.platform == "sunos5":
++                big_value = 2**31 - 1
++            elif sys.platform == "vxworks":
++                big_value = 2**15
++            else:
++                big_value = 2**31
+             chown_func(first_param, big_value, big_value)
+             check_stat(big_value, big_value)
+             chown_func(first_param, -1, -1)
+@@ -1901,7 +1906,10 @@
+                      "bpo-34685: test can fail on BSD")
+     def test_setscheduler_only_param(self):
+         policy = os.sched_getscheduler(0)
+-        priority = os.sched_get_priority_min(policy)
++        if platform.system() == "SunOS" and policy == os.SCHED_OTHER:
++            priority = os.sched_getparam(0).sched_priority
++        else:
++            priority = os.sched_get_priority_min(policy)
+         code = textwrap.dedent(f"""\
+             import os, sys
+             if os.sched_getscheduler(0) != {policy}:
+@@ -1921,7 +1929,10 @@
+                      "bpo-34685: test can fail on BSD")
+     def test_setscheduler_with_policy(self):
+         policy = os.sched_getscheduler(0)
+-        priority = os.sched_get_priority_min(policy)
++        if platform.system() == "SunOS" and policy == os.SCHED_OTHER:
++            priority = os.sched_getparam(0).sched_priority
++        else:
++            priority = os.sched_get_priority_min(policy)
+         code = textwrap.dedent(f"""\
+             import os, sys
+             if os.sched_getscheduler(0) != {policy}:

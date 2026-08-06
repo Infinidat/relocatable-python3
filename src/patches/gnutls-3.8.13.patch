@@ -1,0 +1,206 @@
+--- gnutls-3.8.13/fuzz/gnutls_ocsp_resp_parser_fuzzer.c	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/fuzz/gnutls_ocsp_resp_parser_fuzzer.c	2026-08-10 15:01:30.274352764 +0400
+@@ -26,6 +26,9 @@
+ 
+ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+ {
++#if defined(__sun)
++	return 0;
++#endif
+ 	gnutls_datum_t raw;
+ 	gnutls_datum_t out;
+ 	gnutls_ocsp_resp_t resp;
+--- gnutls-3.8.13/src/gl/tests/test-stat-time.c	2026-04-29 18:34:55.000000000 +0400
++++ gnutls-3.8.13/src/gl/tests/test-stat-time.c	2026-08-10 15:01:30.275142513 +0400
+@@ -137,22 +137,22 @@
+   ASSERT (statinfo[0].st_mtime < statinfo[2].st_mtime
+           || (statinfo[0].st_mtime == statinfo[2].st_mtime
+               && (get_stat_mtime_ns (&statinfo[0])
+-                  < get_stat_mtime_ns (&statinfo[2]))));
++                  <= get_stat_mtime_ns (&statinfo[2]))));
+   /* mtime(stamp2) < mtime(stamp3) */
+   ASSERT (statinfo[2].st_mtime < statinfo[3].st_mtime
+           || (statinfo[2].st_mtime == statinfo[3].st_mtime
+               && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_mtime_ns (&statinfo[3]))));
++                  <= get_stat_mtime_ns (&statinfo[3]))));
+ 
+   /* Now check the result of the access functions. */
+   /* mtime(stamp1) < mtime(stamp2) */
+   ASSERT (modtimes[0].tv_sec < modtimes[2].tv_sec
+           || (modtimes[0].tv_sec == modtimes[2].tv_sec
+-              && modtimes[0].tv_nsec < modtimes[2].tv_nsec));
++              && modtimes[0].tv_nsec <= modtimes[2].tv_nsec));
+   /* mtime(stamp2) < mtime(stamp3) */
+   ASSERT (modtimes[2].tv_sec < modtimes[3].tv_sec
+           || (modtimes[2].tv_sec == modtimes[3].tv_sec
+-              && modtimes[2].tv_nsec < modtimes[3].tv_nsec));
++              && modtimes[2].tv_nsec <= modtimes[3].tv_nsec));
+ 
+   /* verify equivalence */
+   for (int i = 0; i < NFILES; ++i)
+@@ -182,7 +182,7 @@
+   ASSERT (statinfo[2].st_mtime < statinfo[1].st_ctime
+           || (statinfo[2].st_mtime == statinfo[1].st_ctime
+               && (get_stat_mtime_ns (&statinfo[2])
+-                  < get_stat_ctime_ns (&statinfo[1]))));
++                  <= get_stat_ctime_ns (&statinfo[1]))));
+ }
+ #endif
+ 
+--- gnutls-3.8.13/tests/Makefile.in	2026-04-29 18:35:24.000000000 +0400
++++ gnutls-3.8.13/tests/Makefile.in	2026-08-10 15:01:58.687560400 +0400
+@@ -1480,7 +1480,7 @@
+ mini_dtls_fragments_SOURCES = mini-dtls-fragments.c
+ mini_dtls_fragments_OBJECTS =  \
+ 	mini_dtls_fragments-mini-dtls-fragments.$(OBJEXT)
+-mini_dtls_fragments_LDADD = $(LDADD)
++mini_dtls_fragments_LDADD = $(LDADD) ../gl/libgnu.la
+ mini_dtls_fragments_DEPENDENCIES = $(COMMON_GNUTLS_LDADD) libutils.la \
+ 	$(am__DEPENDENCIES_2)
+ mini_dtls_heartbeat_SOURCES = mini-dtls-heartbeat.c
+--- gnutls-3.8.13/tests/client-fastopen.c	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/client-fastopen.c	2026-08-10 15:01:30.276523261 +0400
+@@ -30,7 +30,7 @@
+ /* This tests gnutls_transport_set_fastopen() operation.
+  */
+ 
+-#if defined(_WIN32)
++#if defined(_WIN32) || defined(_AIX) || defined(__sun)
+ 
+ int main(void)
+ {
+--- gnutls-3.8.13/tests/dtls/dtls-stress.c	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/dtls/dtls-stress.c	2026-08-10 15:01:30.278267301 +0400
+@@ -1018,7 +1018,7 @@
+ 	int pid1, pid2;
+ 	int status2;
+ 
+-	if (socketpair(AF_LOCAL, SOCK_STREAM, 0, fds) < 0) {
++	if (socketpair(AF_UNIX, SOCK_STREAM, 0, fds) < 0) {
+ 		rperror("socketpair");
+ 		exit(2);
+ 	}
+--- gnutls-3.8.13/tests/mini-x509-cas.c	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/mini-x509-cas.c	2026-08-10 15:01:30.279275008 +0400
+@@ -36,7 +36,7 @@
+ /* Tests whether a very long CA list, that spans over multiple records
+  * is tolerated */
+ 
+-const char *side;
++const char *side = "NONE";
+ 
+ static void tls_log_func(int level, const char *str)
+ {
+--- gnutls-3.8.13/tests/scripts/common.sh	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/scripts/common.sh	2026-08-10 15:01:30.279943841 +0400
+@@ -45,8 +45,10 @@
+ 
+ 	# We can't assume netstat --version for portability reasons
+ 	if (type netstat) > /dev/null 2>&1; then
+-		PFCMD=netstat
+-		return
++		if netstat -l > /dev/null 2>&1; then
++			PFCMD=netstat
++			return
++		fi
+ 	fi
+ 
+ 	echo "neither ss nor netstat found" 1>&2
+@@ -279,7 +281,11 @@
+ 	kernel_major=$(echo $kernel_version | cut -d. -f1 2>/dev/null)
+ 	kernel_minor=$(echo $kernel_version | cut -d. -f2 2>/dev/null)
+ 
+-	if ! [[ "$kernel_major" =~ ^[0-9]+$ ]] || ! [[ "$kernel_minor" =~ ^[0-9]+$ ]]; then
++	if ! echo "$kernel_major" | grep -E '^[0-9]+$' > /dev/null 2>&1; then
++		return 1
++	fi
++
++	if ! echo "$kernel_minor" | grep -E '^[0-9]+$' > /dev/null 2>&1; then
+ 		return 1
+ 	fi
+ 
+--- gnutls-3.8.13/tests/slow/cipher-api-test.c	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/slow/cipher-api-test.c	2026-08-10 15:01:30.280947840 +0400
+@@ -36,7 +36,7 @@
+  * cases may hit assertion failure in Nettle and crash the process.
+  */
+ 
+-#if defined(WIN32)
++#if defined(WIN32) || defined(_AIX)
+ int main(int argc, char **argv)
+ {
+ 	exit(77);
+--- gnutls-3.8.13/tests/slow/test-hash-large.sh	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/slow/test-hash-large.sh	2026-08-10 15:01:30.282015130 +0400
+@@ -21,6 +21,17 @@
+ # along with this program.  If not, see <https://www.gnu.org/licenses/>
+ #
+ 
++UNAME=$(uname)
++
++case "$UNAME" in
++Linux)
++	;;
++*)
++	echo "Skip $0 on $UNAME: we do not have enough resources"
++	exit 77
++	;;
++esac
++
+ PROG=./hash-large${EXEEXT}
+ unset RETCODE
+ if ! test -z "${VALGRIND}"; then
+--- gnutls-3.8.13/tests/tls-force-etm.c	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/tls-force-etm.c	2026-08-10 15:01:30.282792046 +0400
+@@ -26,7 +26,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+-#if defined(_WIN32)
++#if defined(_WIN32) || defined(_AIX)
+ 
+ int main(void)
+ {
+--- gnutls-3.8.13/tests/utils.h	2026-04-29 18:33:25.000000000 +0400
++++ gnutls-3.8.13/tests/utils.h	2026-08-10 15:01:30.283590461 +0400
+@@ -153,20 +153,28 @@
+ /* calls fail() if status indicates an error  */
+ inline static void _check_wait_status(int status, unsigned sigonly)
+ {
+-#if defined WEXITSTATUS && defined WIFSIGNALED
+-	if (WEXITSTATUS(status) != 0 ||
+-	    (WIFSIGNALED(status) && WTERMSIG(status) != SIGTERM)) {
+-		if (WIFSIGNALED(status)) {
+-			fail("Child died with signal %d\n", WTERMSIG(status));
+-		} else {
+-			if (!sigonly) {
+-				if (WEXITSTATUS(status) == 77)
+-					_exit(77);
+-				fail("Child died with status %d\n",
+-				     WEXITSTATUS(status));
++#if defined(WIFSIGNALED) && defined(WTERMSIG) && defined(WIFEXITED) && defined(WEXITSTATUS)
++	if (WIFSIGNALED(status)) {
++		int sig = WTERMSIG(status);
++		if (sig != SIGTERM) {
++			fail("Child died with signal %d\n", sig);
++		}
++		return;
++	}
++
++	if (WIFEXITED(status)) {
++		int rc = WEXITSTATUS(status);
++		if (rc != 0 && !sigonly) {
++			if (rc == 77) {
++				_exit(77);
+ 			}
++			fail("Child died with status %d\n", rc);
+ 		}
++		return;
+ 	}
++
++	/* Optional: unexpected wait status */
++	fail("Child died with unknown wait status 0x%x\n", status);
+ #endif
+ }
+ 

@@ -1,0 +1,20 @@
+--- xz-5.8.3/CMakeLists.txt	2026-03-31 19:27:00.000000000 +0400
++++ xz-5.8.3/CMakeLists.txt	2026-08-18 16:21:52.894826147 +0400
+@@ -1616,17 +1616,6 @@
+     OUTPUT_NAME "lzma"
+ )
+ 
+-if(WIN32 AND NOT MINGW)
+-    # Up to XZ Utils 5.6.2 and building with MSVC, we produced liblzma.dll
+-    # and liblzma.lib. The downside of liblzma.lib is that it's not
+-    # compatible with pkgconf usage. liblzma.pc contains "-llzma" which
+-    # "pkgconf --msvc-syntax --libs liblzma" converts to "lzma.lib".
+-    # So as a compromise, we can keep the liblzma.dll name but the import
+-    # library and static liblzma need to be named lzma.lib so that pkgconf
+-    # can be used with MSVC. (MinGW-w64 finds both names with "-llzma".)
+-    set_target_properties(liblzma PROPERTIES RUNTIME_OUTPUT_NAME "liblzma")
+-endif()
+-
+ # Create liblzma-config-version.cmake.
+ #
+ # NOTE: SameMajorVersion is correct for stable releases but it is wrong

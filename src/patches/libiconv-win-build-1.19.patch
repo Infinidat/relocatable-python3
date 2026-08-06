@@ -1,0 +1,178 @@
+--- libiconv-win-build-1.19/build-VS2017/_props/iconv-static.props	2026-04-21 10:09:38.000000000 +0400
++++ libiconv-win-build-1.19/build-VS2017/_props/iconv-static.props	2026-08-18 15:33:42.766523479 +0400
+@@ -11,7 +11,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+@@ -20,7 +20,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -29,7 +29,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -38,7 +38,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup />
+--- libiconv-win-build-1.19/build-VS2017/_props/iconv.props	2026-04-21 10:09:38.000000000 +0400
++++ libiconv-win-build-1.19/build-VS2017/_props/iconv.props	2026-08-18 15:33:42.764366531 +0400
+@@ -11,7 +11,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+@@ -20,7 +20,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -29,7 +29,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -38,7 +38,7 @@
+       <AdditionalIncludeDirectories>..\..\src;..\..\include;..\..\lib;..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup />
+--- libiconv-win-build-1.19/build-VS2017/_props/testapp-static.props	2026-04-21 10:09:38.000000000 +0400
++++ libiconv-win-build-1.19/build-VS2017/_props/testapp-static.props	2026-08-18 15:33:42.767116559 +0400
+@@ -11,7 +11,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+@@ -20,7 +20,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -29,7 +29,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -38,7 +38,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)..\libiconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)..\iconv-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup />
+--- libiconv-win-build-1.19/build-VS2017/_props/testapp.props	2026-04-21 10:09:38.000000000 +0400
++++ libiconv-win-build-1.19/build-VS2017/_props/testapp.props	2026-08-18 15:33:42.765009695 +0400
+@@ -11,7 +11,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+@@ -20,7 +20,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+@@ -29,7 +29,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -38,7 +38,7 @@
+       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\include;..\..\..\lib;..\..\..\srclib</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>setargv.obj;$(OutDir)libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>setargv.obj;$(OutDir)iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup />
+--- libiconv-win-build-1.19/build-VS2017/libiconv/libiconv.vcxproj	2026-04-21 10:09:38.000000000 +0400
++++ libiconv-win-build-1.19/build-VS2017/libiconv/libiconv.vcxproj	2026-08-18 15:33:42.765850732 +0400
+@@ -66,7 +66,9 @@
+     <Import Project="..\_props\libiconv.props" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+-  <PropertyGroup />
++  <PropertyGroup>
++    <TargetName>iconv</TargetName>
++  </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+--- libiconv-win-build-1.19/build-VS2017/libiconv-static/libiconv-static.vcxproj	2026-04-21 10:09:38.000000000 +0400
++++ libiconv-win-build-1.19/build-VS2017/libiconv-static/libiconv-static.vcxproj	2026-08-18 15:33:42.767976263 +0400
+@@ -66,7 +66,9 @@
+     <Import Project="..\_props\libiconv-static.props" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+-  <PropertyGroup />
++  <PropertyGroup>
++    <TargetName>iconv-static</TargetName>
++  </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

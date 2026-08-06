@@ -1,0 +1,167 @@
+--- expect5.45.4/Makefile.in	2018-02-02 23:15:52.000000000 +0400
++++ expect5.45.4/Makefile.in	2026-08-12 16:40:48.090560999 +0400
+@@ -120,9 +120,9 @@
+ 
+ DESTDIR		=
+ 
+-PKG_DIR		= $(PACKAGE_NAME)$(PACKAGE_VERSION)
++PKG_DIR		= $(PACKAGE_NAME)
+ pkgdatadir	= $(datadir)/$(PKG_DIR)
+-pkglibdir	= $(libdir)/$(PKG_DIR)
++pkglibdir	= $(libdir)
+ pkgincludedir	= $(includedir)/$(PKG_DIR)
+ 
+ top_builddir	= .
+@@ -264,7 +264,7 @@
+ 	done
+ 
+ test: binaries libraries
+-	$(TCLSH) `@CYGPATH@ $(srcdir)/tests/all.tcl` $(TESTFLAGS)
++	LC_ALL=C LANG=C $(TCLSH) `@CYGPATH@ $(srcdir)/tests/all.tcl` $(TESTFLAGS)
+ 
+ shell: binaries libraries
+ 	@$(TCLSH) $(SCRIPT)
+@@ -556,7 +556,7 @@
+ 	done
+ 	@if test "x$(SHARED_BUILD)" = "x1"; then \
+ 	    echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
+-	    $(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir); \
++	    echo $(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir); \
+ 	fi
+ 
+ #========================================================================
+--- expect5.45.4/configure.in	2018-02-04 14:43:58.000000000 +0400
++++ expect5.45.4/configure.in	2026-08-12 16:40:48.092015710 +0400
+@@ -923,11 +923,7 @@
+     EXP_LIB_FILE="Expect"
+     AC_DEFINE(EXP_FRAMEWORK)
+ else
+-    if test "${TCL_LIB_VERSIONS_OK}" = "ok"; then
+-        EXP_LIB_FLAG="-lexpect${EXP_LIB_VERSION}"
+-    else
+-        EXP_LIB_FLAG="-lexpect`echo ${EXP_LIB_VERSION} | tr -d .`"
+-    fi
++    EXP_LIB_FLAG="-lexpect"
+     EXP_BUILD_LIB_SPEC="-L`pwd` ${EXP_LIB_FLAG}"
+     EXP_LIB_SPEC="-L${libdir} ${EXP_LIB_FLAG}"
+ fi
+--- expect5.45.4/pty_termios.c	2018-02-02 23:15:52.000000000 +0400
++++ expect5.45.4/pty_termios.c	2026-08-12 16:54:48.715377482 +0400
+@@ -42,7 +42,11 @@
+ According to Ashley Pittman <ashley@ilo.dec.com>, Digital works better
+ with openpty which supports 4000 while ptmx supports 60. */
+ #if defined(HAVE_OPENPTY) && defined(HAVE_PTMX)
+-#undef HAVE_PTMX
++# if defined(__sun)
++#  undef HAVE_OPENPTY
++# else
++#  undef HAVE_PTMX
++# endif
+ #endif
+ 
+ #if defined(HAVE_PTYM) && defined(HAVE_PTMX)
+@@ -652,17 +656,29 @@
+ 	}
+ #else
+ #if defined(HAVE_PTMX)
+-	if (ioctl(slave, I_PUSH, "ptem")) {
+-		expDiagLogPtrStrStr("ioctl(%d,I_PUSH,\"ptem\") = %s\n",slave,expErrnoMsg(errno));
++#ifdef I_FIND
++	/*
++	 * The system may have already installed the complete STREAMS
++	 * terminal stack. Do not install a duplicate stack.
++	 */
++	if (!(ioctl(slave, I_FIND, "ptem") > 0 &&
++	      ioctl(slave, I_FIND, "ldterm") > 0 &&
++	      ioctl(slave, I_FIND, "ttcompat") > 0)) {
++#endif
++	if (ioctl(slave, I_PUSH, "ptem") < 0) {
++		expDiagLogPtrStrStr("ioctl(%d,I_PUSH,\"ptem\") = %s\n", slave, expErrnoMsg(errno));
++	}
++	if (ioctl(slave, I_PUSH, "ldterm") < 0) {
++		expDiagLogPtrStrStr("ioctl(%d,I_PUSH,\"ldterm\") = %s\n", slave, expErrnoMsg(errno));
+ 	}
+-	if (ioctl(slave, I_PUSH, "ldterm")) {
+-		expDiagLogPtrStrStr("ioctl(%d,I_PUSH,\"ldterm\") = %s\n",slave,expErrnoMsg(errno));
++	if (ioctl(slave, I_PUSH, "ttcompat") < 0) {
++		expDiagLogPtrStrStr("ioctl(%d,I_PUSH,\"ttcompat\") = %s\n", slave, expErrnoMsg(errno));
+ 	}
+-	if (ioctl(slave, I_PUSH, "ttcompat")) {
+-		expDiagLogPtrStrStr("ioctl(%d,I_PUSH,\"ttcompat\") = %s\n",slave,expErrnoMsg(errno));
++#ifdef I_FIND
+ 	}
+ #endif
+ #endif
++#endif
+ 
+ 	if (0 == slave) {
+ 		/* if opened in a new process, slave will be 0 (and */
+--- expect5.45.4/tclconfig/tcl.m4	2018-02-04 17:55:43.000000000 +0400
++++ expect5.45.4/tclconfig/tcl.m4	2026-08-12 16:40:48.096719551 +0400
+@@ -1354,7 +1354,12 @@
+ 	    # Check to enable 64-bit flags for compiler/linker
+ 	    AS_IF([test "$do64bit" = yes], [
+ 		AS_IF([test "$GCC" = yes], [
+-		    AC_MSG_WARN([64bit mode not supported with GCC on $system])
++		    do64bit_ok=yes
++		    CFLAGS="$CFLAGS -maix64"
++		    LDFLAGS_ARCH="-maix64"
++		    RANLIB="${RANLIB} -X64"
++		    AR="${AR} -X64"
++		    SHLIB_LD_FLAGS="-maix64"
+ 		], [
+ 		    do64bit_ok=yes
+ 		    CFLAGS="$CFLAGS -q64"
+@@ -1376,7 +1381,7 @@
+ 		LD_SEARCH_FLAGS='-R ${LIB_RUNTIME_DIR}'
+ 	    ], [
+ 		AS_IF([test "$GCC" = yes], [
+-		    SHLIB_LD='${CC} -shared -Wl,-bexpall'
++		    SHLIB_LD='${CC} -shared -Wl,-G -Wl,-bexpall'
+ 		], [
+ 		    SHLIB_LD="/bin/ld -bhalt:4 -bM:SRE -bexpall -H512 -T512 -bnoentry"
+ 		    LDFLAGS="$LDFLAGS -brtl"
+@@ -1868,8 +1873,8 @@
+ 			    AC_MSG_WARN([64bit mode not supported with GCC < 3.2 on $system])
+ 			], [
+ 			    do64bit_ok=yes
+-			    CFLAGS="$CFLAGS -m64 -mcpu=v9"
+-			    LDFLAGS="$LDFLAGS -m64 -mcpu=v9"
++			    CFLAGS="$CFLAGS -m64"
++			    LDFLAGS="$LDFLAGS -m64"
+ 			    SHLIB_CFLAGS="-fPIC"
+ 			])
+ 		    ], [
+@@ -1913,23 +1918,6 @@
+ 		SHLIB_LD='${CC} -shared'
+ 		CC_SEARCH_FLAGS='-Wl,-R,${LIB_RUNTIME_DIR}'
+ 		LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+-		AS_IF([test "$do64bit_ok" = yes], [
+-		    AS_IF([test "$arch" = "sparcv9 sparc"], [
+-			# We need to specify -static-libgcc or we need to
+-			# add the path to the sparv9 libgcc.
+-			# JH: static-libgcc is necessary for core Tcl, but may
+-			# not be necessary for extensions.
+-			SHLIB_LD="$SHLIB_LD -m64 -mcpu=v9 -static-libgcc"
+-			# for finding sparcv9 libgcc, get the regular libgcc
+-			# path, remove so name and append 'sparcv9'
+-			#v9gcclibdir="`gcc -print-file-name=libgcc_s.so` | ..."
+-			#CC_SEARCH_FLAGS="${CC_SEARCH_FLAGS},-R,$v9gcclibdir"
+-		    ], [AS_IF([test "$arch" = "amd64 i386"], [
+-			# JH: static-libgcc is necessary for core Tcl, but may
+-			# not be necessary for extensions.
+-			SHLIB_LD="$SHLIB_LD -m64 -static-libgcc"
+-		    ])])
+-		])
+ 	    ], [
+ 		case $system in
+ 		    SunOS-5.[[1-9]][[0-9]]*)
+@@ -1983,7 +1971,7 @@
+ 
+     AS_IF([test "$SHARED_LIB_SUFFIX" = ""], [
+ 	# TEA specific: use PACKAGE_VERSION instead of VERSION
+-	SHARED_LIB_SUFFIX='${PACKAGE_VERSION}${SHLIB_SUFFIX}'])
++	SHARED_LIB_SUFFIX='${SHLIB_SUFFIX}'])
+     AS_IF([test "$UNSHARED_LIB_SUFFIX" = ""], [
+ 	# TEA specific: use PACKAGE_VERSION instead of VERSION
+ 	UNSHARED_LIB_SUFFIX='${PACKAGE_VERSION}.a'])

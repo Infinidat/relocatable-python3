@@ -1,0 +1,141 @@
+--- zeromq-4.3.5/CMakeLists.txt	2023-06-18 18:40:34.000000000 +0400
++++ zeromq-4.3.5/CMakeLists.txt	2026-08-25 20:23:56.166738475 +0400
+@@ -1,11 +1,8 @@
+ # CMake build script for ZeroMQ
+-project(ZeroMQ)
+ 
+-if(${CMAKE_SYSTEM_NAME} STREQUAL Darwin)
+-  cmake_minimum_required(VERSION 3.0.2)
+-else()
+-  cmake_minimum_required(VERSION 2.8.12)
+-endif()
++cmake_minimum_required(VERSION 3.15)
++
++project(ZeroMQ)
+ 
+ include(CheckIncludeFiles)
+ include(CheckCCompilerFlag)
+@@ -1347,11 +1344,10 @@
+     set_target_properties(
+       libzmq
+       PROPERTIES PUBLIC_HEADER "${public_headers}"
+-                 RELEASE_POSTFIX "${MSVC_TOOLSET}-mt-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}"
+-                 RELWITHDEBINFO_POSTFIX
+-                 "${MSVC_TOOLSET}-mt-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}"
+-                 MINSIZEREL_POSTFIX "${MSVC_TOOLSET}-mt-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}"
+-                 DEBUG_POSTFIX "${MSVC_TOOLSET}-mt-gd-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}"
++                 RELEASE_POSTFIX ""
++                 RELWITHDEBINFO_POSTFIX ""
++                 MINSIZEREL_POSTFIX ""
++                 DEBUG_POSTFIX "d"
+                  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+                  COMPILE_DEFINITIONS "DLL_EXPORT"
+                  OUTPUT_NAME "lib${ZMQ_OUTPUT_BASENAME}")
+--- zeromq-4.3.5/configure	2023-10-09 15:11:59.000000000 +0400
++++ zeromq-4.3.5/configure	2026-08-25 20:23:56.181938797 +0400
+@@ -24441,7 +24441,6 @@
+ 
+     case "${host_os}" in
+         *solaris*)
+-                        LDFLAGS="-lssp $LDFLAGS"
+             libzmq_pedantic="no"
+             libzmq_werror="no"
+         ;;
+--- zeromq-4.3.5/src/compat.hpp	2023-06-18 18:40:34.000000000 +0400
++++ zeromq-4.3.5/src/compat.hpp	2026-08-25 20:23:56.186349146 +0400
+@@ -38,7 +38,7 @@
+ {
+     for (size_t i = 0; i < len; i++) {
+         if (s[i] == '\0')
+-            return i + 1;
++            return i;
+     }
+ 
+     return len;
+--- zeromq-4.3.5/src/pollset.cpp	2023-06-18 18:40:34.000000000 +0400
++++ zeromq-4.3.5/src/pollset.cpp	2026-08-25 20:23:56.182721474 +0400
+@@ -160,9 +160,9 @@
+     pe->flag_pollout = false;
+ }
+ 
+-void zmq::pollset_t::start ()
++void zmq::pollset_t::start (const char *name_)
+ {
+-    ctx.start_thread (worker, worker_routine, this);
++    ctx.start_thread (worker, worker_routine, this, name_);
+ }
+ 
+ void zmq::pollset_t::stop ()
+--- zeromq-4.3.5/src/pollset.hpp	2023-06-18 18:40:34.000000000 +0400
++++ zeromq-4.3.5/src/pollset.hpp	2026-08-25 20:23:56.183239814 +0400
+@@ -38,7 +38,7 @@
+     void reset_pollin (handle_t handle_);
+     void set_pollout (handle_t handle_);
+     void reset_pollout (handle_t handle_);
+-    void start ();
++    void start (const char *name_ = NULL);
+     void stop ();
+ 
+     static int max_fds ();
+--- zeromq-4.3.5/tests/CMakeLists.txt	2023-10-09 13:37:00.000000000 +0400
++++ zeromq-4.3.5/tests/CMakeLists.txt	2026-08-25 20:23:56.183813196 +0400
+@@ -1,5 +1,6 @@
+ # CMake build script for ZeroMQ tests
+-cmake_minimum_required(VERSION "2.8.1")
++
++cmake_minimum_required(VERSION 3.15)
+ 
+ # On Windows: solution file will be called tests.sln
+ project(tests)
+--- zeromq-4.3.5/tests/test_pair_ipc.cpp	2023-06-18 18:40:34.000000000 +0400
++++ zeromq-4.3.5/tests/test_pair_ipc.cpp	2026-08-25 20:23:56.184813709 +0400
+@@ -5,6 +5,12 @@
+ 
+ #include <string>
+ 
++#if defined _MSC_VER
++#include <afunix.h>
++#else
++#include <sys/un.h>
++#endif
++
+ SETUP_TEARDOWN_TESTCONTEXT
+ 
+ void test_roundtrip ()
+@@ -29,9 +35,10 @@
+ {
+     std::string endpoint_too_long;
+     endpoint_too_long.append (prefix);
+-    for (size_t i = 0; i < 108; ++i) {
+-        endpoint_too_long.append ("a");
+-    }
++
++    const size_t max_path_length =
++      sizeof (((struct sockaddr_un *) 0)->sun_path);
++    endpoint_too_long.append (max_path_length, 'a');
+ 
+     void *sb = test_context_socket (ZMQ_PAIR);
+     // TODO ENAMETOOLONG is not listed in the errors returned by zmq_bind,
+--- zeromq-4.3.5/tests/testutil.hpp	2023-06-18 18:40:34.000000000 +0400
++++ zeromq-4.3.5/tests/testutil.hpp	2026-08-25 20:23:56.185503635 +0400
+@@ -25,6 +25,10 @@
+ #include <stdlib.h>
+ #endif
+ 
++#ifdef _AIX
++#define MSG_DONTWAIT MSG_NONBLOCK
++#endif
++
+ //  This defines the settle time used in tests; raise this if we
+ //  get test failures on slower systems due to binds/connects not
+ //  settled. Tested to work reliably at 1 msec on a fast PC.
+--- zeromq-4.3.5/unittests/CMakeLists.txt	2020-11-18 17:19:45.000000000 +0400
++++ zeromq-4.3.5/unittests/CMakeLists.txt	2026-08-25 20:23:56.185927849 +0400
+@@ -1,5 +1,6 @@
+ # CMake build script for ZeroMQ unit tests
+-cmake_minimum_required(VERSION "2.8.1")
++
++cmake_minimum_required(VERSION 3.15)
+ 
+ set(unittests
+     unittest_ypipe

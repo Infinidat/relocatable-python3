@@ -1,0 +1,11 @@
+--- Python-3.11.15/Lib/test/test_email/test_utils.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_email/test_utils.py	2026-08-10 16:53:59.304996055 +0400
+@@ -147,7 +147,7 @@
+     def test_variable_tzname(self):
+         t0 = datetime.datetime(1984, 1, 1, tzinfo=datetime.timezone.utc)
+         t1 = utils.localtime(t0)
+-        if t1.tzname() in ('Europe', 'UTC'):
++        if t1.tzname() in ('Europe', 'UTC', 'GMT'):
+             self.skipTest("Can't find a Kyiv timezone database")
+         self.assertEqual(t1.tzname(), 'MSK')
+         t0 = datetime.datetime(1994, 1, 1, tzinfo=datetime.timezone.utc)

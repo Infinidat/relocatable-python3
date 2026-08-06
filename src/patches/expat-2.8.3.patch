@@ -1,0 +1,30 @@
+--- expat-2.8.3/lib/random_dev_urandom.c	2026-08-10 20:53:14.000000000 +0400
++++ expat-2.8.3/lib/random_dev_urandom.c	2026-08-17 00:05:46.379908442 +0400
+@@ -39,6 +39,10 @@
+ #  define _POSIX_C_SOURCE 200809L // for O_CLOEXEC
+ #endif
+ 
++#ifndef O_CLOEXEC
++# define O_CLOEXEC 0
++#endif
++
+ #include <errno.h>
+ #include <fcntl.h>  // open
+ #include <unistd.h> // close
+@@ -54,6 +58,16 @@
+     return false;
+   }
+ 
++#if O_CLOEXEC == 0
++  int flags = fcntl(fd, F_GETFD);
++  if (flags == -1 || fcntl(fd, F_SETFD, flags | FD_CLOEXEC) == -1) {
++    int saved_errno = errno;
++    close(fd);
++    errno = saved_errno;
++    return false;
++  }
++#endif
++
+   do {
+     void *const currentTarget = (char *)target + bytesWrittenTotal;
+     const size_t bytesToWrite = count - bytesWrittenTotal;

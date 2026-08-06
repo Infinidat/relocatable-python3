@@ -1,0 +1,13 @@
+--- Python-3.11.15/Lib/test/test_asyncio/test_base_events.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_asyncio/test_base_events.py	2026-08-11 12:27:48.757392069 +0400
+@@ -1347,6 +1347,10 @@
+ 
+     @patch_socket
+     def test_create_connection_service_name(self, m_socket):
++        try:
++            socket.getaddrinfo('127.0.0.1', 'http', type=socket.SOCK_STREAM)
++        except socket.gaierror as error:
++            self.skipTest('HTTP service-name resolution is unavailable: %s' % error)
+         m_socket.getaddrinfo = socket.getaddrinfo
+         sock = m_socket.socket.return_value
+ 
