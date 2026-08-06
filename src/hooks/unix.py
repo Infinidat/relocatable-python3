@@ -2,6 +2,7 @@ import glob
 import logging
 import platform
 import os
+import shutil
 import sys
 import subprocess
 
@@ -13,9 +14,14 @@ PYTHON = 'python'
 MAJOR = 3
 MINOR = 11
 
-BASH = 'bash'
+CMAKE = [
+    ['cmake', '--build', 'build', '--config', 'Release'],
+    ['cmake', '--install', 'build', '--config', 'Release'],
+    ['ctest', '--test-dir', 'build', '--build-config', 'Release']
+]
+
 LIBTOOL = 'libtool'
-AUTOGEN = [BASH, '-exu', 'autogen.sh']
+AUTOGEN = 'autogen.sh'
 AUTORECONF = ['autoreconf', '--force', '--install', '--verbose']
 
 TRICK = """
@@ -28,19 +34,12 @@ for key, value in build_time_vars.items():
         build_time_vars[key] = value.replace(PREFIX, sys.base_prefix)
 """
 
-def create_python_logger(options, buildout, environ):
-    LOG.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler(sys.stderr)
-    fmt = '[%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
-    formatter = logging.Formatter(fmt)
-    handler.setFormatter(formatter)
-    LOG.addHandler(handler)
-
-def run(args, verbose=True):
+def run(args, env, verbose=True):
     command = ' '.join(str(arg) for arg in args)
     LOG.info('run command: %s', command)
     try:
         process = subprocess.Popen(args=args,
+                                   env=env,
                                    universal_newlines=True,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
@@ -51,30 +50,83 @@ def run(args, verbose=True):
     stdout, stderr = process.communicate()
     status = process.returncode
     if verbose and stdout:
-        LOG.info(stdout)
+        lines = stdout.splitlines()
+        for line in lines:
+            LOG.info('stdout: %s', line)
     if stderr:
-        LOG.error(stderr)
+        lines = stderr.splitlines()
+        for line in lines:
+            LOG.info('stderr: %s', line)
     if status:
         message = 'command %s failed with error %d' % (command, status)
         LOG.error(message)
         raise RuntimeError(message)
     return stdout
 
-def autogen(options, buildout, environ):
-    run(AUTOGEN)
+def cmake(options, buildout, env):
+    for args in CMAKE:
+        run(args, env)
 
-def autoreconf(options, buildout, environ):
-    run(AUTORECONF)
+def libiconv(options, buildout, env):
+    prefix = env.get('PREFIX')
+    suffix = os.path.join('build-VS2017', 'x64', 'Release')
+    pairs = (
+        (
+            os.path.join(suffix, 'libiconv.dll'),
+            os.path.join(prefix, 'bin')
+        ),
+        (
+            os.path.join(suffix, 'libiconv.lib'),
+            os.path.join(prefix, 'lib')
+        ),
+        (
+            os.path.join('include', 'iconv.h'),
+            os.path.join(prefix, 'include')
+        )
+    )
+    for src, dst in pairs:
+        if not os.path.exists(dst):
+            LOG.info('mkdir %s', dst)
+            os.makedirs(dst)
+        LOG.info('copy %s => %s', src, dst)
+        shutil.copy(src, dst)
 
-def pre_make_hook(options, buildout, environ):
-    LOG.info('fix GNU libtool for %s %s',
+def libffi(options, buildout, env):
+    prefix = env.get('PREFIX')
+    src = os.path.join(prefix, 'lib', 'libffi.dll')
+    dst = os.path.join(prefix, 'bin', 'libffi.dll')
+    LOG.info('move %s => %s', src, dst)
+    shutil.move(src, dst)
+
+def autogen(options, buildout, env):
+    shell = env.get('SHELL')
+    args = [shell, '-exu', AUTOGEN]
+    run(args, env)
+
+def autoreconf(options, buildout, env):
+    run(AUTORECONF, env)
+
+def pre_make_hook(options, buildout, env):
+    shell = env.get('SHELL')
+    LOG.info('fix %s scripts for %s %s',
+             LIBTOOL,
              options.get('name'),
              options.get('version'))
-    args = ['find', '.', '-type', 'f', '-name', LIBTOOL,
-            '-exec', 'sed', '-E', '-i.orig',
-            's|^(hardcode_libdir_flag_spec)=.*$|\\1=""|g',
-            '{}', ';']
-    run(args)
+    cmd = r's|^(hardcode_libdir_flag_spec)=.*$|\1=""|g'
+    args = [
+        'find', '.', '-type', 'f', '-name', LIBTOOL, '-print',
+        '-exec', 'sed', '-E', '-i', cmd, '{}', ';'
+    ]
+    run(args, env)
+    LOG.info('fix shell scripts for %s %s',
+             options.get('name'),
+             options.get('version'))
+    cmd = r'1s|^(#!).*sh$|\1%s|' % shell
+    args = [
+        'find', '.', '-type', 'f', '-name', '*.sh', '-print',
+        '-exec', 'sed', '-E', '-i', cmd, '{}', ';'
+    ]
+    run(args, env)
 
 def get_python_name(prefix=None, suffix=None, major=False, minor=False, ext=None):
     name = PYTHON
@@ -90,12 +142,12 @@ def get_python_name(prefix=None, suffix=None, major=False, minor=False, ext=None
                 name += '.' + ext
     return name
 
-def create_python_wrapper(options, buildout, environ):
+def create_python_wrapper(options, buildout, env):
     target = platform.system().lower()
-    compiler = environ.get('CC')
-    pflags = environ.get('CPPFLAGS')
-    cflags = environ.get('CFLAGS')
-    lflags = environ.get('LDFLAGS')
+    compiler = env.get('CC')
+    pflags = env.get('CPPFLAGS')
+    cflags = env.get('CFLAGS')
+    lflags = env.get('LDFLAGS')
     prefix = options.get('prefix')
     hooks = options.get('hooks-dir')
     hook = target + '.c'
@@ -110,9 +162,9 @@ def create_python_wrapper(options, buildout, environ):
     cmd += ['-s', hook, '-o', src]
     LOG.info('rename %s => %s', src, dst)
     os.rename(src, dst)
-    run(cmd)
+    run(cmd, env)
 
-def change_python_sysconfigdata(options, buildout, environ):
+def change_python_sysconfigdata(options, buildout, env):
     prefix = options.get('prefix')
     suffix = 'lib'
     name = get_python_name(prefix=prefix, suffix=suffix, major=True, minor=True)
@@ -127,7 +179,7 @@ def change_python_sysconfigdata(options, buildout, environ):
             file.write(data)
             file.write(TRICK)
 
-def create_python_symlink(options, buildout, environ):
+def create_python_symlink(options, buildout, env):
     prefix = options.get('prefix')
     suffix = 'bin'
     src = get_python_name(major=True)
@@ -142,12 +194,12 @@ def create_python_symlink(options, buildout, environ):
     LOG.info('create symlink %s => %s', dst, src)
     os.symlink(src, dst)
 
-def python_post_make(options, buildout, environ):
-    create_python_wrapper(options, buildout, environ)
-    change_python_sysconfigdata(options, buildout, environ)
-    create_python_symlink(options, buildout, environ)
+def python_post_make(options, buildout, env):
+    create_python_wrapper(options, buildout, env)
+    change_python_sysconfigdata(options, buildout, env)
+    create_python_symlink(options, buildout, env)
 
-def create_ncurses_fallbacks(options, buildout, environ):
+def create_ncurses_fallbacks(options, buildout, env):
     terminals = options.get('terminals', 'xterm')
     toolkit = options.get('toolkit', os.path.sep)
     tic = os.path.join(toolkit, 'bin', 'tic')
@@ -156,7 +208,7 @@ def create_ncurses_fallbacks(options, buildout, environ):
     src = os.path.join('misc', 'terminfo.src')
     cmd = ['ncurses/tinfo/MKfallback.sh', terminfo, src, tic, infocmp]
     cmd += terminals.split(',')
-    data = run(cmd, verbose=False)
+    data = run(cmd, env, verbose=False)
     path = os.path.join('ncurses', 'fallback.c')
     with open(path, 'w') as file:
         file.write(data)

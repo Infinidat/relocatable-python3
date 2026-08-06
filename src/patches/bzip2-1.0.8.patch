@@ -1,6 +1,5 @@
-diff -ur bzip2-1.0.8/Makefile bzip2-1.0.8/Makefile
---- bzip2-1.0.8/Makefile	2019-07-13 17:50:05.000000000 +0000
-+++ bzip2-1.0.8/Makefile	2024-03-25 11:51:30.308393336 +0000
+--- bzip2-1.0.8/Makefile	2019-07-13 21:50:05.000000000 +0400
++++ bzip2-1.0.8/Makefile	2026-08-13 22:36:15.537026482 +0400
 @@ -12,21 +12,32 @@
  # in the file LICENSE.
  # ------------------------------------------------------------------
@@ -128,3 +127,143 @@ diff -ur bzip2-1.0.8/Makefile bzip2-1.0.8/Makefile
  dist: check manual
  	rm -f $(DISTNAME)
  	ln -s -f . $(DISTNAME)
+--- bzip2-1.0.8/libbz2.def	2019-07-13 21:50:05.000000000 +0400
++++ bzip2-1.0.8/libbz2.def	2026-08-13 22:52:04.206593764 +0400
+@@ -1,5 +1,4 @@
+-LIBRARY			LIBBZ2
+-DESCRIPTION		"libbzip2: library for data compression"
++LIBRARY	BZ2
+ EXPORTS
+ 	BZ2_bzCompressInit
+ 	BZ2_bzCompress
+--- bzip2-1.0.8/makefile.msc	2019-07-13 21:50:05.000000000 +0400
++++ bzip2-1.0.8/makefile.msc	2026-08-13 22:52:28.661630377 +0400
+@@ -1,63 +1,75 @@
+-# Makefile for Microsoft Visual C++ 6.0
+-# usage: nmake -f makefile.msc
+-# K.M. Syring (syring@gsf.de)
+-# Fixed up by JRS for bzip2-0.9.5d release.
++# Makefile for Microsoft Visual C++
++#
++# Build:
++#   nmake /f makefile.msc
++#
++# Install:
++#   nmake /f makefile.msc PREFIX=C:\path\to\dist install
+ 
+ CC=cl
+-CFLAGS= -DWIN32 -MD -Ox -D_FILE_OFFSET_BITS=64 -nologo
++LD=link
+ 
+-OBJS= blocksort.obj  \
+-      huffman.obj    \
+-      crctable.obj   \
+-      randtable.obj  \
+-      compress.obj   \
+-      decompress.obj \
+-      bzlib.obj
+-
+-all: lib bzip2 test
+-
+-bzip2: lib
+-	$(CC) $(CFLAGS) -o bzip2 bzip2.c libbz2.lib setargv.obj
+-	$(CC) $(CFLAGS) -o bzip2recover bzip2recover.c
+-
+-lib: $(OBJS)
+-	lib /out:libbz2.lib $(OBJS)
+-
+-test: bzip2
+-	type words1
+-	.\\bzip2 -1  < sample1.ref > sample1.rb2
+-	.\\bzip2 -2  < sample2.ref > sample2.rb2
+-	.\\bzip2 -3  < sample3.ref > sample3.rb2
+-	.\\bzip2 -d  < sample1.bz2 > sample1.tst
+-	.\\bzip2 -d  < sample2.bz2 > sample2.tst
+-	.\\bzip2 -ds < sample3.bz2 > sample3.tst
+-	@echo All six of the fc's should find no differences.
+-	@echo If fc finds an error on sample3.bz2, this could be
+-	@echo because WinZip's 'TAR file smart CR/LF conversion'
+-	@echo is too clever for its own good.  Disable this option.
+-	@echo The correct size for sample3.ref is 120,244.  If it
+-	@echo is 150,251, WinZip has messed it up.
+-	fc sample1.bz2 sample1.rb2 
++CFLAGS=/DWIN32 /MD /Ox /D_FILE_OFFSET_BITS=64 /nologo
++
++DLL=bz2.dll
++IMPLIB=bz2.lib
++
++!IFNDEF PREFIX
++PREFIX=dist
++!ENDIF
++
++OBJS=blocksort.obj  \
++     huffman.obj    \
++     crctable.obj   \
++     randtable.obj  \
++     compress.obj   \
++     decompress.obj \
++     bzlib.obj
++
++all: $(DLL) bzip2.exe bzip2recover.exe
++
++lib: $(DLL)
++
++$(DLL): $(OBJS) libbz2.def
++	$(LD) /nologo /DLL /OUT:$(DLL) /IMPLIB:$(IMPLIB) /DEF:libbz2.def $(OBJS)
++
++bzip2.exe: $(DLL) bzip2.c
++	$(CC) $(CFLAGS) /Fe:bzip2.exe bzip2.c $(IMPLIB) setargv.obj
++
++bzip2recover.exe: bzip2recover.c
++	$(CC) $(CFLAGS) /Fe:bzip2recover.exe bzip2recover.c
++
++test: bzip2.exe
++	@type words1
++	.\bzip2.exe -1  < sample1.ref > sample1.rb2
++	.\bzip2.exe -2  < sample2.ref > sample2.rb2
++	.\bzip2.exe -3  < sample3.ref > sample3.rb2
++	.\bzip2.exe -d  < sample1.bz2 > sample1.tst
++	.\bzip2.exe -d  < sample2.bz2 > sample2.tst
++	.\bzip2.exe -ds < sample3.bz2 > sample3.tst
++	@echo All six fc commands should find no differences.
++	fc sample1.bz2 sample1.rb2
+ 	fc sample2.bz2 sample2.rb2
+ 	fc sample3.bz2 sample3.rb2
+ 	fc sample1.tst sample1.ref
+ 	fc sample2.tst sample2.ref
+ 	fc sample3.tst sample3.ref
+ 
++install: $(DLL)
++	if not exist "$(PREFIX)\bin" mkdir "$(PREFIX)\bin"
++	if not exist "$(PREFIX)\lib" mkdir "$(PREFIX)\lib"
++	if not exist "$(PREFIX)\include" mkdir "$(PREFIX)\include"
++	copy /B /V /Y "$(DLL)" "$(PREFIX)\bin\$(DLL)"
++	copy /B /V /Y "$(IMPLIB)" "$(PREFIX)\lib\$(IMPLIB)"
++	copy /B /V /Y bzlib.h "$(PREFIX)\include\bzlib.h"
++
++clean:
++	-del /Q $(OBJS) 2>NUL
++	-del /Q bzip2.obj bzip2recover.obj 2>NUL
++	-del /Q $(DLL) $(IMPLIB) bz2.exp 2>NUL
++	-del /Q bzip2.exe bzip2recover.exe 2>NUL
++	-del /Q sample1.rb2 sample2.rb2 sample3.rb2 2>NUL
++	-del /Q sample1.tst sample2.tst sample3.tst 2>NUL
+ 
+-
+-clean: 
+-	del *.obj
+-	del libbz2.lib 
+-	del bzip2.exe
+-	del bzip2recover.exe
+-	del sample1.rb2 
+-	del sample2.rb2 
+-	del sample3.rb2
+-	del sample1.tst 
+-	del sample2.tst
+-	del sample3.tst
+-
+-.c.obj: 
+-	$(CC) $(CFLAGS) -c $*.c -o $*.obj
+-
++.c.obj:
++	$(CC) $(CFLAGS) /c $*.c /Fo$*.obj

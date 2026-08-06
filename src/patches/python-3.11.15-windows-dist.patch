@@ -1,0 +1,363 @@
+--- Python-3.11.15/PC/layout/main.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PC/layout/main.py	2026-08-15 17:55:53.429287574 +0400
+@@ -118,8 +118,18 @@
+             log_warning("Failed to find TCL_LIBRARY")
+             return
+ 
+-    for dest, src in rglob(Path(tcl_lib).parent, "**/*"):
+-        yield "tcl/{}".format(dest), src
++    tcl_root = Path(tcl_lib).parent
++
++    for runtime_dir in sorted(tcl_root.iterdir()):
++        if not runtime_dir.is_dir():
++            continue
++
++        name = runtime_dir.name.lower()
++        if not name.startswith(("tcl", "tk", "dde", "reg")):
++            continue
++
++        for dest, src in rglob(runtime_dir, "**/*"):
++            yield "tcl/{}/{}".format(runtime_dir.name, dest), src
+ 
+ 
+ def get_layout(ns):
+--- Python-3.11.15/PCbuild/_bz2.vcxproj	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/_bz2.vcxproj	2026-08-15 17:49:53.109177437 +0400
+@@ -94,24 +94,17 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(bz2Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(DistIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <DisableSpecificWarnings>4244;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+     </ClCompile>
++    <Link>
++      <AdditionalLibraryDirectories>$(DistLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <AdditionalDependencies>bz2.lib;%(AdditionalDependencies)</AdditionalDependencies>
++    </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+     <ClCompile Include="..\Modules\_bz2module.c" />
+-    <ClCompile Include="$(bz2Dir)\blocksort.c" />
+-    <ClCompile Include="$(bz2Dir)\bzlib.c" />
+-    <ClCompile Include="$(bz2Dir)\compress.c" />
+-    <ClCompile Include="$(bz2Dir)\crctable.c" />
+-    <ClCompile Include="$(bz2Dir)\decompress.c" />
+-    <ClCompile Include="$(bz2Dir)\huffman.c" />
+-    <ClCompile Include="$(bz2Dir)\randtable.c" />
+-  </ItemGroup>
+-  <ItemGroup>
+-    <ClInclude Include="$(bz2Dir)\bzlib.h" />
+-    <ClInclude Include="$(bz2Dir)\bzlib_private.h" />
+   </ItemGroup>
+   <ItemGroup>
+     <ResourceCompile Include="..\PC\python_nt.rc" />
+@@ -125,4 +118,4 @@
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+-</Project>
+\ No newline at end of file
++</Project>
+--- Python-3.11.15/PCbuild/_lzma.vcxproj	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/_lzma.vcxproj	2026-08-15 17:49:53.110049187 +0400
+@@ -93,11 +93,12 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(lzmaDir)src/liblzma/api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LZMA_API_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <AdditionalIncludeDirectories>$(DistIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;_FILE_OFFSET_BITS=64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>$(OutDir)liblzma$(PyDebugExt).lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(DistLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <AdditionalDependencies>lzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+@@ -111,10 +112,6 @@
+       <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
+       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+     </ProjectReference>
+-    <ProjectReference Include="liblzma.vcxproj">
+-      <Project>{12728250-16eC-4dc6-94d7-e21dd88947f8}</Project>
+-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+-    </ProjectReference>
+   </ItemGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+--- Python-3.11.15/PCbuild/_sqlite3.vcxproj	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/_sqlite3.vcxproj	2026-08-15 17:49:53.110852688 +0400
+@@ -93,9 +93,13 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(sqlite3Dir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(DistIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>PY_SQLITE_HAVE_SERIALIZE;PY_SQLITE_ENABLE_LOAD_EXTENSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
++    <Link>
++      <AdditionalLibraryDirectories>$(DistLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <AdditionalDependencies>sqlite3.lib;%(AdditionalDependencies)</AdditionalDependencies>
++    </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+     <ClInclude Include="..\Modules\_sqlite\connection.h" />
+@@ -127,12 +131,8 @@
+       <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
+       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+     </ProjectReference>
+-    <ProjectReference Include="sqlite3.vcxproj">
+-      <Project>{a1a295e5-463c-437f-81ca-1f32367685da}</Project>
+-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+-    </ProjectReference>
+   </ItemGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+-</Project>
+\ No newline at end of file
++</Project>
+--- Python-3.11.15/PCbuild/_ssl.vcxproj	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/_ssl.vcxproj	2026-08-15 17:49:53.111755396 +0400
+@@ -99,7 +99,7 @@
+   </ItemDefinitionGroup>
+   <ItemGroup>
+     <ClCompile Include="..\Modules\_ssl.c" />
+-    <ClCompile Include="$(opensslIncludeDir)\applink.c">
++    <ClCompile Include="$(opensslApplink)">
+       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;$(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+   </ItemGroup>
+@@ -119,4 +119,4 @@
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+-</Project>
+\ No newline at end of file
++</Project>
+--- Python-3.11.15/PCbuild/build.bat	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/build.bat	2026-08-15 17:49:53.112775022 +0400
+@@ -24,6 +24,9 @@
+ echo.      depend on external libraries will not attempt to build if this flag
+ echo.      is present; -e is also accepted to explicitly enable fetching and
+ echo.      building externals.
++echo.  -X DIR
++echo.      Use dependencies already installed below DIR. DIR must contain
++echo.      include, lib and bin subdirectories. Dependencies are never fetched.
+ echo.  -m  Enable parallel build (enabled by default)
+ echo.  -M  Disable parallel build
+ echo.  -v  Increased output messages
+@@ -64,9 +67,25 @@
+ set kill=
+ set do_pgo=
+ set pgo_job=-m test --pgo
++set DistDir=
++goto CheckOpts
++
++:SetDistDir
++set "DistDir=%2"
++set "DistDir=%DistDir:"=%"
++if not defined DistDir goto MissingDistDir
++for %%I in ("%DistDir%") do set "DistDir=%%~fI"
++shift
++shift
++goto CheckOpts
++
++:MissingDistDir
++echo.ERROR: -X requires a dependency directory
++exit /b 2
+ 
+ :CheckOpts
+ if "%~1"=="-h" goto Usage
++if "%~1"=="-X" goto SetDistDir
+ if "%~1"=="-c" (set conf=%2) & shift & shift & goto CheckOpts
+ if "%~1"=="-p" (set platf=%2) & shift & shift & goto CheckOpts
+ if "%~1"=="-r" (set target=Rebuild) & shift & goto CheckOpts
+@@ -97,7 +116,25 @@
+ if "%IncludeSSL%"=="" set IncludeSSL=true
+ if "%IncludeTkinter%"=="" set IncludeTkinter=true
+ 
+-if "%IncludeExternals%"=="true" call "%dir%get_externals.bat"
++if not defined DistDir (
++    echo.ERROR: -X DIR is required
++    exit /b 2
++)
++
++if not exist "%DistDir%\include" (
++    echo.ERROR: dependency include directory not found: %DistDir%\include
++    exit /b 2
++)
++
++if not exist "%DistDir%\lib" (
++    echo.ERROR: dependency library directory not found: %DistDir%\lib
++    exit /b 2
++)
++
++if not exist "%DistDir%\bin" (
++    echo.ERROR: dependency DLL directory not found: %DistDir%\bin
++    exit /b 2
++)
+ 
+ if "%do_pgo%" EQU "true" if "%platf%" EQU "x64" (
+     if "%PROCESSOR_ARCHITEW6432%" NEQ "AMD64" if "%PROCESSOR_ARCHITECTURE%" NEQ "AMD64" (
+@@ -172,6 +209,7 @@
+  /p:IncludeExternals=%IncludeExternals%^
+  /p:IncludeCTypes=%IncludeCTypes%^
+  /p:IncludeSSL=%IncludeSSL% /p:IncludeTkinter=%IncludeTkinter%^
++ /p:DistDir="%DistDir%"^
+  /p:UseTestMarker=%UseTestMarker% %GITProperty%^
+  %1 %2 %3 %4 %5 %6 %7 %8 %9
+ 
+@@ -183,4 +221,4 @@
+ call "%dir%find_msbuild.bat" %MSBUILD%
+ if ERRORLEVEL 1 (echo Cannot locate MSBuild.exe on PATH or as MSBUILD variable & exit /b 2)
+ %MSBUILD% "%dir%pythoncore.vcxproj" /t:ShowVersionInfo /v:m /nologo %1 %2 %3 %4 %5 %6 %7 %8 %9
+-if ERRORLEVEL 1 exit /b 3
+\ No newline at end of file
++if ERRORLEVEL 1 exit /b 3
+--- Python-3.11.15/PCbuild/libffi.props	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/libffi.props	2026-08-15 17:49:53.113685106 +0400
+@@ -6,11 +6,11 @@
+     </ClCompile>
+     <Link>
+       <AdditionalLibraryDirectories>$(libffiOutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalDependencies>libffi-8.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+-    <_LIBFFIDLL Include="$(libffiOutDir)\libffi-8.dll" />
++    <_LIBFFIDLL Include="$(DistBinDir)libffi.dll" />
+   </ItemGroup>
+   <Target Name="_CopyLIBFFIDLL" Inputs="@(_LIBFFIDLL)" Outputs="@(_LIBFFIDLL->'$(OutDir)%(Filename)%(Extension)')" AfterTargets="Build">
+     <Copy SourceFiles="@(_LIBFFIDLL)" DestinationFolder="$(OutDir)" />
+@@ -18,4 +18,4 @@
+   <Target Name="_CleanLIBFFIDLL" BeforeTargets="Clean">
+     <Delete Files="@(_LIBFFIDLL->'$(OutDir)%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
+   </Target>
+-</Project>
+\ No newline at end of file
++</Project>
+--- Python-3.11.15/PCbuild/python.props	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/python.props	2026-08-15 17:49:53.115150982 +0400
+@@ -63,6 +63,21 @@
+     <ExternalsDir Condition="$(ExternalsDir) == ''">$(EXTERNALS_DIR)</ExternalsDir>
+     <ExternalsDir Condition="$(ExternalsDir) == ''">$([System.IO.Path]::GetFullPath(`$(PySourcePath)externals`))</ExternalsDir>
+     <ExternalsDir Condition="!HasTrailingSlash($(ExternalsDir))">$(ExternalsDir)\</ExternalsDir>
++
++    <!-- Prefix containing all pre-built dependencies. -->
++    <DistDir Condition="'$(DistDir)' == ''">$(DIST_DIR)</DistDir>
++    <DistRootDir>$(DistDir)\</DistRootDir>
++    <DistIncludeDir>$(DistRootDir)include\</DistIncludeDir>
++    <DistLibDir>$(DistRootDir)lib\</DistLibDir>
++    <DistBinDir>$(DistRootDir)bin\</DistBinDir>
++
++    <libffiOutDir>$(DistLibDir)</libffiOutDir>
++    <libffiIncludeDir>$(DistIncludeDir)</libffiIncludeDir>
++    <opensslOutDir>$(DistLibDir)</opensslOutDir>
++    <opensslIncludeDir>$(DistIncludeDir)</opensslIncludeDir>
++    <opensslApplink>$(DistIncludeDir)openssl\applink.c</opensslApplink>
++    <tcltkDir>$(DistRootDir)</tcltkDir>
++    <SkipCopySSLDLL>true</SkipCopySSLDLL>
+   </PropertyGroup>
+ 
+   <Import Project="$(ExternalProps)" Condition="$(ExternalProps) != '' and Exists('$(ExternalProps)')" />
+@@ -250,4 +265,10 @@
+     <Message Importance="high" Text="PyDllName:           $(PyDllName)" />
+     <Message Importance="high" Text="WindowsSdkVersion:   $(TargetPlatformVersion)" />
+   </Target>
++  <Target Name="_ValidateDistDir" BeforeTargets="PrepareForBuild">
++    <Error Condition="'$(DistDir)' == ''" Text="DistDir is required." />
++    <Error Condition="!Exists('$(DistIncludeDir)')" Text="Dependency include directory not found: $(DistIncludeDir)" />
++    <Error Condition="!Exists('$(DistLibDir)')" Text="Dependency library directory not found: $(DistLibDir)" />
++    <Error Condition="!Exists('$(DistBinDir)')" Text="Dependency DLL directory not found: $(DistBinDir)" />
++  </Target>
+ </Project>
+--- Python-3.11.15/PCbuild/pythoncore.vcxproj	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/PCbuild/pythoncore.vcxproj	2026-08-15 17:49:53.116817274 +0400
+@@ -82,7 +82,7 @@
+   <PropertyGroup>
+     <KillPython>true</KillPython>
+     <RequirePGCFiles>true</RequirePGCFiles>
+-    <IncludeExternals Condition="$(IncludeExternals) == '' and Exists('$(zlibDir)\zlib.h')">true</IncludeExternals>
++    <IncludeExternals Condition="$(IncludeExternals) == '' and Exists('$(DistIncludeDir)zlib.h')">true</IncludeExternals>
+     <IncludeExternals Condition="$(IncludeExternals) == ''">false</IncludeExternals>
+   </PropertyGroup>
+   <ImportGroup Label="PropertySheets">
+@@ -101,12 +101,14 @@
+     <ClCompile>
+       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
+       <AdditionalIncludeDirectories>$(PySourcePath)Python;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <AdditionalIncludeDirectories Condition="$(IncludeExternals)">$(zlibDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories Condition="$(IncludeExternals)">$(DistIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_BUILD_CORE_BUILTIN;Py_ENABLE_SHARED;MS_DLL_ID="$(SysWinVer)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessorDefinitions Condition="$(IncludeExternals)">_Py_HAVE_ZLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>version.lib;ws2_32.lib;pathcch.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories Condition="$(IncludeExternals)">$(DistLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <AdditionalDependencies Condition="$(IncludeExternals)">z.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+@@ -330,19 +332,6 @@
+     <ClInclude Include="..\Python\stdlib_module_names.h" />
+     <ClInclude Include="..\Python\thread_nt.h" />
+   </ItemGroup>
+-  <ItemGroup Condition="$(IncludeExternals)">
+-    <ClInclude Include="$(zlibDir)\crc32.h" />
+-    <ClInclude Include="$(zlibDir)\deflate.h" />
+-    <ClInclude Include="$(zlibDir)\inffast.h" />
+-    <ClInclude Include="$(zlibDir)\inffixed.h" />
+-    <ClInclude Include="$(zlibDir)\inflate.h" />
+-    <ClInclude Include="$(zlibDir)\inftrees.h" />
+-    <ClInclude Include="$(zlibDir)\trees.h" />
+-    <ClInclude Include="$(zlibDir)\zconf.h" />
+-    <ClInclude Include="$(zlibDir)\zconf.in.h" />
+-    <ClInclude Include="$(zlibDir)\zlib.h" />
+-    <ClInclude Include="$(zlibDir)\zutil.h" />
+-  </ItemGroup>
+   <ItemGroup>
+     <ClCompile Include="..\Modules\_abc.c" />
+     <ClCompile Include="..\Modules\_bisectmodule.c" />
+@@ -542,19 +531,6 @@
+   </ItemGroup>
+   <ItemGroup Condition="$(IncludeExternals)">
+     <ClCompile Include="..\Modules\zlibmodule.c" />
+-    <ClCompile Include="$(zlibDir)\adler32.c" />
+-    <ClCompile Include="$(zlibDir)\compress.c" />
+-    <ClCompile Include="$(zlibDir)\crc32.c" />
+-    <ClCompile Include="$(zlibDir)\deflate.c">
+-      <DisableSpecificWarnings>4244</DisableSpecificWarnings>
+-    </ClCompile>
+-    <ClCompile Include="$(zlibDir)\infback.c" />
+-    <ClCompile Include="$(zlibDir)\inffast.c" />
+-    <ClCompile Include="$(zlibDir)\inflate.c" />
+-    <ClCompile Include="$(zlibDir)\inftrees.c" />
+-    <ClCompile Include="$(zlibDir)\trees.c" />
+-    <ClCompile Include="$(zlibDir)\uncompr.c" />
+-    <ClCompile Include="$(zlibDir)\zutil.c" />
+   </ItemGroup>
+   <ItemGroup>
+     <ClCompile Include="..\PC\dl_nt.c" />
+@@ -606,6 +582,16 @@
+     <Delete Files="@(VCRuntimeDLL->'$(OutDir)%(Filename)%(Extension)')" />
+   </Target>
+ 
++  <ItemGroup>
++    <_DistDLL Include="$(DistBinDir)*.dll" />
++  </ItemGroup>
++  <Target Name="_CopyDistDLLs" Condition="'@(_DistDLL)' != ''" AfterTargets="Build">
++    <Copy SourceFiles="@(_DistDLL)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
++  </Target>
++  <Target Name="_CleanDistDLLs" Condition="'@(_DistDLL)' != ''" AfterTargets="Clean">
++    <Delete Files="@(_DistDLL->'$(OutDir)%(Filename)%(Extension)')" />
++  </Target>
++
+   <Target Name="_DeletePyBuildDirTxt" BeforeTargets="PrepareForBuild">
+     <Delete Files="$(OutDir)pybuilddir.txt" />
+   </Target>

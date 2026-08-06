@@ -1,5 +1,14 @@
---- Python-3.11.15/Lib/test/test_tarfile.py	2026-03-14 14:37:13.923913295 +0400
-+++ Python-3.11.15/Lib/test/test_tarfile.py	2026-03-14 14:38:52.409593491 +0400
+--- Python-3.11.15/Lib/test/test_tarfile.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_tarfile.py	2026-08-10 19:02:00.425115115 +0400
+@@ -3163,7 +3163,7 @@
+                         if not path.is_symlink():
+                             raise
+                     else:
+-                        self.assertGreaterEqual(path.stat().st_mtime, now)
++                        self.assertGreaterEqual(path.stat().st_mtime, int(now))
+ 
+     def test_extractall_none_mode(self):
+         # modes of directories and regular files should match the mode
 @@ -3614,6 +3614,7 @@
              with self.check_context(arc.open(), 'data'):
                  self.expect_file('parent/evil')

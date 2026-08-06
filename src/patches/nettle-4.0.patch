@@ -1,5 +1,5 @@
---- nettle-3.10.2/Makefile.in	2025-06-26 22:29:02.000000000 +0400
-+++ nettle-3.10.2/Makefile.in	2026-02-03 13:06:50.580406161 +0400
+--- nettle-4.0/Makefile.in	2025-06-26 22:29:02.000000000 +0400
++++ nettle-4.0/Makefile.in	2026-02-03 13:06:50.580406161 +0400
 @@ -497,7 +497,7 @@
  
  install-static: $(LIBTARGETS)
@@ -9,8 +9,8 @@
  	  $(INSTALL_DATA) $$f $(DESTDIR)$(libdir) ; \
  	done
  
---- nettle-3.10.2/configure	2025-06-26 22:29:02.000000000 +0400
-+++ nettle-3.10.2/configure	2026-02-03 13:07:07.261890564 +0400
+--- nettle-4.0/configure	2025-06-26 22:29:02.000000000 +0400
++++ nettle-4.0/configure	2026-02-03 13:07:07.261890564 +0400
 @@ -8067,6 +8067,19 @@
      LIBHOGWEED_LINK='$(CC) $(CFLAGS) $(LDFLAGS) --shared -h $(LIBHOGWEED_SONAME)'
      LIBHOGWEED_LIBS='libnettle.so $(LIBS)'

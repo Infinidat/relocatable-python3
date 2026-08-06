@@ -1,5 +1,5 @@
---- openldap-2.6.7/build/top.mk	2023-10-07 06:51:21.629931921 -0500
-+++ openldap-2.6.7/build/top.mk	2023-10-07 06:51:34.211116923 -0500
+--- openldap-2.6.14/build/top.mk	2023-10-07 06:51:21.629931921 -0500
++++ openldap-2.6.14/build/top.mk	2023-10-07 06:51:34.211116923 -0500
 @@ -20,7 +20,7 @@
  RELEASEDATE= @OPENLDAP_RELEASE_DATE@
  
@@ -9,8 +9,8 @@
  
  top_builddir = @top_builddir@
  
---- openldap-2.6.7/configure	2024-01-14 20:45:58.926270258 -0600
-+++ openldap-2.6.7/configure	2024-01-14 20:46:16.662704230 -0600
+--- openldap-2.6.14/configure	2024-01-14 20:45:58.926270258 -0600
++++ openldap-2.6.14/configure	2024-01-14 20:46:16.662704230 -0600
 @@ -27200,7 +27200,7 @@
  # ### BEGIN LIBTOOL CONFIG
  

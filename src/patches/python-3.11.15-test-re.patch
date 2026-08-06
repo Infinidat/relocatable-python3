@@ -1,0 +1,24 @@
+--- Python-3.11.15/Lib/test/test_re.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_re.py	2026-08-11 17:48:16.413893345 +0400
+@@ -1956,6 +1956,10 @@
+         is_emscripten or is_wasi,
+         "musl libc issue on Emscripten/WASI, bpo-46390"
+     )
++    @unittest.skipIf(
++        sys.platform == "sunos5",
++        "Solaris has different byte case-folding semantics in UTF-8 locales",
++    )
+     def test_locale_caching(self):
+         # Issue #22410
+         oldlocale = locale.setlocale(locale.LC_CTYPE)
+@@ -1996,6 +2000,10 @@
+         is_emscripten or is_wasi,
+         "musl libc issue on Emscripten/WASI, bpo-46390"
+     )
++    @unittest.skipIf(
++        sys.platform == "sunos5",
++        "Solaris has different byte case-folding semantics in UTF-8 locales",
++    )
+     def test_locale_compiled(self):
+         oldlocale = locale.setlocale(locale.LC_CTYPE)
+         self.addCleanup(locale.setlocale, locale.LC_CTYPE, oldlocale)

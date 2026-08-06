@@ -1,5 +1,121 @@
---- cppunit-1.15.1/autogen.sh	2019-11-28 19:35:43.000000000 +0000
-+++ cppunit-1.15.1/autogen.sh	2026-08-04 18:38:43.852128501 +0000
+--- cppunit-1.15.1/CMakeLists.txt	1970-01-01 04:00:00.000000000 +0400
++++ cppunit-1.15.1/CMakeLists.txt	2026-08-14 16:34:51.106389714 +0400
+@@ -0,0 +1,113 @@
++cmake_minimum_required(VERSION 3.15)
++
++cmake_policy(SET CMP0091 NEW)
++
++project(cppunit LANGUAGES CXX)
++
++include(CTest)
++
++
++###############################################################################
++# CppUnit library
++###############################################################################
++
++file(GLOB CPPUNIT_SOURCES CONFIGURE_DEPENDS
++    "${CMAKE_CURRENT_SOURCE_DIR}/src/cppunit/*.cpp"
++)
++
++add_library(cppunit ${CPPUNIT_SOURCES})
++
++target_include_directories(cppunit
++    PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++        $<INSTALL_INTERFACE:include>
++)
++
++if(BUILD_SHARED_LIBS)
++    target_compile_definitions(cppunit
++        PRIVATE CPPUNIT_BUILD_DLL
++        INTERFACE CPPUNIT_DLL
++    )
++endif()
++
++set_target_properties(cppunit PROPERTIES
++    DEBUG_POSTFIX d
++)
++
++
++###############################################################################
++# Tests
++###############################################################################
++
++if(BUILD_TESTING)
++    #
++    # Main CppUnit self-test suite
++    #
++    file(GLOB CPPUNIT_SELFTEST_SOURCES CONFIGURE_DEPENDS
++        "${CMAKE_CURRENT_SOURCE_DIR}/examples/cppunittest/*.cpp"
++    )
++
++    # This is a separate DLL test plug-in and must not be linked into
++    # cppunittestmain.
++    list(REMOVE_ITEM CPPUNIT_SELFTEST_SOURCES
++        "${CMAKE_CURRENT_SOURCE_DIR}/examples/cppunittest/CppUnitTestPlugIn.cpp"
++    )
++
++    add_executable(cppunittestmain
++        ${CPPUNIT_SELFTEST_SOURCES}
++    )
++
++    target_include_directories(cppunittestmain PRIVATE
++        "${CMAKE_CURRENT_SOURCE_DIR}/include"
++        "${CMAKE_CURRENT_SOURCE_DIR}/examples/cppunittest"
++    )
++
++    target_link_libraries(cppunittestmain PRIVATE
++        cppunit
++    )
++
++    add_test(
++        NAME cppunit-selftest
++        COMMAND $<TARGET_FILE:cppunittestmain>
++    )
++
++    #
++    # DllPlugInTester command-line parser tests
++    #
++    add_executable(DllPlugInTesterTest
++        src/DllPlugInTester/DllPlugInTesterTest.cpp
++        src/DllPlugInTester/CommandLineParser.cpp
++        src/DllPlugInTester/CommandLineParserTest.cpp
++    )
++
++    target_include_directories(DllPlugInTesterTest PRIVATE
++        "${CMAKE_CURRENT_SOURCE_DIR}/include"
++        "${CMAKE_CURRENT_SOURCE_DIR}/src/DllPlugInTester"
++    )
++
++    target_link_libraries(DllPlugInTesterTest PRIVATE
++        cppunit
++    )
++
++    add_test(
++        NAME cppunit-dll-plugin-tester
++        COMMAND $<TARGET_FILE:DllPlugInTesterTest>
++    )
++endif()
++
++
++###############################################################################
++# Install
++###############################################################################
++
++install(
++    TARGETS cppunit
++    RUNTIME DESTINATION bin
++    ARCHIVE DESTINATION lib
++    LIBRARY DESTINATION lib
++)
++
++install(
++    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/cppunit"
++    DESTINATION include
++)
+--- cppunit-1.15.1/autogen.sh	2019-11-28 23:35:43.000000000 +0400
++++ cppunit-1.15.1/autogen.sh	2026-08-14 14:59:43.478968790 +0400
 @@ -1,5 +1,5 @@
  #!/bin/sh
 -TESTLIBTOOLIZE="glibtoolize libtoolize"
@@ -7,8 +123,8 @@
  
  LIBTOOLIZEFOUND="0"
  
---- cppunit-1.15.1/configure.ac	2019-12-20 18:56:13.000000000 +0000
-+++ cppunit-1.15.1/configure.ac	2026-08-04 18:38:29.881125298 +0000
+--- cppunit-1.15.1/configure.ac	2019-12-20 22:56:13.000000000 +0400
++++ cppunit-1.15.1/configure.ac	2026-08-14 14:59:43.480078836 +0400
 @@ -19,6 +19,7 @@
  AC_CONFIG_MACRO_DIR([m4])
  AM_INIT_AUTOMAKE([1.11 foreign dist-xz dist-bzip2])
@@ -33,8 +149,8 @@
  # Check for various headers and settings
  # ======================================
  AC_HEADER_STDC
---- cppunit-1.15.1/examples/cppunittest/Makefile.am	2019-12-24 16:48:06.000000000 +0000
-+++ cppunit-1.15.1/examples/cppunittest/Makefile.am	2026-08-04 18:38:29.881125297 +0000
+--- cppunit-1.15.1/examples/cppunittest/Makefile.am	2019-12-24 20:48:06.000000000 +0400
++++ cppunit-1.15.1/examples/cppunittest/Makefile.am	2026-08-14 14:59:43.480887965 +0400
 @@ -75,6 +75,10 @@
  	XmlUniformiserTest.h \
  	XmlUniformiserTest.cpp
@@ -46,8 +162,8 @@
  cppunittestmain_LDADD= \
    $(top_builddir)/src/cppunit/libcppunit.la \
    $(LIBADD_DL)
---- cppunit-1.15.1/examples/hierarchy/Makefile.am	2019-12-24 16:48:06.000000000 +0000
-+++ cppunit-1.15.1/examples/hierarchy/Makefile.am	2026-08-04 18:38:29.891128995 +0000
+--- cppunit-1.15.1/examples/hierarchy/Makefile.am	2019-12-24 20:48:06.000000000 +0400
++++ cppunit-1.15.1/examples/hierarchy/Makefile.am	2026-08-14 14:59:43.481581218 +0400
 @@ -15,6 +15,10 @@
                     BoardGameTest.h \
                     ChessTest.h
@@ -59,8 +175,8 @@
  hierarchy_LDADD = \
    $(top_builddir)/src/cppunit/libcppunit.la \
    $(LIBADD_DL)
---- cppunit-1.15.1/examples/money/Makefile.am	2019-12-24 16:48:06.000000000 +0000
-+++ cppunit-1.15.1/examples/money/Makefile.am	2026-08-04 18:38:29.891128995 +0000
+--- cppunit-1.15.1/examples/money/Makefile.am	2019-12-24 20:48:06.000000000 +0400
++++ cppunit-1.15.1/examples/money/Makefile.am	2026-08-14 14:59:43.482231846 +0400
 @@ -9,6 +9,10 @@
  MoneyApp_SOURCES = Money.h MoneyTest.h MoneyTest.cpp MoneyApp.cpp StdAfx.h
  MoneyApp_CXXFLAGS = $(CPPUNIT_CFLAGS)
@@ -72,8 +188,8 @@
  # MoneyApp_LDADD = $(CPPUNIT_LIBS)
  # USE THIS in your projects, not the line bellow
  
---- cppunit-1.15.1/examples/simple/Makefile.am	2019-12-24 16:48:06.000000000 +0000
-+++ cppunit-1.15.1/examples/simple/Makefile.am	2026-08-04 18:38:29.901144648 +0000
+--- cppunit-1.15.1/examples/simple/Makefile.am	2019-12-24 20:48:06.000000000 +0400
++++ cppunit-1.15.1/examples/simple/Makefile.am	2026-08-14 14:59:43.482794348 +0400
 @@ -4,6 +4,10 @@
  
  noinst_PROGRAMS = simple
@@ -85,8 +201,8 @@
  simple_SOURCES = ExampleTestCase.cpp Main.cpp  ExampleTestCase.h
  
  simple_LDADD = \
---- cppunit-1.15.1/src/DllPlugInTester/Makefile.am	2019-11-28 19:35:43.000000000 +0000
-+++ cppunit-1.15.1/src/DllPlugInTester/Makefile.am	2026-08-04 18:38:29.881125297 +0000
+--- cppunit-1.15.1/src/DllPlugInTester/Makefile.am	2019-11-28 23:35:43.000000000 +0400
++++ cppunit-1.15.1/src/DllPlugInTester/Makefile.am	2026-08-14 14:59:43.483426559 +0400
 @@ -11,6 +11,10 @@
  	CommandLineParser.h \
  	CommandLineParser.cpp

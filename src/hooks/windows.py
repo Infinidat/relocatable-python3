@@ -30,17 +30,23 @@ def _copy(src, dst):
 def _move(src, dst):
     _todo('mv -f -v', src, dst)
 
-def libiconv_post_make(options, buildout, environ):
+def libiconv(options, buildout, environ):
     prefix = environ['PREFIX']
-    suffix = os.path.join('build-VS2017-MT', 'x64', 'Release')
+    suffix = os.path.join('build-VS2017', 'x64', 'Release')
     _copy(glob.glob(os.path.join('include', '*.h')),
           os.path.join(prefix, 'include'))
     _copy(glob.glob(os.path.join(suffix, '*.dll')),
-          os.path.join(prefix, 'lib'))
+          os.path.join(prefix, 'bin'))
     _copy(glob.glob(os.path.join(suffix, '*.lib')),
           os.path.join(prefix, 'lib'))
-    _copy(glob.glob(os.path.join(suffix, 'static', '*.exe')),
+    _copy(glob.glob(os.path.join(suffix, '*.exe')),
           os.path.join(prefix, 'bin'))
+
+def libffi(options, buildout, environ):
+    dll = 'libffi.dll'
+    prefix = environ.get('PREFIX')
+    _move(os.path.join(prefix, 'lib', dll),
+          os.path.join(prefix, 'bin', dll))
 
 class PythonPostMake(object):
     def __init__(self, environ):

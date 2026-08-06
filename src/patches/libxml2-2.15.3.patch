@@ -1,0 +1,38 @@
+--- libxml2-2.15.3/test/catalogs/test.sh	2026-04-16 11:04:38.000000000 +0300
++++ libxml2-2.15.3/test/catalogs/test.sh	2026-08-06 10:39:06.865401130 +0300
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "## Catalog regression tests"
+ 
+--- libxml2-2.15.3/test/catalogs/test_sgml.sh	2026-04-16 11:04:38.000000000 +0300
++++ libxml2-2.15.3/test/catalogs/test_sgml.sh	2026-08-06 10:46:11.216874387 +0300
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ set -e
+ 
+--- libxml2-2.15.3/test/scripts/test.sh	2026-04-16 11:04:38.000000000 +0300
++++ libxml2-2.15.3/test/scripts/test.sh	2026-08-06 10:38:57.802584181 +0300
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ set -e
+ 
+--- libxml2-2.15.3/xmlreader.c	2026-04-16 11:04:38.000000000 +0300
++++ libxml2-2.15.3/xmlreader.c	2026-08-06 10:38:38.991265847 +0300
+@@ -2086,6 +2086,11 @@
+     xmlParserInputBufferPtr input;
+     xmlTextReaderPtr ret;
+ 
++    if (URI == NULL) {
++        xmlTextReaderErr(XML_ERR_ARGUMENT, "failed to open <NULL>");
++        return NULL;
++    }
++
+     if (xmlParserInputBufferCreateFilenameValue != NULL) {
+         input = xmlParserInputBufferCreateFilenameValue(URI,
+                 XML_CHAR_ENCODING_NONE);

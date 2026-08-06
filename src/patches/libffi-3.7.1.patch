@@ -1,0 +1,290 @@
+--- libffi-3.7.1/configure.host	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/configure.host	2026-08-14 18:51:55.511408131 +0400
+@@ -211,10 +211,8 @@
+   powerpc-*-darwin* | powerpc64-*-darwin*)
+ 	TARGET=POWERPC_DARWIN; TARGETDIR=powerpc
+ 	;;
+-  powerpc-*-aix* | rs6000-*-aix*)
++  powerpc*-*-aix* | rs6000-*-aix*)
+ 	TARGET=POWERPC_AIX; TARGETDIR=powerpc
+-	# Create AIX-style "FAT" libraries.
+-	tmake_file="t-aix"
+ 	;;
+   powerpc-*-freebsd* | powerpc-*-openbsd* | powerpc-*-netbsd*)
+ 	TARGET=POWERPC_FREEBSD; TARGETDIR=powerpc
+--- libffi-3.7.1/include/ffi.h.in	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/include/ffi.h.in	2026-08-14 18:51:55.512697912 +0400
+@@ -85,6 +85,13 @@
+ 
+ #include <ffitarget.h>
+ 
++/* libffi has no generic array type.  Most ABIs classify the equivalent
++   repeated-element structure identically.  Targets with an exception may
++   override this in ffitarget.h.  */
++#ifndef FFI_TYPE_NATIVE_ARRAY
++# define FFI_TYPE_NATIVE_ARRAY FFI_TYPE_STRUCT
++#endif
++
+ #ifndef LIBFFI_ASM
+ 
+ #if defined(_MSC_VER) && !defined(__clang__)
+--- libffi-3.7.1/ltmain.sh	2026-07-10 17:59:31.000000000 +0400
++++ libffi-3.7.1/ltmain.sh	2026-08-14 18:51:55.520830162 +0400
+@@ -3102,7 +3102,7 @@
+   $debug_cmd
+ 
+   # awkward: cmd appends spaces to result
+-  func_convert_core_msys_to_w32_result=`( cmd //c echo "$1" ) 2>/dev/null |
++  func_convert_core_msys_to_w32_result=`( cmd /c echo "$1" ) 2>/dev/null |
+     $SED -e 's/[ ]*$//' -e "$sed_naive_backslashify"`
+ }
+ #end: func_convert_core_msys_to_w32
+--- libffi-3.7.1/msvcc.sh	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/msvcc.sh	2026-08-14 18:52:23.546531077 +0400
+@@ -202,7 +202,7 @@
+       case $1
+       in
+         -lffi)
+-          linkargs="$linkargs lib${1#-l}-${libversion}.lib"
++          linkargs="$linkargs lib${1#-l}.lib"
+           ;;
+         *)
+           # ignore other libraries like -lm, hope they are
+--- libffi-3.7.1/src/powerpc/ffi_darwin.c	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/src/powerpc/ffi_darwin.c	2026-08-14 18:51:55.522334683 +0400
+@@ -139,6 +139,44 @@
+   (ffi_type *, char *, unsigned, unsigned *, double **, unsigned long **);
+ #endif
+ 
++#if defined(POWERPC_AIX)
++/* GCC represents a single-field AIX aggregate such as
++   struct { float x; } using the scalar field mode.  The aggregate itself is
++   passed in the parameter save area/GPRs, but GCC still advances the FPR
++   argument index.  Return the number of FPRs reserved by such an aggregate.  */
++static unsigned
++aix_scalar_aggregate_fprs (ffi_type *type)
++{
++  ffi_type *element;
++
++  if (type->type != FFI_TYPE_STRUCT
++      || type->elements == NULL
++      || type->elements[0] == NULL
++      || type->elements[1] != NULL)
++    return 0;
++
++  element = type->elements[0];
++  if (type->size != element->size)
++    return 0;
++
++  if (element->type == FFI_TYPE_STRUCT)
++    return aix_scalar_aggregate_fprs (element);
++
++  switch (element->type)
++    {
++    case FFI_TYPE_FLOAT:
++    case FFI_TYPE_DOUBLE:
++      return 1;
++#if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
++    case FFI_TYPE_LONGDOUBLE:
++      return 2;
++#endif
++    default:
++      return 0;
++    }
++}
++#endif
++
+ /* This depends on GPR_SIZE = sizeof (unsigned long) */
+ 
+ void
+@@ -196,10 +234,15 @@
+ 	  double_tmp = *(float *) *p_argv;
+ 	  if (fparg_count < NUM_FPR_ARG_REGISTERS)
+ 	    *fpr_base++ = double_tmp;
+-#if defined(POWERPC_DARWIN)
+-	  *(float *)next_arg = *(float *) *p_argv;
++#if defined(POWERPC_AIX)
++	  /* A single-precision AIX argument is widened only in an FPR.  In
++	     the parameter save area or a GPR it keeps its 32-bit representation
++	     and is right-justified in the parameter word/doubleword.  */
++	  *(float *) ((char *) next_arg
++		       + sizeof (unsigned long) - sizeof (float))
++	    = *(float *) *p_argv;
+ #else
+-	  *(double *)next_arg = double_tmp;
++	  *(float *)next_arg = *(float *) *p_argv;
+ #endif
+ 	  next_arg++;
+ 	  gp_count++;
+@@ -321,6 +364,21 @@
+ 	  memcpy((char *) dest_cpy, (char *) *p_argv, size_al);
+ 	  next_arg += (size_al + 3) / 4;
+ #  endif
++#if defined(POWERPC_AIX)
++	  if (abi == FFI_AIX)
++	    {
++	      unsigned reserved_fprs = aix_scalar_aggregate_fprs (*ptr);
++	      unsigned available_fprs =
++		fparg_count < NUM_FPR_ARG_REGISTERS
++		? NUM_FPR_ARG_REGISTERS - fparg_count : 0;
++	      unsigned saved_fprs =
++		reserved_fprs < available_fprs ? reserved_fprs : available_fprs;
++
++	      while (saved_fprs-- != 0)
++		*fpr_base++ = 0.0;
++	      fparg_count += reserved_fprs;
++	    }
++#endif
+ #endif
+ 	  break;
+ 
+@@ -909,6 +967,10 @@
+ #  else
+ 	  intarg_count += (size_al + 3) / 4;
+ #  endif
++#if defined(POWERPC_AIX)
++	  if (cif->abi == FFI_AIX)
++	    fparg_count += aix_scalar_aggregate_fprs (*ptr);
++#endif
+ #endif
+ 	  break;
+ 
+@@ -1369,6 +1431,15 @@
+ 	    avalue[i] = pgr;
+ 	  pgr += (size_al + 3) / 4;
+ #  endif
++#if defined(POWERPC_AIX)
++	  {
++	    unsigned reserved_fprs = aix_scalar_aggregate_fprs (arg_types[i]);
++	    unsigned available_fprs = (unsigned) (end_pfr - pfr);
++
++	    pfr += reserved_fprs < available_fprs
++		   ? reserved_fprs : available_fprs;
++	  }
++#endif
+ #endif
+ 	  break;
+ 
+@@ -1398,7 +1469,12 @@
+ 	    }
+ 	  else
+ 	    {
++#if defined(POWERPC_AIX)
++	      avalue[i] = (char *) pgr
++			  + sizeof (unsigned long) - sizeof (float);
++#else
+ 	      avalue[i] = pgr;
++#endif
+ 	    }
+ 	  pgr++;
+ 	  break;
+--- libffi-3.7.1/src/sparc/ffi64.c	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/src/sparc/ffi64.c	2026-08-14 18:51:55.523125484 +0400
+@@ -78,6 +78,11 @@
+       size_mask = FFI_ALIGN(size_mask, t->alignment);
+       switch (t->type)
+ 	{
++	case FFI_TYPE_SPARC_GCC_LEGACY_ARRAY:
++	  /* GCC before 14 classifies an array field as an integer aggregate,
++	     even when its elements are floating-point values.  */
++	  break;
++
+ 	case FFI_TYPE_STRUCT:
+ 	  size_mask = ffi_struct_float_mask (t, size_mask);
+ 	  continue;
+--- libffi-3.7.1/src/sparc/ffitarget.h	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/src/sparc/ffitarget.h	2026-08-14 18:51:55.523641005 +0400
+@@ -63,6 +63,23 @@
+ #ifdef SPARC64
+ # define FFI_TARGET_SPECIFIC_VARIADIC 1
+ # define FFI_EXTRA_CIF_FIELDS  unsigned int nfixedargs
++
++/* GCC before 14 does not classify floating-point array members of small
++   structures according to the Solaris SPARC V9 ABI.  Keep an explicit
++   aggregate marker so clients which know that a field is an array can ask
++   libffi to follow that legacy GCC calling convention.  */
++# define FFI_TYPE_SPARC_GCC_LEGACY_ARRAY 18
++# undef FFI_TYPE_LAST
++# define FFI_TYPE_LAST FFI_TYPE_SPARC_GCC_LEGACY_ARRAY
++
++/* This may be overridden by the client when the GCC fix for PR target/114416
++   has been backported without changing __GNUC__.  */
++# ifndef FFI_TYPE_NATIVE_ARRAY
++#  if defined(__sun) && defined(__GNUC__) && !defined(__clang__) \
++      && __GNUC__ < 14
++#   define FFI_TYPE_NATIVE_ARRAY FFI_TYPE_SPARC_GCC_LEGACY_ARRAY
++#  endif
++# endif
+ #endif
+ 
+ /* ---- Definitions for closures ----------------------------------------- */
+--- libffi-3.7.1/testsuite/lib/libffi.exp	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/testsuite/lib/libffi.exp	2026-08-14 18:51:55.524510011 +0400
+@@ -415,6 +415,10 @@
+             lappend options "libs= -lpthread"
+         }
+ 
++        if { [string match "*-*-aix*" $target_triplet] } {
++            lappend options "ldflags=-Wl,-brtl"
++        }
++
+         lappend options "libs= -lffi"
+ 
+         if { [string match "aarch64*-*-linux*" $target_triplet] } {
+--- libffi-3.7.1/testsuite/libffi.call/callback.c	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/testsuite/libffi.call/callback.c	2026-08-14 18:51:55.525167484 +0400
+@@ -46,7 +46,7 @@
+ 
+   ts12a_type.size = 0;
+   ts12a_type.alignment = 0;
+-  ts12a_type.type = FFI_TYPE_STRUCT;
++  ts12a_type.type = FFI_TYPE_NATIVE_ARRAY;
+   ts12a_type.elements = ts12a_type_elements;
+   ts12a_type_elements[0] = &ffi_type_double;
+   ts12a_type_elements[1] = &ffi_type_double;
+--- libffi-3.7.1/testsuite/libffi.call/callback2.c	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/testsuite/libffi.call/callback2.c	2026-08-14 18:51:55.526076655 +0400
+@@ -55,7 +55,7 @@
+ 
+   ts12b_type.size = 0;
+   ts12b_type.alignment = 0;
+-  ts12b_type.type = FFI_TYPE_STRUCT;
++  ts12b_type.type = FFI_TYPE_NATIVE_ARRAY;
+   ts12b_type.elements = ts12b_type_elements;
+   ts12b_type_elements[0] = &ffi_type_double;
+   ts12b_type_elements[1] = &ffi_type_double;
+--- libffi-3.7.1/testsuite/libffi.call/callback3.c	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/testsuite/libffi.call/callback3.c	2026-08-14 18:51:55.526619300 +0400
+@@ -57,7 +57,7 @@
+ 
+   ts12b_type.size = 0;
+   ts12b_type.alignment = 0;
+-  ts12b_type.type = FFI_TYPE_STRUCT;
++  ts12b_type.type = FFI_TYPE_NATIVE_ARRAY;
+   ts12b_type.elements = ts12b_type_elements;
+   ts12b_type_elements[0] = &ffi_type_double;
+   ts12b_type_elements[1] = &ffi_type_double;
+--- libffi-3.7.1/testsuite/libffi.call/callback4.c	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/testsuite/libffi.call/callback4.c	2026-08-14 18:51:55.527109654 +0400
+@@ -58,7 +58,7 @@
+ 
+   ts12b_type.size = 0;
+   ts12b_type.alignment = 0;
+-  ts12b_type.type = FFI_TYPE_STRUCT;
++  ts12b_type.type = FFI_TYPE_NATIVE_ARRAY;
+   ts12b_type.elements = ts12b_type_elements;
+   ts12b_type_elements[0] = &ts12a_type;
+   ts12b_type_elements[1] = &ts12a_type;
+--- libffi-3.7.1/testsuite/libffi.threads/threads.exp	2026-07-10 17:59:29.000000000 +0400
++++ libffi-3.7.1/testsuite/libffi.threads/threads.exp	2026-08-14 18:51:55.527611884 +0400
+@@ -32,6 +32,10 @@
+     set additional_options "";
+ }
+ 
++if { [istarget "*-*-aix*"] } {
++    append additional_options " -pthread"
++}
++
+ set tlist [lsort [glob -nocomplain -- $srcdir/$subdir/*.c]]
+ 
+ # No pthreads for windows or wasm

@@ -1,56 +1,117 @@
-diff --git a/cmake/modules/CompilerOptions.cmake b/cmake/modules/CompilerOptions.cmake
-index 151166d..d56d480 100644
---- a/cmake/modules/CompilerOptions.cmake
-+++ b/cmake/modules/CompilerOptions.cmake
-@@ -292,28 +292,39 @@ elseif(WITH_CRYPTO_BACKEND STREQUAL "openssl")
+--- SoftHSMv2-2.7.0/CMakeLists.txt	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/CMakeLists.txt	2026-08-14 16:22:55.651315425 +0400
+@@ -50,11 +50,11 @@
+     CACHE STRING "The default log level")
+ set(DEFAULT_OBJECTSTORE_BACKEND "file"
+     CACHE STRING "Default storage backend for token objects")
+-set(DEFAULT_PKCS11_LIB "${CMAKE_INSTALL_FULL_LIBDIR}/softhsm/libsofthsm2${CMAKE_SHARED_LIBRARY_SUFFIX}"
++set(DEFAULT_PKCS11_LIB "libsofthsm2${CMAKE_SHARED_LIBRARY_SUFFIX}"
+     CACHE STRING "The default PKCS#11 library")
+-set(DEFAULT_SOFTHSM2_CONF "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softhsm2.conf"
++set(DEFAULT_SOFTHSM2_CONF "softhsm2.conf"
+     CACHE STRING "The default location of softhsm.conf")
+-set(DEFAULT_TOKENDIR "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/softhsm/tokens/"
++set(DEFAULT_TOKENDIR "tokens"
+     CACHE STRING "The default location of the token directory")
+ set(DEFAULT_UMASK "0077"
+     CACHE STRING "The default file mode creation mask")
+--- SoftHSMv2-2.7.0/cmake/modules/CompilerOptions.cmake	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/cmake/modules/CompilerOptions.cmake	2026-08-14 15:21:06.940682257 +0400
+@@ -292,28 +292,94 @@
  
      set(CRYPTO_INCLUDES ${OPENSSL_INCLUDE_DIR})
      set(CRYPTO_LIBS ${OPENSSL_LIBRARIES})
 +
-+    find_package(ZLIB)
-+    if(ZLIB_LIBRARY AND ZLIB_INCLUDE_DIR)
-+        include_directories(${ZLIB_INCLUDE_DIRS})
-+        file(TO_CMAKE_PATH "${ZLIB_LIBRARY}" ZLIB_LIBRARY)
-+        list(APPEND CRYPTO_LIBS "${ZLIB_LIBRARY}")
++    if(WIN32)
++        set(_normalized_crypto_includes)
++        foreach(_crypto_include IN LISTS CRYPTO_INCLUDES)
++            file(TO_CMAKE_PATH
++                "${_crypto_include}"
++                _crypto_include_normalized
++            )
++            list(APPEND
++                _normalized_crypto_includes
++                "${_crypto_include_normalized}"
++            )
++        endforeach()
++        set(CRYPTO_INCLUDES ${_normalized_crypto_includes})
++
++        set(_normalized_crypto_libs)
++        foreach(_crypto_library IN LISTS CRYPTO_LIBS)
++            file(TO_CMAKE_PATH
++                "${_crypto_library}"
++                _crypto_library_normalized
++            )
++            list(APPEND
++                _normalized_crypto_libs
++                "${_crypto_library_normalized}"
++            )
++        endforeach()
++        set(CRYPTO_LIBS ${_normalized_crypto_libs})
 +    endif()
 +
-+    if(WIN32)
-+    list(APPEND CRYPTO_LIBS
-+        crypt32.lib
-+        ws2_32.lib
-+        advapi32.lib
-+        user32.lib
-+        bcrypt.lib
-+    )
-+    endif()
++    find_package(ZLIB REQUIRED)
++
++    foreach(_zlib_include IN LISTS ZLIB_INCLUDE_DIRS)
++        file(TO_CMAKE_PATH
++            "${_zlib_include}"
++            _zlib_include_normalized
++        )
++        if(NOT _zlib_include_normalized IN_LIST CRYPTO_INCLUDES)
++            list(APPEND CRYPTO_INCLUDES "${_zlib_include_normalized}")
++        endif()
++    endforeach()
++
++    foreach(_zlib_library IN LISTS ZLIB_LIBRARIES)
++        file(TO_CMAKE_PATH
++            "${_zlib_library}"
++            _zlib_library_normalized
++        )
++        if(NOT _zlib_library_normalized IN_LIST CRYPTO_LIBS)
++            list(APPEND CRYPTO_LIBS "${_zlib_library_normalized}")
++        endif()
++    endforeach()
++
++    list(REMOVE_DUPLICATES CRYPTO_INCLUDES)
 +
      message(STATUS "OpenSSL: Found version ${OPENSSL_VERSION}")
      message(STATUS "OpenSSL: Includes: ${CRYPTO_INCLUDES}")
      message(STATUS "OpenSSL: Libs: ${CRYPTO_LIBS}")
  
--    if(WIN32)
--        set(_ossl_inc "${OPENSSL_INCLUDE_DIR}")
--        if(_ossl_inc)
--            if(_ossl_inc MATCHES ";")
--                list(GET OPENSSL_INCLUDE_DIR 0 _ossl_inc)
--            endif()
+     if(WIN32)
+         set(_ossl_inc "${OPENSSL_INCLUDE_DIR}")
++
+         if(_ossl_inc)
+             if(_ossl_inc MATCHES ";")
+                 list(GET OPENSSL_INCLUDE_DIR 0 _ossl_inc)
+             endif()
 -            get_filename_component(_triplet_root "${_ossl_inc}" DIRECTORY)
 -            set(_vcpkg_bin "${_triplet_root}/bin")
 -            if(EXISTS "${_vcpkg_bin}")
 -                message(STATUS "Extending PATH with ${_vcpkg_bin} for OpenSSL ECC tests")
 -                set(ENV{PATH} "${_vcpkg_bin};$ENV{PATH}")
--            endif()
--        endif()
--    endif()
++
++            get_filename_component(_openssl_root "${_ossl_inc}" DIRECTORY)
++            set(_openssl_bin "${_openssl_root}/bin")
++
++            if(EXISTS "${_openssl_bin}")
++                message(STATUS
++                    "Extending PATH with ${_openssl_bin} for OpenSSL tests")
++                set(ENV{PATH} "${_openssl_bin};$ENV{PATH}")
+             endif()
+         endif()
+     endif()
+ 
 +    set(_save_cmake_required_includes "${CMAKE_REQUIRED_INCLUDES}")
 +    set(_save_cmake_required_libraries "${CMAKE_REQUIRED_LIBRARIES}")
 +
 +    set(CMAKE_REQUIRED_INCLUDES "${CRYPTO_INCLUDES}")
-+    set(CMAKE_REQUIRED_LIBRARIES ${CRYPTO_LIBS})
- 
++    set(CMAKE_REQUIRED_LIBRARIES "")
      check_include_files(openssl/ssl.h HAVE_OPENSSL_SSL_H)
 -    get_filename_component(CRYPTO_LIB_DIR "${OPENSSL_CRYPTO_LIBRARY}" DIRECTORY)
 -    check_library_exists(crypto "BN_new" "${CRYPTO_LIB_DIR}" HAVE_LIBCRYPTO)
++
++    set(CMAKE_REQUIRED_LIBRARIES "${CRYPTO_LIBS}")
 +    check_function_exists(BN_new HAVE_LIBCRYPTO)
 +
 +    set(CMAKE_REQUIRED_INCLUDES "${_save_cmake_required_includes}")
@@ -58,10 +119,40 @@ index 151166d..d56d480 100644
  
      # acx_openssl_ecc.m4
      if(ENABLE_ECC)
-@@ -458,11 +469,21 @@ if(WITH_SQLITE3)
+@@ -458,11 +524,52 @@
  
      set(SQLITE3_INCLUDES ${SQLITE3_INCLUDE_DIRS})
      set(SQLITE3_LIBS ${SQLITE3_LIBRARIES})
++
++    if(WIN32)
++        set(_normalized_sqlite3_includes)
++        foreach(_sqlite3_include IN LISTS SQLITE3_INCLUDES)
++            file(TO_CMAKE_PATH
++                "${_sqlite3_include}"
++                _sqlite3_include_normalized
++            )
++            list(APPEND
++                _normalized_sqlite3_includes
++                "${_sqlite3_include_normalized}"
++            )
++        endforeach()
++        set(SQLITE3_INCLUDES ${_normalized_sqlite3_includes})
++
++        set(_normalized_sqlite3_libs)
++        foreach(_sqlite3_library IN LISTS SQLITE3_LIBS)
++            file(TO_CMAKE_PATH
++                "${_sqlite3_library}"
++                _sqlite3_library_normalized
++            )
++            list(APPEND
++                _normalized_sqlite3_libs
++                "${_sqlite3_library_normalized}"
++            )
++        endforeach()
++        set(SQLITE3_LIBS ${_normalized_sqlite3_libs})
++    endif()
++
++    list(REMOVE_DUPLICATES SQLITE3_INCLUDES)
 +
      message(STATUS "SQLite3: Includes: ${SQLITE3_INCLUDES}")
      message(STATUS "SQLite3: Libs: ${SQLITE3_LIBS}")
@@ -70,10 +161,11 @@ index 151166d..d56d480 100644
 +    set(_save_cmake_required_libraries "${CMAKE_REQUIRED_LIBRARIES}")
 +
 +    set(CMAKE_REQUIRED_INCLUDES "${SQLITE3_INCLUDES}")
-+    set(CMAKE_REQUIRED_LIBRARIES "${SQLITE3_LIBS}")
-+
++    set(CMAKE_REQUIRED_LIBRARIES "")
      check_include_files(sqlite3.h HAVE_SQLITE3_H)
 -    check_library_exists(sqlite3 sqlite3_prepare_v2 "" HAVE_LIBSQLITE3)
++
++    set(CMAKE_REQUIRED_LIBRARIES "${SQLITE3_LIBS}")
 +    check_function_exists(sqlite3_prepare_v2 HAVE_LIBSQLITE3)
 +
 +    set(CMAKE_REQUIRED_INCLUDES "${_save_cmake_required_includes}")
@@ -81,11 +173,9 @@ index 151166d..d56d480 100644
  else(WITH_SQLITE3)
      message(STATUS "Not including SQLite3 in build")
  endif(WITH_SQLITE3)
-diff --git a/configure.ac b/configure.ac
-index a561a2a..48551ba 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -37,6 +37,20 @@ AC_CONFIG_MACRO_DIR([m4])
+--- SoftHSMv2-2.7.0/configure.ac	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/configure.ac	2026-08-14 15:21:06.941545844 +0400
+@@ -37,6 +37,20 @@
  AM_INIT_AUTOMAKE([foreign subdir-objects])
  ACX_PREFIXHACK
  
@@ -106,7 +196,7 @@ index a561a2a..48551ba 100644
  # Version info for the library
  VERSION_INFO="SOFTHSM_VERSION_CURRENT:SOFTHSM_VERSION_REVISION:SOFTHSM_VERSION_AGE"
  AC_SUBST(VERSION_INFO)
-@@ -67,7 +81,6 @@ ACX_CRYPTO_BACKEND
+@@ -67,7 +81,6 @@
  ACX_NON_PAGED_MEMORY
  
  # If the user want to have the migration tool
@@ -114,7 +204,7 @@ index a561a2a..48551ba 100644
  AC_ARG_WITH(migrate,
  	AS_HELP_STRING([--with-migrate],
  		[Build the migration tool. Requires SQLite3.]
-@@ -105,14 +118,7 @@ else
+@@ -105,14 +118,7 @@
  fi
  AM_CONDITIONAL([BUILD_OBJECTSTORE_BACKEND_DB], [test "x${build_objectstore_backend_db}" = "xyes"])
  
@@ -130,7 +220,7 @@ index a561a2a..48551ba 100644
  
  # Set visibility flags so only PKCS#11 entry points are exported
  ACX_VISIBILITY
-@@ -131,7 +137,6 @@ default_softhsm2_conf="`eval echo ${full_sysconfdir} | sed s,NONE,$ac_default_pr
+@@ -131,7 +137,6 @@
  softhsmtokendir=${full_localstatedir}/lib/softhsm/tokens/
  
  # Install the library in a sub-directory
@@ -138,10 +228,8 @@ index a561a2a..48551ba 100644
  libdir=$full_libdir
  default_softhsm2_lib="$full_libdir/libsofthsm2.so"
  
-diff --git a/m4/acx_sqlite3.m4 b/m4/acx_sqlite3.m4
-index ce63029..1b507b8 100644
---- a/m4/acx_sqlite3.m4
-+++ b/m4/acx_sqlite3.m4
+--- SoftHSMv2-2.7.0/m4/acx_sqlite3.m4	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/m4/acx_sqlite3.m4	2026-08-14 15:21:06.942428181 +0400
 @@ -1,35 +1,75 @@
 -AC_DEFUN([ACX_SQLITE3],[
 -	AC_ARG_WITH(sqlite3,
@@ -168,15 +256,6 @@ index ce63029..1b507b8 100644
 -
 -	CPPFLAGS="$CPPFLAGS $SQLITE3_INCLUDES"
 -	LIBS="$LIBS $SQLITE3_LIBS"
--
--	AC_CHECK_HEADERS(sqlite3.h,,[AC_MSG_ERROR([Can't find SQLite3 headers])])
--	AC_CHECK_LIB(sqlite3, sqlite3_prepare_v2, [], [AC_MSG_ERROR([Missing SQLite3 library v3.4.2 or greater])])
--
--	CPPFLAGS=$tmp_CPPFLAGS
--	LIBS=$tmp_LIBS
--
--	AC_SUBST(SQLITE3_INCLUDES)
--	AC_SUBST(SQLITE3_LIBS)
 +AC_DEFUN([ACX_SQLITE3], [
 +        AC_ARG_WITH(
 +                [sqlite3],
@@ -248,15 +327,21 @@ index ce63029..1b507b8 100644
 +                        ]
 +                )
 +        fi
-+
+ 
+-	AC_CHECK_HEADERS(sqlite3.h,,[AC_MSG_ERROR([Can't find SQLite3 headers])])
+-	AC_CHECK_LIB(sqlite3, sqlite3_prepare_v2, [], [AC_MSG_ERROR([Missing SQLite3 library v3.4.2 or greater])])
+-
+-	CPPFLAGS=$tmp_CPPFLAGS
+-	LIBS=$tmp_LIBS
+-
+-	AC_SUBST(SQLITE3_INCLUDES)
+-	AC_SUBST(SQLITE3_LIBS)
 +        AC_SUBST([SQLITE3_CFLAGS])
 +        AC_SUBST([SQLITE3_LIBS])
  ])
-diff --git a/src/bin/dump/Makefile.am b/src/bin/dump/Makefile.am
-index 64bfa8c..27c44a3 100644
---- a/src/bin/dump/Makefile.am
-+++ b/src/bin/dump/Makefile.am
-@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES =	$(srcdir)/Makefile.in
+--- SoftHSMv2-2.7.0/src/bin/dump/Makefile.am	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/bin/dump/Makefile.am	2026-08-14 15:21:06.943085558 +0400
+@@ -3,7 +3,7 @@
  AM_CPPFLAGS =		-I$(srcdir)/../../lib \
  			-I$(srcdir)/../../lib/object_store \
  			-I$(srcdir)/../../lib/pkcs11 \
@@ -265,10 +350,8 @@ index 64bfa8c..27c44a3 100644
  
  dist_man_MANS =		softhsm2-dump-file.1
  
-diff --git a/src/bin/keyconv/Makefile.am b/src/bin/keyconv/Makefile.am
-index 5565017..b27f2a3 100644
---- a/src/bin/keyconv/Makefile.am
-+++ b/src/bin/keyconv/Makefile.am
+--- SoftHSMv2-2.7.0/src/bin/keyconv/Makefile.am	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/bin/keyconv/Makefile.am	2026-08-14 15:21:06.943954229 +0400
 @@ -1,7 +1,8 @@
  MAINTAINERCLEANFILES =	$(srcdir)/Makefile.in
  
@@ -279,7 +362,7 @@ index 5565017..b27f2a3 100644
  
  dist_man_MANS =			softhsm2-keyconv.1
  
-@@ -9,7 +10,8 @@ bin_PROGRAMS =			softhsm2-keyconv
+@@ -9,7 +10,8 @@
  
  softhsm2_keyconv_SOURCES =	softhsm2-keyconv.cpp \
  				base64.c
@@ -289,11 +372,9 @@ index 5565017..b27f2a3 100644
  
  # Compile with OpenSSL support
  if WITH_OPENSSL
-diff --git a/src/bin/migrate/Makefile.am b/src/bin/migrate/Makefile.am
-index d903764..40f9082 100644
---- a/src/bin/migrate/Makefile.am
-+++ b/src/bin/migrate/Makefile.am
-@@ -2,7 +2,7 @@ MAINTAINERCLEANFILES =	$(srcdir)/Makefile.in
+--- SoftHSMv2-2.7.0/src/bin/migrate/Makefile.am	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/bin/migrate/Makefile.am	2026-08-14 15:21:06.944514065 +0400
+@@ -2,7 +2,7 @@
  
  AM_CPPFLAGS = 		-I$(srcdir)/../../lib/pkcs11 \
  			-I$(srcdir)/../common \
@@ -302,11 +383,9 @@ index d903764..40f9082 100644
  
  dist_man_MANS =		softhsm2-migrate.1
  
-diff --git a/src/bin/util/Makefile.am b/src/bin/util/Makefile.am
-index 788ea87..b791a82 100644
---- a/src/bin/util/Makefile.am
-+++ b/src/bin/util/Makefile.am
-@@ -8,7 +8,8 @@ AM_CPPFLAGS =		-I$(srcdir)/../common \
+--- SoftHSMv2-2.7.0/src/bin/util/Makefile.am	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/bin/util/Makefile.am	2026-08-14 15:21:06.945029983 +0400
+@@ -8,7 +8,8 @@
  			-I$(srcdir)/../../lib/object_store \
  			-I$(srcdir)/../../lib/pkcs11 \
  			@CRYPTO_INCLUDES@ \
@@ -316,7 +395,7 @@ index 788ea87..b791a82 100644
  
  dist_man_MANS =		softhsm2-util.1
  
-@@ -22,6 +23,7 @@ softhsm2_util_SOURCES =	softhsm2-util.cpp \
+@@ -22,6 +23,7 @@
  			../common/library.cpp
  
  softhsm2_util_LDADD =	@CRYPTO_LIBS@ \
@@ -324,27 +403,54 @@ index 788ea87..b791a82 100644
  			@SQLITE3_LIBS@ \
  			../../lib/libsofthsm_convarch.la
  
-diff --git a/src/lib/CMakeLists.txt b/src/lib/CMakeLists.txt
-index 5ec9d13..068cd31 100644
---- a/src/lib/CMakeLists.txt
-+++ b/src/lib/CMakeLists.txt
-@@ -91,10 +91,10 @@ endif(BUILD_TESTS)
+--- SoftHSMv2-2.7.0/src/lib/CMakeLists.txt	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/CMakeLists.txt	2026-08-14 15:22:02.951454145 +0400
+@@ -90,11 +90,25 @@
+ ###############################################################################
  # Install
  ###############################################################################
- install(TARGETS ${PROJECT_NAME}
+-install(TARGETS ${PROJECT_NAME}
 -        DESTINATION ${CMAKE_INSTALL_LIBDIR}/softhsm
-+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-         )
- if(ENABLE_STATIC)
-         install(TARGETS ${PROJECT_NAME}-static
+-        )
+-if(ENABLE_STATIC)
+-        install(TARGETS ${PROJECT_NAME}-static
 -                DESTINATION ${CMAKE_INSTALL_LIBDIR}/softhsm
++if(WIN32)
++        install(TARGETS ${PROJECT_NAME}
++                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++                LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++                )
++else()
++        install(TARGETS ${PROJECT_NAME}
 +                DESTINATION ${CMAKE_INSTALL_LIBDIR}
                  )
  endif()
-diff --git a/src/lib/crypto/test/EDDSATests.cpp b/src/lib/crypto/test/EDDSATests.cpp
-index 8fae764..260ff9b 100644
---- a/src/lib/crypto/test/EDDSATests.cpp
-+++ b/src/lib/crypto/test/EDDSATests.cpp
++if(ENABLE_STATIC)
++        if(WIN32)
++                install(TARGETS ${PROJECT_NAME}-static
++                        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++                        )
++        else()
++                install(TARGETS ${PROJECT_NAME}-static
++                        DESTINATION ${CMAKE_INSTALL_LIBDIR}
++                        )
++        endif()
++endif()
+--- SoftHSMv2-2.7.0/src/lib/common/CMakeLists.txt	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/common/CMakeLists.txt	2026-08-14 15:24:22.388810274 +0400
+@@ -44,9 +44,3 @@
+ install(FILES ${PROJECT_BINARY_DIR}/man5/softhsm2.conf.5
+         DESTINATION ${CMAKE_INSTALL_MANDIR}/man5
+         )
+-
+-install(DIRECTORY DESTINATION ${CMAKE_INSTALL_LOCALSTATEDIR}/lib/softhsm/tokens)
+-
+-install(CODE
+-        "execute_process(
+-        COMMAND chmod 1777 ${CMAKE_INSTALL_LOCALSTATEDIR}/lib/softhsm/tokens)")
+--- SoftHSMv2-2.7.0/src/lib/crypto/test/EDDSATests.cpp	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/crypto/test/EDDSATests.cpp	2026-08-14 15:21:06.946397781 +0400
 @@ -46,53 +46,77 @@
  
  CPPUNIT_TEST_SUITE_REGISTRATION(EDDSATests);
@@ -424,12 +530,7 @@ index 8fae764..260ff9b 100644
 +	};
 +	return curves;
 +}
- 
--static const std::vector<ByteString> allCurves = []{
--	auto v = montCurves;
--	v.insert(v.end(), edCurves.begin(), edCurves.end());
--	return v;
--}();
++
 +static const std::vector<ByteString>& allCurves()
 +{
 +	static const std::vector<ByteString> curves = []{
@@ -440,6 +541,12 @@ index 8fae764..260ff9b 100644
 +	return curves;
 +}
  
+-static const std::vector<ByteString> allCurves = []{
+-	auto v = montCurves;
+-	v.insert(v.end(), edCurves.begin(), edCurves.end());
+-	return v;
+-}();
+-
 -static const std::vector<ByteString> allCompatCurves = []{
 -	auto v = montCompatCurves;
 -	v.insert(v.end(), edCompatCurves.begin(), edCompatCurves.end());
@@ -457,7 +564,7 @@ index 8fae764..260ff9b 100644
  
  
  void EDDSATests::setUp()
-@@ -117,8 +141,8 @@ void EDDSATests::tearDown()
+@@ -117,8 +141,8 @@
  
  void EDDSATests::testKeyGeneration()
  {
@@ -468,7 +575,7 @@ index 8fae764..260ff9b 100644
  		c++, cc++)
  	{
  		// Set domain parameters
-@@ -156,7 +180,7 @@ void EDDSATests::testKeyGeneration()
+@@ -156,7 +180,7 @@
  
  void EDDSATests::testSerialisation()
  {
@@ -477,7 +584,7 @@ index 8fae764..260ff9b 100644
  	{
  		// Get domain parameters
  		ECParameters* p = new ECParameters;
-@@ -211,7 +235,7 @@ void EDDSATests::testSerialisation()
+@@ -211,7 +235,7 @@
  
  void EDDSATests::testPKCS8()
  {
@@ -486,7 +593,7 @@ index 8fae764..260ff9b 100644
  	{
  		// Get domain parameters
  		ECParameters* p = new ECParameters;
-@@ -246,7 +270,7 @@ void EDDSATests::testPKCS8()
+@@ -246,7 +270,7 @@
  
  void EDDSATests::testSigningVerifying()
  {
@@ -495,7 +602,7 @@ index 8fae764..260ff9b 100644
  	{
  		// Get parameters
  		ECParameters* p = new ECParameters;
-@@ -402,7 +426,7 @@ void EDDSATests::testSignVerifyKnownVectorEd448()
+@@ -402,7 +426,7 @@
  
  void EDDSATests::testDerivation()
  {
@@ -504,10 +611,8 @@ index 8fae764..260ff9b 100644
  	{
  		// Get parameters
  		ECParameters* p = new ECParameters;
-diff --git a/src/lib/object_store/DB.cpp b/src/lib/object_store/DB.cpp
-index 548f346..bd1fa43 100644
---- a/src/lib/object_store/DB.cpp
-+++ b/src/lib/object_store/DB.cpp
+--- SoftHSMv2-2.7.0/src/lib/object_store/DB.cpp	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/object_store/DB.cpp	2026-08-14 15:57:10.591077646 +0400
 @@ -46,8 +46,9 @@
  #include <unistd.h>
  #include <errno.h>
@@ -519,7 +624,7 @@ index 548f346..bd1fa43 100644
  #define S_IRUSR 0400
  #define S_IWUSR 0200
  #define S_IRGRP 0
-@@ -80,13 +81,13 @@ static int static_log_err(const char *format, va_list ap)
+@@ -80,13 +81,13 @@
  
  static DB::LogErrorHandler static_LogErrorhandler = static_log_err;
  
@@ -535,7 +640,7 @@ index 548f346..bd1fa43 100644
  	va_end(args);
  }
  
-@@ -754,7 +755,7 @@ const std::string &DB::Connection::dbpath()
+@@ -754,7 +755,7 @@
  	return _dbpath;
  }
  
@@ -544,7 +649,7 @@ index 548f346..bd1fa43 100644
  	// pstatement will hold a dynamically allocated string that needs to be deleted.
  	char *pstatement = NULL;
  
-@@ -762,7 +763,7 @@ DB::Statement DB::Connection::prepare(const std::string format, ...){
+@@ -762,7 +763,7 @@
  	char statement[128];
  	va_list args;
  	va_start(args, format);
@@ -553,7 +658,7 @@ index 548f346..bd1fa43 100644
  	va_end(args);
  	if (cneeded<0) {
  		DB::logError("Connection::prepare: vsnprintf encoding error");
-@@ -776,7 +777,7 @@ DB::Statement DB::Connection::prepare(const std::string format, ...){
+@@ -776,7 +777,7 @@
  			return Statement();
  		}
  		va_start(args, format);
@@ -562,10 +667,49 @@ index 548f346..bd1fa43 100644
  		va_end(args);
  		if (!ok) {
  			DB::logError("Connection::prepare: vsnprintf error");
-diff --git a/src/lib/object_store/DB.h b/src/lib/object_store/DB.h
-index 124bb81..922243b 100644
---- a/src/lib/object_store/DB.h
-+++ b/src/lib/object_store/DB.h
+@@ -872,11 +873,35 @@
+ 	return true;
+ }
+ 
+-void DB::Connection::close()
+-{
+-	if (_db) {
+-		sqlite3_close(_db);
+-		_db = NULL;
++ void DB::Connection::close()
++ {
++       if (_db)
++       {
++               unsigned int statementCount = 0;
++
++               for (sqlite3_stmt* statement = sqlite3_next_stmt(_db, NULL);
++                    statement != NULL;
++                    statement = sqlite3_next_stmt(_db, statement))
++               {
++                       const char* sql = sqlite3_sql(statement);
++
++                       fprintf(stderr,
++                               "DB::Connection::close: active statement: %s\n",
++                               sql != NULL ? sql : "<unknown>");
++                       statementCount++;
++               }
++
++               int rv = sqlite3_close(_db);
++               if (rv != SQLITE_OK)
++               {
++                       fprintf(stderr,
++                               "DB::Connection::close: sqlite3_close=%d, "
++                               "statements=%u, error=%s\n",
++                               rv, statementCount, sqlite3_errmsg(_db));
++                       return;
++               }
++
++               _db = NULL;
+ 	}
+ }
+ 
+--- SoftHSMv2-2.7.0/src/lib/object_store/DB.h	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/object_store/DB.h	2026-08-14 15:21:06.947872871 +0400
 @@ -42,7 +42,7 @@
  namespace DB {
  
@@ -575,7 +719,7 @@ index 124bb81..922243b 100644
  
  // The ap parameter has already been started with va_start.
  // So the handler only has to pass this on to a vprintf function
-@@ -153,7 +153,7 @@ public:
+@@ -153,7 +153,7 @@
  	// concatenation of dbdir and dbname
  	const std::string &dbpath();
  
@@ -584,11 +728,31 @@ index 124bb81..922243b 100644
  	Result perform(Statement &statement);
  	bool execute(Statement &statement);
  
-diff --git a/src/lib/object_store/Makefile.am b/src/lib/object_store/Makefile.am
-index 6af0d2c..9e28c46 100644
---- a/src/lib/object_store/Makefile.am
-+++ b/src/lib/object_store/Makefile.am
-@@ -5,7 +5,7 @@ AM_CPPFLAGS =				-I$(srcdir)/.. \
+--- SoftHSMv2-2.7.0/src/lib/object_store/Directory.cpp	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/object_store/Directory.cpp	2026-08-14 15:57:42.765421093 +0400
+@@ -273,7 +273,18 @@
+ #ifndef _WIN32
+ 	return (!::remove(fullPath.c_str()) && refresh());
+ #else
+-	return (!_unlink(fullPath.c_str()) && refresh());
++       int rv = _unlink(fullPath.c_str());
++
++       if (rv != 0)
++       {
++               fprintf(stderr,
++                       "Directory::remove: _unlink(%s) failed: "
++                       "errno=%d (%s)\n",
++                       fullPath.c_str(), errno, strerror(errno));
++               return false;
++       }
++
++       return refresh();
+ #endif
+ }
+ 
+--- SoftHSMv2-2.7.0/src/lib/object_store/Makefile.am	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/object_store/Makefile.am	2026-08-14 15:21:06.948369581 +0400
+@@ -5,7 +5,7 @@
  					-I$(srcdir)/../crypto \
  					-I$(srcdir)/../data_mgr \
  					-I$(srcdir)/../pkcs11 \
@@ -597,3 +761,27 @@ index 6af0d2c..9e28c46 100644
  
  noinst_LTLIBRARIES =			libsofthsm_objectstore.la
  libsofthsm_objectstore_la_SOURCES =	ObjectStore.cpp \
+--- SoftHSMv2-2.7.0/src/lib/object_store/test/DBTokenTests.cpp	2026-01-20 10:25:10.000000000 +0400
++++ SoftHSMv2-2.7.0/src/lib/object_store/test/DBTokenTests.cpp	2026-08-14 15:33:56.656402669 +0400
+@@ -489,7 +489,11 @@
+ 	CPPUNIT_ASSERT(newToken->createObject() != NULL);
+ 	delete newToken;
+ 
+-#if 1
++#ifndef _WIN32
++	/*
++	 * Unix permits unlinking an SQLite database while another connection
++	 * keeps the file open. Windows does not permit this.
++	*/
+ 	// Reopen the newly created token and keep a reference around.
+ 	DBToken referencingToken("testdir", "newToken", DEFAULT_UMASK);
+ 	CPPUNIT_ASSERT(referencingToken.isValid());
+@@ -529,7 +533,7 @@
+ 	DBToken clearedToken("testdir", "newToken", DEFAULT_UMASK);
+ 	CPPUNIT_ASSERT(!clearedToken.isValid());
+ 
+-#if 1
++#ifndef _WIN32
+ 	// Verify that it is no longer possible to access the database...
+ 	CPPUNIT_ASSERT(!referencingToken.getSOPIN(retrievedSOPIN));
+ 	CPPUNIT_ASSERT(retrievedSOPIN == soPIN);
