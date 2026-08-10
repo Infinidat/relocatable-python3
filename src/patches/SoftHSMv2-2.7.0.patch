@@ -1,0 +1,599 @@
+diff --git a/cmake/modules/CompilerOptions.cmake b/cmake/modules/CompilerOptions.cmake
+index 151166d..d56d480 100644
+--- a/cmake/modules/CompilerOptions.cmake
++++ b/cmake/modules/CompilerOptions.cmake
+@@ -292,28 +292,39 @@ elseif(WITH_CRYPTO_BACKEND STREQUAL "openssl")
+ 
+     set(CRYPTO_INCLUDES ${OPENSSL_INCLUDE_DIR})
+     set(CRYPTO_LIBS ${OPENSSL_LIBRARIES})
++
++    find_package(ZLIB)
++    if(ZLIB_LIBRARY AND ZLIB_INCLUDE_DIR)
++        include_directories(${ZLIB_INCLUDE_DIRS})
++        file(TO_CMAKE_PATH "${ZLIB_LIBRARY}" ZLIB_LIBRARY)
++        list(APPEND CRYPTO_LIBS "${ZLIB_LIBRARY}")
++    endif()
++
++    if(WIN32)
++    list(APPEND CRYPTO_LIBS
++        crypt32.lib
++        ws2_32.lib
++        advapi32.lib
++        user32.lib
++        bcrypt.lib
++    )
++    endif()
++
+     message(STATUS "OpenSSL: Found version ${OPENSSL_VERSION}")
+     message(STATUS "OpenSSL: Includes: ${CRYPTO_INCLUDES}")
+     message(STATUS "OpenSSL: Libs: ${CRYPTO_LIBS}")
+ 
+-    if(WIN32)
+-        set(_ossl_inc "${OPENSSL_INCLUDE_DIR}")
+-        if(_ossl_inc)
+-            if(_ossl_inc MATCHES ";")
+-                list(GET OPENSSL_INCLUDE_DIR 0 _ossl_inc)
+-            endif()
+-            get_filename_component(_triplet_root "${_ossl_inc}" DIRECTORY)
+-            set(_vcpkg_bin "${_triplet_root}/bin")
+-            if(EXISTS "${_vcpkg_bin}")
+-                message(STATUS "Extending PATH with ${_vcpkg_bin} for OpenSSL ECC tests")
+-                set(ENV{PATH} "${_vcpkg_bin};$ENV{PATH}")
+-            endif()
+-        endif()
+-    endif()
++    set(_save_cmake_required_includes "${CMAKE_REQUIRED_INCLUDES}")
++    set(_save_cmake_required_libraries "${CMAKE_REQUIRED_LIBRARIES}")
++
++    set(CMAKE_REQUIRED_INCLUDES "${CRYPTO_INCLUDES}")
++    set(CMAKE_REQUIRED_LIBRARIES ${CRYPTO_LIBS})
+ 
+     check_include_files(openssl/ssl.h HAVE_OPENSSL_SSL_H)
+-    get_filename_component(CRYPTO_LIB_DIR "${OPENSSL_CRYPTO_LIBRARY}" DIRECTORY)
+-    check_library_exists(crypto "BN_new" "${CRYPTO_LIB_DIR}" HAVE_LIBCRYPTO)
++    check_function_exists(BN_new HAVE_LIBCRYPTO)
++
++    set(CMAKE_REQUIRED_INCLUDES "${_save_cmake_required_includes}")
++    set(CMAKE_REQUIRED_LIBRARIES "${_save_cmake_required_libraries}")
+ 
+     # acx_openssl_ecc.m4
+     if(ENABLE_ECC)
+@@ -458,11 +469,21 @@ if(WITH_SQLITE3)
+ 
+     set(SQLITE3_INCLUDES ${SQLITE3_INCLUDE_DIRS})
+     set(SQLITE3_LIBS ${SQLITE3_LIBRARIES})
++
+     message(STATUS "SQLite3: Includes: ${SQLITE3_INCLUDES}")
+     message(STATUS "SQLite3: Libs: ${SQLITE3_LIBS}")
+ 
++    set(_save_cmake_required_includes "${CMAKE_REQUIRED_INCLUDES}")
++    set(_save_cmake_required_libraries "${CMAKE_REQUIRED_LIBRARIES}")
++
++    set(CMAKE_REQUIRED_INCLUDES "${SQLITE3_INCLUDES}")
++    set(CMAKE_REQUIRED_LIBRARIES "${SQLITE3_LIBS}")
++
+     check_include_files(sqlite3.h HAVE_SQLITE3_H)
+-    check_library_exists(sqlite3 sqlite3_prepare_v2 "" HAVE_LIBSQLITE3)
++    check_function_exists(sqlite3_prepare_v2 HAVE_LIBSQLITE3)
++
++    set(CMAKE_REQUIRED_INCLUDES "${_save_cmake_required_includes}")
++    set(CMAKE_REQUIRED_LIBRARIES "${_save_cmake_required_libraries}")
+ else(WITH_SQLITE3)
+     message(STATUS "Not including SQLite3 in build")
+ endif(WITH_SQLITE3)
+diff --git a/configure.ac b/configure.ac
+index a561a2a..48551ba 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,6 +37,20 @@ AC_CONFIG_MACRO_DIR([m4])
+ AM_INIT_AUTOMAKE([foreign subdir-objects])
+ ACX_PREFIXHACK
+ 
++AC_CANONICAL_HOST
++
++AS_CASE([$host_os],
++    [aix*], [
++        GETOPT_INCLUDES='-I$(includedir)/getopt'
++        GETOPT_LIBS='-lgnugetopt'
++    ], [
++        GETOPT_INCLUDES=''
++        GETOPT_LIBS=''
++    ])
++
++AC_SUBST([GETOPT_INCLUDES])
++AC_SUBST([GETOPT_LIBS])
++
+ # Version info for the library
+ VERSION_INFO="SOFTHSM_VERSION_CURRENT:SOFTHSM_VERSION_REVISION:SOFTHSM_VERSION_AGE"
+ AC_SUBST(VERSION_INFO)
+@@ -67,7 +81,6 @@ ACX_CRYPTO_BACKEND
+ ACX_NON_PAGED_MEMORY
+ 
+ # If the user want to have the migration tool
+-# Requires SQLite3
+ AC_ARG_WITH(migrate,
+ 	AS_HELP_STRING([--with-migrate],
+ 		[Build the migration tool. Requires SQLite3.]
+@@ -105,14 +118,7 @@ else
+ fi
+ AM_CONDITIONAL([BUILD_OBJECTSTORE_BACKEND_DB], [test "x${build_objectstore_backend_db}" = "xyes"])
+ 
+-# Require SQLite3 if either building --with-migrate or --with-objectstore-backend-db
+-AC_MSG_CHECKING(if SQLite3 required)
+-if test "x${build_migrate}" = "xyes" -o "x${build_objectstore_backend_db}" = "xyes"; then
+-	AC_MSG_RESULT(yes)
+-	ACX_SQLITE3
+-else
+-	AC_MSG_RESULT(no)
+-fi
++ACX_SQLITE3
+ 
+ # Set visibility flags so only PKCS#11 entry points are exported
+ ACX_VISIBILITY
+@@ -131,7 +137,6 @@ default_softhsm2_conf="`eval echo ${full_sysconfdir} | sed s,NONE,$ac_default_pr
+ softhsmtokendir=${full_localstatedir}/lib/softhsm/tokens/
+ 
+ # Install the library in a sub-directory
+-full_libdir="$full_libdir/softhsm"
+ libdir=$full_libdir
+ default_softhsm2_lib="$full_libdir/libsofthsm2.so"
+ 
+diff --git a/m4/acx_sqlite3.m4 b/m4/acx_sqlite3.m4
+index ce63029..1b507b8 100644
+--- a/m4/acx_sqlite3.m4
++++ b/m4/acx_sqlite3.m4
+@@ -1,35 +1,75 @@
+-AC_DEFUN([ACX_SQLITE3],[
+-	AC_ARG_WITH(sqlite3,
+-		AS_HELP_STRING([--with-sqlite3=PATH],[Specify prefix of path of SQLite3]),
+-		[
+-			SQLITE3_INCLUDES="-I$withval/include"
+-			SQLITE3_LIBDIRS="-L$withval/lib"
+-			
+-		],[
+-			SQLITE3_INCLUDES=""
+-			SQLITE3_LIBDIRS=""
+-		])
+-
+-	
+-	AC_MSG_CHECKING(what are the SQLite3 includes)
+-	AC_MSG_RESULT($SQLITE3_INCLUDES)
+-
+-	AC_MSG_CHECKING(what are the SQLite3 libs)
+-	SQLITE3_LIBS="$SQLITE3_LIBDIRS -lsqlite3"
+-	AC_MSG_RESULT($SQLITE3_LIBS)
+-
+-	tmp_CPPFLAGS=$CPPFLAGS
+-	tmp_LIBS=$LIBS
+-
+-	CPPFLAGS="$CPPFLAGS $SQLITE3_INCLUDES"
+-	LIBS="$LIBS $SQLITE3_LIBS"
+-
+-	AC_CHECK_HEADERS(sqlite3.h,,[AC_MSG_ERROR([Can't find SQLite3 headers])])
+-	AC_CHECK_LIB(sqlite3, sqlite3_prepare_v2, [], [AC_MSG_ERROR([Missing SQLite3 library v3.4.2 or greater])])
+-
+-	CPPFLAGS=$tmp_CPPFLAGS
+-	LIBS=$tmp_LIBS
+-
+-	AC_SUBST(SQLITE3_INCLUDES)
+-	AC_SUBST(SQLITE3_LIBS)
++AC_DEFUN([ACX_SQLITE3], [
++        AC_ARG_WITH(
++                [sqlite3],
++                [AS_HELP_STRING(
++                        [--with-sqlite3=PATH],
++                        [Specify the SQLite3 installation prefix]
++                )],
++                [sqlite3_prefix="$withval"],
++                [sqlite3_prefix=no]
++        )
++
++        PKG_PROG_PKG_CONFIG
++
++        if test "x$sqlite3_prefix" = xno; then
++                if test "x${build_migrate}" = xyes -o \
++                        "x${build_objectstore_backend_db}" = xyes; then
++                        AC_MSG_ERROR([--with-sqlite3=PATH is required for the migration tool or database backend])
++                fi
++
++                SQLITE3_CFLAGS=""
++                SQLITE3_LIBS=""
++
++                AC_DEFINE(
++                        [HAVE_SQLITE3_H],
++                        [0],
++                        [Define to 1 if sqlite3.h is available]
++                )
++
++                AC_DEFINE(
++                        [HAVE_LIBSQLITE3],
++                        [0],
++                        [Define to 1 if the SQLite3 library is available]
++                )
++
++                AC_MSG_NOTICE([SQLite3 support disabled])
++        else
++                if test "x$sqlite3_prefix" = xyes -o \
++                        -z "$sqlite3_prefix"; then
++                        AC_MSG_ERROR([--with-sqlite3 requires an installation prefix])
++                fi
++
++                sqlite3_pkgconfig_path="$sqlite3_prefix/lib/pkgconfig"
++
++                if test ! -f "$sqlite3_pkgconfig_path/sqlite3.pc"; then
++                        AC_MSG_ERROR([Cannot find $sqlite3_pkgconfig_path/sqlite3.pc])
++                fi
++
++                PKG_CONFIG_PATH="$sqlite3_pkgconfig_path${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
++                export PKG_CONFIG_PATH
++
++                PKG_CHECK_MODULES_STATIC(
++                        [SQLITE3],
++                        [sqlite3 >= 3.4.2],
++                        [
++                                AC_DEFINE(
++                                        [HAVE_SQLITE3_H],
++                                        [1],
++                                        [Define to 1 if sqlite3.h is available]
++                                )
++
++                                AC_DEFINE(
++                                        [HAVE_LIBSQLITE3],
++                                        [1],
++                                        [Define to 1 if the SQLite3 library is available]
++                                )
++                        ],
++                        [
++                                AC_MSG_ERROR([SQLite3 3.4.2 or newer was not found using pkg-config])
++                        ]
++                )
++        fi
++
++        AC_SUBST([SQLITE3_CFLAGS])
++        AC_SUBST([SQLITE3_LIBS])
+ ])
+diff --git a/src/bin/dump/Makefile.am b/src/bin/dump/Makefile.am
+index 64bfa8c..27c44a3 100644
+--- a/src/bin/dump/Makefile.am
++++ b/src/bin/dump/Makefile.am
+@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES =	$(srcdir)/Makefile.in
+ AM_CPPFLAGS =		-I$(srcdir)/../../lib \
+ 			-I$(srcdir)/../../lib/object_store \
+ 			-I$(srcdir)/../../lib/pkcs11 \
+-			@SQLITE3_INCLUDES@
++			@SQLITE3_CFLAGS@
+ 
+ dist_man_MANS =		softhsm2-dump-file.1
+ 
+diff --git a/src/bin/keyconv/Makefile.am b/src/bin/keyconv/Makefile.am
+index 5565017..b27f2a3 100644
+--- a/src/bin/keyconv/Makefile.am
++++ b/src/bin/keyconv/Makefile.am
+@@ -1,7 +1,8 @@
+ MAINTAINERCLEANFILES =	$(srcdir)/Makefile.in
+ 
+ AM_CPPFLAGS =			-I$(srcdir)/../../lib/crypto \
+-				@CRYPTO_INCLUDES@
++				@CRYPTO_INCLUDES@ \
++				@GETOPT_INCLUDES@
+ 
+ dist_man_MANS =			softhsm2-keyconv.1
+ 
+@@ -9,7 +10,8 @@ bin_PROGRAMS =			softhsm2-keyconv
+ 
+ softhsm2_keyconv_SOURCES =	softhsm2-keyconv.cpp \
+ 				base64.c
+-softhsm2_keyconv_LDADD =	@CRYPTO_LIBS@
++softhsm2_keyconv_LDADD =	@CRYPTO_LIBS@ \
++				@GETOPT_LIBS@
+ 
+ # Compile with OpenSSL support
+ if WITH_OPENSSL
+diff --git a/src/bin/migrate/Makefile.am b/src/bin/migrate/Makefile.am
+index d903764..40f9082 100644
+--- a/src/bin/migrate/Makefile.am
++++ b/src/bin/migrate/Makefile.am
+@@ -2,7 +2,7 @@ MAINTAINERCLEANFILES =	$(srcdir)/Makefile.in
+ 
+ AM_CPPFLAGS = 		-I$(srcdir)/../../lib/pkcs11 \
+ 			-I$(srcdir)/../common \
+-			@SQLITE3_INCLUDES@
++			@SQLITE3_CFLAGS@
+ 
+ dist_man_MANS =		softhsm2-migrate.1
+ 
+diff --git a/src/bin/util/Makefile.am b/src/bin/util/Makefile.am
+index 788ea87..b791a82 100644
+--- a/src/bin/util/Makefile.am
++++ b/src/bin/util/Makefile.am
+@@ -8,7 +8,8 @@ AM_CPPFLAGS =		-I$(srcdir)/../common \
+ 			-I$(srcdir)/../../lib/object_store \
+ 			-I$(srcdir)/../../lib/pkcs11 \
+ 			@CRYPTO_INCLUDES@ \
+-			@SQLITE3_INCLUDES@
++			@GETOPT_INCLUDES@ \
++			@SQLITE3_CFLAGS@
+ 
+ dist_man_MANS =		softhsm2-util.1
+ 
+@@ -22,6 +23,7 @@ softhsm2_util_SOURCES =	softhsm2-util.cpp \
+ 			../common/library.cpp
+ 
+ softhsm2_util_LDADD =	@CRYPTO_LIBS@ \
++			@GETOPT_LIBS@ \
+ 			@SQLITE3_LIBS@ \
+ 			../../lib/libsofthsm_convarch.la
+ 
+diff --git a/src/lib/CMakeLists.txt b/src/lib/CMakeLists.txt
+index 5ec9d13..068cd31 100644
+--- a/src/lib/CMakeLists.txt
++++ b/src/lib/CMakeLists.txt
+@@ -91,10 +91,10 @@ endif(BUILD_TESTS)
+ # Install
+ ###############################################################################
+ install(TARGETS ${PROJECT_NAME}
+-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/softhsm
++        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         )
+ if(ENABLE_STATIC)
+         install(TARGETS ${PROJECT_NAME}-static
+-                DESTINATION ${CMAKE_INSTALL_LIBDIR}/softhsm
++                DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                 )
+ endif()
+diff --git a/src/lib/crypto/test/EDDSATests.cpp b/src/lib/crypto/test/EDDSATests.cpp
+index 8fae764..260ff9b 100644
+--- a/src/lib/crypto/test/EDDSATests.cpp
++++ b/src/lib/crypto/test/EDDSATests.cpp
+@@ -46,53 +46,77 @@
+ 
+ CPPUNIT_TEST_SUITE_REGISTRATION(EDDSATests);
+ 
+-static const std::vector<ByteString> montCurves = {
+-	// x25519 [RFC 7748] per PKCS#11 3.0
+-	ByteString("130a63757276653235353139"),
++static const std::vector<ByteString>& montCurves()
++{
++	static const std::vector<ByteString> curves = {
++		// x25519 [RFC 7748] per PKCS#11 3.0
++		ByteString("130a63757276653235353139"),
+ #ifndef WITH_BOTAN
+-	// x448 [RFC 7748] per PKCS#11 3.0
+-	ByteString("13086375727665343438"),
++		// x448 [RFC 7748] per PKCS#11 3.0
++		ByteString("13086375727665343438"),
+ #endif
+-};
++	};
++	return curves;
++}
+ 
+-static const std::vector<ByteString> montCompatCurves = {
+-	// x25519 [RFC 8410] -- non-standard !
+-	ByteString("06032b656e"),
++static const std::vector<ByteString>& montCompatCurves()
++{
++	static const std::vector<ByteString> curves = {
++		// x25519 [RFC 8410] -- non-standard !
++		ByteString("06032b656e"),
+ #ifndef WITH_BOTAN
+-	// x448 [RFC 8410] -- non-standard !
+-	ByteString("06032b656f"),
++		// x448 [RFC 8410] -- non-standard !
++		ByteString("06032b656f"),
+ #endif
+-};
++	};
++	return curves;
++}
+ 
+-static const std::vector<ByteString> edCurves = {
+-	// ed25519 [RFC 8032] per PKCS#11 3.0
+-	ByteString("130c656477617264733235353139"),
++static const std::vector<ByteString>& edCurves()
++{
++	static const std::vector<ByteString> curves = {
++		// ed25519 [RFC 8032] per PKCS#11 3.0
++		ByteString("130c656477617264733235353139"),
+ #ifndef WITH_BOTAN
+-	// ed448 [RFC 8032] per PKCS#11 3.0
+-	ByteString("130a65647761726473343438"),
++		// ed448 [RFC 8032] per PKCS#11 3.0
++		ByteString("130a65647761726473343438"),
+ #endif
+-};
++	};
++	return curves;
++}
+ 
+-static const std::vector<ByteString> edCompatCurves = {
+-	// ed25519 [RFC 8410] -- non-standard !
+-	ByteString("06032b6570"),
++static const std::vector<ByteString>& edCompatCurves()
++{
++	static const std::vector<ByteString> curves = {
++		// ed25519 [RFC 8410] -- non-standard !
++		ByteString("06032b6570"),
+ #ifndef WITH_BOTAN
+-	// ed448 [RFC 8410] -- non-standard !
+-	ByteString("06032b6571"),
++		// ed448 [RFC 8410] -- non-standard !
++		ByteString("06032b6571"),
+ #endif
+-};
++	};
++	return curves;
++}
+ 
+-static const std::vector<ByteString> allCurves = []{
+-	auto v = montCurves;
+-	v.insert(v.end(), edCurves.begin(), edCurves.end());
+-	return v;
+-}();
++static const std::vector<ByteString>& allCurves()
++{
++	static const std::vector<ByteString> curves = []{
++		auto v = montCurves();
++		v.insert(v.end(), edCurves().begin(), edCurves().end());
++		return v;
++	}();
++	return curves;
++}
+ 
+-static const std::vector<ByteString> allCompatCurves = []{
+-	auto v = montCompatCurves;
+-	v.insert(v.end(), edCompatCurves.begin(), edCompatCurves.end());
+-	return v;
+-}();
++static const std::vector<ByteString>& allCompatCurves()
++{
++	static const std::vector<ByteString> curves = []{
++		auto v = montCompatCurves();
++		v.insert(v.end(), edCompatCurves().begin(), edCompatCurves().end());
++		return v;
++	}();
++	return curves;
++}
+ 
+ 
+ void EDDSATests::setUp()
+@@ -117,8 +141,8 @@ void EDDSATests::tearDown()
+ 
+ void EDDSATests::testKeyGeneration()
+ {
+-	for (auto c = allCurves.begin(), cc = allCompatCurves.begin();
+-		c != allCurves.end() && cc != allCompatCurves.end();
++	for (auto c = allCurves().begin(), cc = allCompatCurves().begin();
++		c != allCurves().end() && cc != allCompatCurves().end();
+ 		c++, cc++)
+ 	{
+ 		// Set domain parameters
+@@ -156,7 +180,7 @@ void EDDSATests::testKeyGeneration()
+ 
+ void EDDSATests::testSerialisation()
+ {
+-	for (const ByteString& c : allCurves)
++	for (const ByteString& c : allCurves())
+ 	{
+ 		// Get domain parameters
+ 		ECParameters* p = new ECParameters;
+@@ -211,7 +235,7 @@ void EDDSATests::testSerialisation()
+ 
+ void EDDSATests::testPKCS8()
+ {
+-	for (const ByteString& c : allCurves)
++	for (const ByteString& c : allCurves())
+ 	{
+ 		// Get domain parameters
+ 		ECParameters* p = new ECParameters;
+@@ -246,7 +270,7 @@ void EDDSATests::testPKCS8()
+ 
+ void EDDSATests::testSigningVerifying()
+ {
+-	for (const ByteString& c : edCurves)
++	for (const ByteString& c : edCurves())
+ 	{
+ 		// Get parameters
+ 		ECParameters* p = new ECParameters;
+@@ -402,7 +426,7 @@ void EDDSATests::testSignVerifyKnownVectorEd448()
+ 
+ void EDDSATests::testDerivation()
+ {
+-	for (const ByteString& c : montCurves)
++	for (const ByteString& c : montCurves())
+ 	{
+ 		// Get parameters
+ 		ECParameters* p = new ECParameters;
+diff --git a/src/lib/object_store/DB.cpp b/src/lib/object_store/DB.cpp
+index 548f346..bd1fa43 100644
+--- a/src/lib/object_store/DB.cpp
++++ b/src/lib/object_store/DB.cpp
+@@ -46,8 +46,9 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #else
+-#define gmtime_r(tt, pm) (pm=gmtime(tt))
+ #include <io.h>
++#include <time.h>
++#define gmtime_r(timer, result) (gmtime_s((result), (timer)) == 0 ? (result) : NULL)
+ #define S_IRUSR 0400
+ #define S_IWUSR 0200
+ #define S_IRGRP 0
+@@ -80,13 +81,13 @@ static int static_log_err(const char *format, va_list ap)
+ 
+ static DB::LogErrorHandler static_LogErrorhandler = static_log_err;
+ 
+-void DB::logError(const std::string format, ...)
++void DB::logError(const char *format, ...)
+ {
+ 	if (!static_LogErrorhandler)
+ 		return;
+ 	va_list args;
+ 	va_start(args, format);
+-	static_LogErrorhandler(format.c_str(),args);
++	static_LogErrorhandler(format, args);
+ 	va_end(args);
+ }
+ 
+@@ -754,7 +755,7 @@ const std::string &DB::Connection::dbpath()
+ 	return _dbpath;
+ }
+ 
+-DB::Statement DB::Connection::prepare(const std::string format, ...){
++DB::Statement DB::Connection::prepare(const char *format, ...){
+ 	// pstatement will hold a dynamically allocated string that needs to be deleted.
+ 	char *pstatement = NULL;
+ 
+@@ -762,7 +763,7 @@ DB::Statement DB::Connection::prepare(const std::string format, ...){
+ 	char statement[128];
+ 	va_list args;
+ 	va_start(args, format);
+-	int cneeded = vsnprintf(statement,sizeof(statement),format.c_str(),args);
++	int cneeded = vsnprintf(statement, sizeof(statement), format, args);
+ 	va_end(args);
+ 	if (cneeded<0) {
+ 		DB::logError("Connection::prepare: vsnprintf encoding error");
+@@ -776,7 +777,7 @@ DB::Statement DB::Connection::prepare(const std::string format, ...){
+ 			return Statement();
+ 		}
+ 		va_start(args, format);
+-		bool ok = vsnprintf(pstatement,cneeded+1,format.c_str(),args)==cneeded;
++		bool ok = vsnprintf(pstatement,cneeded+1,format,args)==cneeded;
+ 		va_end(args);
+ 		if (!ok) {
+ 			DB::logError("Connection::prepare: vsnprintf error");
+diff --git a/src/lib/object_store/DB.h b/src/lib/object_store/DB.h
+index 124bb81..922243b 100644
+--- a/src/lib/object_store/DB.h
++++ b/src/lib/object_store/DB.h
+@@ -42,7 +42,7 @@
+ namespace DB {
+ 
+ // Log an error to the error handler that has been setup using a call to setLogErrorHandler declared below.
+-void logError(const std::string format, ...);
++void logError(const char *format, ...);
+ 
+ // The ap parameter has already been started with va_start.
+ // So the handler only has to pass this on to a vprintf function
+@@ -153,7 +153,7 @@ public:
+ 	// concatenation of dbdir and dbname
+ 	const std::string &dbpath();
+ 
+-	Statement prepare(const std::string format, ...);
++	Statement prepare(const char *format, ...);
+ 	Result perform(Statement &statement);
+ 	bool execute(Statement &statement);
+ 
+diff --git a/src/lib/object_store/Makefile.am b/src/lib/object_store/Makefile.am
+index 6af0d2c..9e28c46 100644
+--- a/src/lib/object_store/Makefile.am
++++ b/src/lib/object_store/Makefile.am
+@@ -5,7 +5,7 @@ AM_CPPFLAGS =				-I$(srcdir)/.. \
+ 					-I$(srcdir)/../crypto \
+ 					-I$(srcdir)/../data_mgr \
+ 					-I$(srcdir)/../pkcs11 \
+-					@SQLITE3_INCLUDES@
++					@SQLITE3_CFLAGS@
+ 
+ noinst_LTLIBRARIES =			libsofthsm_objectstore.la
+ libsofthsm_objectstore_la_SOURCES =	ObjectStore.cpp \
