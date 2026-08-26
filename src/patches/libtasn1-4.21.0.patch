@@ -1,0 +1,64 @@
+--- libtasn1-4.21.0/tests/benchmark.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/benchmark.sh	2026-08-06 12:38:18.705563814 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2006-2026 Free Software Foundation, Inc.
+ #
+--- libtasn1-4.21.0/tests/coding.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/coding.sh	2026-08-06 12:38:14.889848852 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2017-2026 Free Software Foundation, Inc.
+ #
+--- libtasn1-4.21.0/tests/crlf.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/crlf.sh	2026-08-06 12:38:06.523103026 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2006-2026 Free Software Foundation, Inc.
+ #
+--- libtasn1-4.21.0/tests/decoding-invalid-pkcs7.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/decoding-invalid-pkcs7.sh	2026-08-06 12:38:27.259453972 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2017-2026 Free Software Foundation, Inc.
+ #
+--- libtasn1-4.21.0/tests/decoding-invalid-x509.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/decoding-invalid-x509.sh	2026-08-06 12:37:59.185197964 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2016-2026 Free Software Foundation, Inc.
+ #
+--- libtasn1-4.21.0/tests/decoding.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/decoding.sh	2026-08-06 12:38:22.636882419 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2015-2026 Free Software Foundation, Inc.
+ #
+--- libtasn1-4.21.0/tests/parser.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/parser.sh	2026-08-06 12:38:02.936830596 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2021-2026 Free Software Foundation, Inc.
+ # Copyright (C) 2019 Red Hat, Inc.
+--- libtasn1-4.21.0/tests/threadsafety.sh	2026-01-08 16:19:22.000000000 +0400
++++ libtasn1-4.21.0/tests/threadsafety.sh	2026-08-06 12:38:11.542820534 +0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ # Copyright (C) 2004-2026 Free Software Foundation, Inc.
+ #

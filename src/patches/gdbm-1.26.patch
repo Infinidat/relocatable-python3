@@ -1,0 +1,33 @@
+--- gdbm-1.26/src/gdbmdefs.h	2025-03-09 13:50:57.000000000 +0400
++++ gdbm-1.26/src/gdbmdefs.h	2026-08-11 10:33:57.914466367 +0400
+@@ -206,7 +206,7 @@
+ };
+ 
+ /* Type of file locking in use. */
+-enum lock_type
++enum gdbm_lock_type
+   {
+     LOCKING_NONE = 0,
+     LOCKING_FLOCK,
+@@ -259,7 +259,7 @@
+   /* Last formatted error */
+   char *last_errstr;
+ 
+-  enum lock_type lock_type;
++  enum gdbm_lock_type lock_type;
+   
+   /* The fatal error handling routine. */
+   void (*fatal_err) (const char *);
+--- gdbm-1.26/tests/t_dumpload.c	2025-03-06 19:57:50.000000000 +0400
++++ gdbm-1.26/tests/t_dumpload.c	2026-08-11 10:33:03.673950614 +0400
+@@ -33,6 +33,10 @@
+ # endif
+ #endif
+ 
++#ifndef WCOREDUMP
++# define WCOREDUMP(status) 0
++#endif
++
+ char a_name[] = "a.gdbm";
+ char b_name[] = "b.gdbm";
+ char orig_name[] = "orig.gdbm";

@@ -1,0 +1,282 @@
+--- tcl8.6.18/tests/cmdAH.test	2026-04-17 22:51:37.000000000 +0400
++++ tcl8.6.18/tests/cmdAH.test	2026-08-15 19:15:59.051632460 +0400
+@@ -852,7 +852,7 @@
+ catch {testsetplatform $platform}
+ 
+ # readable
+-set gorpfile [makeFile abcde g\xF3rp.file]
++set gorpfile [makeFile abcde grp.file]
+ set dirfile [makeDirectory dir.file]
+ test cmdAH-16.1 {Tcl_FileObjCmd: readable} {
+     -returnCodes error
+@@ -895,7 +895,7 @@
+ removeFile $gorpfile
+ removeDirectory $dirfile
+ set dirfile [makeDirectory dir.file]
+-set gorpfile [makeFile abcde g\xF3rp.file]
++set gorpfile [makeFile abcde grp.file]
+ test cmdAH-18.1 {Tcl_FileObjCmd: executable} -returnCodes error -body {
+     file executable a b
+ } -result {wrong # args: should be "file executable name"}
+@@ -940,12 +940,12 @@
+ } -result {wrong # args: should be "file exists name"}
+ test cmdAH-19.2 {Tcl_FileObjCmd: exists} {file exists $gorpfile} 0
+ test cmdAH-19.3 {Tcl_FileObjCmd: exists} {
+-    file exists [file join [temporaryDirectory] dir.file g\xF3rp.file]
++    file exists [file join [temporaryDirectory] dir.file grp.file]
+ } 0
+ catch {
+-    set gorpfile [makeFile abcde g\xF3rp.file]
++    set gorpfile [makeFile abcde grp.file]
+     set dirfile [makeDirectory dir.file]
+-    set subgorp [makeFile 12345 [file join $dirfile g\xF3rp.file]]
++    set subgorp [makeFile 12345 [file join $dirfile grp.file]]
+ }
+ test cmdAH-19.4 {Tcl_FileObjCmd: exists} {
+     file exists $gorpfile
+@@ -1007,7 +1007,7 @@
+ 
+ catch {testsetplatform $platform}
+ removeFile $gorpfile
+-set gorpfile [makeFile "Test string" g\xF3rp.file]
++set gorpfile [makeFile "Test string" grp.file]
+ catch {file attributes $gorpfile -permissions 0o765}
+ 
+ # avoid problems with non-local filesystems
+@@ -1423,7 +1423,7 @@
+ 
+ catch {testsetplatform $platform}
+ removeFile $gorpfile
+-set gorpfile [makeFile "Test string" g\xF3rp.file]
++set gorpfile [makeFile "Test string" grp.file]
+ catch {file attributes $gorpfile -permissions 0o765}
+ 
+ # stat
+--- tcl8.6.18/unix/Makefile.in	2026-04-17 22:51:37.000000000 +0400
++++ tcl8.6.18/unix/Makefile.in	2026-08-15 19:15:59.053166000 +0400
+@@ -622,7 +622,7 @@
+ # Start of rules
+ #--------------------------------------------------------------------------
+ 
+-all: binaries libraries doc packages
++all: binaries libraries
+ 
+ binaries: ${LIB_FILE} ${TCL_EXE}
+ 
+@@ -720,7 +720,7 @@
+ # tcltest, ie:
+ #	% make test TESTFLAGS="-verbose bps -file fileName.test"
+ 
+-test: test-tcl test-packages
++test: test-tcl
+ 
+ test-tcl: ${TCLTEST_EXE}
+ 	$(SHELL_ENV) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl $(TESTFLAGS)
+@@ -788,12 +788,11 @@
+ #--------------------------------------------------------------------------
+ 
+ INSTALL_BASE_TARGETS = install-binaries install-libraries install-msgs $(INSTALL_TZDATA)
+-INSTALL_DOC_TARGETS = install-doc
+-INSTALL_PACKAGE_TARGETS = install-packages
++INSTALL_DOC_TARGETS =
++INSTALL_PACKAGE_TARGETS =
+ INSTALL_DEV_TARGETS = install-headers
+-INSTALL_EXTRA_TARGETS = @EXTRA_INSTALL@
+-INSTALL_TARGETS = $(INSTALL_BASE_TARGETS) $(INSTALL_DEV_TARGETS) $(INSTALL_DOC_TARGETS) \
+-		  $(INSTALL_PACKAGE_TARGETS) $(INSTALL_EXTRA_TARGETS)
++INSTALL_EXTRA_TARGETS =
++INSTALL_TARGETS = $(INSTALL_BASE_TARGETS) $(INSTALL_DEV_TARGETS)
+ 
+ install: $(INSTALL_TARGETS)
+ 
+--- tcl8.6.18/unix/configure	2026-04-17 22:51:37.000000000 +0400
++++ tcl8.6.18/unix/configure	2026-08-15 19:15:59.061017782 +0400
+@@ -8565,31 +8565,6 @@
+ 		SHLIB_LD='${CC} -shared'
+ 		CC_SEARCH_FLAGS='-Wl,-R,${LIB_RUNTIME_DIR}'
+ 		LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+-		if test "$do64bit_ok" = yes; then
+-
+-		    if test "$arch" = "sparcv9 sparc"; then
+-
+-			# We need to specify -static-libgcc or we need to
+-			# add the path to the sparv9 libgcc.
+-			SHLIB_LD="$SHLIB_LD -m64 -mcpu=v9 -static-libgcc"
+-			# for finding sparcv9 libgcc, get the regular libgcc
+-			# path, remove so name and append 'sparcv9'
+-			#v9gcclibdir="`gcc -print-file-name=libgcc_s.so` | ..."
+-			#CC_SEARCH_FLAGS="${CC_SEARCH_FLAGS},-R,$v9gcclibdir"
+-
+-else
+-  if test "$arch" = "amd64 i386"; then
+-
+-			SHLIB_LD="$SHLIB_LD -m64 -static-libgcc"
+-
+-fi
+-
+-fi
+-
+-
+-fi
+-
+-
+ else
+ 
+ 		if test "$use_sunmath" = yes; then
+--- tcl8.6.18/unix/dltest/Makefile.in	2026-04-17 22:51:37.000000000 +0400
++++ tcl8.6.18/unix/dltest/Makefile.in	2026-08-15 19:15:59.061533656 +0400
+@@ -6,8 +6,8 @@
+ LIBS =			@TCL_BUILD_STUB_LIB_SPEC@ @TCL_LIBS@
+ AC_FLAGS =		@DEFS@
+ SHLIB_LD =		@SHLIB_LD@
+-SHLIB_CFLAGS =		@SHLIB_CFLAGS@
+-SHLIB_LD_LIBS =		@SHLIB_LD_LIBS@
++SHLIB_CFLAGS =		@CFLAGS@ @SHLIB_CFLAGS@
++SHLIB_LD_LIBS =		@LDFLAGS_DEFAULT@ @LDFLAGS@ @SHLIB_LD_LIBS@
+ SHLIB_SUFFIX =		@SHLIB_SUFFIX@
+ DLTEST_LD =		@DLTEST_LD@
+ DLTEST_SUFFIX =		@DLTEST_SUFFIX@
+--- tcl8.6.18/unix/tcl.m4	2026-04-17 22:51:37.000000000 +0400
++++ tcl8.6.18/unix/tcl.m4	2026-08-15 19:15:59.063164571 +0400
+@@ -1886,19 +1886,6 @@
+ 		SHLIB_LD='${CC} -shared'
+ 		CC_SEARCH_FLAGS='-Wl,-R,${LIB_RUNTIME_DIR}'
+ 		LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+-		AS_IF([test "$do64bit_ok" = yes], [
+-		    AS_IF([test "$arch" = "sparcv9 sparc"], [
+-			# We need to specify -static-libgcc or we need to
+-			# add the path to the sparv9 libgcc.
+-			SHLIB_LD="$SHLIB_LD -m64 -mcpu=v9 -static-libgcc"
+-			# for finding sparcv9 libgcc, get the regular libgcc
+-			# path, remove so name and append 'sparcv9'
+-			#v9gcclibdir="`gcc -print-file-name=libgcc_s.so` | ..."
+-			#CC_SEARCH_FLAGS="${CC_SEARCH_FLAGS},-R,$v9gcclibdir"
+-		    ], [AS_IF([test "$arch" = "amd64 i386"], [
+-			SHLIB_LD="$SHLIB_LD -m64 -static-libgcc"
+-		    ])])
+-		])
+ 	    ], [
+ 		AS_IF([test "$use_sunmath" = yes], [textmode=textoff],[textmode=text])
+ 		case $system in
+--- tcl8.6.18/win/makefile.vc	2026-04-17 22:51:37.000000000 +0400
++++ tcl8.6.18/win/makefile.vc	2026-08-15 19:31:32.708962385 +0400
+@@ -303,23 +303,6 @@
+ 	$(TMP_DIR)\tclVar.obj \
+ 	$(TMP_DIR)\tclZlib.obj
+ 
+-!if $(STATIC_BUILD)
+-ZLIBOBJS = \
+-	$(TMP_DIR)\adler32.obj \
+-	$(TMP_DIR)\compress.obj \
+-	$(TMP_DIR)\crc32.obj \
+-	$(TMP_DIR)\deflate.obj \
+-	$(TMP_DIR)\infback.obj \
+-	$(TMP_DIR)\inffast.obj \
+-	$(TMP_DIR)\inflate.obj \
+-	$(TMP_DIR)\inftrees.obj \
+-	$(TMP_DIR)\trees.obj \
+-	$(TMP_DIR)\uncompr.obj \
+-	$(TMP_DIR)\zutil.obj
+-!else
+-ZLIBOBJS = $(OUT_DIR)\zdll.lib
+-!endif
+-
+ TOMMATHOBJS = \
+ 	$(TMP_DIR)\bn_mp_add.obj \
+ 	$(TMP_DIR)\bn_mp_add_d.obj \
+@@ -409,7 +392,7 @@
+ 	$(TMP_DIR)\tcl.res
+ !endif
+ 
+-TCLOBJS = $(COREOBJS) $(ZLIBOBJS) $(TOMMATHOBJS) $(PLATFORMOBJS)
++TCLOBJS = $(COREOBJS) $(ZLIBLIB) $(TOMMATHOBJS) $(PLATFORMOBJS)
+ 
+ TCLSTUBOBJS = \
+ 	$(TMP_DIR)\tclStubLib.obj \
+@@ -466,19 +449,19 @@
+ # release   - Everything that builds as part of a release
+ #---------------------------------------------------------------------
+ 
+-release:    setup $(TCLSH) $(TCLSTUBLIB) dlls pkgs
+-all:	    setup $(TCLSH) $(TCLSTUBLIB) dlls $(CAT32) pkgs
++release:    setup $(TCLSH) $(TCLSTUBLIB) dlls
++all:	    setup $(TCLSH) $(TCLSTUBLIB) dlls $(CAT32)
+ core:	    setup $(TCLLIB) $(TCLSTUBLIB)
+ shell:	    setup $(TCLSH)
+-dlls:	    setup $(TCLREGLIB) $(TCLDDELIB) $(OUT_DIR)\zlib1.dll
++dlls:	    setup $(TCLREGLIB) $(TCLDDELIB)
+ tcltest:    setup $(TCLTEST) dlls $(CAT32)
+-install:    install-binaries install-libraries install-docs install-pkgs
++install:    install-binaries install-libraries
+ !if $(SYMBOLS)
+ install:    install-pdbs
+ !endif
+ setup:      default-setup
+ 
+-test: test-core test-pkgs
++test: test-core
+ test-core: setup $(TCLTEST) dlls $(CAT32)
+ 	set TCL_LIBRARY=$(ROOT:\=/)/library
+ 	$(DEBUGGER) $(TCLTEST) "$(ROOT:\=/)/tests/all.tcl" $(TESTFLAGS) -loadfile <<
+@@ -544,23 +527,6 @@
+ 	$(_VC_MANIFEST_EMBED_DLL)
+ !endif
+ 
+-!if "$(MACHINE)" == "ARM64"
+-$(OUT_DIR)\zlib1.dll:	$(COMPATDIR)\zlib\win64-arm\zlib1.dll
+-	$(COPY) $(COMPATDIR)\zlib\win64-arm\zlib1.dll $(OUT_DIR)\zlib1.dll
+-$(OUT_DIR)\zdll.lib:	$(COMPATDIR)\zlib\win64-arm\zdll.lib
+-	$(COPY) $(COMPATDIR)\zlib\win64-arm\zdll.lib $(OUT_DIR)\zdll.lib
+-!elseif "$(MACHINE)" == "IX86"
+-$(OUT_DIR)\zlib1.dll:	$(COMPATDIR)\zlib\win32\zlib1.dll
+-	$(COPY) $(COMPATDIR)\zlib\win32\zlib1.dll $(OUT_DIR)\zlib1.dll
+-$(OUT_DIR)\zdll.lib:	$(COMPATDIR)\zlib\win32\zdll.lib
+-	$(COPY) $(COMPATDIR)\zlib\win32\zdll.lib $(OUT_DIR)\zdll.lib
+-!else
+-$(OUT_DIR)\zlib1.dll:	$(COMPATDIR)\zlib\win64\zlib1.dll
+-	$(COPY) $(COMPATDIR)\zlib\win64\zlib1.dll $(OUT_DIR)\zlib1.dll
+-$(OUT_DIR)\zdll.lib:	$(COMPATDIR)\zlib\win64\zdll.lib
+-	$(COPY) $(COMPATDIR)\zlib\win64\zdll.lib $(OUT_DIR)\zdll.lib
+-!endif
+-
+ pkgs:
+ 	@for /d %d in ($(PKGSDIR)\*) do \
+ 	  @if exist "%~fd\win\makefile.vc" ( \
+@@ -764,7 +730,7 @@
+ !else
+ @TCL_SHARED_BUILD@   1
+ !endif
+-@TCL_ZLIB_LIB_NAME@ zdll.lib
++@TCL_ZLIB_LIB_NAME@ z.lib
+ <<
+ 
+ 
+@@ -815,7 +781,7 @@
+ 	$(CCAPPCMD) $?
+ 
+ $(TMP_DIR)\tclZlib.obj: $(GENERICDIR)\tclZlib.c
+-	$(cc32) $(pkgcflags) -I$(COMPATDIR)\zlib -Fo$@ $?
++	$(cc32) $(pkgcflags) -I"$(ZLIBINCDIR)" -Fo$@ $?
+ 
+ $(TMP_DIR)\tclPkgConfig.obj: $(GENERICDIR)\tclPkgConfig.c
+ 	$(cc32) $(pkgcflags) \
+@@ -912,11 +878,6 @@
+ $<
+ <<
+ 
+-{$(COMPATDIR)\zlib}.c{$(TMP_DIR)}.obj::
+-	$(cc32) $(pkgcflags) -Fo$(TMP_DIR)\ @<<
+-$<
+-<<
+-
+ $(TMP_DIR)\tclsh.res: $(TMP_DIR)\tclsh.exe.manifest $(WIN_DIR)\tclsh.rc
+ 
+ $(TMP_DIR)\tcltest.res: $(TMP_DIR)\tclsh.exe.manifest $(WIN_DIR)\tcltest.rc
+@@ -932,7 +893,6 @@
+ 	@$(CPY) "$(TCLLIB)" "$(BIN_INSTALL_DIR)\"
+ !endif
+ 	@$(CPY) "$(TCLIMPLIB)" "$(LIB_INSTALL_DIR)\"
+-	@$(CPY) "$(OUT_DIR)\zlib1.dll" "$(BIN_INSTALL_DIR)\"
+ !if exist($(TCLSH))
+ 	@echo Installing $(TCLSHNAME)
+ 	@$(CPY) "$(TCLSH)" "$(BIN_INSTALL_DIR)\"

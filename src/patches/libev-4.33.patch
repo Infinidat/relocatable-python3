@@ -1,0 +1,180 @@
+--- libev-4.33/CMakeLists.txt	1970-01-01 04:00:00.000000000 +0400
++++ libev-4.33/CMakeLists.txt	2026-08-21 23:30:48.902380712 +0400
+@@ -0,0 +1,94 @@
++cmake_minimum_required(VERSION 3.15)
++
++cmake_policy(SET CMP0091 NEW)
++
++project(libev
++    VERSION 4.33
++    LANGUAGES C
++)
++
++include(GNUInstallDirs)
++include(CTest)
++
++add_library(ev SHARED
++    ev.c
++)
++
++target_include_directories(ev
++    PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++)
++
++target_compile_definitions(ev
++    PUBLIC
++        EV_STANDALONE=1
++        FD_SETSIZE=1024
++    PRIVATE
++        EV_BUILDING_DLL=1
++        _CRT_SECURE_NO_WARNINGS
++)
++
++if(WIN32)
++    target_link_libraries(ev PRIVATE ws2_32)
++endif()
++
++set_target_properties(ev PROPERTIES
++    OUTPUT_NAME ev
++    PUBLIC_HEADER "ev.h;ev++.h"
++    MSVC_RUNTIME_LIBRARY
++        "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
++)
++
++install(
++    TARGETS ev
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++)
++
++if(BUILD_TESTING)
++    file(WRITE
++        "${CMAKE_CURRENT_BINARY_DIR}/libev-dll-test.c"
++        [=[
++#include <ev.h>
++
++int main(void)
++{
++    struct ev_loop *loop;
++
++    if (ev_version_major() != 4 ||
++        ev_version_minor() != 33) {
++        return 1;
++    }
++
++    loop = ev_default_loop(EVFLAG_AUTO);
++    if (loop == 0) {
++        return 2;
++    }
++
++    /*
++     * Accesses the imported global variable
++     * ev_default_loop_ptr.
++     */
++    if (EV_DEFAULT_UC != loop) {
++        return 3;
++    }
++
++    ev_loop_destroy(loop);
++    return 0;
++}
++]=])
++
++    add_executable(libev-dll-test
++        "${CMAKE_CURRENT_BINARY_DIR}/libev-dll-test.c"
++    )
++
++    target_link_libraries(libev-dll-test PRIVATE ev)
++
++    add_test(
++        NAME libev-dll
++        COMMAND libev-dll-test
++    )
++endif()
+--- libev-4.33/Makefile.am	2019-10-31 08:02:23.000000000 +0400
++++ libev-4.33/Makefile.am	2026-08-21 23:30:18.234179057 +0400
+@@ -10,7 +10,7 @@
+ 
+ man_MANS = ev.3
+ 
+-include_HEADERS = ev.h ev++.h event.h
++include_HEADERS = ev.h ev++.h
+ 
+ lib_LTLIBRARIES = libev.la
+ 
+--- libev-4.33/Makefile.in	2020-03-18 16:27:30.000000000 +0400
++++ libev-4.33/Makefile.in	2026-08-21 23:30:12.621563621 +0400
+@@ -357,7 +357,7 @@
+ 	     ev.3 ev.pod Symbols.ev Symbols.event
+ 
+ man_MANS = ev.3
+-include_HEADERS = ev.h ev++.h event.h
++include_HEADERS = ev.h ev++.h
+ lib_LTLIBRARIES = libev.la
+ libev_la_SOURCES = ev.c event.c
+ libev_la_LDFLAGS = -version-info $(VERSION_INFO)
+--- libev-4.33/ev.c	2020-03-18 16:27:32.000000000 +0400
++++ libev-4.33/ev.c	2026-08-24 09:24:51.850347583 +0400
+@@ -2140,11 +2140,11 @@
+   #include "ev_wrap.h"
+ 
+   static struct ev_loop default_loop_struct;
+-  EV_API_DECL struct ev_loop *ev_default_loop_ptr = 0; /* needs to be initialised to make it a definition despite extern */
++  EV_API_DEF struct ev_loop *ev_default_loop_ptr = 0; /* needs to be initialised to make it a definition despite extern */
+ 
+ #else
+ 
+-  EV_API_DECL ev_tstamp ev_rt_now = EV_TS_CONST (0.); /* needs to be initialised to make it a definition despite extern */
++  EV_API_DEF ev_tstamp ev_rt_now = EV_TS_CONST (0.); /* needs to be initialised to make it a definition despite extern */
+   #define VAR(name,decl) static decl;
+     #include "ev_vars.h"
+   #undef VAR
+--- libev-4.33/ev.h	2020-03-18 16:23:22.000000000 +0400
++++ libev-4.33/ev.h	2026-08-24 09:22:42.226734950 +0400
+@@ -203,8 +203,26 @@
+ 
+ #ifdef EV_API_STATIC
+ # define EV_API_DECL static
++# define EV_API_DEF  static
++
++#elif defined(_WIN32)
++
++# if defined(EV_BUILDING_DLL)
++#  define EV_API_DECL extern __declspec(dllexport)
++#  define EV_API_DEF         __declspec(dllexport)
++
++# elif defined(EV_STATIC_LIBRARY)
++#  define EV_API_DECL extern
++#  define EV_API_DEF
++
++# else
++#  define EV_API_DECL extern __declspec(dllimport)
++#  define EV_API_DEF
++# endif
++
+ #else
+ # define EV_API_DECL extern
++# define EV_API_DEF
+ #endif
+ 
+ /* EV_PROTOTYPES can be used to switch of prototype declarations */
+@@ -559,15 +577,11 @@
+ /* you can call this as often as you like */
+ EV_API_DECL struct ev_loop *ev_default_loop (unsigned int flags EV_CPP (= 0)) EV_NOEXCEPT;
+ 
+-#ifdef EV_API_STATIC
+ EV_API_DECL struct ev_loop *ev_default_loop_ptr;
+-#endif
+ 
+ EV_INLINE struct ev_loop *
+ ev_default_loop_uc_ (void) EV_NOEXCEPT
+ {
+-  extern struct ev_loop *ev_default_loop_ptr;
+-
+   return ev_default_loop_ptr;
+ }
+ 

@@ -1,0 +1,22 @@
+--- Python-3.11.15/Lib/test/test_zipfile.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_zipfile.py	2026-08-11 13:56:25.453280096 +0400
+@@ -1,5 +1,6 @@
+ import array
+ import contextlib
++import errno
+ import importlib.util
+ import io
+ import itertools
+@@ -647,6 +648,12 @@
+             os.utime(TESTFN, (ts, ts))
+         except OverflowError:
+             self.skipTest('Host fs cannot set timestamp to required value.')
++        except OSError as error:
++            if error.errno == errno.EOVERFLOW:
++                self.skipTest(
++                    'Host fs cannot set timestamp to required value.'
++                )
++            raise
+ 
+         mtime_ns = os.stat(TESTFN).st_mtime_ns
+         if mtime_ns != (4386268800 * 10**9):

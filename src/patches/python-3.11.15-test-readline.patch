@@ -1,0 +1,10 @@
+--- Python-3.11.15/Lib/test/test_readline.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.15/Lib/test/test_readline.py	2026-08-11 16:33:27.174356978 +0400
+@@ -183,6 +183,7 @@
+         output = run_pty(script, input=b"$\t\n")
+         self.assertIn(b"$complete", output)
+ 
++    @unittest.skipIf(sys.platform == 'sunos5', 'known Solaris issue')
+     def test_nonascii(self):
+         loc = locale.setlocale(locale.LC_CTYPE, None)
+         if loc in ('C', 'POSIX'):

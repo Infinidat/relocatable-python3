@@ -1,167 +1,114 @@
-from __future__ import print_function
 import glob
+import logging
+import shutil
+import stat
 import os
-import posixpath
 
-def _convert(text):
-    return text.replace(os.path.sep, posixpath.sep)
+LOG = logging.getLogger(__name__)
 
-def _system(cmd):
-    cmd = _convert(cmd)
-    print('==>', cmd)
-    os.system(cmd)
+def onerror(function, path, excinfo):
+    error = excinfo[1]
+    LOG.info('%s %s: %s', function.__name__, path, error)
+    if not isinstance(error, PermissionError):
+        raise error
+    LOG.info('chmod: %s', path)
+    os.chmod(path, stat.S_IWRITE)
+    function(path)
 
-def _mkdir(path):
-    _system('install -v -d "%s"' % path)
+def python_pre_make(options, buildout, env):
+    dist = options.get('dist')
+    if os.path.exists(dist):
+        LOG.info('remove %s', dist)
+        shutil.rmtree(dist, onerror=onerror)
 
-def _todo(act, src, dst):
-    if isinstance(src, str):
-        _system('%s "%s" "%s"' % (act, src, dst))
-    elif isinstance(src, (list, tuple)):
-        _mkdir(dst)
-        for item in src:
-            _system('%s "%s" "%s"' % (act, item, dst))
-    else:
-        raise Exception('Unexpected source type %s' % type(src))
-
-def _copy(src, dst):
-    _todo('cp -f -r -v', src, dst)
-
-def _move(src, dst):
-    _todo('mv -f -v', src, dst)
-
-def libiconv_post_make(options, buildout, environ):
-    prefix = environ['PREFIX']
-    suffix = os.path.join('build-VS2017-MT', 'x64', 'Release')
-    _copy(glob.glob(os.path.join('include', '*.h')),
-          os.path.join(prefix, 'include'))
-    _copy(glob.glob(os.path.join(suffix, '*.dll')),
-          os.path.join(prefix, 'lib'))
-    _copy(glob.glob(os.path.join(suffix, '*.lib')),
-          os.path.join(prefix, 'lib'))
-    _copy(glob.glob(os.path.join(suffix, 'static', '*.exe')),
-          os.path.join(prefix, 'bin'))
-
-class PythonPostMake(object):
-    def __init__(self, environ):
-        self.arch = 'amd64'
-        self.python_source_path = os.path.abspath(os.curdir)
-        self.externals = os.path.join(self.python_source_path, 'externals')
-        self.pcbuild_path = os.path.join(self.python_source_path, 'PCbuild', self.arch)
-        self.prefix = environ['PREFIX']
-        self.environ = environ
-
-    def make_install(self):
-        self.move_dlls()
-        self.move_libs()
-        self.copy_dlls()
-        self.copy_libs()
-        self.copy_bins()
-        self.copy_libffi()
-        self.copy_openssl()
-        self.copy_sqlite3()
-        self.copy_headers()
-        self.copy_crt()
-        self.chmod_dist()
-
-    def move_dlls(self):
-        src = glob.glob(os.path.join(self.prefix, 'bin', '*.dll'))
-        src += glob.glob(os.path.join(self.prefix, 'lib', '*.dll'))
-        src += glob.glob(os.path.join(self.prefix, 'lib', '*.pdb'))
-        src = [dll for dll in src if 'python' not in dll]
-        dst = os.path.join(self.prefix, 'DLLs')
-        _move(src, dst)
-
-    def move_libs(self):
-        src = glob.glob(os.path.join(self.prefix, 'lib', '*.a'))
-        src += glob.glob(os.path.join(self.prefix, 'lib', '*.lib'))
-        dst = os.path.join(self.prefix, 'libs')
-        _move(src, dst)
-
-    def copy_dlls(self):
-        src = glob.glob(os.path.join(self.pcbuild_path, '*.dll'))
-        src += glob.glob(os.path.join(self.pcbuild_path, '*.pyd'))
-        dst = os.path.join(self.prefix, 'DLLs')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(self.pcbuild_path, 'python*.dll'))
-        dst = os.path.join(self.prefix, 'bin')
-        _copy(src, dst)
-
-    def copy_bins(self):
-        src = glob.glob(os.path.join(self.pcbuild_path, '*.exe'))
-        src += glob.glob(os.path.join(self.pcbuild_path, '*.ico'))
-        dst = os.path.join(self.prefix, 'bin')
-        _copy(src, dst)
-
-    def copy_libs(self):
-        src = glob.glob(os.path.join(self.pcbuild_path, '*.lib'))
-        dst = os.path.join(self.prefix, 'libs')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(self.python_source_path, 'lib', '*'))
-        dst = os.path.join(self.prefix, 'lib')
-        _copy(src, dst)
-
-    def copy_libffi(self):
-        name = 'libffi-3.4.4'
-        base = os.path.join(self.externals, name, self.arch)
-        src = glob.glob(os.path.join(base, 'include', '*.h'))
-        dst = os.path.join(self.prefix, 'include')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(base, '*.lib'))
-        dst = os.path.join(self.prefix, 'libs')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(base, '*.dll'))
-        dst = os.path.join(self.prefix, 'DLLs')
-        _copy(src, dst)
-
-    def copy_openssl(self):
-        name = 'openssl-bin-1.1.1w'
-        base = os.path.join(self.externals, name, self.arch)
-        src = glob.glob(os.path.join(base, 'include', 'openssl', '*.h'))
-        dst = os.path.join(self.prefix, 'include', 'openssl')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(base, '*.lib'))
-        dst = os.path.join(self.prefix, 'libs')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(base, '*.dll'))
-        dst = os.path.join(self.prefix, 'DLLs')
-        _copy(src, dst)
-
-    def copy_sqlite3(self):
-        name = 'sqlite-3.45.1.0'
-        base = os.path.join(self.externals, name)
-        src = glob.glob(os.path.join(base, '*.h'))
-        dst = os.path.join(self.prefix, 'include')
-        _copy(src, dst)
-
-    def copy_headers(self):
-        src = glob.glob(os.path.join(self.python_source_path, 'Include', '*.h'))
-        dst = os.path.join(self.prefix, 'include')
-        _copy(src, dst)
-        src = os.path.join(self.python_source_path, 'PC', 'pyconfig.h')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(self.python_source_path, 'Include', 'cpython', '*.h'))
-        dst = os.path.join(self.prefix, 'include', 'cpython')
-        _copy(src, dst)
-        src = glob.glob(os.path.join(self.python_source_path, 'Include', 'internal', '*.h'))
-        dst = os.path.join(self.prefix, 'include', 'internal')
-        _copy(src, dst)
-
-    def copy_crt(self):
-        src = glob.glob(os.path.join(self.environ['WindowsSdkDir'],
-                                     'Redist', self.environ['XSDKVer'],
-                                     'ucrt', 'DLLs', 'x64', '*.dll'))
-        src += glob.glob(os.path.join(self.environ['VCRoot'],
-                                      'Redist', 'MSVC', '14.16.27012',
-                                      'x64', 'Microsoft.VC141.CRT', '*.dll'))
-        dst = os.path.join(self.prefix, 'bin')
-        _copy(src, dst)
-
-    def chmod_dist(self):
-        _system('find "%s" -type d -exec chmod 0755 {} ";"' % self.prefix)
-        _system('find "%s" -type f -exec chmod 0644 {} ";"' % self.prefix)
-        _system('find "%s" -type f -iname "*.exe" -exec chmod 0755 {} ";"' % os.path.join(self.prefix, 'bin'))
-
-def python_post_make(options, buildout, environ):
-    instance = PythonPostMake(environ)
-    instance.make_install()
+def python_post_make(options, buildout, env):
+    dist = options.get('dist')
+    prefix = options.get('prefix')
+    sdk_dir = env.get('WindowsSdkDir')
+    sdk_ver = env.get('XSDKVer')
+    crt_dir = env.get('VCRoot')
+    crt_ver = env.get('XCrtVer')
+    if not os.path.exists(dist):
+        os.makedirs(dist)
+    for base, _, names in os.walk(dist):
+        for name in names:
+            if name.endswith('.pdb') or name.endswith('static.lib'):
+                path = os.path.join(base, name)
+                LOG.info('remove %s', path)
+                os.remove(path)
+    pairs = (
+        (
+            os.path.join(dist, '*.dll'),
+            os.path.join(dist, 'bin')
+        ),
+        (
+            os.path.join(dist, '*.exe'),
+            os.path.join(dist, 'bin')
+        ),
+        (
+            os.path.join(dist, 'DLLs', '*.dll'),
+            os.path.join(dist, 'bin')
+        )
+    )
+    for src, dst in pairs:
+        if not os.path.exists(dst):
+            LOG.info('mkdir %s', dst)
+            os.makedirs(dst)
+        for origin in glob.glob(src):
+            name = os.path.basename(origin)
+            target = os.path.join(dst, name)
+            if os.path.exists(target):
+                LOG.info('remove %s', target)
+                if os.path.isdir(target):
+                    shutil.rmtree(target, onerror=onerror)
+                else:
+                    os.unlink(target)
+            LOG.info('move %s => %s', origin, target)
+            shutil.move(origin, target)
+    pairs = (
+        (
+            os.path.join(prefix, 'bin', '*.dll'),
+            os.path.join(dist, 'bin')
+        ),
+        (
+            os.path.join(prefix, 'lib', '*.dll'),
+            os.path.join(dist, 'bin')
+        ),
+        (
+            os.path.join(prefix, 'lib', '*.lib'),
+            os.path.join(dist, 'libs')
+        ),
+        (
+            os.path.join(prefix, 'include', '*'),
+            os.path.join(dist, 'include')
+        ),
+        (
+            os.path.join(sdk_dir, 'Redist', sdk_ver, 'ucrt', 'DLLs', 'x64', '*.dll'),
+            os.path.join(dist, 'bin')
+        ),
+        (
+            os.path.join(crt_dir, 'Redist', 'MSVC', crt_ver, 'x64', 'Microsoft.VC141.CRT', '*.dll'),
+            os.path.join(dist, 'bin')
+        )
+    )
+    for src, dst in pairs:
+        if not os.path.exists(dst):
+            LOG.info('mkdir %s', dst)
+            os.makedirs(dst)
+        for origin in glob.glob(src):
+            name = os.path.basename(origin)
+            target = os.path.join(dst, name)
+            if os.path.isdir(origin):
+                LOG.info('copy tree %s => %s', origin, target)
+                shutil.copytree(origin, target)
+            else:
+                LOG.info('copy file %s => %s', origin, target)
+                shutil.copy(origin, target)
+    pairs = (
+        ('zlib.lib', 'z.lib'),
+    )
+    for dst, src in pairs:
+        origin = os.path.join(dist, 'libs', src)
+        target = os.path.join(dist, 'libs', dst)
+        LOG.info('copy file %s => %s', origin, target)
+        shutil.copy(origin, target)

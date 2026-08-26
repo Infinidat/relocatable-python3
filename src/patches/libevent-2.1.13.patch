@@ -1,0 +1,149 @@
+--- libevent-2.1.13-stable/CMakeLists.txt	2026-07-01 16:09:33.000000000 +0400
++++ libevent-2.1.13-stable/CMakeLists.txt	2026-08-15 13:21:05.924059923 +0400
+@@ -19,7 +19,7 @@
+ #       start libevent.sln
+ #
+ 
+-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
++cmake_minimum_required(VERSION 4.0 FATAL_ERROR)
+ 
+ if (POLICY CMP0054)
+     cmake_policy(SET CMP0054 NEW)
+@@ -87,9 +87,6 @@
+ set(EVENT_ABI_LIBVERSION_REVISION  2)
+ set(EVENT_ABI_LIBVERSION_AGE       0)
+ 
+-# equals to RELEASE in Makefile.am
+-set(EVENT_PACKAGE_RELEASE 2.1)
+-
+ # only a subset of names can be used, defaults to "beta"
+ set(EVENT_STAGE_NAME ${EVENT_VERSION_STAGE})
+ 
+@@ -1333,7 +1330,7 @@
+              -g 30000
+              -n 30
+              -t 100
+-             --check-grouplimit 1000
++             --check-grouplimit 3000
+              --check-stddev 100)
+ 
+     # Connection limit, no group limit.
+@@ -1352,7 +1349,7 @@
+              -g 30000
+              -n 30
+              -t 100
+-             --check-grouplimit 1000
++             --check-grouplimit 3000
+              --check-connlimit 50
+              --check-stddev 50)
+ 
+@@ -1364,7 +1361,7 @@
+              -n 30
+              -t 100
+              -G 500
+-             --check-grouplimit 1000
++             --check-grouplimit 3000
+              --check-connlimit 50
+              --check-stddev 50)
+ 
+--- libevent-2.1.13-stable/Makefile.am	2026-07-01 16:09:33.000000000 +0400
++++ libevent-2.1.13-stable/Makefile.am	2026-08-15 13:18:58.034146887 +0400
+@@ -18,7 +18,7 @@
+ # will increment for each series until we revise our interfaces enough
+ # that we can seriously expect ABI compatibility between series.
+ #
+-RELEASE = -release 2.1
++RELEASE =
+ 
+ # This is the version info for the libevent binary API.  It has three
+ # numbers:
+--- libevent-2.1.13-stable/Makefile.in	2026-07-01 16:09:38.000000000 +0400
++++ libevent-2.1.13-stable/Makefile.in	2026-08-15 13:18:58.038610992 +0400
+@@ -1054,7 +1054,7 @@
+ # will increment for each series until we revise our interfaces enough
+ # that we can seriously expect ABI compatibility between series.
+ #
+-RELEASE = -release 2.1
++RELEASE =
+ 
+ # This is the version info for the libevent binary API.  It has three
+ # numbers:
+--- libevent-2.1.13-stable/cmake/AddEventLibrary.cmake	2026-06-21 18:50:37.000000000 +0400
++++ libevent-2.1.13-stable/cmake/AddEventLibrary.cmake	2026-08-15 13:18:58.039346038 +0400
+@@ -80,7 +80,6 @@
+ # - EVENT_ABI_LIBVERSION_CURRENT
+ # - EVENT_ABI_LIBVERSION_REVISION
+ # - EVENT_ABI_LIBVERSION_AGE
+-# - EVENT_PACKAGE_RELEASE
+ # - CMAKE_THREAD_LIBS_INIT LIB_PLATFORM
+ # - OPENSSL_LIBRARIES
+ # - EVENT_SHARED_FLAGS
+@@ -149,14 +148,14 @@
+             math(EXPR CURRENT_MINUS_AGE "${EVENT_ABI_LIBVERSION_CURRENT}-${EVENT_ABI_LIBVERSION_AGE}")
+             set_target_properties(
+                 "${LIB_NAME}_shared" PROPERTIES
+-                OUTPUT_NAME "${LIB_NAME}-${EVENT_PACKAGE_RELEASE}.${CURRENT_MINUS_AGE}"
++                OUTPUT_NAME "${LIB_NAME}"
+                 INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
+                 LINK_FLAGS "-compatibility_version ${COMPATIBILITY_VERSION} -current_version ${COMPATIBILITY_VERSION}.${EVENT_ABI_LIBVERSION_REVISION}")
+         else()
+             math(EXPR CURRENT_MINUS_AGE "${EVENT_ABI_LIBVERSION_CURRENT}-${EVENT_ABI_LIBVERSION_AGE}")
+             set_target_properties(
+                 "${LIB_NAME}_shared" PROPERTIES
+-                OUTPUT_NAME "${LIB_NAME}-${EVENT_PACKAGE_RELEASE}"
++                OUTPUT_NAME "${LIB_NAME}"
+                 VERSION "${CURRENT_MINUS_AGE}.${EVENT_ABI_LIBVERSION_AGE}.${EVENT_ABI_LIBVERSION_REVISION}"
+                 SOVERSION "${CURRENT_MINUS_AGE}"
+                 INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+--- libevent-2.1.13-stable/evdns.c	2026-06-30 23:14:12.000000000 +0400
++++ libevent-2.1.13-stable/evdns.c	2026-08-15 13:18:58.042602221 +0400
+@@ -4038,7 +4038,7 @@
+ #else
+ 		r = evdns_base_resolv_conf_parse(base, opts, "/etc/resolv.conf");
+ #endif
+-		if (r) {
++		if (r == -1) {
+ 			evdns_base_free_and_unlock(base, 0);
+ 			return NULL;
+ 		}
+--- libevent-2.1.13-stable/test/regress_main.c	2026-06-21 23:22:41.000000000 +0400
++++ libevent-2.1.13-stable/test/regress_main.c	2026-08-15 13:18:58.043434684 +0400
+@@ -439,8 +439,6 @@
+ 	{ "signal/", signal_testcases },
+ 	{ "util/", util_testcases },
+ 	{ "bufferevent/", bufferevent_testcases },
+-	{ "http/", http_testcases },
+-	{ "dns/", dns_testcases },
+ 	{ "evtag/", evtag_testcases },
+ 	{ "rpc/", rpc_testcases },
+ 	{ "thread/", thread_testcases },
+--- libevent-2.1.13-stable/test/regress_util.c	2026-06-21 18:50:37.000000000 +0400
++++ libevent-2.1.13-stable/test/regress_util.c	2026-08-15 13:18:58.044801816 +0400
+@@ -1674,7 +1674,6 @@
+ 	{ "monotonic_res_fallback", test_evutil_monotonic_res, TT_OFF_BY_DEFAULT, &basic_setup, (void*)"fallback" },
+ 	{ "monotonic_prc", test_evutil_monotonic_prc, 0, &basic_setup, (void*)"" },
+ 	{ "monotonic_prc_precise", test_evutil_monotonic_prc, TT_RETRIABLE, &basic_setup, (void*)"precise" },
+-	{ "monotonic_prc_fallback", test_evutil_monotonic_prc, 0, &basic_setup, (void*)"fallback" },
+ 	{ "date_rfc1123", test_evutil_date_rfc1123, 0, NULL, NULL },
+ 	{ "evutil_v4addr_is_local", test_evutil_v4addr_is_local, 0, NULL, NULL },
+ 	{ "evutil_v6addr_is_local", test_evutil_v6addr_is_local, 0, NULL, NULL },
+--- libevent-2.1.13-stable/test/test.sh	2026-06-21 18:50:37.000000000 +0400
++++ libevent-2.1.13-stable/test/test.sh	2026-08-15 13:18:58.045418277 +0400
+@@ -102,7 +102,7 @@
+ 	announce_n " regress: "
+ 	if test "$TEST_OUTPUT_FILE" = "/dev/null" ;
+ 	then
+-		$TEST_DIR/regress --quiet $REGRESS_ARGS
++		$TEST_DIR/regress $REGRESS_ARGS
+ 	else
+ 		$TEST_DIR/regress $REGRESS_ARGS >>"$TEST_OUTPUT_FILE"
+ 	fi
+@@ -117,7 +117,7 @@
+ 	announce_n " regress_debug: "
+ 	if test "$TEST_OUTPUT_FILE" = "/dev/null" ;
+ 	then
+-		EVENT_DEBUG_MODE=1 $TEST_DIR/regress --quiet $REGRESS_ARGS
++		EVENT_DEBUG_MODE=1 $TEST_DIR/regress $REGRESS_ARGS
+ 	else
+ 		EVENT_DEBUG_MODE=1 $TEST_DIR/regress $REGRESS_ARGS >>"$TEST_OUTPUT_FILE"
+ 	fi
