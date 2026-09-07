@@ -27,11 +27,12 @@ def build():
     if system in ('AIX', 'SunOS'):
         import resource
         ulimits = (
-            (resource.RLIMIT_NOFILE, 8 * 1024),
+            (resource.RLIMIT_FSIZE, 2 ** 32),
+            (resource.RLIMIT_NOFILE, 2 ** 12)
         )
         for limit, value in ulimits:
             soft, hard = resource.getrlimit(limit)
-            if soft < value:
+            if soft != value:
                 print('==> ulimit', limit, value, hard)
                 resource.setrlimit(limit, (value, hard))
     info = get_platform_string()

@@ -7,7 +7,7 @@ cppunit-1.15.1.tar.gz                   http://dev-www.libreoffice.org/src/cppun
 cyrus-sasl-2.1.28.tar.gz                https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz
 dectest.zip                             http://speleotrove.com/decimal/dectest.zip
 dejagnu-1.6.3.tar.gz                    https://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
-expat-2.8.3.tar.gz                      https://github.com/libexpat/libexpat/releases/download/R_2_8_3/expat-2.8.3.tar.gz
+expat-2.8.4.tar.gz                      https://github.com/libexpat/libexpat/releases/download/R_2_8_4/expat-2.8.4.tar.gz
 expect5.45.4.tar.gz                     https://yer.dl.sourceforge.net/project/expect/Expect/5.45.4/expect5.45.4.tar.gz
 gdbm-1.26.tar.gz                        https://ftp.gnu.org/gnu/gdbm/gdbm-1.26.tar.gz
 gettext-1.0.tar.gz                      https://ftp.gnu.org/pub/gnu/gettext/gettext-1.0.tar.gz
