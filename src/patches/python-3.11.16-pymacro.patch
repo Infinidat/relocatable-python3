@@ -1,0 +1,13 @@
+--- Python-3.11.16/Include/pymacro.h	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Include/pymacro.h	2026-08-13 17:47:48.076445464 +0400
+@@ -18,8 +18,8 @@
+ // behaviour. So only define if building as C (if __STDC_VERSION__ is defined),
+ // not C++, and only for C11-17.
+ #if !defined(static_assert) && (defined(__GNUC__) || defined(__clang__)) \
+-     && defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L \
+-     && __STDC_VERSION__ <= 201710L
++     && !defined(__cplusplus) && defined(__STDC_VERSION__) \
++     && __STDC_VERSION__ >= 201112L && __STDC_VERSION__ <= 201710L
+ #  define static_assert _Static_assert
+ #endif
+ 

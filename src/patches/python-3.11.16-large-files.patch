@@ -1,0 +1,33 @@
+--- Python-3.11.16/configure	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/configure	2026-03-11 00:09:17.617367126 +0400
+@@ -9681,30 +9681,6 @@
+ 
+ fi
+ 
+-use_lfs=yes
+-# Don't use largefile support for GNU/Hurd
+-case $ac_sys_system in GNU*)
+-  use_lfs=no
+-esac
+-
+-if test "$use_lfs" = "yes"; then
+-# Two defines needed to enable largefile support on various platforms
+-# These may affect some typedefs
+-case $ac_sys_system/$ac_sys_release in
+-AIX*)
+-
+-$as_echo "#define _LARGE_FILES 1" >>confdefs.h
+-
+-    ;;
+-esac
+-
+-$as_echo "#define _LARGEFILE_SOURCE 1" >>confdefs.h
+-
+-
+-$as_echo "#define _FILE_OFFSET_BITS 64" >>confdefs.h
+-
+-fi
+-
+ # Add some code to confdefs.h so that the test for off_t works on SCO
+ cat >> confdefs.h <<\EOF
+ #if defined(SCO_DS)

@@ -1,0 +1,47 @@
+--- Python-3.11.16/configure	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/configure	2026-03-11 00:09:58.086609149 +0400
+@@ -21069,14 +21069,12 @@
+ LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
+ #endif
+-char rl_pre_input_hook ();
+ int
+ main ()
+ {
+@@ -21115,18 +21113,16 @@
+ LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
+ #endif
+-char rl_completion_display_matches_hook ();
+ int
+ main ()
+ {
+-return rl_completion_display_matches_hook ();
++rl_completion_display_matches_hook (NULL, 0, 0);
+   ;
+   return 0;
+ }

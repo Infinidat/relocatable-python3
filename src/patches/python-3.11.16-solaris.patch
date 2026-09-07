@@ -1,0 +1,11 @@
+--- Python-3.11.16/setup.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/setup.py	2026-03-11 00:10:32.917124771 +0400
+@@ -971,7 +971,7 @@
+         # grp(3)
+         self.addext(Extension('grp', ['grpmodule.c']))
+ 
+-        self.addext(Extension('_socket', ['socketmodule.c']))
++        self.addext(Extension('_socket', ['socketmodule.c'], libraries=['resolv', 'socket', 'nsl']))
+         self.addext(Extension('spwd', ['spwdmodule.c']))
+ 
+         # select(2); not on ancient System V

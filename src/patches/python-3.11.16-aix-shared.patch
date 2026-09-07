@@ -1,0 +1,162 @@
+--- Python-3.11.16/Lib/sysconfig.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/sysconfig.py	2026-03-11 00:06:55.074681441 +0400
+@@ -484,11 +484,6 @@
+         if hasattr(e, "strerror"):
+             msg = f"{msg} ({e.strerror})"
+         raise OSError(msg)
+-    # On AIX, there are wrong paths to the linker scripts in the Makefile
+-    # -- these paths are relative to the Python source, but when installed
+-    # the scripts are in another directory.
+-    if _PYTHON_BUILD:
+-        vars['BLDSHARED'] = vars['LDSHARED']
+ 
+     # There's a chicken-and-egg situation on OS X with regards to the
+     # _sysconfigdata module after the changes introduced by #15298:
+--- Python-3.11.16/Makefile.pre.in	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Makefile.pre.in	2026-03-11 00:06:55.076350552 +0400
+@@ -167,10 +167,6 @@
+ LDCXXSHARED=	@LDCXXSHARED@
+ DESTSHARED=	$(BINLIBDEST)/lib-dynload
+ 
+-# List of exported symbols for AIX
+-EXPORTSYMS=	@EXPORTSYMS@
+-EXPORTSFROM=	@EXPORTSFROM@
+-
+ # Executable suffix (.exe on Windows and Mac OS X)
+ EXE=		@EXEEXT@
+ BUILDEXE=	@BUILDEXEEXT@
+@@ -771,10 +767,6 @@
+ libpython$(VERSION).sl: $(LIBRARY_OBJS)
+ 	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM)
+ 
+-# List of exported symbols for AIX
+-Modules/python.exp: $(LIBRARY)
+-	$(srcdir)/Modules/makexp_aix $@ "$(EXPORTSFROM)" $?
+-
+ # Copy up the gdb python hooks into a position where they can be automatically
+ # loaded by gdb during Lib/test/test_gdb.py
+ #
+@@ -2273,21 +2265,6 @@
+ 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
+ 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
+ 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
+-	@if [ -s Modules/python.exp -a \
+-		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
+-		echo; echo "Installing support files for building shared extension modules on AIX:"; \
+-		$(INSTALL_DATA) Modules/python.exp		\
+-				$(DESTDIR)$(LIBPL)/python.exp;		\
+-		echo; echo "$(LIBPL)/python.exp";		\
+-		$(INSTALL_SCRIPT) $(srcdir)/Modules/makexp_aix	\
+-				$(DESTDIR)$(LIBPL)/makexp_aix;		\
+-		echo "$(LIBPL)/makexp_aix";			\
+-		$(INSTALL_SCRIPT) Modules/ld_so_aix	\
+-				$(DESTDIR)$(LIBPL)/ld_so_aix;		\
+-		echo "$(LIBPL)/ld_so_aix";			\
+-		echo; echo "See Misc/README.AIX for details.";	\
+-	else true; \
+-	fi
+ 
+ # Install the dynamically loadable modules
+ # This goes into $(exec_prefix)
+@@ -2509,7 +2486,7 @@
+ 	done
+ 	-rm -f core Makefile Makefile.pre config.status Modules/Setup.local \
+ 	    Modules/Setup.bootstrap Modules/Setup.stdlib \
+-		Modules/ld_so_aix Modules/python.exp Misc/python.pc \
++		Misc/python.pc \
+ 		Misc/python-embed.pc Misc/python-config.sh
+ 	-rm -f python*-gdb.py
+ 	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
+--- Python-3.11.16/configure	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/configure	2026-03-11 00:06:55.082742290 +0400
+@@ -894,8 +894,6 @@
+ HOSTRUNNER
+ STATIC_LIBPYTHON
+ GNULD
+-EXPORTSFROM
+-EXPORTSYMS
+ LINKCC
+ LDVERSION
+ RUNSHARED
+@@ -6600,23 +6598,6 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LINKCC" >&5
+ $as_echo "$LINKCC" >&6; }
+ 
+-# EXPORTSYMS holds the list of exported symbols for AIX.
+-# EXPORTSFROM holds the module name exporting symbols on AIX.
+-EXPORTSYMS=
+-EXPORTSFROM=
+-
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking EXPORTSYMS" >&5
+-$as_echo_n "checking EXPORTSYMS... " >&6; }
+-case $ac_sys_system in
+-AIX*)
+-	EXPORTSYMS="Modules/python.exp"
+-	EXPORTSFROM=. # the main executable
+-	;;
+-esac
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $EXPORTSYMS" >&5
+-$as_echo "$EXPORTSYMS" >&6; }
+-
+ # GNULD is set to "yes" if the GNU linker is used.  If this goes wrong
+ # make sure we default having it set to "no": this is used by
+ # distutils.unixccompiler to know if it should add --enable-new-dtags
+@@ -6985,7 +6966,7 @@
+   Emscripten/browser*) :
+     LIBRARY_DEPS='$(PY3LIBRARY) $(WASM_STDLIB) python.html python.worker.js' ;; #(
+   *) :
+-    LIBRARY_DEPS='$(PY3LIBRARY) $(EXPORTSYMS)'
++    LIBRARY_DEPS='$(PY3LIBRARY)'
+  ;;
+ esac
+ LINK_PYTHON_DEPS='$(LIBRARY_DEPS)'
+@@ -10885,8 +10866,8 @@
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
+-		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/python.exp"
++		LDSHARED='$(CC) -shared -Wl,-G'
++		LDCXXSHARED='$(CXX) -shared -Wl,-G'
+ 		;;
+ 	SunOS/5*)
+ 		if test "$GCC" = "yes" ; then
+@@ -11071,7 +11052,7 @@
+ if test -z "$LINKFORSHARED"
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+-	AIX*)	LINKFORSHARED='-Wl,-bE:Modules/python.exp -lld';;
++	AIX*)	LINKFORSHARED='-lld -lm';;
+ 	hp*|HP*)
+ 	    LINKFORSHARED="-Wl,-E -Wl,+s";;
+ #	    LINKFORSHARED="-Wl,-E -Wl,+s -Wl,+b\$(BINLIBDEST)/lib-dynload";;
+@@ -25879,8 +25860,6 @@
+ 
+ ac_config_files="$ac_config_files Modules/Setup.bootstrap Modules/Setup.stdlib"
+ 
+-ac_config_files="$ac_config_files Modules/ld_so_aix"
+-
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+ # tests run on this system so they can be shared between configure
+@@ -26892,7 +26871,6 @@
+     "Misc/python-config.sh") CONFIG_FILES="$CONFIG_FILES Misc/python-config.sh" ;;
+     "Modules/Setup.bootstrap") CONFIG_FILES="$CONFIG_FILES Modules/Setup.bootstrap" ;;
+     "Modules/Setup.stdlib") CONFIG_FILES="$CONFIG_FILES Modules/Setup.stdlib" ;;
+-    "Modules/ld_so_aix") CONFIG_FILES="$CONFIG_FILES Modules/ld_so_aix" ;;
+ 
+   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+   esac
+@@ -27449,11 +27427,6 @@
+ 
+   esac
+ 
+-
+-  case $ac_file$ac_mode in
+-    "Modules/ld_so_aix":F) chmod +x Modules/ld_so_aix ;;
+-
+-  esac
+ done # for ac_tag
+ 
+ 

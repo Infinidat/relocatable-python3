@@ -1,0 +1,17 @@
+--- Python-3.11.16/Lib/collections/__init__.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/collections/__init__.py	2026-03-11 00:07:29.005443557 +0400
+@@ -50,6 +50,14 @@
+ except ImportError:
+     pass
+ 
++# For backward compatibility with Python 3.8 and earlier, provide access
++# to ABCs collection objects through the collections module.
++def __getattr__(name):
++    if name in _collections_abc.__all__:
++        value = getattr(_collections_abc, name)
++        globals()[name] = value
++        return value
++    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
+ 
+ ################################################################################
+ ### OrderedDict
