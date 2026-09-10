@@ -1,0 +1,19 @@
+--- Python-3.11.16/setup.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/setup.py	2026-03-11 21:49:30.736894044 +0400
+@@ -1309,7 +1309,7 @@
+         #
+         # More information on Expat can be found at www.libexpat.org.
+         #
+-        self.addext(Extension('pyexpat', sources=['pyexpat.c']))
++        self.addext(Extension('pyexpat', libraries=['m'], sources=['pyexpat.c']))
+ 
+         # Fredrik Lundh's cElementTree module.  Note that this also
+         # uses expat (via the CAPI hook in pyexpat).
+@@ -1476,6 +1476,7 @@
+             Extension(
+                 '_decimal',
+                 ['_decimal/_decimal.c'],
++                libraries=['m'],
+                 # Uncomment for extra functionality:
+                 # define_macros=[('EXTRA_FUNCTIONALITY', 1)]
+             )

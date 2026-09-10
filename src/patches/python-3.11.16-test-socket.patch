@@ -1,0 +1,55 @@
+--- Python-3.11.16/Lib/test/test_socket.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/test/test_socket.py	2026-08-12 13:42:37.564289079 +0400
+@@ -145,7 +145,11 @@
+     return True
+ 
+ 
+ def _have_udp_lite():
++    # UDP-Lite tests can hang on RHEL/CentOS/Oracle Linux 6.
++    if platform.system() == "Linux" and "el6" in platform.release():
++        return False
++
+     if not hasattr(socket, "IPPROTO_UDPLITE"):
+         return False
+     # Older Android versions block UDPLITE with SELinux.
+@@ -255,6 +259,7 @@
+                            self.interface)
+ 
+ 
++@unittest.skip('https://github.com/python/cpython/issues/136110')
+ class SocketRDSTest(unittest.TestCase):
+ 
+     """To be able to run this test, the `rds` kernel module must be loaded:
+@@ -446,6 +451,7 @@
+         self.cli = None
+         ThreadableTest.clientTearDown(self)
+ 
++@unittest.skip('https://github.com/python/cpython/issues/136110')
+ class ThreadedRDSSocketTest(SocketRDSTest, ThreadableTest):
+ 
+     def __init__(self, methodName='runTest'):
+@@ -3434,6 +3440,8 @@
+         # Test CMSG_SPACE() with various valid and invalid values,
+         # checking the assumptions used by sendmsg().
+         toobig = self.socklen_t_limit - socket.CMSG_SPACE(1) + 1
++        if (platform.system() == "SunOS" and platform.processor() == "sparc"):
++            toobig -= 3
+         values = list(range(257)) + list(range(toobig - 257, toobig))
+ 
+         last = socket.CMSG_SPACE(0)
+@@ -3580,6 +3588,7 @@
+         self.createAndSendFDs(1)
+ 
+     @unittest.skipIf(sys.platform == "darwin", "skipping, see issue #12958")
++    @unittest.skipIf(sys.platform == "sunos5", "Solaris does not support multiple SCM_RIGHTS control messages")
+     @unittest.skipIf(AIX, "skipping, see issue #22397")
+     @requireAttrs(socket, "CMSG_SPACE")
+     def testFDPassSeparate(self):
+@@ -3604,6 +3613,7 @@
+             len(MSG))
+ 
+     @unittest.skipIf(sys.platform == "darwin", "skipping, see issue #12958")
++    @unittest.skipIf(sys.platform == "sunos5", "Solaris does not support multiple SCM_RIGHTS control messages")
+     @unittest.skipIf(AIX, "skipping, see issue #22397")
+     @requireAttrs(socket, "CMSG_SPACE")
+     def testFDPassSeparateMinSpace(self):

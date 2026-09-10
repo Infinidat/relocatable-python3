@@ -27,13 +27,14 @@ def build():
     if system in ('AIX', 'SunOS'):
         import resource
         ulimits = (
-            (resource.RLIMIT_NOFILE, 8 * 1024),
+            (resource.RLIMIT_CPU, resource.RLIM_INFINITY),
+            (resource.RLIMIT_CORE, resource.RLIM_INFINITY),
+            (resource.RLIMIT_DATA, resource.RLIM_INFINITY),
+            (resource.RLIMIT_FSIZE, resource.RLIM_INFINITY),
+            (resource.RLIMIT_NOFILE, 2 ** 14)
         )
         for limit, value in ulimits:
-            soft, hard = resource.getrlimit(limit)
-            if soft < value:
-                print('==> ulimit', limit, value, hard)
-                resource.setrlimit(limit, (value, hard))
+            resource.setrlimit(limit, (value, value))
     info = get_platform_string()
     config = 'buildout-build-%s.cfg' % info
     buildout(config)

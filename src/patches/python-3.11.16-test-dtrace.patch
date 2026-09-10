@@ -1,0 +1,12 @@
+--- Python-3.11.16/Lib/test/test_dtrace.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/test/test_dtrace.py	2026-08-11 17:35:58.927455764 +0400
+@@ -11,6 +11,9 @@
+ from test.support import findfile
+ 
+ 
++if not sysconfig.get_config_var("WITH_DTRACE"):
++    raise unittest.SkipTest("dtrace is not availablexi")
++
+ if not support.has_subprocess_support:
+     raise unittest.SkipTest("test module requires subprocess")
+ 

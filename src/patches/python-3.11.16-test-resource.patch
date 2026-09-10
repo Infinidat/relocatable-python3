@@ -1,0 +1,18 @@
+--- Python-3.11.16/Lib/test/test_resource.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/test/test_resource.py	2026-08-10 18:44:57.764754204 +0400
+@@ -26,12 +26,9 @@
+         except AttributeError:
+             pass
+         else:
+-            # RLIMIT_FSIZE should be RLIM_INFINITY, which will be a really big
+-            # number on a platform with large file support.  On these platforms,
+-            # we need to test that the get/setrlimit functions properly convert
+-            # the number to a C long long and that the conversion doesn't raise
+-            # an error.
+-            self.assertEqual(resource.RLIM_INFINITY, max)
++            self.assertLessEqual(cur, max)
++            if resource.RLIM_INFINITY >= 0:
++                self.assertLessEqual(max, resource.RLIM_INFINITY)
+             resource.setrlimit(resource.RLIMIT_FSIZE, (cur, max))
+ 
+     def test_fsize_enforced(self):

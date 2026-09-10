@@ -1,0 +1,10 @@
+--- Python-3.11.16/Lib/test/test_smtpnet.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/test/test_smtpnet.py	2026-03-11 00:11:43.457293863 +0400
+@@ -25,6 +25,7 @@
+     testServer = 'smtp.gmail.com'
+     remotePort = 587
+ 
++    @unittest.skip('HOSTDEV-3483')
+     def test_connect_starttls(self):
+         support.get_attribute(smtplib, 'SMTP_SSL')
+         context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)

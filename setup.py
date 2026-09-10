@@ -2,7 +2,7 @@ import setuptools
 
 SETUP_INFO = dict(
     name = 'python',
-    version = '3.11.15',
+    version = '3.11.16',
     author = 'Infinidat',
     description = 'Build Relocatable Python',
     long_description = 'Build Relocatable Python',

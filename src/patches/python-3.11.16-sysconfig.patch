@@ -1,0 +1,22 @@
+--- Python-3.11.16/Lib/sysconfig.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/sysconfig.py	2026-08-13 12:45:55.072200271 +0400
+@@ -770,16 +770,11 @@
+     elif osname[:5] == "sunos":
+         if release[0] >= "5":           # SunOS 5 == Solaris 2
+             osname = "solaris"
+-            release = f"{int(release[0]) - 3}.{release[2:]}"
+-            # We can't use "platform.architecture()[0]" because a
+-            # bootstrap problem. We use a dict to get an error
+-            # if some suspicious happens.
+-            bitness = {2147483647:"32bit", 9223372036854775807:"64bit"}
+-            machine += f".{bitness[sys.maxsize]}"
++            release = release[2:]
+         # fall through to standard osname-release-machine representation
+     elif osname[:3] == "aix":
+-        from _aix_support import aix_platform
+-        return aix_platform()
++        release = "%s.%s" % (version, release)
++        machine = "powerpc"
+     elif osname[:6] == "cygwin":
+         osname = "cygwin"
+         import re

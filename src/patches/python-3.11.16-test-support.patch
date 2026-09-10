@@ -1,0 +1,34 @@
+--- Python-3.11.16/Lib/test/support/__init__.py	2026-03-03 00:52:57.000000000 +0000
++++ Python-3.11.16/Lib/test/support/__init__.py	2026-09-03 16:13:25.659955204 +0000
+@@ -565,8 +565,7 @@
+ 
+ # Does strftime() support glibc extension like '%4Y'?
+ has_strftime_extensions = False
+-if sys.platform != "win32":
+-    # bpo-47037: Windows debug builds crash with "Debug Assertion Failed"
++if sys.platform not in ("win32", "aix"):
+     try:
+         has_strftime_extensions = time.strftime("%4Y") != "%4Y"
+     except ValueError:
+--- Python-3.11.16/Lib/test/test_support.py	2026-03-03 00:52:57.000000000 +0000
++++ Python-3.11.16/Lib/test/test_support.py	2026-09-03 16:12:37.323013460 +0000
+@@ -2,6 +2,7 @@
+ import importlib
+ import io
+ import os
++import platform
+ import shutil
+ import socket
+ import stat
+@@ -579,7 +580,10 @@
+                                  'Warning -- a\nWarning -- b\n')
+ 
+     def test_has_strftime_extensions(self):
+-        if support.is_emscripten or sys.platform == "win32":
++        if (support.is_emscripten
++                or platform.system() == "AIX"
++                or sys.platform == "win32"
++                or (platform.system() == "SunOS" and platform.release() == "5.10")):
+             self.assertFalse(support.has_strftime_extensions)
+         else:
+             self.assertTrue(support.has_strftime_extensions)

@@ -1,0 +1,8 @@
+--- Python-3.11.16/Lib/glob.py	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Lib/glob.py	2026-08-11 18:20:37.575121561 +0400
+@@ -249,4 +249,4 @@
+     return drive + pathname
+ 
+ 
+-_dir_open_flags = os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0)
++_dir_open_flags = os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0) | getattr(os, 'O_NONBLOCK', 0)

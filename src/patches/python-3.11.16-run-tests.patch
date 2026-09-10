@@ -1,0 +1,11 @@
+--- Python-3.11.16/Makefile.pre.in	2026-03-03 04:52:57.000000000 +0400
++++ Python-3.11.16/Makefile.pre.in	2026-03-11 00:10:11.549300980 +0400
+@@ -1670,7 +1670,7 @@
+ ######################################################################
+ 
+ TESTOPTS=	$(EXTRATESTOPTS)
+-TESTPYTHON=	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(TESTPYTHONOPTS)
++TESTPYTHON=	$(RUNSHARED) $(BINDIR)/$(PYTHON)$(VERSION) $(TESTPYTHONOPTS)
+ TESTRUNNER=	$(TESTPYTHON) $(srcdir)/Tools/scripts/run_tests.py
+ TESTTIMEOUT=	1200
+ 
