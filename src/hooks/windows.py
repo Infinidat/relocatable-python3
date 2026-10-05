@@ -30,10 +30,14 @@ def python_post_make(options, buildout, env):
     crt_ver = env.get('XCrtVer')
     if not os.path.exists(dist):
         os.makedirs(dist)
-    for base, _, names in os.walk(dist):
-        for name in names:
-            if name.endswith('.pdb') or name.endswith('static.lib'):
-                path = os.path.join(base, name)
+    for base, directories, files in os.walk(dist):
+        for directory in directories:
+            path = os.path.join(base, directory)
+            os.chmod(path, stat.S_IWRITE)
+        for file in files:
+            path = os.path.join(base, file)
+            os.chmod(path, stat.S_IWRITE)
+            if file.endswith('.pdb') or file.endswith('static.lib'):
                 LOG.info('remove %s', path)
                 os.remove(path)
     pairs = (
